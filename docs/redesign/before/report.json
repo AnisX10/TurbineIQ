@@ -1931,36 +1931,36 @@
   {
    "viewport": "mobile",
    "width": 375,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\mobile-fold.jpg",
+   "fold": "docs/redesign/before/mobile-fold.jpg",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\mobile-page-01.jpg"
+    "docs/redesign/before/mobile-filmstrip.jpg"
    ],
    "film": []
   },
   {
    "viewport": "tablet",
    "width": 768,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\tablet-768-fold.jpg",
+   "fold": "docs/redesign/before/tablet-768-fold.jpg",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\tablet-768-page-01.jpg"
+    "docs/redesign/before/tablet-768-filmstrip.jpg"
    ],
    "film": []
   },
   {
    "viewport": "tablet",
    "width": 1024,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\tablet-1024-fold.jpg",
+   "fold": "docs/redesign/before/tablet-1024-fold.jpg",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\tablet-1024-page-01.jpg"
+    "docs/redesign/before/tablet-1024-filmstrip.jpg"
    ],
    "film": []
   },
   {
    "viewport": "desktop",
    "width": 1440,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\desktop-fold.jpg",
+   "fold": "docs/redesign/before/desktop-fold.jpg",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\before\\desktop-page-01.jpg"
+    "docs/redesign/before/desktop-filmstrip.jpg"
    ],
    "film": []
   }

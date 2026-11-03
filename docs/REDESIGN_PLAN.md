@@ -89,7 +89,7 @@ Why it fits: the chrome holds no colour at all, figures read as columns in a led
 2. **The one chart hue `#1d5fbf` on the synthetic observation series.** Everything else is ink or grey.
 3. **Every figure in Geist Mono**, text in Geist. Tabular digits so columns of values stack. taste-skill's inspector flags mono, so state this reason in the report: *engineering readouts are a ledger of aligned figures.*
 
-**Signature element only this product has: the Station ledger.** A thin horizontal strip under the 3D stage showing the four Brayton stations in axis order: 1 Compressor inlet → 2 Compressor discharge → 3 Turbine inlet → 4 Turbine exhaust. Each shows T (K) and P (kPa), reference vs synthetic. Selecting a component highlights its station pair, and hovering a station highlights the matching part in 3D. This ties the physics, the 3D model, and the data into one object.
+**Signature element only this product has: the Station ledger (amended after Phase 0 review).** A thin horizontal strip under the 3D stage shows four Brayton stations in axis order: 1 Compressor inlet → 2 Compressor discharge → 3 Turbine inlet → 4 Turbine exhaust. It shows temperature only: station 1 shows synthetic ambient temperature and ambient pressure from the scenario input (no reference values are supplied); stations 2–4 compare reference and synthetic temperatures where both values exist. The browser API has no per-station pressure values, so the UI must not show them and this redesign must not extend the backend. Selecting a component highlights its station pair, and hovering a station highlights the matching part in 3D.
 
 **Brand mark: the cycle glyph.** A closed four-vertex loop drawn on a 24px grid, 1.5px stroke, ink only. The four vertices are the four stations of the cycle (a T–s diagram silhouette). Starter path (refine by eye):
 
@@ -222,7 +222,7 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
 - **Asset switcher** at the top of the sidebar: reads `GE 6B.03 reference · Synthetic`. With one asset it is a static label with a chevron-less style; do not fake a menu.
 - **Nav items:** 32px tall, 34px pitch, 16px outline icon plus a 14px label. Active item is a neutral grey pill (`--raised`, radius 6) inset 8px. No coloured bar.
 - **Bottom of the sidebar:** engine status as **text** ("Local engine · connected / offline / checking"), theme toggle (System, Light, Dark), and a **Boundary** button.
-- **The Boundary sheet** replaces the trust strip, the footer, and the badge. It is a right-side sheet listing: data provenance, model name, "simplified, not OEM-validated", "no physical connection or control", seed, scenario. The page header keeps one small chip, `Synthetic · seed 42`, that opens the same sheet.
+- **The Boundary sheet** replaces the trust strip, the footer, and the badge. It is a right-side sheet listing: data provenance, model name, "simplified, not OEM-validated", "no physical connection or control", seed, scenario. The page header keeps one small chip, `Synthetic · seed 42`, that opens the same sheet. Keep the published 6B.03 reference block and its "synthetic replay is not calibrated" caveat visible on Component pages and reference it from the Boundary sheet (amended after Phase 0 review).
 - **Routes (hash-based, no router dependency):**
   - `#/overview`
   - `#/components/<component_id>` (inlet, compressor, combustor, turbine, shaft, generator)
@@ -244,26 +244,26 @@ Use **real values from the running API** (seed 42, `compressor_fouling`, sample 
 **Filter row** (compound outlined groups, 28px tall, 8px apart, reads as a sentence):
 `Scenario | Compressor-performance drift` · `Seed | 42` · `Sample | 73 of 96 · 18:00` · `Interval | 15 min`.
 
-**KPI row.** Four equal columns, values in Geist Mono 30/500, label 12px grey above, one factual line below. No icons, no tiles, no sparklines.
+**KPI row (amended after Phase 0 review).** Four equal columns, values in Geist Mono 30/500, label 12px grey above, one factual line below. No icons, no tiles, no sparklines.
 
 | Label | Value | Line below |
 |---|---|---|
-| Reference model | `25.46 MW` | Fixed assumptions |
-| Synthetic observation | `25.19 MW` *(ink)* | Model output + generated noise |
-| Residual | `−0.27 MW ▾` *(the only coloured KPI: red sign)* | Observation − reference |
-| Flagged samples | `7 / 96` | Median-absolute-deviation screen |
+| Reference model | `26.30 MW` | Fixed assumptions |
+| Synthetic observation | `24.67 MW` *(ink)* | Model output + generated noise |
+| Residual | `−1.63 MW ▾` *(the only coloured KPI: red sign)* | Observation − reference |
+| Flagged samples | `0 / 96` | Median-absolute-deviation screen |
 
-(Example numbers only. Replace with live API values.)
+These are the live API values for `compressor_fouling`, seed 42, sample index 72 (73 of 96); implementers must read values and flagged counts from the current API response rather than hard-code examples (amended after Phase 0 review).
 
 **Main band** (two columns, 8 / 4 split):
-- **Left: the Stage.** A white card with a 1px border holding the 3D viewer. Toolbar inside the card, top left: `Exploded` toggle, `Reset view`. Under the viewer, the **Station ledger** strip.
+- **Left: the Stage.** A white card with a 1px border holding the 3D viewer. Keep `Load GLB` and `Schematic` as the view switch. Put `Reset camera`, `Explode view`, `Isolate component`, and the `Model sub-parts` mesh picker in the Stage toolbar; the mesh picker is also available on the Component page. Under the viewer, the **Station ledger** shows station 1 ambient temperature and ambient pressure, then temperatures for stations 2–4 with reference and synthetic values where both exist. No per-station pressure is present in the browser API, so do not show it or extend the backend (amended after Phase 0 review).
 - **Right: Component ledger.** A card listing the six components as rows (44px): name, a neutral status pill, and the primary metric as a mono figure. The selected row has the same 1px ink marker as the selected 3D part. Below it, the selected component's first four metrics with their provenance in small grey text. A `Open component detail` text link goes to `#/components/<id>`.
 
 **Timeline card** (full width, see §8). Title `Electrical output over 24 hours`, one question: *where does the observation depart from the reference?* Includes the scrubber, play control, and a `View as table` toggle.
 
 **Behaviour**
 - Scrubbing, playing, or clicking a flagged sample updates KPIs, the Stage, the Station ledger, the Component ledger, and the chart together, from one store.
-- `←` / `→` step one sample, `Shift+←/→` step ten, `Home` / `End` jump, `Space` plays or pauses, `F` jumps to the first flagged sample. Show these in a small `?` popover.
+- `←` / `→` step one sample, `Shift+←/→` step ten, `Home` / `End` jump, `Space` plays or pauses, `F` jumps to the first flagged sample. Disable `F` when the current run has no flagged samples. Show these in a small `?` popover (amended after Phase 0 review).
 - Selecting a part in 3D or a row in the ledger selects the same component everywhere and writes it to the URL.
 
 **States:** skeletons at final dimensions (no spinners, no layout shift); `Engine offline` banner with the exact command to start it; invalid seed shows an inline field error under the Seed group and keeps the last good run on screen.
@@ -277,6 +277,8 @@ Pattern: tabbed object detail.
 - **Metrics tab:** three KPI cards (value 30 mono, label below): synthetic efficiency vs reference, discharge temperature vs reference, compressor power. Then the **metric ledger**: a table with Metric · Synthetic · Reference · Δ · Provenance. Rules and alignment only, no zebra, no header band, numbers right-aligned.
 - **Over time tab:** two chart cards on one 24px gutter, from the `snapshots` array already in the API payload: (1) the component's key metric across the 96 samples against its fixed reference line, (2) the residual for the same window. Direct labels, no legend.
 - **Evidence tab:** results of an evidence search seeded with the component name, as in §6.3.
+- Keep the published 6B.03 reference block on the Component page, with its visible "synthetic replay is not calibrated" caveat. The Boundary sheet references that block (amended after Phase 0 review).
+- Put the `Model sub-parts` mesh picker in the Stage toolbar and on the Component page (amended after Phase 0 review).
 - Do not stretch a short card to match its neighbour. Do not print legend entries for series with no data.
 
 ### 6.3 Evidence (route `#/evidence`)
@@ -307,7 +309,7 @@ Loading skeleton · empty · no evidence · engine offline · invalid seed · re
 - **Look.** Flat and matte. Light neutral parts (`--stage-part`) with hairline edges (`--stage-edge`) on a flat `--stage-bg`. No gradient background, no bloom, no glow, no floor reflection.
 - **Selection.** The selected part gets a 1.5px outline in `--stage-selected` plus a leader line to a 12px HTML label in ink. Status is never shown as glow; it is a pill in the Component ledger.
 - **Tokens, not literals.** Read `--stage-*` from `getComputedStyle` at mount and on theme change. Delete the hardcoded `SELECTED_TONE`.
-- **Controls.** `Exploded` toggle and `Reset view` inside the card toolbar. Camera moves ease over `--dur-slow`. Cap device pixel ratio at 2. No auto-rotate (and none at all under `prefers-reduced-motion`).
+- **Controls (amended after Phase 0 review).** Keep `Load GLB` and `Schematic` as the view switch. Put `Reset camera`, `Explode view`, `Isolate component`, and the `Model sub-parts` mesh picker in the Stage toolbar; keep the mesh picker available on the Component page too. `No auto-rotate` applies to the camera only. The existing `Pause rotor` control remains an opt-in, visual-only rotor animation toggle, off by default and off under `prefers-reduced-motion`. Camera moves ease over `--dur-slow`. Cap device pixel ratio at 2.
 - **Accessibility.** The Component ledger is the accessible path to every part. The canvas gets a descriptive `aria-label` and is not a keyboard trap.
 - **Do not touch** the component-ID aliases or the GLB mapping contract. Split `TurbineViewer.tsx` into `GLBModel`, `SchematicTurbine`, `selection`, and `camera` modules without changing behaviour; run `tests/test_blender_asset.py` after.
 - Keep the 3D bundle lazy-loaded.
@@ -316,7 +318,7 @@ Loading skeleton · empty · no evidence · engine offline · invalid seed · re
 
 ## 8. Data visualisation rules (timeline)
 
-Hand-rolled SVG is fine under 1,000 points (this project has at most 288). Make it responsive with a `ResizeObserver` instead of a fixed viewBox.
+Hand-rolled SVG is fine under 1,000 points (this project has at most 288). Make it responsive with a `ResizeObserver` instead of a fixed viewBox. The current fixed viewBox makes axis text illegible on mobile; the rewrite must keep axis labels at a readable minimum of 11px at every width (amended after Phase 0 review).
 
 | Series | Style | Notes |
 |---|---|---|
@@ -352,7 +354,7 @@ The product's credibility depends on not over-claiming. Keep the existing bounda
 - **Focus:** a visible 2px ring on every interactive element, never removed. Logical tab order. Skip link to main content.
 - **Touch:** 44×44px hit area for every control on touch devices (the 28–36px visual height is fine if the hit area grows).
 - **Colour independence:** signs and triangles accompany every colour signal.
-- **Motion:** 120–240ms, opacity and transform only. `prefers-reduced-motion` removes autoplay interpolation, camera easing, and any auto-rotate.
+- **Motion (amended after Phase 0 review):** 120–240ms, opacity and transform only. `No auto-rotate` applies to the camera only. The visual-only `Pause rotor` animation remains opt-in, starts off, and stays off under `prefers-reduced-motion`; reduced motion also removes autoplay interpolation and camera easing.
 - **Zoom:** usable at 200% and with 320px width without horizontal scroll (the chart and tables scroll inside their own containers).
 - **Breakpoints to verify:** 375, 768, 1024, 1440. KPIs go 2×2 on phones; panels stack; the Stage keeps a fixed 4:3 aspect on phones and uses touch orbit controls.
 - **Screen readers:** the replay announces the selected sample politely, throttled to settle after scrubbing. Never announce every playback tick.
