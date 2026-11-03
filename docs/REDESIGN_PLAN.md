@@ -80,7 +80,7 @@ Read from the code in `frontend/src/`:
 
 ## 3. Direction (decided)
 
-**Style: "Achromatic ledger"**, dealt by `taste-skill` for an app screen of kind `analytics`, light theme. **Shell: "Open plane."**
+**Style: "Achromatic ledger"**, dealt by `taste-skill` for an app screen of kind `analytics`, light theme. **Shell: "Icon rail" (Phase 1 direction lock; this supersedes the earlier Open plane choice).**
 
 Why it fits: the chrome holds no colour at all, figures read as columns in a ledger, and exactly one hue marks the main data element. That is minimalist SaaS in the Linear, Stripe, and Vercel family, and it suits an engineering instrument.
 
@@ -143,7 +143,7 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
   --row-height: 44px;
   --control-height: 36px;
   --filter-height: 28px;
-  --sidebar-width: 240px;
+  --rail-width: 55px;
   --gap: 12px;
   --pad: 24px;
   --gutter: 32px;
@@ -198,38 +198,20 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
 
 ## 5. Information architecture and shell
 
-**Shell: Open plane.** A labelled 240px sidebar sits on the page ground with no top bar. Page header and cards start about 32px from the top. Cards are white on the blue-grey ground.
+**Shell: Icon rail (Phase 1 direction lock).** The Taste draw selected a 55px icon rail, replacing the previous 240px labelled-sidebar proposal. The rail sits on the page ground with a 1px edge; the fluid content canvas keeps the 32px page gutter. The page-specific title and filters lead the canvas without a repeated global top bar. Cards stay white on the blue-grey ground.
 
-```
-┌ Sidebar 240 ─────┐ ┌ Canvas (fluid, 32px gutter) ───────────────────────────┐
-│ [glyph] TurbineIQ│ │ Page title (24/700)   [Synthetic · seed 42]   [actions] │
-│ GE 6B.03 ref ▾   │ │ ─ tabs / filter row ─────────────────────────────────── │
-│                  │ │                                                         │
-│ Workspace        │ │   content cards on --surface, 8px radius, 1px --border  │
-│  Overview        │ │                                                         │
-│  Components      │ │                                                         │
-│  Evidence        │ │                                                         │
-│  Assistant       │ │                                                         │
-│                  │ │                                                         │
-│ ──────────────── │ │                                                         │
-│ ● Local engine   │ │                                                         │
-│   connected      │ │                                                         │
-│ Theme  ◐         │ │                                                         │
-│ Boundary ⓘ       │ │                                                         │
-└──────────────────┘ └─────────────────────────────────────────────────────────┘
-```
-
-- **Asset switcher** at the top of the sidebar: reads `GE 6B.03 reference · Synthetic`. With one asset it is a static label with a chevron-less style; do not fake a menu.
-- **Nav items:** 32px tall, 34px pitch, 16px outline icon plus a 14px label. Active item is a neutral grey pill (`--raised`, radius 6) inset 8px. No coloured bar.
-- **Bottom of the sidebar:** engine status as **text** ("Local engine · connected / offline / checking"), theme toggle (System, Light, Dark), and a **Boundary** button.
-- **The Boundary sheet** replaces the trust strip, the footer, and the badge. It is a right-side sheet listing: data provenance, model name, "simplified, not OEM-validated", "no physical connection or control", seed, scenario. The page header keeps one small chip, `Synthetic · seed 42`, that opens the same sheet. Keep the published 6B.03 reference block and its "synthetic replay is not calibrated" caveat visible on Component pages and reference it from the Boundary sheet (amended after Phase 0 review).
+- Put the cycle glyph at the top. Keep product and asset context visible in the page header as `GE 6B.03 reference · Synthetic`; with one asset it is static text, not a fake dropdown.
+- Use 16px outline Lucide icons on a 34-49px pitch, split navigation groups with short 20px hairlines, and place utilities at the bottom. The four workspace destinations are Overview, Components, Evidence, and Assistant.
+- The rail is visually unlabelled on desktop. Every icon-only control needs an accessible name and visible focus; tooltips supplement the name, not replace it. The active item uses a neutral ink or grey state, never a coloured bar.
+- Put engine status, theme, and Boundary utilities at the rail bottom with accessible names. The `Synthetic · seed 42` page-header chip opens the Boundary sheet.
+- **Boundary sheet (amended after Phase 0 review):** keep the right-side sheet with data provenance, model name, "simplified, not OEM-validated", "no physical connection or control", seed, and scenario. Keep the published 6B.03 reference block and its "synthetic replay is not calibrated" caveat visible on Component pages and reference it here.
 - **Routes (hash-based, no router dependency):**
   - `#/overview`
   - `#/components/<component_id>` (inlet, compressor, combustor, turbine, shaft, generator)
   - `#/evidence`
   - `#/assistant`
   - Shared query string: `?scenario=compressor_fouling&seed=42&i=72`. Hash routing avoids 404s on refresh, because FastAPI's `StaticFiles(html=True)` has no SPA fallback.
-- **Below 1024px:** the sidebar becomes a 48px top bar (page name, menu button, at most one action). The menu opens a full-screen sheet with the nav and the same bottom utilities.
+- **Phone shell (Phase 1 direction lock):** replace the desktop rail with a bottom bar containing the same four destinations, each with a short visible label. Keep the page header and at most one primary action; ensure the visual controls retain the 44px touch target specified in section 10.
 
 ---
 
@@ -253,10 +235,10 @@ Use **real values from the running API** (seed 42, `compressor_fouling`, sample 
 | Residual | `−1.63 MW ▾` *(the only coloured KPI: red sign)* | Observation − reference |
 | Flagged samples | `0 / 96` | Median-absolute-deviation screen |
 
-These are the live API values for `compressor_fouling`, seed 42, sample index 72 (73 of 96); implementers must read values and flagged counts from the current API response rather than hard-code examples (amended after Phase 0 review).
+For the default `compressor_fouling` scenario, the live API currently returns these values at seed 42, sample index 72 (73 of 96): 26.30 MW reference, 24.67 MW observation, -1.63 MW residual, and 0 of 96 flagged. These example values are illustrative; implementers must read current values and flagged counts from the API rather than hard-code them (amended after Phase 0 review).
 
 **Main band** (two columns, 8 / 4 split):
-- **Left: the Stage.** A white card with a 1px border holding the 3D viewer. Keep `Load GLB` and `Schematic` as the view switch. Put `Reset camera`, `Explode view`, `Isolate component`, and the `Model sub-parts` mesh picker in the Stage toolbar; the mesh picker is also available on the Component page. Under the viewer, the **Station ledger** shows station 1 ambient temperature and ambient pressure, then temperatures for stations 2–4 with reference and synthetic values where both exist. No per-station pressure is present in the browser API, so do not show it or extend the backend (amended after Phase 0 review).
+- **Left: the Stage.** A white card with a 1px border holding the 3D viewer. Keep `Load GLB` and `Schematic` as the view switch. Put `Reset camera`, `Explode view`, `Isolate component`, and the `Model sub-parts` mesh picker in the Stage toolbar; the mesh picker is also available on the Component page. Under the viewer, the **Station ledger** shows synthetic station 1 ambient temperature and ambient pressure from the scenario input (no reference values are supplied), then temperatures for stations 2–4 with reference and synthetic values where both exist. No per-station pressure is present in the browser API, so do not show it or extend the backend (amended after Phase 0 review).
 - **Right: Component ledger.** A card listing the six components as rows (44px): name, a neutral status pill, and the primary metric as a mono figure. The selected row has the same 1px ink marker as the selected 3D part. Below it, the selected component's first four metrics with their provenance in small grey text. A `Open component detail` text link goes to `#/components/<id>`.
 
 **Timeline card** (full width, see §8). Title `Electrical output over 24 hours`, one question: *where does the observation depart from the reference?* Includes the scrubber, play control, and a `View as table` toggle.
@@ -309,7 +291,7 @@ Loading skeleton · empty · no evidence · engine offline · invalid seed · re
 - **Look.** Flat and matte. Light neutral parts (`--stage-part`) with hairline edges (`--stage-edge`) on a flat `--stage-bg`. No gradient background, no bloom, no glow, no floor reflection.
 - **Selection.** The selected part gets a 1.5px outline in `--stage-selected` plus a leader line to a 12px HTML label in ink. Status is never shown as glow; it is a pill in the Component ledger.
 - **Tokens, not literals.** Read `--stage-*` from `getComputedStyle` at mount and on theme change. Delete the hardcoded `SELECTED_TONE`.
-- **Controls (amended after Phase 0 review).** Keep `Load GLB` and `Schematic` as the view switch. Put `Reset camera`, `Explode view`, `Isolate component`, and the `Model sub-parts` mesh picker in the Stage toolbar; keep the mesh picker available on the Component page too. `No auto-rotate` applies to the camera only. The existing `Pause rotor` control remains an opt-in, visual-only rotor animation toggle, off by default and off under `prefers-reduced-motion`. Camera moves ease over `--dur-slow`. Cap device pixel ratio at 2.
+- **Controls (amended after Phase 0 review).** Keep `Load GLB` and `Schematic` as the view switch. Put `Reset camera`, `Explode view`, `Isolate component`, and the `Model sub-parts` mesh picker in the Stage toolbar; keep the mesh picker available on the Component page too. `No auto-rotate` applies to the camera only. The existing `Pause rotor` control remains an opt-in, visual-only rotor animation toggle, off by default and off under `prefers-reduced-motion`. Camera moves ease over `--dur-slow`. Cap device pixel ratio at 2. Use the existing React Three Fiber/drei OrbitControls for exploratory free-look.
 - **Accessibility.** The Component ledger is the accessible path to every part. The canvas gets a descriptive `aria-label` and is not a keyboard trap.
 - **Do not touch** the component-ID aliases or the GLB mapping contract. Split `TurbineViewer.tsx` into `GLBModel`, `SchematicTurbine`, `selection`, and `camera` modules without changing behaviour; run `tests/test_blender_asset.py` after.
 - Keep the 3D bundle lazy-loaded.
@@ -354,9 +336,11 @@ The product's credibility depends on not over-claiming. Keep the existing bounda
 - **Focus:** a visible 2px ring on every interactive element, never removed. Logical tab order. Skip link to main content.
 - **Touch:** 44×44px hit area for every control on touch devices (the 28–36px visual height is fine if the hit area grows).
 - **Colour independence:** signs and triangles accompany every colour signal.
-- **Motion (amended after Phase 0 review):** 120–240ms, opacity and transform only. `No auto-rotate` applies to the camera only. The visual-only `Pause rotor` animation remains opt-in, starts off, and stays off under `prefers-reduced-motion`; reduced motion also removes autoplay interpolation and camera easing.
+- **Motion (amended after Phase 0 review):** 120–240ms, opacity and transform only. `No auto-rotate` applies to the camera only. The visual-only `Pause rotor` animation remains opt-in, starts off, and stays off under `prefers-reduced-motion`; reduced motion also removes autoplay interpolation and camera easing. The implementation must observe preference changes while mounted, not only read the initial setting (Phase 1 search refinement).
 - **Zoom:** usable at 200% and with 320px width without horizontal scroll (the chart and tables scroll inside their own containers).
 - **Breakpoints to verify:** 375, 768, 1024, 1440. KPIs go 2×2 on phones; panels stack; the Stage keeps a fixed 4:3 aspect on phones and uses touch orbit controls.
+- **Icon controls (Phase 1 search refinement):** icon-only controls have an accessible name and expose selected, pressed, or expanded state when applicable. Decorative icons beside visible text are hidden from assistive technology.
+- **Timeline scrubber (Phase 1 search refinement):** prefer a native range control; expose its current sample and value to assistive technology, keep visible focus, and preserve keyboard alternatives for every drag action.
 - **Screen readers:** the replay announces the selected sample politely, throttled to settle after scrubbing. Never announce every playback tick.
 
 ---
@@ -379,7 +363,7 @@ frontend/src/
     ui/                  # Button, IconButton, Chip, Pill, Tabs, Segmented, Field,
                          # Select, CompoundFilter, Card, Kpi, DataTable, BarList,
                          # Tooltip, Sheet, Skeleton, EmptyState, Banner
-    shell/               # Sidebar, MobileBar, PageHeader, BoundarySheet, ThemeToggle
+    shell/               # IconRail, MobileBottomBar, PageHeader, BoundarySheet, ThemeToggle
     brand/               # CycleGlyph.tsx, Wordmark.tsx
   features/
     overview/            # KpiRow, ComponentLedger, StationLedger, ReplayTimeline,
@@ -396,6 +380,7 @@ frontend/src/
 **Decisions**
 - **URL is state.** `scenario`, `seed`, `i` (sample index) and the component ID are read from and written to the hash. Reloading or sharing a link restores the exact view.
 - **One store** for the run payload and selection. Components receive typed props; nothing reads `useState` three levels up.
+- **Rendering note (Phase 1 React search):** keep context values memoized and avoid making high-frequency sample/playhead updates rerender unrelated shell, theme, or evidence subtrees; use narrow consumers/selectors when implementing the store.
 - **Theme:** `data-theme` on `<html>` (`light`, `dark`, or unset for system). Persist the choice in `localStorage` inside `try/catch`.
 - **No hardcoded colours in TSX.** Anything that needs a colour reads a CSS variable.
 - **Charts:** keep hand-rolled SVG, rewritten as `TimelineChart` with `ResizeObserver`, direct labels, and a table fallback.
@@ -413,7 +398,7 @@ Work on a branch `redesign/v2`. Each phase ends in a mergeable state with the ga
 |---|---|---|---|
 | **0. Setup and baseline** | S | Install the three skills (Appendix A). Run the app. Capture "before" screenshots at 375, 768, 1024, 1440 into `docs/redesign/before/`. Record the baseline bundle size and Lighthouse scores. | Before-set committed; `npm run build`, `npm run lint`, `pytest`, `ruff` all green. |
 | **1. Direction lock** | S | Run `taste-skill draw --app` as in Appendix B and save `.taste-skill/direction.json` (it is the committed art-direction record; replace the old `data-terminal` one). Run the ui-ux-pro-max domain searches in Appendix B and note anything that tightens §10. Download Geist fonts. Draw the final cycle glyph. | `direction.json` matches §3; fonts and licence files in place; glyph SVG reviewed. |
-| **2. Foundation** | M | `tokens.css`, `base.css`, `fonts.css`. UI primitives. Shell (Sidebar, MobileBar, PageHeader, BoundarySheet). Hash router, store, URL state. Delete `TurbineIQ.css` as screens migrate. | Empty routes render inside the new shell in light and dark; keyboard and focus work; `taste lint` clean on shell files. |
+| **2. Foundation** | M | `tokens.css`, `base.css`, `fonts.css`. UI primitives. Shell (IconRail, MobileBottomBar, PageHeader, BoundarySheet). Hash router, store, URL state. Delete `TurbineIQ.css` as screens migrate. | Empty routes render inside the new shell in light and dark; keyboard and focus work; `taste lint` clean on shell files. |
 | **3. Overview** | L | KpiRow, ComponentLedger, StationLedger, ReplayTimeline with the new chart, keyboard map, Boundary sheet content. | §6.1 met with live API data; keyboard map works; scrubbing keeps all panels in sync. |
 | **4. Component, Evidence, Assistant** | L | §6.2, §6.3, §6.4 including cloud-consent sheet, tool trace, no-evidence state. | Each screen answers its one question; all states in §6.5 exist for them. |
 | **5. 3D stage** | M | Split `TurbineViewer.tsx`; token-driven scene colours; selection outline and labels; Exploded and Reset; perf cap. | §7 met; `tests/test_blender_asset.py` and API tests unchanged and green; viewer chunk still lazy. |
