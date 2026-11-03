@@ -1,0 +1,49 @@
+:root {
+  --bg: #101112;
+  --surface: #08090a;
+  --surface-raised: #191b1d;
+  --border: #292b2d;
+  --border-strong: #515457;
+  --control: #55595c;
+  --text: #e4e6e7;
+  --text-strong: #f5f6f7;
+  --muted: #b1b4b6;
+  --faint: #969a9d;
+  --accent: #69cbd3;
+  --accent-dim: #193235;
+  --amber: #dbb77e;
+  --red: #e57a6c;
+  --green: #80c59d;
+  --sans: "Fira Sans", "Segoe UI", system-ui, sans-serif;
+  /* taste-skill-ignore: data-terminal uses tabular monospace for engineering values and source references. */
+  --mono: "Fira Code", Consolas, monospace; /* taste-skill-ignore: monospace is the chosen face for data-terminal readouts. */
+  font-family: var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html { min-width: 320px; min-height: 100%; background: var(--bg); color-scheme: dark; }
+
+body { min-width: 320px; min-height: 100vh; margin: 0; background: var(--bg); }
+
+button, input, select, textarea { font: inherit; }
+
+button { cursor: pointer; }
+
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+a { color: inherit; text-decoration: none; }
+
+#root { min-height: 100vh; }
+
+::selection { color: #071216; background: #8ce1e3; }
