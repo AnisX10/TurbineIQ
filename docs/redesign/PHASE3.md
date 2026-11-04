@@ -62,3 +62,11 @@ Desktop performance ranged 67-75 across the three runs, a wider spread than the 
 - Did not split the Viewer module, change the GLB asset/contract, add runtime packages, change API/types, or start Phase 4/5.
 
 The app remains synthetic-only and local: no real-time industrial connectivity, DCS/SCADA/PLC control, or confidential FieldCore material.
+
+## Phase 3 performance finding closure
+
+The Phase 3 mobile and desktop LCP regressions and desktop performance miss recorded above were rechecked after Phase 4's Stage-frame correction. The Stage heading, toolbar, reserved 4:3 viewport, preview and interaction note now render in the main bundle. Only the Canvas and `TurbineViewer` are lazy-loaded; the Canvas starts after the Stage is active and a 700 ms delay, with the schematic preview visible meanwhile.
+
+Three final Lighthouse runs per preset report mobile performance 68/69/70 (median 69), LCP 1.075/1.078/1.084 s (median 1.078 s), CLS 0.0373, and desktop performance 76/76/75 (median 76), LCP 0.330/0.301/0.310 s (median 0.310 s), CLS 0.0132. The desktop performance median is 4 points below the Phase 0 median of 80, within the 5-point noise allowance. Both LCP limits and the CLS limit pass. The independent LCP probe identifies the static Stage interaction note on mobile and the Component ledger heading on desktop; neither is inside the lazy Canvas. Full run tables and evidence are in [PHASE4.md](PHASE4.md) and [`phase4/lighthouse/`](phase4/lighthouse/).
+
+The 3D chunk remains large and mobile total-blocking time is still high. This closes the requested Phase 3 finding without splitting the full viewer, changing the GLB, or changing the API.

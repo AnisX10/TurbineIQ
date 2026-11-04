@@ -15,7 +15,7 @@ import {
 } from 'three'
 import type { Object3D } from 'three'
 import type { TwinComponentState } from './types'
-import { getPartPickerHost, subscribePartPickerHost } from './features/overview/partPickerHost'
+import { getPartPickerHost, getStageInfoHost, subscribePartPickerHost } from './features/overview/partPickerHost'
 
 const MODEL_PATH = '/models/turbine.glb'
 
@@ -28,17 +28,27 @@ interface StageTokens {
   part: string
   edge: string
   selected: string
+  ambient: number
+  keyLight: number
+  fillLight: number
+  rimLight: number
 }
 
-const DEFAULT_STAGE_TOKENS: StageTokens = { background: '#ffffff', part: '#d9dde3', edge: '#8a8f98', selected: '#1d5fbf' }
+const DEFAULT_STAGE_TOKENS: StageTokens = { background: '#ffffff', part: '#d9dde3', edge: '#8a8f98', selected: '#1d5fbf', ambient: 0.8, keyLight: 2.1, fillLight: 9, rimLight: 4 }
 const StageTokenContext = createContext<StageTokens>(DEFAULT_STAGE_TOKENS)
 
 function readStageTokens(): StageTokens {
+  const root = document.documentElement
+  const dark = root.dataset.theme === 'dark' || (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches)
   return {
     background: readCssColor('--stage-bg', DEFAULT_STAGE_TOKENS.background),
     part: readCssColor('--stage-part', DEFAULT_STAGE_TOKENS.part),
     edge: readCssColor('--stage-edge', DEFAULT_STAGE_TOKENS.edge),
     selected: readCssColor('--stage-selected', DEFAULT_STAGE_TOKENS.selected),
+    ambient: dark ? 4 : DEFAULT_STAGE_TOKENS.ambient,
+    keyLight: dark ? 7 : DEFAULT_STAGE_TOKENS.keyLight,
+    fillLight: dark ? 32 : DEFAULT_STAGE_TOKENS.fillLight,
+    rimLight: dark ? 24 : DEFAULT_STAGE_TOKENS.rimLight,
   }
 }
 
@@ -60,10 +70,19 @@ function useStageTokens(): StageTokens {
   return tokens
 }
 
-interface TurbineViewerProps {
+interface SchematicTurbineProps {
   components: TwinComponentState[]
   selectedComponentId: string
   onSelectComponent: (componentId: string) => void
+}
+
+interface TurbineViewerProps extends SchematicTurbineProps {
+  view: 'glb' | 'schematic'
+  exploded: boolean
+  isolated: boolean
+  spinning: boolean
+  cameraKey: number
+  onModelStatus: (status: { available: boolean; failed: boolean }) => void
 }
 
 interface PartInspection {
@@ -212,7 +231,7 @@ function SchematicTurbine({
   components,
   selectedComponentId,
   onSelectComponent,
-}: TurbineViewerProps) {
+}: SchematicTurbineProps) {
   const statusById = new Map(components.map((component) => [component.component_id, component.status]))
   const selected = (id: string) => selectedComponentId === id
   const status = (id: string) => statusById.get(id) ?? 'nominal'
@@ -540,19 +559,15 @@ class ModelBoundary extends Component<ModelBoundaryProps, ModelBoundaryState> {
   }
 }
 
-export function TurbineViewer({ components, selectedComponentId, onSelectComponent }: TurbineViewerProps) {
+export function TurbineViewer({ components, selectedComponentId, onSelectComponent, view, exploded, isolated, spinning, cameraKey, onModelStatus }: TurbineViewerProps) {
   const stageTokens = useStageTokens()
   const [modelUrl, setModelUrl] = useState<string | null>(null)
   const [modelName, setModelName] = useState<string | null>(null)
   const [modelFailed, setModelFailed] = useState(false)
   const [partCatalog, setPartCatalog] = useState<PartInspection[]>([])
   const [selectedPart, setSelectedPart] = useState<PartInspection | null>(null)
-  const [exploded, setExploded] = useState(false)
-  const [isolated, setIsolated] = useState(false)
-  const [spinning, setSpinning] = useState(false)
-  const [reduceMotion, setReduceMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
-  const [cameraKey, setCameraKey] = useState(0)
   const partPickerHost = useSyncExternalStore(subscribePartPickerHost, getPartPickerHost, () => null)
+  const stageInfoHost = useSyncExternalStore(subscribePartPickerHost, getStageInfoHost, () => null)
   const previousComponentId = useRef(selectedComponentId)
   const preserveInspectedPartOnComponentChange = useRef(false)
   const modelInteractive = Boolean(modelUrl && !modelFailed)
@@ -569,9 +584,11 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
         if (!cancelled && response.ok && isGlb) {
           setModelUrl(MODEL_PATH)
           setModelName('turbine.glb')
+        } else if (!cancelled) {
+          setModelFailed(true)
         }
       })
-      .catch(() => undefined)
+      .catch(() => { if (!cancelled) setModelFailed(true) })
     return () => { cancelled = true }
   }, [])
 
@@ -581,15 +598,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
     }
   }, [modelUrl])
 
-  useEffect(() => {
-    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const stopForReducedMotion = () => {
-      setReduceMotion(preference.matches)
-      if (preference.matches) setSpinning(false)
-    }
-    preference.addEventListener('change', stopForReducedMotion)
-    return () => preference.removeEventListener('change', stopForReducedMotion)
-  }, [])
+  useEffect(() => onModelStatus({ available: Boolean(modelUrl), failed: modelFailed }), [modelUrl, modelFailed, onModelStatus])
 
   useEffect(() => {
     if (previousComponentId.current === selectedComponentId) return
@@ -601,50 +610,9 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
     setSelectedPart(null)
   }, [selectedComponentId])
 
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-    if (!file.name.toLowerCase().endsWith('.glb')) {
-      setModelFailed(true)
-      setModelName('Select a .glb export')
-      return
-    }
-    setModelUrl(URL.createObjectURL(file))
-    setModelName(file.name)
-    setModelFailed(false)
-    setSelectedPart(null)
-    setExploded(false)
-    setIsolated(false)
-    setSpinning(false)
-    setPartCatalog([])
-  }
-
-  const useSchematic = () => {
-    if (modelUrl?.startsWith('blob:')) URL.revokeObjectURL(modelUrl)
-    setModelUrl(null)
-    setModelName(null)
-    setModelFailed(false)
-    setSelectedPart(null)
-    setExploded(false)
-    setIsolated(false)
-    setSpinning(false)
-    setPartCatalog([])
-  }
-
   const selectComponent = (componentId: string) => {
     setSelectedPart(null)
     onSelectComponent(componentId)
-  }
-
-  const resetCamera = () => setCameraKey((key) => key + 1)
-
-  const toggleIsolation = () => {
-    if (isolated) {
-      setIsolated(false)
-      setCameraKey((key) => key + 1)
-    } else {
-      setIsolated(true)
-    }
   }
 
   const inspectPart = (part: PartInspection) => {
@@ -654,29 +622,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
   }
 
   return (
-    <section className="viewer-panel panel">
-      <div className="panel-heading viewer-heading">
-        <h2>GE 6B.03 · conceptual reference</h2>
-        <span className={`model-state ${modelUrl && !modelFailed ? 'model-state-loaded' : ''}`}>{modelFailed ? 'Schematic fallback' : modelUrl ? 'Blender GLB' : 'Interactive schematic'}</span>
-      </div>
-      <div className="stage-toolbar" aria-label="Stage toolbar">
-        <div className="viewer-actions" role="group" aria-label="Stage view">
-          <label className={`button button-quiet file-button ${modelUrl && !modelFailed ? 'is-active' : ''}`}>
-            <input type="file" accept=".glb,model/gltf-binary" aria-label="Load GLB model" onChange={onFileChange} />
-            Load GLB
-          </label>
-          <button type="button" className="button button-quiet" aria-pressed={!modelUrl || modelFailed} onClick={useSchematic}>Schematic</button>
-        </div>
-        <div className="viewer-control-row" role="group" aria-label="Stage controls">
-          <div className="viewer-control-group">
-            <button type="button" className="button button-quiet" onClick={resetCamera}>Reset camera</button>
-            <button type="button" className={`button button-quiet ${exploded ? 'is-active' : ''}`} aria-pressed={exploded} disabled={!modelInteractive} onClick={() => setExploded((value) => !value)}>{exploded ? 'Reassemble' : 'Explode view'}</button>
-            <button type="button" className={`button button-quiet ${isolated ? 'is-active' : ''}`} aria-pressed={isolated} disabled={!modelInteractive} onClick={toggleIsolation}>{isolated ? 'Show all parts' : activeSelectedPart ? 'Isolate selected part' : 'Isolate component'}</button>
-            <button type="button" className={`button button-quiet ${spinning ? 'is-active' : ''}`} aria-pressed={spinning} disabled={!modelInteractive || reduceMotion} onClick={() => setSpinning((value) => !value)}>{spinning ? 'Pause rotor' : 'Rotor motion'}</button>
-          </div>
-          <span className="viewer-control-hint">{spinning ? 'Rotor motion on · visual only' : modelInteractive ? 'Rotor motion is opt-in.' : 'Load the Blender GLB to use model controls.'}</span>
-        </div>
-      </div>
+    <div className="viewer-scene">
       {partPickerHost && createPortal(
         <div className="part-browser">
           <label htmlFor="model-part-select">Model sub-parts · {components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}</label>
@@ -699,95 +645,76 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
           aria-label="Interactive simplified gas turbine. Drag to orbit, right-drag to pan, scroll to zoom, and select a part to inspect it."
         >
           <color attach="background" args={[stageTokens.background]} />
-          <ambientLight intensity={0.8} />
-          <directionalLight position={[4, 8, 5]} intensity={2.1} color="#dce8ed" />
-          <pointLight position={[-2.5, 1.2, 2.5]} intensity={9} distance={10} color="#a9c6c8" />
-          <pointLight position={[1.4, 0.8, -2]} intensity={4} distance={8} color="#d5d9da" />
+          <ambientLight intensity={stageTokens.ambient} />
+          <directionalLight position={[4, 8, 5]} intensity={stageTokens.keyLight} color="#dce8ed" />
+          <pointLight position={[-2.5, 1.2, 2.5]} intensity={stageTokens.fillLight} distance={10} color="#a9c6c8" />
+          <pointLight position={[1.4, 0.8, -2]} intensity={stageTokens.rimLight} distance={8} color="#d5d9da" />
           <StageTokenContext.Provider value={stageTokens}>
-          <Suspense fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}>
-            {modelUrl ? (
-              <ModelBoundary
-                key={modelUrl}
-                onFailure={() => {
-                  setModelFailed(true)
-                  setPartCatalog([])
-                }}
-                fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}
-              >
-                <GLBModel
-                  url={modelUrl}
-                  selectedComponentId={selectedComponentId}
-                  selectedPart={activeSelectedPart}
-                  isolated={isolated}
-                  exploded={exploded}
-                  spinning={spinning}
-                  onSelectComponent={onSelectComponent}
-                  onInspectPart={inspectPart}
-                  onPartsAvailable={setPartCatalog}
-                  selectedTone={stageTokens.selected}
-                  stagePart={stageTokens.part}
-                />
-              </ModelBoundary>
-            ) : (
-              <SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />
-            )}
-          </Suspense>
+            <Suspense fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}>
+              {modelUrl && view === 'glb' ? (
+                <ModelBoundary
+                  key={modelUrl}
+                  onFailure={() => { setModelFailed(true); setPartCatalog([]) }}
+                  fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}
+                >
+                  <GLBModel
+                    url={modelUrl}
+                    selectedComponentId={selectedComponentId}
+                    selectedPart={activeSelectedPart}
+                    isolated={isolated}
+                    exploded={exploded}
+                    spinning={spinning}
+                    onSelectComponent={onSelectComponent}
+                    onInspectPart={inspectPart}
+                    onPartsAvailable={setPartCatalog}
+                    selectedTone={stageTokens.selected}
+                    stagePart={stageTokens.part}
+                  />
+                </ModelBoundary>
+              ) : (
+                <SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />
+              )}
+            </Suspense>
           </StageTokenContext.Provider>
-          <OrbitControls
-            enableDamping
-            dampingFactor={0.08}
-            enablePan
-            panSpeed={0.9}
-            zoomSpeed={0.8}
-            rotateSpeed={0.8}
-            minDistance={0.45}
-            maxDistance={26}
-            minPolarAngle={0.035}
-            maxPolarAngle={Math.PI - 0.035}
-            makeDefault
-          />
+          <OrbitControls enableDamping dampingFactor={0.08} enablePan panSpeed={0.9} zoomSpeed={0.8} rotateSpeed={0.8} minDistance={0.45} maxDistance={26} minPolarAngle={0.035} maxPolarAngle={Math.PI - 0.035} makeDefault />
           <ViewerCameraReset resetKey={cameraKey} />
         </Canvas>
         <div className="viewer-axis-label axis-intake">Air inlet</div>
         <div className="viewer-axis-label axis-core">Core</div>
         <div className="viewer-axis-label axis-output">Generator</div>
-        <div className="viewer-note">Orbit: drag · Pan: right-drag · Zoom: scroll · Click a part to inspect</div>
       </div>
-      {modelFailed && <p className="viewer-fallback-note" role="status">The 3D model is unavailable; showing the interactive schematic.</p>}
-      <div className="part-inspection" aria-live="polite">
-        <div className="part-inspection-heading">
-          <span className="part-inspection-label">Selected model part</span>
-          {activeSelectedPart && <span className="part-component-tag">{activeSelectedPart.componentId.toUpperCase()}</span>}
-        </div>
-        {activeSelectedPart ? (
-          <>
-            <strong className="part-inspection-name">{activeSelectedPart.name}</strong>
-            <div className="part-inspection-facts">
-              {activeSelectedPart.role && <span>{activeSelectedPart.role}</span>}
-              {activeSelectedPart.envelopeMm && <span>Single casting envelope: {activeSelectedPart.envelopeMm}{'\u00a0'}mm</span>}
-              {activeSelectedPart.massKg !== undefined && <span>Single casting listed mass: {activeSelectedPart.massKg}{'\u00a0'}kg</span>}
-              {activeSelectedPart.referenceLabel && <span>Related reference: {activeSelectedPart.referenceLabel}</span>}
-              {activeSelectedPart.referenceEnvelopeMm && <span>Stage casting envelope: {activeSelectedPart.referenceEnvelopeMm}{'\u00a0'}mm</span>}
-              {activeSelectedPart.referenceMassKg !== undefined && <span>Stage casting listed mass: {activeSelectedPart.referenceMassKg}{'\u00a0'}kg</span>}
-              {activeSelectedPart.instanceIndex !== undefined && activeSelectedPart.instanceCount !== undefined && (
-                <span>Visual instance {activeSelectedPart.instanceIndex} of {activeSelectedPart.instanceCount}</span>
-              )}
+      {stageInfoHost && createPortal(
+        <>
+          {modelFailed && <p className="viewer-fallback-note" role="status">The 3D model is unavailable; showing the interactive schematic.</p>}
+          <div className="part-inspection" aria-live="polite">
+            <div className="part-inspection-heading">
+              <span className="part-inspection-label">Selected model part</span>
+              {activeSelectedPart && <span className="part-component-tag">{activeSelectedPart.componentId.toUpperCase()}</span>}
             </div>
-            {activeSelectedPart.instanceCountNote && <div className="part-inspection-note">{activeSelectedPart.instanceCountNote}</div>}
-            {activeSelectedPart.dataNote && <div className="part-inspection-note">{activeSelectedPart.dataNote}</div>}
-            {activeSelectedPart.geometryNote && <div className="part-inspection-note">{activeSelectedPart.geometryNote}</div>}
-            {activeSelectedPart.source && <a className="part-inspection-source" href={activeSelectedPart.source} target="_blank" rel="noreferrer">Open public source ↗</a>}
-          </>
-        ) : (
-          <div className="part-inspection-empty">
-            {modelInteractive ? 'Click any visible mesh in the Blender model to inspect the sub-part and available public metadata.' : 'Sub-part inspection is available when the Blender GLB is loaded.'}
+            {activeSelectedPart ? (
+              <>
+                <strong className="part-inspection-name">{activeSelectedPart.name}</strong>
+                <div className="part-inspection-facts">
+                  {activeSelectedPart.role && <span>{activeSelectedPart.role}</span>}
+                  {activeSelectedPart.envelopeMm && <span>Single casting envelope: {activeSelectedPart.envelopeMm}{'\u00a0'}mm</span>}
+                  {activeSelectedPart.massKg !== undefined && <span>Single casting listed mass: {activeSelectedPart.massKg}{'\u00a0'}kg</span>}
+                  {activeSelectedPart.referenceLabel && <span>Related reference: {activeSelectedPart.referenceLabel}</span>}
+                  {activeSelectedPart.referenceEnvelopeMm && <span>Stage casting envelope: {activeSelectedPart.referenceEnvelopeMm}{'\u00a0'}mm</span>}
+                  {activeSelectedPart.referenceMassKg !== undefined && <span>Stage casting listed mass: {activeSelectedPart.referenceMassKg}{'\u00a0'}kg</span>}
+                  {activeSelectedPart.instanceIndex !== undefined && activeSelectedPart.instanceCount !== undefined && <span>Visual instance {activeSelectedPart.instanceIndex} of {activeSelectedPart.instanceCount}</span>}
+                </div>
+                {activeSelectedPart.instanceCountNote && <div className="part-inspection-note">{activeSelectedPart.instanceCountNote}</div>}
+                {activeSelectedPart.dataNote && <div className="part-inspection-note">{activeSelectedPart.dataNote}</div>}
+                {activeSelectedPart.geometryNote && <div className="part-inspection-note">{activeSelectedPart.geometryNote}</div>}
+                {activeSelectedPart.source && <a className="part-inspection-source" href={activeSelectedPart.source} target="_blank" rel="noreferrer">Open public source</a>}
+              </>
+            ) : <div className="part-inspection-empty">{modelInteractive ? 'Click any visible mesh in the Blender model to inspect the sub-part and available public metadata.' : 'Sub-part inspection is available when the Blender GLB is loaded.'}</div>}
+            {spinning && <div className="visual-only-note">Rotor motion is illustrative only; it is not an RPM or operating-state prediction.</div>}
           </div>
-        )}
-        {spinning && <div className="visual-only-note">Rotor motion is illustrative only; it is not an RPM or operating-state prediction.</div>}
-      </div>
-      <div className="viewer-footnote">
-        {modelName && !modelFailed ? `Loaded locally in this browser · ${modelName}` : 'No Blender export found in this workspace. The schematic is an interactive geometry scaffold.'}
-      </div>
-    </section>
+          <div className="viewer-footnote">{modelName && !modelFailed ? `Loaded locally in this browser · ${modelName}` : 'No Blender export found in this workspace. The schematic is an interactive geometry scaffold.'}</div>
+        </>,
+        stageInfoHost,
+      )}
+    </div>
   )
 }

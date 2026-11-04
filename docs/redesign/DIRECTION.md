@@ -27,7 +27,7 @@ The shell starts with the System theme preference; users can choose System, Ligh
 | Negative pill background / ink | `#ffedea` / `#831c1e` | `#2c1a20` / `#ef6b7a` |
 | Warning pill background / ink | `#fffbeb` / `#92400e` | `#2a2416` / `#d9a441` |
 | Neutral pill background / ink | `#eeeeee` / `#3d3d3d` | `#212226` / `#c9ccd1` |
-| Stage background / part / edge / selected | `surface` / `#d9dde3` / `#8a8f98` / `chart-3` | `surface` / `#2a2d33` / `#686e77` / `chart-3` |
+| Stage background / part / edge / selected | `surface` / `#d9dde3` / `#8a8f98` / `chart-3` | `surface` / `#626872` / `#686e77` / `chart-3` |
 
 Shape and type values stay as specified in plan section 4: card radius 8px, control radius 6px, pill radius 999px, row 44px, control 36px, filter 28px, 55px desktop icon rail, 12px gap, 24px card padding, 32px page gutter; 24px title, 16px section title, 30px KPI, 14px body, 12px small text. Motion is 120-240ms with opacity/transform only. Keep chart and residual meaning independent of hue.
 
@@ -47,6 +47,7 @@ Ran `python docs/redesign/contrast_check.py`. Text and pill ink require 4.5:1; U
 | Light | `--chart-3` on `--surface` | 6.10:1 | 3.0:1 |
 | Light | `--accent` on `--surface` | 18.42:1 | 3.0:1 |
 | Light | `--stage-edge` on `--stage-bg` | 3.25:1 | 3.0:1 |
+| Light | `--stage-part` on `--stage-bg` | 1.36:1 | 1.0:1 |
 | Light | `--positive` text on `--surface` | 5.13:1 | 4.5:1 |
 | Light | `--positive` text on `--ground` | 4.65:1 | 4.5:1 |
 | Light | `--negative` text on `--surface` | 5.78:1 | 4.5:1 |
@@ -67,6 +68,7 @@ Ran `python docs/redesign/contrast_check.py`. Text and pill ink require 4.5:1; U
 | Dark | `--chart-3` on `--surface` | 7.03:1 | 3.0:1 |
 | Dark | `--accent` on `--surface` | 16.43:1 | 3.0:1 |
 | Dark | `--stage-edge` on `--stage-bg` | 3.55:1 | 3.0:1 |
+| Dark | `--stage-part` on `--stage-bg` | 3.25:1 | 1.0:1 |
 | Dark | `--positive` text on `--surface` | 8.50:1 | 4.5:1 |
 | Dark | `--positive` text on `--ground` | 8.92:1 | 4.5:1 |
 | Dark | `--negative` text on `--surface` | 6.13:1 | 4.5:1 |

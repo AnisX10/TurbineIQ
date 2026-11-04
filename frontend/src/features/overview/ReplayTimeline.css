@@ -1,0 +1,29 @@
+
+.timeline-card { min-width: 0; color: var(--text); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.timeline-heading h2 { margin: 0; color: var(--text); font-size: 16px; line-height: 1.35; font-weight: 600; }
+.timeline-card { position: relative; margin-top: 12px; padding: 15px; }
+.timeline-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.timeline-heading p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+.timeline-actions { display: flex; align-items: center; gap: 6px; }
+.icon-action { width: 36px; height: 36px; display: grid; place-items: center; color: var(--muted); border: 1px solid var(--control-strong); border-radius: 6px; background: transparent; }
+.text-control, .first-flag-button { color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: transparent; }
+.replay-button { min-height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; font-size: 12px; }
+.shortcut-popover { position: absolute; z-index: 10; top: 56px; right: 15px; width: 245px; display: grid; gap: 6px; padding: 11px 13px; color: var(--text); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); box-shadow: 0 4px 16px rgb(0 0 0 / 8%); font-size: 11px; }
+.shortcut-popover strong { font-size: 12px; }
+.shortcut-popover .is-disabled { color: var(--muted); }
+.text-control, .first-flag-button { min-height: 32px; padding: 0 8px; font-size: 11px; cursor: pointer; }
+.text-control.is-on { color: var(--text); background: var(--raised); }
+.timeline-scrubber-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 6px 12px; margin-top: 8px; color: var(--muted); font: 11px var(--mono); }
+.timeline-scrubber-row input { grid-column: 1 / -1; width: 100%; min-height: 30px; accent-color: var(--text); }
+.first-flag-button { min-height: 36px; margin-top: 4px; }
+.first-flag-button:disabled { color: var(--muted); cursor: not-allowed; }
+@media (max-width: 620px) {
+  .timeline-card { padding: 12px 9px; }
+  .timeline-heading { align-items: flex-start; }
+  .timeline-heading h2 { font-size: 15px; }
+  .timeline-actions { flex: 0 0 auto; }
+  .replay-button { min-height: 44px; padding-inline: 7px; font-size: 11px; }
+  .icon-action { width: 44px; height: 44px; }
+  .timeline-scrubber-row input { min-height: 44px; }
+  .first-flag-button { min-height: 44px; }
+}

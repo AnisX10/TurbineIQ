@@ -1,0 +1,29 @@
+
+.filter-row { position: relative; display: flex; align-items: flex-start; flex-wrap: wrap; gap: 8px; min-height: 28px; margin: 0 0 14px; }
+.filter-group { position: relative; min-width: 0; height: 28px; display: inline-flex; align-items: center; gap: 9px; padding: 0 9px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; }
+.filter-label { color: var(--muted); white-space: nowrap; }
+.filter-group select, .filter-group input { min-width: 0; height: 24px; padding: 0; color: var(--text); border: 0; outline: 0; background: transparent; font-size: 12px; }
+.filter-scenario select { max-width: 285px; }
+.filter-seed input { width: 54px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.filter-sample .filter-value, .filter-interval .filter-value { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.filter-group.has-error { border-color: var(--negative); }
+.filter-error { position: absolute; top: calc(100% + 4px); left: 4px; z-index: 3; width: max-content; max-width: 250px; padding: 4px 6px; color: var(--negative); background: var(--surface); font-size: 11px; }
+.filter-seed.has-error { height: auto; min-height: 28px; flex-wrap: wrap; padding-block: 4px; }
+.filter-seed.has-error .filter-error { position: static; flex-basis: 100%; }
+.filter-status { align-self: center; color: var(--muted); font-size: 11px; }
+@media (max-width: 1023px) {
+  .filter-group { min-height: 44px; height: auto; }
+  .filter-row { gap: 6px; margin-bottom: 9px; }
+  .filter-scenario { flex: 1 1 100%; }
+  .filter-scenario select { max-width: none; flex: 1; }
+  .filter-seed, .filter-sample, .filter-interval { min-height: 38px; }
+}
+@media (max-width: 620px) {
+  .filter-scenario { flex: 1 1 100%; }
+  .filter-group { gap: 5px; padding-inline: 7px; font-size: 11px; }
+  .filter-group select, .filter-group input { font-size: 11px; }
+  .filter-seed { flex: 0 0 92px; }
+  .filter-sample { flex: 1 1 190px; min-width: 200px; }
+  .filter-interval { flex: 0 0 auto; }
+  .filter-sample .filter-value { font-size: 11px; }
+}

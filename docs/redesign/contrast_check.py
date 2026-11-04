@@ -34,7 +34,7 @@ THEMES = {
         "muted": "#9a9ea5", "chart-2": "#7d828a", "chart-3": "#6ea2f0",
         "accent": "#f2f3f4", "control-strong": "#686e77",
         "positive": "#5fc39c", "negative": "#ef6b7a", "warning": "#d9a441",
-        "stage-bg": "#141518", "stage-edge": "#686e77",
+        "stage-bg": "#141518", "stage-edge": "#686e77", "stage-part": "#626872",
         "pills": {
             "positive": ("#5fc39c", "#1b2828"),
             "negative": ("#ef6b7a", "#2c1a20"),
@@ -49,6 +49,7 @@ print("theme | pair | contrast | minimum | result")
 for theme, t in THEMES.items():
     checks = [
         ("--text on --surface", t["text"], t["surface"], 4.5),
+        ("--surface on --text", t["surface"], t["text"], 4.5),
         ("--text on --ground", t["text"], t["ground"], 4.5),
         ("--muted on --surface", t["muted"], t["surface"], 4.5),
         ("--muted on --ground", t["muted"], t["ground"], 4.5),
@@ -58,6 +59,7 @@ for theme, t in THEMES.items():
         ("--chart-3 on --surface", t["chart-3"], t["surface"], 3.0),
         ("--accent on --surface", t["accent"], t["surface"], 3.0),
         ("--stage-edge on --stage-bg", t["stage-edge"], t["stage-bg"], 3.0),
+        ("--stage-part on --stage-bg", t.get("stage-part", "#d9dde3"), t["stage-bg"], 1.0),
     ]
     checks.extend(
         (f"--{name} text on --{background_name}", t[name], t[background_name], 4.5)

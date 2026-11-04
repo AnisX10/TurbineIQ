@@ -288,6 +288,7 @@ export function PageHeader({
         <h1>{titles[page]}</h1>
       </div>
       <div className="page-header-actions">
+        {page === 'evidence' && <span className="page-route-chip">Local lexical retrieval</span>}
         <button
           className="boundary-chip"
           type="button"

@@ -4,7 +4,8 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
   retries: 0,
-  reporter: [['list'], ['json', { outputFile: '../docs/redesign/phase2/playwright-results.json' }]],
+  timeout: 120000,
+  reporter: [['list'], ['json', { outputFile: '../docs/redesign/phase4/playwright-results.json' }]],
   use: {
     baseURL: 'http://127.0.0.1:8011',
     browserName: 'chromium',

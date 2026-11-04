@@ -3,14 +3,17 @@ import { BoundarySheet, IconRail, MobileBottomBar, PageHeader } from './Shell'
 import { TurbineStoreProvider } from './app/store'
 import { useTurbineStore } from './app/useTurbineStore'
 import { getBoundaryDetails } from './shellLogic'
-import Overview, { ComponentDetail } from './features/overview/Overview'
-import { LegacyWorkspace } from './features/legacy/LegacyWorkspace'
+import Overview from './features/overview/Overview'
+import ComponentDetail from './features/component-detail/ComponentDetail'
+import Evidence from './features/evidence/Evidence'
+import Assistant from './features/assistant/Assistant'
 import './Shell.css'
 
 function RouteOutlet() {
   const { state } = useTurbineStore()
   if (state.page === 'components') return <ComponentDetail />
-  if (state.page === 'evidence' || state.page === 'assistant') return <LegacyWorkspace page={state.page} />
+  if (state.page === 'evidence') return <Evidence />
+  if (state.page === 'assistant') return <Assistant />
   return <Overview />
 }
 

@@ -9,6 +9,8 @@ export interface RouteState {
   scenarioId: string
   seed: number
   sampleIndex: number
+  evidenceQuery?: string
+  evidenceTopK?: number
 }
 
 export const DEFAULT_SCENARIO = 'compressor_fouling'
@@ -31,29 +33,38 @@ export function parseRoute(hash: string): RouteState {
   const rawSampleIndex = parseNonNegativeInteger(params.get('i'), DEFAULT_SAMPLE_INDEX)
   const sampleIndex = rawSampleIndex < 96 ? rawSampleIndex : DEFAULT_SAMPLE_INDEX
   const scenarioId = params.get('scenario')?.trim() || DEFAULT_SCENARIO
+  const rawEvidenceQuery = params.get('q')?.trim() ?? ''
+  const evidenceQuery = rawEvidenceQuery.length <= 300 ? rawEvidenceQuery : ''
+  const rawTopK = parseNonNegativeInteger(params.get('top_k'), 4)
+  const evidenceTopK = rawTopK >= 1 && rawTopK <= 8 ? rawTopK : 4
+  const shared = { scenarioId, seed, sampleIndex, evidenceQuery, evidenceTopK }
 
   if (segments[0] === 'components') {
     const componentId = segments[1]
     if (segments.length === 2 && COMPONENT_IDS.includes(componentId as ComponentId)) {
-      return { page: 'components', componentId: componentId as ComponentId, scenarioId, seed, sampleIndex }
+      return { page: 'components', componentId: componentId as ComponentId, ...shared }
     }
-    return { page: 'overview', componentId: 'compressor', scenarioId, seed, sampleIndex }
+    return { page: 'overview', componentId: 'compressor', ...shared }
   }
 
   const page = segments[0] as RoutePage
   if (segments.length === 1 && ROUTE_PAGES.has(page)) {
     const rawComponent = params.get('component')
     const componentId = COMPONENT_IDS.includes(rawComponent as ComponentId) ? rawComponent as ComponentId : 'compressor'
-    return { page, componentId, scenarioId, seed, sampleIndex }
+    return { page, componentId, ...shared }
   }
-  return { page: 'overview', componentId: 'compressor', scenarioId, seed, sampleIndex }
+  return { page: 'overview', componentId: 'compressor', ...shared }
 }
 
-export function routeHash(state: Pick<RouteState, 'page' | 'componentId' | 'scenarioId' | 'seed' | 'sampleIndex'>): string {
+export function routeHash(state: Pick<RouteState, 'page' | 'componentId' | 'scenarioId' | 'seed' | 'sampleIndex'> & Partial<Pick<RouteState, 'evidenceQuery' | 'evidenceTopK'>>): string {
   const path = state.page === 'components'
     ? `components/${state.componentId && COMPONENT_IDS.includes(state.componentId) ? state.componentId : 'compressor'}`
     : state.page
   const params = new URLSearchParams({ scenario: state.scenarioId, seed: String(state.seed), i: String(state.sampleIndex) })
+  if (state.page === 'evidence' || state.evidenceQuery || (state.evidenceTopK !== undefined && state.evidenceTopK !== 4)) {
+    params.set('q', state.evidenceQuery ?? '')
+    params.set('top_k', String(state.evidenceTopK ?? 4))
+  }
   if (state.page !== 'components' && state.componentId) params.set('component', state.componentId)
   return `#/${path}?${params.toString()}`
 }

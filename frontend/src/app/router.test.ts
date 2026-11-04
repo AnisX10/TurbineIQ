@@ -3,12 +3,12 @@ import { parseRoute, routeHash } from './router'
 
 describe('URL state', () => {
   it('round trips route and shared query state', () => {
-    const route = { page: 'components' as const, componentId: 'compressor' as const, scenarioId: 'compressor_fouling', seed: 42, sampleIndex: 72 }
+    const route = { page: 'components' as const, componentId: 'compressor' as const, scenarioId: 'compressor_fouling', seed: 42, sampleIndex: 72, evidenceQuery: '', evidenceTopK: 4 }
     expect(parseRoute(routeHash(route))).toEqual(route)
   })
 
   it('keeps the selected component on overview routes', () => {
-    const route = { page: 'overview' as const, componentId: 'turbine' as const, scenarioId: 'compressor_fouling', seed: 7, sampleIndex: 12 }
+    const route = { page: 'overview' as const, componentId: 'turbine' as const, scenarioId: 'compressor_fouling', seed: 7, sampleIndex: 12, evidenceQuery: '', evidenceTopK: 4 }
     expect(parseRoute(routeHash(route))).toEqual(route)
   })
 
@@ -18,6 +18,13 @@ describe('URL state', () => {
     })
     expect(parseRoute('#/overview?seed=not-a-number&i=2.5')).toMatchObject({ seed: 42, sampleIndex: 72 })
     expect(parseRoute('#/overview?seed=9007199254740992')).toMatchObject({ seed: 42 })
+  })
+
+  it('round trips evidence query and result count and defaults invalid values', () => {
+    const route = { page: 'evidence' as const, componentId: 'compressor' as const, scenarioId: 'compressor_fouling', seed: 42, sampleIndex: 72, evidenceQuery: 'Brayton cycle', evidenceTopK: 6 }
+    expect(parseRoute(routeHash(route))).toEqual(route)
+    expect(parseRoute('#/evidence?q=abc&top_k=0')).toMatchObject({ evidenceQuery: 'abc', evidenceTopK: 4 })
+    expect(parseRoute(`#/evidence?q=${'x'.repeat(301)}&top_k=99`)).toMatchObject({ evidenceQuery: '', evidenceTopK: 4 })
   })
 })
 
