@@ -116,11 +116,14 @@ The Phase 0 Python gates (Ruff and 69 pytest cases) are recorded in [BASELINE.md
 - At Phase 1 close, fonts were committed but unused. No Python API, type definition, component ID, GLB contract, or GLB asset was changed.
 - Phase 1 changed no application files. Phase 2 adds the shell and token integration described below.
 
-## Phase 2 shell implementation
+## Phase 2 and Phase 3 implementation status
 
-- Replaced the labelled sidebar with the 55px `IconRail`; its four destinations use 16px Lucide icons, 44px hit areas, accessible names, current-page state, and hover/focus tooltips. The active fill is neutral. Divider lines use `--control`; field/select boundaries use `--control-strong`.
-- Added the safe-area-aware `MobileBottomBar` below 1024px with four labelled destinations. Engine status, theme choice, and boundary controls are available in the header utilities menu; the seed chip continues to open the boundary sheet.
-- Added the 24px/700 `PageHeader`, persisted System/Light/Dark preference, local-engine status popover, and boundary sheet. Existing skip navigation and main landmark are retained. The evidence and assistant panels are routed through their shell destinations.
-- Loaded local Geist fonts and moved the theme tokens into the runtime stylesheet. The app continues to use local deterministic API/data and has no industrial connection or control path.
-- Verification: `npm run lint` and `npm run build` passed; Vite reports the existing lazy 3D viewer chunk at 1,024.10 kB. Ruff passed and pytest passed all 69 cases (five dependency deprecation warnings). `git diff --check` passed, all 40 contrast pairs passed, and the unsupported-glyph scan found none in docs or frontend source.
-- The desktop shell was visually reviewed during integration. A final mobile recapture and full keyboard/screen-reader/axe audit remain outstanding; the responsive layout has not yet been certified at every planned viewport.
+Phase 2 is complete. The 55px IconRail, accessible destination links, safe-area-aware MobileBottomBar, PageHeader, utilities menu, BoundarySheet, local fonts, first-paint theme initialization, hash router, reducer/context store, format utilities, and shared published-reference constant are implemented. Evidence, Assistant, and the basic component detail remain on their legacy/transition screens until Phase 4.
+
+Phase 3 Overview is implemented as a live API-backed engineering screen: compound filters, four ledger-style KPIs, interactive turbine stage, station and component ledgers, sample timeline with residual strip, table alternative, playback controls, URL state, reduced-motion behavior, skeleton and request error states, and 320px reflow. The one-percent colour budget, type, controls, and stage colors are checked in the finished browser at all four planned widths.
+
+- Phase 2 commands, accessibility and network results, screenshots, skill inspections, and limitations: [PHASE2.md](PHASE2.md).
+- Phase 3 feature decisions, TurbineViewer change log, test outputs, contrast measurements, screenshots, bundle comparison, and Lighthouse results: [PHASE3.md](PHASE3.md).
+- Overview colour share at 1440, 1024, 768, and 375px is 0.1%, 0.2%, 0.2%, and 0.2%. The blue chart series remains the sole broad data hue. The mono flag is justified once above because aligned engineering readouts are a ledger of figures.
+- No light-stage lighting intensities changed after visual review; the metal model remained legible without looking washed out. GLB selection emission was reduced after the measured tablet colour budget exceeded 1%.
+- The public API, Python behavior, frontend types, six component IDs, and GLB contract remain unchanged. No new runtime dependency, remote request, DCS/SCADA/PLC path, or industrial connectivity was added.

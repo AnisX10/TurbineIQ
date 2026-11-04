@@ -1,0 +1,149 @@
+{
+  "files": 23,
+  "findings": [
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/index.html",
+      "line": 13,
+      "match": "GeistMono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "shadow",
+      "file": "frontend/src/Shell.css",
+      "line": 84,
+      "match": "box-shadow:",
+      "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+    },
+    {
+      "level": "WARN",
+      "id": "shadow",
+      "file": "frontend/src/Shell.css",
+      "line": 127,
+      "match": "box-shadow:",
+      "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+    },
+    {
+      "level": "WARN",
+      "id": "shadow",
+      "file": "frontend/src/Shell.css",
+      "line": 140,
+      "match": "box-shadow:",
+      "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+    },
+    {
+      "level": "WARN",
+      "id": "shadow",
+      "file": "frontend/src/Shell.css",
+      "line": 164,
+      "match": "box-shadow:",
+      "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/Shell.css",
+      "line": 192,
+      "match": "font-family: var(--mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/Shell.css",
+      "line": 197,
+      "match": "font-family: var(--mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/index.css",
+      "line": 34,
+      "match": "font-family: 'Geist Mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/index.css",
+      "line": 38,
+      "match": "GeistMono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/index.css",
+      "line": 42,
+      "match": "font-family: 'Geist Mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/index.css",
+      "line": 46,
+      "match": "GeistMono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/index.css",
+      "line": 80,
+      "match": "Geist Mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/features/overview/Overview.css",
+      "line": 9,
+      "match": "font-family: var(--mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/features/overview/Overview.css",
+      "line": 10,
+      "match": "font-family: var(--mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "shadow",
+      "file": "frontend/src/features/overview/Overview.css",
+      "line": 30,
+      "match": "box-shadow:",
+      "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+    },
+    {
+      "level": "WARN",
+      "id": "shadow",
+      "file": "frontend/src/features/overview/Overview.css",
+      "line": 112,
+      "match": "box-shadow:",
+      "message": "Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/features/overview/Overview.css",
+      "line": 140,
+      "match": "font-family: var(--mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    },
+    {
+      "level": "WARN",
+      "id": "mono",
+      "file": "frontend/src/features/overview/Overview.css",
+      "line": 169,
+      "match": "font-family: var(--mono",
+      "message": "Monospace type. Only literal code may be monospace."
+    }
+  ]
+}

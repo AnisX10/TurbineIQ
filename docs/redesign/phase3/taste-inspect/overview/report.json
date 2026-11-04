@@ -1,0 +1,2544 @@
+{
+  "url": "http://127.0.0.1:8011/#/overview?scenario=compressor_fouling&seed=42&i=72",
+  "at": "2026-11-04T16:49:21.171Z",
+  "allow": [],
+  "viewports": [
+    {
+      "width": 375,
+      "height": 812,
+      "load": "load",
+      "screens": 4,
+      "filled": [
+        0.58,
+        0.83,
+        0.89,
+        0.9
+      ],
+      "motion": {
+        "elements": 0,
+        "css": 0,
+        "transitions": 0,
+        "scripted": 0,
+        "videos": 0,
+        "playingVideos": 0
+      },
+      "metrics": {
+        "viewport": {
+          "w": 375,
+          "h": 812
+        },
+        "page": {
+          "height": 3013,
+          "screens": 3.7,
+          "words": 679,
+          "img": 0,
+          "video": 0,
+          "canvas": 1,
+          "svg": 18,
+          "sections": 7,
+          "horizontalOverflow": 0,
+          "overflowCulprits": [],
+          "uiFragments": 0,
+          "uiAbuse": false,
+          "realPictures": 0,
+          "videoCount": 0,
+          "uiPictures": 0,
+          "pictureSamples": [],
+          "blendText": 0,
+          "sideScrollers": 1,
+          "brokenImages": [],
+          "emoji": [],
+          "videosNoPoster": 0
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 6.4,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 38,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "h1": {
+          "text": "Overview",
+          "words": 1,
+          "lines": 1,
+          "size": 24,
+          "font": "Geist"
+        },
+        "headings": [
+          {
+            "text": "Overview",
+            "words": 1,
+            "chars": 8,
+            "lines": 1,
+            "size": 24,
+            "vw": 6.4,
+            "font": "Geist",
+            "weight": 700,
+            "tracking": -0.025,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": false,
+            "align": "left",
+            "position": "center",
+            "widthRatio": 0.93,
+            "top": 38,
+            "tag": "h1",
+            "kind": "heading"
+          },
+          {
+            "text": "26.30MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 22.5,
+            "vw": 6,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "left",
+            "widthRatio": 0.44,
+            "top": 317,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "24.67MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 22.5,
+            "vw": 6,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "right",
+            "widthRatio": 0.42,
+            "top": 317,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "\u22121.63MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 22.5,
+            "vw": 6,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "left",
+            "widthRatio": 0.44,
+            "top": 396,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "0 / 96",
+            "words": 3,
+            "chars": 6,
+            "lines": 1,
+            "size": 22.5,
+            "vw": 6,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "right",
+            "widthRatio": 0.42,
+            "top": 396,
+            "tag": "div",
+            "kind": "heading"
+          }
+        ],
+        "headingSummary": {
+          "count": 5,
+          "maxLines": 1,
+          "over2Lines": 0,
+          "statements": 0,
+          "centered": 0,
+          "medianWords": 1,
+          "mixedFontHeadings": 0
+        },
+        "type": {
+          "families": [
+            {
+              "family": "Geist",
+              "share": 0.88,
+              "mono": false
+            },
+            {
+              "family": "Geist Mono",
+              "share": 0.12,
+              "mono": true
+            }
+          ],
+          "familyCount": 2,
+          "sizes": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            15,
+            16,
+            23,
+            24
+          ],
+          "sizeCount": 9,
+          "notLoaded": [],
+          "body": {
+            "font": "Geist",
+            "size": 10,
+            "leading": 1.2,
+            "weight": 400,
+            "tracking": 0,
+            "contrast": 5.3
+          },
+          "measureChars": 64,
+          "max": {
+            "size": 24,
+            "vw": 6.4,
+            "font": "Geist",
+            "text": "Overview"
+          },
+          "monoShare": 0.12,
+          "monoProseShare": 0.12,
+          "monoFamilies": [
+            "Geist Mono"
+          ],
+          "monoSamples": [
+            "73 of 96 \u00b7 18:00 UTC",
+            "15 min",
+            "26.30",
+            "MW",
+            "24.67",
+            "MW"
+          ],
+          "microLabels": 0,
+          "microLabelShare": 0,
+          "microSamples": [],
+          "upperShare": 0,
+          "centerShare": 0.07,
+          "smallText": 49
+        },
+        "eyebrows": [
+          {
+            "text": "Reference model",
+            "above": "26.30MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 11,
+            "top": 298
+          },
+          {
+            "text": "Synthetic observation",
+            "above": "24.67MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 11,
+            "top": 298
+          },
+          {
+            "text": "Residual",
+            "above": "\u22121.63MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 11,
+            "top": 377
+          },
+          {
+            "text": "Flagged samples",
+            "above": "0 / 96",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 11,
+            "top": 377
+          }
+        ],
+        "numbered": [],
+        "color": {
+          "bodyBg": "#f2f4f7",
+          "bodyBgHsl": {
+            "h": 216,
+            "s": 0.24,
+            "l": 0.96
+          },
+          "dark": false,
+          "sectionBgs": [
+            {
+              "color": "#f2f4f7",
+              "top": 0,
+              "hsl": {
+                "h": 216,
+                "s": 0.24,
+                "l": 0.96
+              }
+            },
+            {
+              "color": "#ffffff",
+              "top": 468,
+              "hsl": {
+                "h": 0,
+                "s": 0,
+                "l": 1
+              }
+            }
+          ],
+          "textColors": [
+            {
+              "color": "#6b6b6b",
+              "share": 0.62
+            },
+            {
+              "color": "#0a0a0a",
+              "share": 0.34
+            },
+            {
+              "color": "#3d3d3d",
+              "share": 0.04
+            },
+            {
+              "color": "#c4242a",
+              "share": 0
+            }
+          ],
+          "button": {
+            "bg": "#eceff3",
+            "hsl": {
+              "h": 214,
+              "s": 0.23,
+              "l": 0.94
+            },
+            "fg": "#0a0a0a"
+          },
+          "lowContrast": []
+        },
+        "buttons": {
+          "count": 14,
+          "inHero": 8,
+          "radius": 6,
+          "height": 40,
+          "withShadow": 1,
+          "withGradient": 0,
+          "mono": 0,
+          "upper": 0,
+          "heroLabels": [
+            "Skip to content",
+            "Synthetic \u00b7 seed 42",
+            "Schematic",
+            "Reset camera",
+            "Explode view"
+          ]
+        },
+        "surfaces": {
+          "shadowStatic": 0,
+          "shadowOverlay": 0,
+          "shadowSamples": [],
+          "gradients": 0,
+          "scrims": 0,
+          "gradientSamples": [],
+          "gradientText": 0,
+          "hairlines": 27,
+          "hairlineSamples": [
+            "header.page-header 375px",
+            "section.kpi-row 347px",
+            "div.part-inspection 327px",
+            "div.station-list 345px",
+            "button.station-row 345px"
+          ],
+          "outlinedBoxes": 5,
+          "dashed": 0,
+          "blurred": 0,
+          "roundedBoxes": 5,
+          "boxRadius": 8,
+          "squareMedia": 0,
+          "roundedMedia": 1,
+          "mediaRadius": 6,
+          "textShadow": 0,
+          "cardRows": []
+        },
+        "heroMedia": [
+          {
+            "type": "canvas",
+            "ratio": 0.12
+          }
+        ],
+        "nav": {
+          "links": 0,
+          "fixed": true,
+          "height": 0,
+          "floatingPill": false,
+          "blur": false
+        },
+        "fontsLoaded": [
+          "geist",
+          "geist mono"
+        ]
+      },
+      "layout": {
+        "viewport": {
+          "w": 375,
+          "h": 812
+        },
+        "pageH": 3013,
+        "margins": {
+          "left": 14,
+          "right": 15
+        },
+        "sections": [
+          {
+            "sel": "header.page-header",
+            "tag": "header",
+            "top": 0,
+            "height": 137,
+            "words": 10,
+            "media": 0,
+            "middle": 133,
+            "heading": {
+              "text": "Overview",
+              "size": 24,
+              "tag": "h1"
+            },
+            "left": 14,
+            "right": 14,
+            "textLeft": 14,
+            "textRight": 191,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": false,
+            "pinned": false
+          },
+          {
+            "sel": "form.filter-row",
+            "tag": "form",
+            "top": 150,
+            "height": 128,
+            "words": 11,
+            "media": 0,
+            "middle": 0,
+            "heading": null,
+            "left": 22,
+            "right": 22,
+            "textLeft": 22,
+            "textRight": 91,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.kpi-row",
+            "tag": "section",
+            "top": 287,
+            "height": 167,
+            "words": 28,
+            "media": 0,
+            "middle": 24,
+            "heading": {
+              "text": "26.30",
+              "size": 23,
+              "tag": "span"
+            },
+            "left": 14,
+            "right": 44,
+            "textLeft": 14,
+            "textRight": 44,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "div.stage-column",
+            "tag": "div",
+            "top": 468,
+            "height": 853,
+            "words": 101,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "GE 6B.03 \u00b7 conceptual reference",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 15,
+            "right": 15,
+            "textLeft": 24,
+            "textRight": 30,
+            "fullBleed": false,
+            "footer": false,
+            "hero": false,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.component-ledger.panel",
+            "tag": "section",
+            "top": 1333,
+            "height": 899,
+            "words": 116,
+            "media": 0,
+            "middle": 0,
+            "heading": {
+              "text": "Component ledger",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 15,
+            "right": 15,
+            "textLeft": 23,
+            "textRight": 23,
+            "fullBleed": false,
+            "footer": false,
+            "hero": false,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.timeline-card.panel",
+            "tag": "section",
+            "top": 2244,
+            "height": 675,
+            "words": 54,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "Electrical output over 24 hours",
+              "size": 15,
+              "tag": "h2"
+            },
+            "left": 24,
+            "right": 22,
+            "textLeft": 24,
+            "textRight": 32,
+            "fullBleed": true,
+            "footer": true,
+            "hero": false,
+            "continues": true,
+            "pinned": false
+          }
+        ],
+        "gaps": [],
+        "h1s": [
+          {
+            "text": "Overview",
+            "size": 24,
+            "top": 38,
+            "firstScreen": true
+          }
+        ],
+        "edgeText": [
+          {
+            "text": "GE 6B.03 reference \u00b7 Synthetic",
+            "side": "left",
+            "px": 14
+          },
+          {
+            "text": "Overview",
+            "side": "left",
+            "px": 14
+          },
+          {
+            "text": "Reference model",
+            "side": "left",
+            "px": 14
+          },
+          {
+            "text": "26.30",
+            "side": "left",
+            "px": 14
+          },
+          {
+            "text": "Simplified model output",
+            "side": "left",
+            "px": 14
+          },
+          {
+            "text": "Residual",
+            "side": "left",
+            "px": 14
+          },
+          {
+            "text": "Observation \u2212 reference model",
+            "side": "left",
+            "px": 14
+          }
+        ],
+        "edges": [
+          {
+            "x": 14,
+            "n": 3
+          },
+          {
+            "x": 30,
+            "n": 2
+          }
+        ],
+        "leftBlocks": 5,
+        "bodySize": 10,
+        "stage": false,
+        "explains": false,
+        "slivers": [],
+        "voidShare": 0,
+        "voidBox": null
+      },
+      "app": {
+        "viewport": {
+          "w": 375,
+          "h": 812
+        },
+        "dark": false,
+        "ground": "#f2f4f7",
+        "sidebar": null,
+        "topbar": null,
+        "canvas": {
+          "left": 14,
+          "right": 14
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 6.4,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 38,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "charts": 4,
+        "layout": {
+          "panels": 5,
+          "firstScreen": 2,
+          "ragged": [],
+          "voids": []
+        },
+        "tiles": 0,
+        "panels": {
+          "count": 8,
+          "radii": [
+            [
+              8,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              6,
+              1
+            ]
+          ],
+          "heavyBorders": 1,
+          "borderSamples": [
+            "#8a8f98 on #ffffff (3.25:1)"
+          ],
+          "heavyShadows": 0,
+          "softShadows": 0,
+          "shadowSamples": [],
+          "glass": 0
+        },
+        "chips": {
+          "count": 0,
+          "hues": 0,
+          "samples": []
+        },
+        "numbers": {
+          "cells": 0,
+          "leftAligned": 0,
+          "figures": 2,
+          "tabularShare": 1,
+          "kpiMax": 11
+        },
+        "rows": null,
+        "chartHues": 1,
+        "placeholders": [],
+        "type": {
+          "under13": 0.88,
+          "tiny": 62,
+          "tinySamples": [
+            "18:00 10px",
+            "UTC 10px",
+            "Blender GLB 10px",
+            "Air inlet 10px"
+          ],
+          "sizes": [
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            23,
+            24
+          ]
+        },
+        "title": {
+          "text": "Overview",
+          "size": 24,
+          "top": 38
+        },
+        "colourShare": 0.002
+      },
+      "consoleErrors": []
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "load": "load",
+      "screens": 3,
+      "filled": [
+        0.6,
+        0.87,
+        0.87
+      ],
+      "motion": {
+        "elements": 0,
+        "css": 0,
+        "transitions": 0,
+        "scripted": 0,
+        "videos": 0,
+        "playingVideos": 0
+      },
+      "metrics": {
+        "viewport": {
+          "w": 768,
+          "h": 1024
+        },
+        "page": {
+          "height": 3019,
+          "screens": 2.9,
+          "words": 680,
+          "img": 0,
+          "video": 0,
+          "canvas": 1,
+          "svg": 18,
+          "sections": 7,
+          "horizontalOverflow": 0,
+          "overflowCulprits": [],
+          "uiFragments": 0,
+          "uiAbuse": false,
+          "realPictures": 0,
+          "videoCount": 0,
+          "uiPictures": 0,
+          "pictureSamples": [],
+          "blendText": 0,
+          "sideScrollers": 0,
+          "brokenImages": [],
+          "emoji": [],
+          "videosNoPoster": 0
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 3.1,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 44,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "h1": {
+          "text": "Overview",
+          "words": 1,
+          "lines": 1,
+          "size": 24,
+          "font": "Geist"
+        },
+        "headings": [],
+        "headingSummary": {
+          "count": 0,
+          "maxLines": 0,
+          "over2Lines": 0,
+          "statements": 0,
+          "centered": 0,
+          "medianWords": null,
+          "mixedFontHeadings": 0
+        },
+        "type": {
+          "families": [
+            {
+              "family": "Geist",
+              "share": 0.88,
+              "mono": false
+            },
+            {
+              "family": "Geist Mono",
+              "share": 0.12,
+              "mono": true
+            }
+          ],
+          "familyCount": 2,
+          "sizes": [
+            10,
+            11,
+            12,
+            13,
+            16,
+            24,
+            25
+          ],
+          "sizeCount": 7,
+          "notLoaded": [],
+          "body": {
+            "font": "Geist",
+            "size": 10,
+            "leading": 1.2,
+            "weight": 400,
+            "tracking": 0,
+            "contrast": 5.3
+          },
+          "measureChars": 141,
+          "max": {
+            "size": 25,
+            "vw": 3.3,
+            "font": "Geist Mono",
+            "text": "26.30"
+          },
+          "monoShare": 0.12,
+          "monoProseShare": 0.12,
+          "monoFamilies": [
+            "Geist Mono"
+          ],
+          "monoSamples": [
+            "73 of 96 \u00b7 18:00 UTC",
+            "15 min",
+            "26.30",
+            "MW",
+            "24.67",
+            "MW"
+          ],
+          "microLabels": 0,
+          "microLabelShare": 0,
+          "microSamples": [],
+          "upperShare": 0,
+          "centerShare": 0.07,
+          "smallText": 49
+        },
+        "eyebrows": [],
+        "numbered": [],
+        "color": {
+          "bodyBg": "#f2f4f7",
+          "bodyBgHsl": {
+            "h": 216,
+            "s": 0.24,
+            "l": 0.96
+          },
+          "dark": false,
+          "sectionBgs": [
+            {
+              "color": "#f2f4f7",
+              "top": 0,
+              "hsl": {
+                "h": 216,
+                "s": 0.24,
+                "l": 0.96
+              }
+            },
+            {
+              "color": "#ffffff",
+              "top": 402,
+              "hsl": {
+                "h": 0,
+                "s": 0,
+                "l": 1
+              }
+            }
+          ],
+          "textColors": [
+            {
+              "color": "#6b6b6b",
+              "share": 0.62
+            },
+            {
+              "color": "#0a0a0a",
+              "share": 0.34
+            },
+            {
+              "color": "#3d3d3d",
+              "share": 0.04
+            },
+            {
+              "color": "#c4242a",
+              "share": 0
+            }
+          ],
+          "button": {
+            "bg": "#eceff3",
+            "hsl": {
+              "h": 214,
+              "s": 0.23,
+              "l": 0.94
+            },
+            "fg": "#0a0a0a"
+          },
+          "lowContrast": []
+        },
+        "buttons": {
+          "count": 14,
+          "inHero": 8,
+          "radius": 6,
+          "height": 36,
+          "withShadow": 1,
+          "withGradient": 0,
+          "mono": 0,
+          "upper": 0,
+          "heroLabels": [
+            "Skip to content",
+            "Synthetic \u00b7 seed 42",
+            "Schematic",
+            "Reset camera",
+            "Explode view"
+          ]
+        },
+        "surfaces": {
+          "shadowStatic": 0,
+          "shadowOverlay": 0,
+          "shadowSamples": [],
+          "gradients": 0,
+          "scrims": 0,
+          "gradientSamples": [],
+          "gradientText": 0,
+          "hairlines": 27,
+          "hairlineSamples": [
+            "header.page-header 768px",
+            "section.kpi-row 732px",
+            "div.part-inspection 706px",
+            "div.station-list 730px",
+            "button.station-row 730px"
+          ],
+          "outlinedBoxes": 5,
+          "dashed": 0,
+          "blurred": 0,
+          "roundedBoxes": 5,
+          "boxRadius": 8,
+          "squareMedia": 0,
+          "roundedMedia": 1,
+          "mediaRadius": 6,
+          "textShadow": 0,
+          "cardRows": []
+        },
+        "heroMedia": [
+          {
+            "type": "canvas",
+            "ratio": 0.43
+          }
+        ],
+        "nav": {
+          "links": 0,
+          "fixed": true,
+          "height": 0,
+          "floatingPill": false,
+          "blur": false
+        },
+        "fontsLoaded": [
+          "geist",
+          "geist mono"
+        ]
+      },
+      "layout": {
+        "viewport": {
+          "w": 768,
+          "h": 1024
+        },
+        "pageH": 3019,
+        "margins": {
+          "left": 18,
+          "right": 19
+        },
+        "sections": [
+          {
+            "sel": "section.kpi-row",
+            "tag": "section",
+            "top": 203,
+            "height": 185,
+            "words": 28,
+            "media": 0,
+            "middle": 207,
+            "heading": {
+              "text": "26.30",
+              "size": 25,
+              "tag": "span"
+            },
+            "left": 18,
+            "right": 224,
+            "textLeft": 18,
+            "textRight": 224,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": false,
+            "pinned": false
+          },
+          {
+            "sel": "div.stage-column",
+            "tag": "div",
+            "top": 402,
+            "height": 1019,
+            "words": 101,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "GE 6B.03 \u00b7 conceptual reference",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 19,
+            "right": 19,
+            "textLeft": 31,
+            "textRight": 31,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.component-ledger.panel",
+            "tag": "section",
+            "top": 1433,
+            "height": 885,
+            "words": 116,
+            "media": 0,
+            "middle": 0,
+            "heading": {
+              "text": "Component ledger",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 19,
+            "right": 19,
+            "textLeft": 31,
+            "textRight": 31,
+            "fullBleed": false,
+            "footer": false,
+            "hero": false,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.timeline-card.panel",
+            "tag": "section",
+            "top": 2329,
+            "height": 592,
+            "words": 54,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "Electrical output over 24 hours",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 34,
+            "right": 32,
+            "textLeft": 34,
+            "textRight": 43,
+            "fullBleed": false,
+            "footer": true,
+            "hero": false,
+            "continues": false,
+            "pinned": false
+          }
+        ],
+        "gaps": [],
+        "h1s": [
+          {
+            "text": "Overview",
+            "size": 24,
+            "top": 44,
+            "firstScreen": true
+          }
+        ],
+        "edgeText": [],
+        "edges": [
+          {
+            "x": 31,
+            "n": 4
+          },
+          {
+            "x": 18,
+            "n": 1
+          }
+        ],
+        "leftBlocks": 5,
+        "bodySize": 10,
+        "stage": false,
+        "explains": false,
+        "slivers": [],
+        "voidShare": 0,
+        "voidBox": null
+      },
+      "app": {
+        "viewport": {
+          "w": 768,
+          "h": 1024
+        },
+        "dark": false,
+        "ground": "#f2f4f7",
+        "sidebar": null,
+        "topbar": {
+          "h": 94
+        },
+        "canvas": {
+          "left": 18,
+          "right": 19
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 3.1,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 44,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "charts": 4,
+        "layout": {
+          "panels": 5,
+          "firstScreen": 2,
+          "ragged": [],
+          "voids": []
+        },
+        "tiles": 0,
+        "panels": {
+          "count": 8,
+          "radii": [
+            [
+              8,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              6,
+              1
+            ]
+          ],
+          "heavyBorders": 1,
+          "borderSamples": [
+            "#8a8f98 on #ffffff (3.25:1)"
+          ],
+          "heavyShadows": 0,
+          "softShadows": 0,
+          "shadowSamples": [],
+          "glass": 0
+        },
+        "chips": {
+          "count": 0,
+          "hues": 0,
+          "samples": []
+        },
+        "numbers": {
+          "cells": 0,
+          "leftAligned": 0,
+          "figures": 2,
+          "tabularShare": 1,
+          "kpiMax": 12
+        },
+        "rows": null,
+        "chartHues": 1,
+        "placeholders": [],
+        "type": {
+          "under13": 0.88,
+          "tiny": 39,
+          "tinySamples": [
+            "Blender GLB 10px",
+            "Air inlet 10px",
+            "Core 10px",
+            "Generator 10px"
+          ],
+          "sizes": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            24,
+            25
+          ]
+        },
+        "title": {
+          "text": "Overview",
+          "size": 24,
+          "top": 44
+        },
+        "colourShare": 0.014
+      },
+      "consoleErrors": []
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "load": "load",
+      "screens": 4,
+      "filled": [
+        0.67,
+        0.84,
+        0.9,
+        0.87
+      ],
+      "motion": {
+        "elements": 0,
+        "css": 0,
+        "transitions": 0,
+        "scripted": 0,
+        "videos": 0,
+        "playingVideos": 0
+      },
+      "metrics": {
+        "viewport": {
+          "w": 1024,
+          "h": 768
+        },
+        "page": {
+          "height": 2679,
+          "screens": 3.5,
+          "words": 676,
+          "img": 0,
+          "video": 0,
+          "canvas": 1,
+          "svg": 18,
+          "sections": 7,
+          "horizontalOverflow": 0,
+          "overflowCulprits": [],
+          "uiFragments": 0,
+          "uiAbuse": false,
+          "realPictures": 0,
+          "videoCount": 0,
+          "uiPictures": 0,
+          "pictureSamples": [],
+          "blendText": 0,
+          "sideScrollers": 0,
+          "brokenImages": [],
+          "emoji": [],
+          "videosNoPoster": 0
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 2.3,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 47,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "h1": {
+          "text": "Overview",
+          "words": 1,
+          "lines": 1,
+          "size": 24,
+          "font": "Geist"
+        },
+        "headings": [
+          {
+            "text": "26.30MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.9,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "left",
+            "widthRatio": 0.2,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "24.67MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.9,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "left",
+            "widthRatio": 0.18,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "\u22121.63MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.9,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "right",
+            "widthRatio": 0.18,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "0 / 96",
+            "words": 3,
+            "chars": 6,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.9,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "right",
+            "widthRatio": 0.19,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          }
+        ],
+        "headingSummary": {
+          "count": 4,
+          "maxLines": 1,
+          "over2Lines": 0,
+          "statements": 0,
+          "centered": 0,
+          "medianWords": null,
+          "mixedFontHeadings": 0
+        },
+        "type": {
+          "families": [
+            {
+              "family": "Geist",
+              "share": 0.88,
+              "mono": false
+            },
+            {
+              "family": "Geist Mono",
+              "share": 0.12,
+              "mono": true
+            }
+          ],
+          "familyCount": 2,
+          "sizes": [
+            10,
+            11,
+            12,
+            13,
+            16,
+            24,
+            30
+          ],
+          "sizeCount": 7,
+          "notLoaded": [],
+          "body": {
+            "font": "Geist",
+            "size": 10,
+            "leading": 1.2,
+            "weight": 400,
+            "tracking": 0,
+            "contrast": 5.3
+          },
+          "measureChars": 176,
+          "max": {
+            "size": 30,
+            "vw": 2.9,
+            "font": "Geist Mono",
+            "text": "26.30"
+          },
+          "monoShare": 0.12,
+          "monoProseShare": 0.12,
+          "monoFamilies": [
+            "Geist Mono"
+          ],
+          "monoSamples": [
+            "73 of 96 \u00b7 18:00 UTC",
+            "15 min",
+            "26.30",
+            "MW",
+            "24.67",
+            "MW"
+          ],
+          "microLabels": 0,
+          "microLabelShare": 0,
+          "microSamples": [],
+          "upperShare": 0,
+          "centerShare": 0.07,
+          "smallText": 49
+        },
+        "eyebrows": [
+          {
+            "text": "Reference model",
+            "above": "26.30MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          },
+          {
+            "text": "Synthetic observation",
+            "above": "24.67MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          },
+          {
+            "text": "Residual",
+            "above": "\u22121.63MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          },
+          {
+            "text": "Flagged samples",
+            "above": "0 / 96",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          }
+        ],
+        "numbered": [],
+        "color": {
+          "bodyBg": "#f2f4f7",
+          "bodyBgHsl": {
+            "h": 216,
+            "s": 0.24,
+            "l": 0.96
+          },
+          "dark": false,
+          "sectionBgs": [
+            {
+              "color": "#f2f4f7",
+              "top": 0,
+              "hsl": {
+                "h": 216,
+                "s": 0.24,
+                "l": 0.96
+              }
+            },
+            {
+              "color": "#ffffff",
+              "top": 283,
+              "hsl": {
+                "h": 0,
+                "s": 0,
+                "l": 1
+              }
+            }
+          ],
+          "textColors": [
+            {
+              "color": "#6b6b6b",
+              "share": 0.62
+            },
+            {
+              "color": "#0a0a0a",
+              "share": 0.34
+            },
+            {
+              "color": "#3d3d3d",
+              "share": 0.04
+            },
+            {
+              "color": "#c4242a",
+              "share": 0
+            }
+          ],
+          "button": {
+            "bg": "#ffffff",
+            "hsl": {
+              "h": 0,
+              "s": 0,
+              "l": 1
+            },
+            "fg": "#0a0a0a"
+          },
+          "lowContrast": []
+        },
+        "buttons": {
+          "count": 11,
+          "inHero": 7,
+          "radius": 6,
+          "height": 36,
+          "withShadow": 0,
+          "withGradient": 0,
+          "mono": 0,
+          "upper": 0,
+          "heroLabels": [
+            "Skip to content",
+            "Synthetic \u00b7 seed 42",
+            "Schematic",
+            "Reset camera",
+            "Explode view"
+          ]
+        },
+        "surfaces": {
+          "shadowStatic": 0,
+          "shadowOverlay": 0,
+          "shadowSamples": [],
+          "gradients": 0,
+          "scrims": 0,
+          "gradientSamples": [],
+          "gradientText": 0,
+          "hairlines": 27,
+          "hairlineSamples": [
+            "aside.icon-rail 55px",
+            "header.page-header 969px",
+            "section.kpi-row 905px",
+            "div.part-inspection 879px",
+            "div.station-list 903px"
+          ],
+          "outlinedBoxes": 5,
+          "dashed": 0,
+          "blurred": 0,
+          "roundedBoxes": 5,
+          "boxRadius": 8,
+          "squareMedia": 0,
+          "roundedMedia": 1,
+          "mediaRadius": 6,
+          "textShadow": 0,
+          "cardRows": []
+        },
+        "heroMedia": [
+          {
+            "type": "canvas",
+            "ratio": 0.38
+          }
+        ],
+        "nav": {
+          "links": 2,
+          "fixed": true,
+          "height": 768,
+          "floatingPill": false,
+          "blur": false
+        },
+        "fontsLoaded": [
+          "geist",
+          "geist mono"
+        ]
+      },
+      "layout": {
+        "viewport": {
+          "w": 1024,
+          "h": 768
+        },
+        "pageH": 2679,
+        "margins": {
+          "left": 87,
+          "right": 33
+        },
+        "sections": [
+          {
+            "sel": "div.stage-column",
+            "tag": "div",
+            "top": 283,
+            "height": 878,
+            "words": 101,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "GE 6B.03 \u00b7 conceptual reference",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 88,
+            "right": 33,
+            "textLeft": 100,
+            "textRight": 45,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.component-ledger.panel",
+            "tag": "section",
+            "top": 1173,
+            "height": 870,
+            "words": 116,
+            "media": 0,
+            "middle": 0,
+            "heading": {
+              "text": "Component ledger",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 88,
+            "right": 33,
+            "textLeft": 100,
+            "textRight": 45,
+            "fullBleed": false,
+            "footer": false,
+            "hero": false,
+            "continues": true,
+            "pinned": false
+          },
+          {
+            "sel": "section.timeline-card.panel",
+            "tag": "section",
+            "top": 2055,
+            "height": 592,
+            "words": 54,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "Electrical output over 24 hours",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 103,
+            "right": 46,
+            "textLeft": 103,
+            "textRight": 57,
+            "fullBleed": false,
+            "footer": true,
+            "hero": false,
+            "continues": false,
+            "pinned": false
+          }
+        ],
+        "gaps": [],
+        "h1s": [
+          {
+            "text": "Overview",
+            "size": 24,
+            "top": 47,
+            "firstScreen": true
+          }
+        ],
+        "edgeText": [],
+        "edges": [
+          {
+            "x": 100,
+            "n": 4
+          },
+          {
+            "x": 87,
+            "n": 1
+          }
+        ],
+        "leftBlocks": 5,
+        "bodySize": 10,
+        "stage": false,
+        "explains": false,
+        "slivers": [],
+        "voidShare": 0.07,
+        "voidBox": {
+          "x": 384,
+          "y": 256,
+          "w": 512,
+          "h": 102
+        }
+      },
+      "app": {
+        "viewport": {
+          "w": 1024,
+          "h": 768
+        },
+        "dark": false,
+        "ground": "#f2f4f7",
+        "sidebar": {
+          "w": 55,
+          "tag": "aside",
+          "links": 8,
+          "share": 0.05
+        },
+        "topbar": null,
+        "canvas": {
+          "left": 32,
+          "right": 33
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 2.3,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 47,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "charts": 4,
+        "layout": {
+          "panels": 5,
+          "firstScreen": 2,
+          "ragged": [],
+          "voids": []
+        },
+        "tiles": 0,
+        "panels": {
+          "count": 8,
+          "radii": [
+            [
+              8,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              6,
+              1
+            ]
+          ],
+          "heavyBorders": 1,
+          "borderSamples": [
+            "#8a8f98 on #ffffff (3.25:1)"
+          ],
+          "heavyShadows": 0,
+          "softShadows": 0,
+          "shadowSamples": [],
+          "glass": 0
+        },
+        "chips": {
+          "count": 1,
+          "hues": 1,
+          "samples": [
+            {
+              "hue": 214,
+              "size": 44,
+              "radius": "6px"
+            }
+          ]
+        },
+        "numbers": {
+          "cells": 0,
+          "leftAligned": 0,
+          "figures": 2,
+          "tabularShare": 1,
+          "kpiMax": 12
+        },
+        "rows": null,
+        "chartHues": 1,
+        "placeholders": [],
+        "type": {
+          "under13": 0.87,
+          "tiny": 35,
+          "tinySamples": [
+            "Blender GLB 10px",
+            "Air inlet 10px",
+            "Core 10px",
+            "Generator 10px"
+          ],
+          "sizes": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            24,
+            30
+          ]
+        },
+        "title": {
+          "text": "Overview",
+          "size": 24,
+          "top": 47
+        },
+        "colourShare": 0.008
+      },
+      "consoleErrors": []
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "load": "load",
+      "screens": 3,
+      "filled": [
+        0.65,
+        0.83,
+        0.79
+      ],
+      "motion": {
+        "elements": 0,
+        "css": 0,
+        "transitions": 0,
+        "scripted": 0,
+        "videos": 0,
+        "playingVideos": 0
+      },
+      "metrics": {
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "page": {
+          "height": 1928,
+          "screens": 2.1,
+          "words": 676,
+          "img": 0,
+          "video": 0,
+          "canvas": 1,
+          "svg": 18,
+          "sections": 7,
+          "horizontalOverflow": 0,
+          "overflowCulprits": [],
+          "uiFragments": 0,
+          "uiAbuse": false,
+          "realPictures": 0,
+          "videoCount": 0,
+          "uiPictures": 0,
+          "pictureSamples": [],
+          "blendText": 0,
+          "sideScrollers": 0,
+          "brokenImages": [],
+          "emoji": [],
+          "videosNoPoster": 0
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 1.7,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 47,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "h1": {
+          "text": "Overview",
+          "words": 1,
+          "lines": 1,
+          "size": 24,
+          "font": "Geist"
+        },
+        "headings": [
+          {
+            "text": "26.30MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.1,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "left",
+            "widthRatio": 0.22,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "24.67MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.1,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "left",
+            "widthRatio": 0.2,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "\u22121.63MW",
+            "words": 1,
+            "chars": 7,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.1,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "right",
+            "widthRatio": 0.2,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          },
+          {
+            "text": "0 / 96",
+            "words": 3,
+            "chars": 6,
+            "lines": 1,
+            "size": 30,
+            "vw": 2.1,
+            "font": "Geist Mono",
+            "weight": 500,
+            "tracking": -0.045,
+            "leading": 1.2,
+            "upper": false,
+            "italic": false,
+            "mono": true,
+            "align": "left",
+            "position": "right",
+            "widthRatio": 0.2,
+            "top": 197,
+            "tag": "div",
+            "kind": "heading"
+          }
+        ],
+        "headingSummary": {
+          "count": 4,
+          "maxLines": 1,
+          "over2Lines": 0,
+          "statements": 0,
+          "centered": 0,
+          "medianWords": null,
+          "mixedFontHeadings": 0
+        },
+        "type": {
+          "families": [
+            {
+              "family": "Geist",
+              "share": 0.88,
+              "mono": false
+            },
+            {
+              "family": "Geist Mono",
+              "share": 0.12,
+              "mono": true
+            }
+          ],
+          "familyCount": 2,
+          "sizes": [
+            10,
+            11,
+            12,
+            13,
+            16,
+            24,
+            30
+          ],
+          "sizeCount": 7,
+          "notLoaded": [],
+          "body": {
+            "font": "Geist",
+            "size": 10,
+            "leading": 1.2,
+            "weight": 400,
+            "tracking": 0,
+            "contrast": 5.3
+          },
+          "measureChars": 82,
+          "max": {
+            "size": 30,
+            "vw": 2.1,
+            "font": "Geist Mono",
+            "text": "26.30"
+          },
+          "monoShare": 0.12,
+          "monoProseShare": 0.12,
+          "monoFamilies": [
+            "Geist Mono"
+          ],
+          "monoSamples": [
+            "73 of 96 \u00b7 18:00 UTC",
+            "15 min",
+            "26.30",
+            "MW",
+            "24.67",
+            "MW"
+          ],
+          "microLabels": 0,
+          "microLabelShare": 0,
+          "microSamples": [],
+          "upperShare": 0,
+          "centerShare": 0.07,
+          "smallText": 49
+        },
+        "eyebrows": [
+          {
+            "text": "Reference model",
+            "above": "26.30MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          },
+          {
+            "text": "Synthetic observation",
+            "above": "24.67MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          },
+          {
+            "text": "Residual",
+            "above": "\u22121.63MW",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          },
+          {
+            "text": "Flagged samples",
+            "above": "0 / 96",
+            "upper": false,
+            "tracked": false,
+            "mono": false,
+            "pill": false,
+            "size": 12,
+            "top": 176
+          }
+        ],
+        "numbered": [],
+        "color": {
+          "bodyBg": "#f2f4f7",
+          "bodyBgHsl": {
+            "h": 216,
+            "s": 0.24,
+            "l": 0.96
+          },
+          "dark": false,
+          "sectionBgs": [
+            {
+              "color": "#f2f4f7",
+              "top": 0,
+              "hsl": {
+                "h": 216,
+                "s": 0.24,
+                "l": 0.96
+              }
+            },
+            {
+              "color": "#ffffff",
+              "top": 283,
+              "hsl": {
+                "h": 0,
+                "s": 0,
+                "l": 1
+              }
+            }
+          ],
+          "textColors": [
+            {
+              "color": "#6b6b6b",
+              "share": 0.62
+            },
+            {
+              "color": "#0a0a0a",
+              "share": 0.34
+            },
+            {
+              "color": "#3d3d3d",
+              "share": 0.04
+            },
+            {
+              "color": "#c4242a",
+              "share": 0
+            }
+          ],
+          "button": {
+            "bg": "#eceff3",
+            "hsl": {
+              "h": 214,
+              "s": 0.23,
+              "l": 0.94
+            },
+            "fg": "#0a0a0a"
+          },
+          "lowContrast": []
+        },
+        "buttons": {
+          "count": 13,
+          "inHero": 8,
+          "radius": 6,
+          "height": 36,
+          "withShadow": 1,
+          "withGradient": 0,
+          "mono": 0,
+          "upper": 0,
+          "heroLabels": [
+            "Skip to content",
+            "Synthetic \u00b7 seed 42",
+            "Schematic",
+            "Reset camera",
+            "Explode view"
+          ]
+        },
+        "surfaces": {
+          "shadowStatic": 0,
+          "shadowOverlay": 0,
+          "shadowSamples": [],
+          "gradients": 0,
+          "scrims": 0,
+          "gradientSamples": [],
+          "gradientText": 0,
+          "hairlines": 27,
+          "hairlineSamples": [
+            "aside.icon-rail 55px",
+            "header.page-header 1385px",
+            "section.kpi-row 1321px",
+            "div.part-inspection 847px",
+            "div.station-list 871px"
+          ],
+          "outlinedBoxes": 5,
+          "dashed": 0,
+          "blurred": 0,
+          "roundedBoxes": 5,
+          "boxRadius": 8,
+          "squareMedia": 0,
+          "roundedMedia": 1,
+          "mediaRadius": 6,
+          "textShadow": 0,
+          "cardRows": []
+        },
+        "heroMedia": [
+          {
+            "type": "canvas",
+            "ratio": 0.31
+          }
+        ],
+        "nav": {
+          "links": 2,
+          "fixed": true,
+          "height": 900,
+          "floatingPill": false,
+          "blur": false
+        },
+        "fontsLoaded": [
+          "geist",
+          "geist mono"
+        ]
+      },
+      "layout": {
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "pageH": 1928,
+        "margins": {
+          "left": 87,
+          "right": 33
+        },
+        "sections": [
+          {
+            "sel": "div.overview-band",
+            "tag": "div",
+            "top": 283,
+            "height": 1009,
+            "words": 217,
+            "media": 1,
+            "middle": 14,
+            "heading": {
+              "text": "GE 6B.03 \u00b7 conceptual reference",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 88,
+            "right": 33,
+            "textLeft": 100,
+            "textRight": 45,
+            "fullBleed": false,
+            "footer": false,
+            "hero": true,
+            "continues": false,
+            "pinned": false
+          },
+          {
+            "sel": "section.timeline-card.panel",
+            "tag": "section",
+            "top": 1304,
+            "height": 592,
+            "words": 54,
+            "media": 1,
+            "middle": 0,
+            "heading": {
+              "text": "Electrical output over 24 hours",
+              "size": 16,
+              "tag": "h2"
+            },
+            "left": 103,
+            "right": 46,
+            "textLeft": 103,
+            "textRight": 57,
+            "fullBleed": false,
+            "footer": true,
+            "hero": false,
+            "continues": false,
+            "pinned": false
+          }
+        ],
+        "gaps": [],
+        "h1s": [
+          {
+            "text": "Overview",
+            "size": 24,
+            "top": 47,
+            "firstScreen": true
+          }
+        ],
+        "edgeText": [],
+        "edges": [
+          {
+            "x": 100,
+            "n": 3
+          },
+          {
+            "x": 87,
+            "n": 1
+          },
+          {
+            "x": 988,
+            "n": 1
+          }
+        ],
+        "leftBlocks": 5,
+        "bodySize": 10,
+        "stage": false,
+        "explains": false,
+        "slivers": [],
+        "voidShare": 0.03,
+        "voidBox": {
+          "x": 1200,
+          "y": 120,
+          "w": 240,
+          "h": 180
+        }
+      },
+      "app": {
+        "viewport": {
+          "w": 1440,
+          "h": 900
+        },
+        "dark": false,
+        "ground": "#f2f4f7",
+        "sidebar": {
+          "w": 55,
+          "tag": "aside",
+          "links": 8,
+          "share": 0.04
+        },
+        "topbar": null,
+        "canvas": {
+          "left": 32,
+          "right": 33
+        },
+        "hero": {
+          "text": "Overview",
+          "words": 1,
+          "chars": 8,
+          "lines": 1,
+          "size": 24,
+          "vw": 1.7,
+          "font": "Geist",
+          "weight": 700,
+          "tracking": -0.02,
+          "leading": 1.2,
+          "top": 47,
+          "tag": "h1",
+          "kind": "heading",
+          "align": "left",
+          "position": "left"
+        },
+        "charts": 4,
+        "layout": {
+          "panels": 5,
+          "firstScreen": 3,
+          "ragged": [
+            {
+              "diff": 125,
+              "top": 283
+            }
+          ],
+          "voids": []
+        },
+        "tiles": 0,
+        "panels": {
+          "count": 8,
+          "radii": [
+            [
+              8,
+              4
+            ],
+            [
+              0,
+              3
+            ],
+            [
+              6,
+              1
+            ]
+          ],
+          "heavyBorders": 1,
+          "borderSamples": [
+            "#8a8f98 on #ffffff (3.25:1)"
+          ],
+          "heavyShadows": 0,
+          "softShadows": 0,
+          "shadowSamples": [],
+          "glass": 0
+        },
+        "chips": {
+          "count": 1,
+          "hues": 1,
+          "samples": [
+            {
+              "hue": 214,
+              "size": 44,
+              "radius": "6px"
+            }
+          ]
+        },
+        "numbers": {
+          "cells": 0,
+          "leftAligned": 0,
+          "figures": 2,
+          "tabularShare": 1,
+          "kpiMax": 12
+        },
+        "rows": null,
+        "chartHues": 1,
+        "placeholders": [],
+        "type": {
+          "under13": 0.87,
+          "tiny": 35,
+          "tinySamples": [
+            "Blender GLB 10px",
+            "Air inlet 10px",
+            "Core 10px",
+            "Generator 10px"
+          ],
+          "sizes": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            24,
+            30
+          ]
+        },
+        "title": {
+          "text": "Overview",
+          "size": 24,
+          "top": 47
+        },
+        "colourShare": 0.008
+      },
+      "consoleErrors": []
+    }
+  ],
+  "findings": [
+    {
+      "level": "FAIL",
+      "id": "button-fx",
+      "width": 375,
+      "message": "Buttons with shadow/glow.",
+      "fix": "Flat fill, one colour.",
+      "alsoAt": [
+        768,
+        1440
+      ]
+    },
+    {
+      "level": "WARN",
+      "id": "edge-text",
+      "width": 375,
+      "message": "7 text block(s) sit 12\u201315px from the phone's edge: \"GE 6B.03 reference \u00b7 Synthetic\" (14px); \"Overview\" (14px); \"Reference model\" (14px)",
+      "fix": "The page margin is 16\u201320px on a phone; the header and the corner labels sit on it too."
+    },
+    {
+      "level": "FAIL",
+      "id": "tiny-text",
+      "width": 375,
+      "message": "62 text blocks under 11px: 18:00 10px, UTC 10px, Blender GLB 10px, Air inlet 10px.",
+      "fix": "Nothing below 11px; secondary text 12px, data 13\u201314px.",
+      "alsoAt": [
+        768,
+        1024,
+        1440
+      ]
+    },
+    {
+      "level": "WARN",
+      "id": "ragged-row",
+      "width": 1440,
+      "message": "1 pair(s) of cards in one row end at different heights (by 125px).",
+      "fix": "Cards that share a row share a bottom edge: balance them by their content (the same number of rows, a block of similar height beside it), or stack them. In testing, ragged rows were marked down every time."
+    }
+  ],
+  "images": [
+    {
+      "viewport": "mobile",
+      "width": 375,
+      "fold": "docs\\redesign\\phase3\\taste-inspect\\overview\\mobile-fold.jpg",
+      "pages": [
+        "docs\\redesign\\phase3\\taste-inspect\\overview\\mobile-page-01.jpg"
+      ],
+      "film": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 768,
+      "fold": "docs\\redesign\\phase3\\taste-inspect\\overview\\tablet-768-fold.jpg",
+      "pages": [
+        "docs\\redesign\\phase3\\taste-inspect\\overview\\tablet-768-page-01.jpg"
+      ],
+      "film": []
+    },
+    {
+      "viewport": "tablet",
+      "width": 1024,
+      "fold": "docs\\redesign\\phase3\\taste-inspect\\overview\\tablet-1024-fold.jpg",
+      "pages": [
+        "docs\\redesign\\phase3\\taste-inspect\\overview\\tablet-1024-page-01.jpg"
+      ],
+      "film": []
+    },
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "fold": "docs\\redesign\\phase3\\taste-inspect\\overview\\desktop-fold.jpg",
+      "pages": [
+        "docs\\redesign\\phase3\\taste-inspect\\overview\\desktop-page-01.jpg"
+      ],
+      "film": []
+    }
+  ]
+}
