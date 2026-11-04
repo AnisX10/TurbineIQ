@@ -18,7 +18,10 @@ def ratio(foreground: str, background: str) -> float:
 THEMES = {
     "light": {
         "surface": "#ffffff", "ground": "#f2f4f7", "text": "#0a0a0a",
-        "muted": "#6b6b6b", "chart-3": "#1d5fbf", "accent": "#141414",
+        "muted": "#6b6b6b", "chart-2": "#8a8a8a", "chart-3": "#1d5fbf",
+        "accent": "#141414", "control-strong": "#858a94",
+        "positive": "#2e7d32", "negative": "#c4242a", "warning": "#92400e",
+        "stage-bg": "#ffffff", "stage-edge": "#8a8f98",
         "pills": {
             "positive": ("#04250e", "#dcfae5"),
             "negative": ("#831c1e", "#ffedea"),
@@ -28,7 +31,10 @@ THEMES = {
     },
     "dark": {
         "surface": "#141518", "ground": "#0e0f11", "text": "#f2f3f4",
-        "muted": "#9a9ea5", "chart-3": "#6ea2f0", "accent": "#f2f3f4",
+        "muted": "#9a9ea5", "chart-2": "#7d828a", "chart-3": "#6ea2f0",
+        "accent": "#f2f3f4", "control-strong": "#686e77",
+        "positive": "#5fc39c", "negative": "#ef6b7a", "warning": "#d9a441",
+        "stage-bg": "#141518", "stage-edge": "#686e77",
         "pills": {
             "positive": ("#5fc39c", "#1b2828"),
             "negative": ("#ef6b7a", "#2c1a20"),
@@ -46,9 +52,18 @@ for theme, t in THEMES.items():
         ("--text on --ground", t["text"], t["ground"], 4.5),
         ("--muted on --surface", t["muted"], t["surface"], 4.5),
         ("--muted on --ground", t["muted"], t["ground"], 4.5),
+        ("--control-strong on --surface", t["control-strong"], t["surface"], 3.0),
+        ("--control-strong on --ground", t["control-strong"], t["ground"], 3.0),
+        ("--chart-2 on --surface", t["chart-2"], t["surface"], 3.0),
         ("--chart-3 on --surface", t["chart-3"], t["surface"], 3.0),
         ("--accent on --surface", t["accent"], t["surface"], 3.0),
+        ("--stage-edge on --stage-bg", t["stage-edge"], t["stage-bg"], 3.0),
     ]
+    checks.extend(
+        (f"--{name} text on --{background_name}", t[name], t[background_name], 4.5)
+        for name in ("positive", "negative", "warning")
+        for background_name in ("surface", "ground")
+    )
     checks.extend(
         (f"{name} pill ink on background", ink, background, 4.5)
         for name, (ink, background) in t["pills"].items()

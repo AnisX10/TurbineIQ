@@ -91,11 +91,11 @@ Why it fits: the chrome holds no colour at all, figures read as columns in a led
 
 **Signature element only this product has: the Station ledger (amended after Phase 0 review).** A thin horizontal strip under the 3D stage shows four Brayton stations in axis order: 1 Compressor inlet → 2 Compressor discharge → 3 Turbine inlet → 4 Turbine exhaust. It shows temperature only: station 1 shows synthetic ambient temperature and ambient pressure from the scenario input (no reference values are supplied); stations 2–4 compare reference and synthetic temperatures where both values exist. The browser API has no per-station pressure values, so the UI must not show them and this redesign must not extend the backend. Selecting a component highlights its station pair, and hovering a station highlights the matching part in 3D.
 
-**Brand mark: the cycle glyph.** A closed four-vertex loop drawn on a 24px grid, 1.5px stroke, ink only. The four vertices are the four stations of the cycle (a T–s diagram silhouette). Starter path (refine by eye):
+**Brand mark: the cycle glyph.** A closed four-station loop drawn on a 24px grid, with the path using most of that grid. Use a 1.75px stroke at 20px and below; the 16px variant omits station dots. Keep the mark ink only. The four vertices are the four stations of the cycle (a T–s diagram silhouette); gently curved isobar edges are preferred where they preserve the four-station read.
 
 ```svg
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
-  <path d="M5 19 L7 9 Q13 6 19 4 L18 13 Q12 17 5 19 Z"/>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" aria-hidden="true">
+  <path d="M2.5 21 L6.5 7.5 Q13 5.5 21.5 2.5 L18.8 16.8 Q10 20 2.5 21 Z"/>
 </svg>
 ```
 
@@ -117,7 +117,8 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
   --raised: #eceff3;
   --border: #e2e6eb;
   --rule: #eef1f4;
-  --control: #cfd5dc;
+  --control: #cfd5dc;       /* dividers only */
+  --control-strong: #858a94; /* field, select, segmented-control boundaries */
 
   /* ink */
   --text: #0a0a0a;
@@ -173,6 +174,7 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
 [data-theme="dark"] {
   --ground: #0e0f11;  --surface: #141518;  --raised: #1c1d21;
   --border: #26282c;  --rule: #1d1f23;     --control: #3a3d42;
+  --control-strong: #686e77;
   --text: #f2f3f4;    --muted: #9a9ea5;    --accent: #f2f3f4;
   --chart-1: #f2f3f4; --chart-2: #7d828a;  --chart-3: #6ea2f0;
   --positive: #5fc39c; --negative: #ef6b7a; --warning: #d9a441;
@@ -180,7 +182,7 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
   --pill-negative-bg: #2c1a20; --pill-negative-ink: #ef6b7a;
   --pill-warning-bg:  #2a2416; --pill-warning-ink:  #d9a441;
   --pill-neutral-bg:  #212226; --pill-neutral-ink:  #c9ccd1;
-  --stage-part: #2a2d33; --stage-edge: #5b6068;
+  --stage-part: #2a2d33; --stage-edge: #686e77;
 }
 ```
 
@@ -189,7 +191,7 @@ Create `frontend/src/design/tokens.css`. Values for the light theme are taken fr
 - **One gap value** (12px) horizontally and vertically inside a card grid; 24px card padding; 32px page gutter.
 - **Type:** Geist 400/500/600/700 and Geist Mono 400/500, self-hosted as `.woff2` in `frontend/public/fonts/` with the OFL licence text beside them (the project already does this for Fira). Remove the Fira files once the swap lands. Apply `font-variant-numeric: tabular-nums` to every figure. **Bold is for the page title and section titles, never for numbers.**
 - **Colour budget:** under 1% coloured pixels on a screen in the light theme. Ink and grey everywhere; `--chart-3` only on the observation series, the selected sample marker, and the selected 3D part; red and green only as a small sign or short number where a figure changed.
-- **Signs, not colour alone:** every residual shows a `+` or `−` and a small triangle. Colour never carries meaning by itself.
+- **Signs, not colour alone:** every residual shows a `+` or `−` and a small direction marker drawn with a Lucide icon or SVG shape. Do not use U+25B2 or U+25BE; Geist Mono lacks U+25B2 and neither Geist face has U+25BE. Colour never carries meaning by itself.
 - **Radii:** 8px cards, 6px controls, full pills. No other values.
 - **Icons:** `lucide-react`, 16px, 1.5px stroke, outline only. No icons in tinted squares. No emoji.
 - **Forbidden:** gradients, glows, glass, sparklines on KPIs, rainbow charts, "Welcome back", invented vanity numbers, lorem ipsum.
@@ -232,7 +234,7 @@ Use **real values from the running API** (seed 42, `compressor_fouling`, sample 
 |---|---|---|
 | Reference model | `26.30 MW` | Fixed assumptions |
 | Synthetic observation | `24.67 MW` *(ink)* | Model output + generated noise |
-| Residual | `−1.63 MW ▾` *(the only coloured KPI: red sign)* | Observation − reference |
+| Residual | `−1.63 MW` with a down-direction SVG icon *(the only coloured KPI: red sign)* | Observation − reference |
 | Flagged samples | `0 / 96` | Median-absolute-deviation screen |
 
 For the default `compressor_fouling` scenario, the live API currently returns these values at seed 42, sample index 72 (73 of 96): 26.30 MW reference, 24.67 MW observation, -1.63 MW residual, and 0 of 96 flagged. These example values are illustrative; implementers must read current values and flagged counts from the API rather than hard-code them (amended after Phase 0 review).
@@ -307,7 +309,7 @@ Hand-rolled SVG is fine under 1,000 points (this project has at most 288). Make 
 | Reference model | `--chart-1` ink, 1.5px solid | The comparison baseline |
 | Synthetic observation | `--chart-3`, 1.5px solid | **The one hue**, because it is the main data element |
 | Synthetic truth | `--chart-2` grey, 1px dashed | Optional toggle; off by default |
-| Residual strip | Signed bars under the main plot, grey; flagged samples in ink with a small ▲ marker | Own y-scale, zero line visible |
+| Residual strip | Signed bars under the main plot, grey; flagged samples in ink with a small Lucide `Triangle` icon or SVG marker | Own y-scale, zero line visible |
 
 - Y axis is always visible with 4–5 ticks and units (MW). 3–7 faint gridlines at most. No legend for fewer than three series; use **direct end labels**.
 - Series differ by **line style and direct label as well as colour** (ui-ux-pro-max chart guidance: never distinguish series by hue alone).
@@ -324,7 +326,7 @@ The product's credibility depends on not over-claiming. Keep the existing bounda
 
 - **Glossary (use exactly):** Reference model · Synthetic observation · Synthetic truth · Residual (observation − reference) · Residual screen · Flagged sample.
 - **Never write:** fault, failure, diagnosis, anomaly detected, AI-powered, smart, insights. A flagged sample is "flagged by the residual screen".
-- **Sentence case** for all UI text. Units after every value, with a thin space (`25.46 MW`). Dates and times in 24h UTC with the zone shown once in the sample filter.
+- **Sentence case** for all UI text. Units after every value (`25.46 MW`): render the unit in its own span with `margin-inline-start: 0.25em`, or use U+00A0 between value and unit. Do not use U+2009 or U+202F; neither Geist face contains those glyphs. Dates and times in 24h UTC with the zone shown once in the sample filter.
 - **Every empty or error message** says what happened, what it means for the data, and the next action in one line each.
 - The words **synthetic** and **simplified model** appear in the header chip and in the Boundary sheet. They must never be removable by a layout change.
 
