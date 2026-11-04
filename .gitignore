@@ -16,6 +16,8 @@ data/documents/uploads/
 .taste-skill/inspect/
 frontend/node_modules/
 frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
 frontend/public/models/*.glb
 !frontend/public/models/turbine.glb
 frontend/public/models/*.gltf

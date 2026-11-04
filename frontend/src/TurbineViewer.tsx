@@ -1,7 +1,8 @@
-import { Component, Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { Component, Suspense, createContext, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
 import type { ErrorInfo, ReactNode } from 'react'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
+import { createPortal } from 'react-dom'
 import {
   Box3,
   Color,
@@ -14,11 +15,49 @@ import {
 } from 'three'
 import type { Object3D } from 'three'
 import type { TwinComponentState } from './types'
+import { getPartPickerHost, subscribePartPickerHost } from './features/overview/partPickerHost'
 
 const MODEL_PATH = '/models/turbine.glb'
 
 function readCssColor(token: string, fallback: string): string {
   return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || fallback
+}
+
+interface StageTokens {
+  background: string
+  part: string
+  edge: string
+  selected: string
+}
+
+const DEFAULT_STAGE_TOKENS: StageTokens = { background: '#ffffff', part: '#d9dde3', edge: '#8a8f98', selected: '#1d5fbf' }
+const StageTokenContext = createContext<StageTokens>(DEFAULT_STAGE_TOKENS)
+
+function readStageTokens(): StageTokens {
+  return {
+    background: readCssColor('--stage-bg', DEFAULT_STAGE_TOKENS.background),
+    part: readCssColor('--stage-part', DEFAULT_STAGE_TOKENS.part),
+    edge: readCssColor('--stage-edge', DEFAULT_STAGE_TOKENS.edge),
+    selected: readCssColor('--stage-selected', DEFAULT_STAGE_TOKENS.selected),
+  }
+}
+
+function useStageTokens(): StageTokens {
+  const [tokens, setTokens] = useState(readStageTokens)
+  useEffect(() => {
+    const root = document.documentElement
+    const refresh = () => setTokens(readStageTokens())
+    const observer = new MutationObserver(refresh)
+    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] })
+    const preference = window.matchMedia('(prefers-color-scheme: dark)')
+    preference.addEventListener('change', refresh)
+    refresh()
+    return () => {
+      observer.disconnect()
+      preference.removeEventListener('change', refresh)
+    }
+  }, [])
+  return tokens
 }
 
 interface TurbineViewerProps {
@@ -64,16 +103,9 @@ interface PartProps {
   children: ReactNode
 }
 
-function toneForStatus(status: string): string {
-  if (status === 'scenario_perturbation') return readCssColor('--warning', '#92400e')
-  if (status === 'residual_screen' || status === 'synthetic_measurement_fault') return readCssColor('--negative', '#c4242a')
-  if (status === 'scenario_context') return readCssColor('--chart-2', '#8a8a8a')
-  return readCssColor('--stage-edge', '#8a8f98')
-}
-
 function Part({ id, position, outlineRadius = 0.66, selected, status, onSelect, children }: PartProps) {
-  const baseTone = toneForStatus(status)
-  const selectedTone = readCssColor('--stage-selected', '#1d5fbf')
+  const stageTokens = useContext(StageTokenContext)
+  const selectedTone = stageTokens.selected
   const onClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation()
     onSelect(id)
@@ -92,13 +124,13 @@ function Part({ id, position, outlineRadius = 0.66, selected, status, onSelect, 
       onClick={onClick}
       onPointerOver={onPointerOver}
       onPointerOut={onPointerOut}
-      userData={{ turbineiqComponentId: id }}
+      userData={{ turbineiqComponentId: id, turbineiqStatus: status }}
     >
       {children}
       <mesh rotation={[0, Math.PI / 2, 0]}>
         <torusGeometry args={[outlineRadius, selected ? 0.035 : 0.02, 8, 48]} />
         <meshStandardMaterial
-          color={selected ? selectedTone : baseTone}
+          color={selected ? selectedTone : stageTokens.edge}
           emissive={selected ? selectedTone : '#000000'}
           emissiveIntensity={selected ? 0.18 : 0}
           metalness={0.62}
@@ -124,11 +156,12 @@ function AxialCylinder({
   color: string
   opacity?: number
 }) {
+  const stageTokens = useContext(StageTokenContext)
   return (
     <mesh position={[x, 0, 0]} rotation={[0, 0, Math.PI / 2]} castShadow receiveShadow>
       <cylinderGeometry args={[radius, radius, length, 48, 1, false]} />
       <meshStandardMaterial
-        color={color}
+        color={stageTokens.part || color}
         metalness={0.68}
         roughness={0.37}
         transparent={opacity < 1}
@@ -140,15 +173,17 @@ function AxialCylinder({
 }
 
 function Ring({ x, radius, color = '#8295a0' }: { x: number; radius: number; color?: string }) {
+  const stageTokens = useContext(StageTokenContext)
   return (
     <mesh position={[x, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
       <torusGeometry args={[radius, 0.025, 10, 48]} />
-      <meshStandardMaterial color={color} metalness={0.78} roughness={0.3} />
+      <meshStandardMaterial color={stageTokens.edge || color} metalness={0.78} roughness={0.3} />
     </mesh>
   )
 }
 
 function BladeRow({ x, count, radius, color }: { x: number; count: number; radius: number; color: string }) {
+  const stageTokens = useContext(StageTokenContext)
   return (
     <group position={[x, 0, 0]}>
       {Array.from({ length: count }, (_, index) => {
@@ -161,7 +196,7 @@ function BladeRow({ x, count, radius, color }: { x: number; count: number; radiu
             castShadow
           >
             <boxGeometry args={[0.055, radius * 1.1, 0.035]} />
-            <meshStandardMaterial color={color} metalness={0.8} roughness={0.32} />
+            <meshStandardMaterial color={stageTokens.part || color} metalness={0.8} roughness={0.32} />
           </mesh>
         )
       })}
@@ -343,6 +378,7 @@ function GLBModel({
   onInspectPart,
   onPartsAvailable,
   selectedTone,
+  stagePart,
 }: {
   url: string
   selectedComponentId: string
@@ -354,6 +390,7 @@ function GLBModel({
   onInspectPart: (part: PartInspection) => void
   onPartsAvailable: (parts: PartInspection[]) => void
   selectedTone: string
+  stagePart: string
 }) {
   const gltf = useGLTF(url)
   const camera = useThree((state) => state.camera)
@@ -428,12 +465,13 @@ function GLBModel({
       const materials = Array.isArray(object.material) ? object.material : [object.material]
       materials.forEach((material) => {
         if (material instanceof MeshStandardMaterial) {
+          material.color = new Color(stagePart)
           material.emissive = new Color(selectedPartMesh || selected ? selectedTone : '#000000')
-          material.emissiveIntensity = selectedPartMesh ? 0.48 : selected ? 0.16 : 0
+          material.emissiveIntensity = selectedPartMesh ? 0.22 : selected ? 0.08 : 0
         }
       })
     })
-  }, [exploded, fittedScene, isolated, selectedComponentId, selectedPart, selectedTone])
+  }, [exploded, fittedScene, isolated, selectedComponentId, selectedPart, selectedTone, stagePart])
 
   useEffect(() => {
     if (!isolated || !controls) return
@@ -503,8 +541,7 @@ class ModelBoundary extends Component<ModelBoundaryProps, ModelBoundaryState> {
 }
 
 export function TurbineViewer({ components, selectedComponentId, onSelectComponent }: TurbineViewerProps) {
-  const stageBackground = readCssColor('--stage-bg', '#ffffff')
-  const stageSelectedTone = readCssColor('--stage-selected', '#1d5fbf')
+  const stageTokens = useStageTokens()
   const [modelUrl, setModelUrl] = useState<string | null>(null)
   const [modelName, setModelName] = useState<string | null>(null)
   const [modelFailed, setModelFailed] = useState(false)
@@ -512,8 +549,10 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
   const [selectedPart, setSelectedPart] = useState<PartInspection | null>(null)
   const [exploded, setExploded] = useState(false)
   const [isolated, setIsolated] = useState(false)
-  const [spinning, setSpinning] = useState(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  const [spinning, setSpinning] = useState(false)
+  const [reduceMotion, setReduceMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   const [cameraKey, setCameraKey] = useState(0)
+  const partPickerHost = useSyncExternalStore(subscribePartPickerHost, getPartPickerHost, () => null)
   const previousComponentId = useRef(selectedComponentId)
   const preserveInspectedPartOnComponentChange = useRef(false)
   const modelInteractive = Boolean(modelUrl && !modelFailed)
@@ -545,6 +584,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
     const stopForReducedMotion = () => {
+      setReduceMotion(preference.matches)
       if (preference.matches) setSpinning(false)
     }
     preference.addEventListener('change', stopForReducedMotion)
@@ -575,7 +615,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
     setSelectedPart(null)
     setExploded(false)
     setIsolated(false)
-    setSpinning(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    setSpinning(false)
     setPartCatalog([])
   }
 
@@ -616,32 +656,54 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
   return (
     <section className="viewer-panel panel">
       <div className="panel-heading viewer-heading">
-        <div>
-          <h2>GE 6B.03 · conceptual reference</h2>
-        </div>
-        <div className="viewer-actions">
-          <span className={`model-state ${modelUrl && !modelFailed ? 'model-state-loaded' : ''}`}>
-            <span className="state-dot" />
-            {modelFailed ? 'SCHEMATIC FALLBACK' : modelUrl ? 'BLENDER GLB' : 'INTERACTIVE SCHEMATIC'}
-          </span>
-          <label className="button button-quiet file-button">
-            <input type="file" accept=".glb,model/gltf-binary" onChange={onFileChange} />
+        <h2>GE 6B.03 · conceptual reference</h2>
+        <span className={`model-state ${modelUrl && !modelFailed ? 'model-state-loaded' : ''}`}>{modelFailed ? 'Schematic fallback' : modelUrl ? 'Blender GLB' : 'Interactive schematic'}</span>
+      </div>
+      <div className="stage-toolbar" aria-label="Stage toolbar">
+        <div className="viewer-actions" role="group" aria-label="Stage view">
+          <label className={`button button-quiet file-button ${modelUrl && !modelFailed ? 'is-active' : ''}`}>
+            <input type="file" accept=".glb,model/gltf-binary" aria-label="Load GLB model" onChange={onFileChange} />
             Load GLB
           </label>
-          {modelUrl && <button type="button" className="button button-quiet" onClick={useSchematic}>Schematic</button>}
+          <button type="button" className="button button-quiet" aria-pressed={!modelUrl || modelFailed} onClick={useSchematic}>Schematic</button>
+        </div>
+        <div className="viewer-control-row" role="group" aria-label="Stage controls">
+          <div className="viewer-control-group">
+            <button type="button" className="button button-quiet" onClick={resetCamera}>Reset camera</button>
+            <button type="button" className={`button button-quiet ${exploded ? 'is-active' : ''}`} aria-pressed={exploded} disabled={!modelInteractive} onClick={() => setExploded((value) => !value)}>{exploded ? 'Reassemble' : 'Explode view'}</button>
+            <button type="button" className={`button button-quiet ${isolated ? 'is-active' : ''}`} aria-pressed={isolated} disabled={!modelInteractive} onClick={toggleIsolation}>{isolated ? 'Show all parts' : activeSelectedPart ? 'Isolate selected part' : 'Isolate component'}</button>
+            <button type="button" className={`button button-quiet ${spinning ? 'is-active' : ''}`} aria-pressed={spinning} disabled={!modelInteractive || reduceMotion} onClick={() => setSpinning((value) => !value)}>{spinning ? 'Pause rotor' : 'Rotor motion'}</button>
+          </div>
+          <span className="viewer-control-hint">{spinning ? 'Rotor motion on · visual only' : modelInteractive ? 'Rotor motion is opt-in.' : 'Load the Blender GLB to use model controls.'}</span>
         </div>
       </div>
+      {partPickerHost && createPortal(
+        <div className="part-browser">
+          <label htmlFor="model-part-select">Model sub-parts · {components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}</label>
+          <select id="model-part-select" value={activeSelectedPart?.componentId === selectedComponentId ? activeSelectedPart.objectId : ''} disabled={!modelInteractive || !partCatalog.some((part) => part.componentId === selectedComponentId)} onChange={(event) => {
+            const part = partCatalog.find((candidate) => candidate.objectId === event.target.value)
+            if (part) inspectPart(part)
+          }}>
+            <option value="">{modelInteractive ? 'Choose a mesh to inspect...' : 'Load the Blender model to inspect meshes...'}</option>
+            {partCatalog.filter((part) => part.componentId === selectedComponentId).map((part) => <option key={part.objectId} value={part.objectId}>{part.name}{part.envelopeMm ? ` · ${part.envelopeMm}\u00a0mm single casting` : part.referenceEnvelopeMm ? ` · ${part.referenceEnvelopeMm}\u00a0mm stage reference` : ''}</option>)}
+          </select>
+        </div>,
+        partPickerHost,
+      )}
       <div className="viewer-stage">
         <Canvas
           dpr={[1, 1.5]}
           camera={{ position: [-6.4, -4.4, 7.6], fov: 35, near: 0.1, far: 100 }}
           gl={{ antialias: true, alpha: false }}
+          role="img"
+          aria-label="Interactive simplified gas turbine. Drag to orbit, right-drag to pan, scroll to zoom, and select a part to inspect it."
         >
-          <color attach="background" args={[stageBackground]} />
+          <color attach="background" args={[stageTokens.background]} />
           <ambientLight intensity={0.8} />
           <directionalLight position={[4, 8, 5]} intensity={2.1} color="#dce8ed" />
           <pointLight position={[-2.5, 1.2, 2.5]} intensity={9} distance={10} color="#a9c6c8" />
           <pointLight position={[1.4, 0.8, -2]} intensity={4} distance={8} color="#d5d9da" />
+          <StageTokenContext.Provider value={stageTokens}>
           <Suspense fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}>
             {modelUrl ? (
               <ModelBoundary
@@ -662,13 +724,15 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
                   onSelectComponent={onSelectComponent}
                   onInspectPart={inspectPart}
                   onPartsAvailable={setPartCatalog}
-                  selectedTone={stageSelectedTone}
+                  selectedTone={stageTokens.selected}
+                  stagePart={stageTokens.part}
                 />
               </ModelBoundary>
             ) : (
               <SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />
             )}
           </Suspense>
+          </StageTokenContext.Provider>
           <OrbitControls
             enableDamping
             dampingFactor={0.08}
@@ -689,46 +753,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
         <div className="viewer-axis-label axis-output">Generator</div>
         <div className="viewer-note">Orbit: drag · Pan: right-drag · Zoom: scroll · Click a part to inspect</div>
       </div>
-      <div className="viewer-control-row" aria-label="3D model controls">
-        <div className="viewer-control-group">
-          <button type="button" className="button button-quiet" onClick={resetCamera}>Reset camera</button>
-          <button type="button" className={`button button-quiet ${exploded ? 'is-active' : ''}`} aria-pressed={exploded} disabled={!modelInteractive} onClick={() => setExploded((value) => !value)}>
-            {exploded ? 'Reassemble' : 'Explode view'}
-          </button>
-          <button type="button" className={`button button-quiet ${isolated ? 'is-active' : ''}`} aria-pressed={isolated} disabled={!modelInteractive} onClick={toggleIsolation}>
-            {isolated ? 'Show all parts' : activeSelectedPart ? 'Isolate selected part' : 'Isolate component'}
-          </button>
-          <button type="button" className={`button button-quiet ${spinning ? 'is-active' : ''}`} aria-pressed={spinning} disabled={!modelInteractive} onClick={() => setSpinning((value) => !value)}>
-            {spinning ? 'Pause rotor' : 'Spin rotor'}
-          </button>
-        </div>
-        <span className="viewer-control-hint">
-          {spinning
-            ? <span className="rotor-status"><span className="rotor-status-dot" />Rotor motion on · visual only</span>
-            : modelInteractive ? 'Choose a mesh below, then isolate it.' : 'Load the Blender GLB to use part controls.'}
-        </span>
-      </div>
-      <div className="part-browser">
-        <label htmlFor="model-part-select">Model sub-parts · {components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}</label>
-        <select
-          id="model-part-select"
-          value={activeSelectedPart?.componentId === selectedComponentId ? activeSelectedPart.objectId : ''}
-          disabled={!modelInteractive || !partCatalog.some((part) => part.componentId === selectedComponentId)}
-          onChange={(event) => {
-            const part = partCatalog.find((candidate) => candidate.objectId === event.target.value)
-            if (part) inspectPart(part)
-          }}
-        >
-          <option value="">Choose a mesh to inspect…</option>
-          {partCatalog.filter((part) => part.componentId === selectedComponentId).map((part) => (
-            <option key={part.objectId} value={part.objectId}>
-              {part.name}{part.envelopeMm
-                ? ` · ${part.envelopeMm} mm single casting`
-                : part.referenceEnvelopeMm ? ` · ${part.referenceEnvelopeMm} mm stage reference` : ''}
-            </option>
-          ))}
-        </select>
-      </div>
+      {modelFailed && <p className="viewer-fallback-note" role="status">The 3D model is unavailable; showing the interactive schematic.</p>}
       <div className="part-inspection" aria-live="polite">
         <div className="part-inspection-heading">
           <span className="part-inspection-label">Selected model part</span>
@@ -739,11 +764,11 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
             <strong className="part-inspection-name">{activeSelectedPart.name}</strong>
             <div className="part-inspection-facts">
               {activeSelectedPart.role && <span>{activeSelectedPart.role}</span>}
-              {activeSelectedPart.envelopeMm && <span>Single casting envelope: {activeSelectedPart.envelopeMm} mm</span>}
-              {activeSelectedPart.massKg !== undefined && <span>Single casting listed mass: {activeSelectedPart.massKg} kg</span>}
+              {activeSelectedPart.envelopeMm && <span>Single casting envelope: {activeSelectedPart.envelopeMm}{'\u00a0'}mm</span>}
+              {activeSelectedPart.massKg !== undefined && <span>Single casting listed mass: {activeSelectedPart.massKg}{'\u00a0'}kg</span>}
               {activeSelectedPart.referenceLabel && <span>Related reference: {activeSelectedPart.referenceLabel}</span>}
-              {activeSelectedPart.referenceEnvelopeMm && <span>Stage casting envelope: {activeSelectedPart.referenceEnvelopeMm} mm</span>}
-              {activeSelectedPart.referenceMassKg !== undefined && <span>Stage casting listed mass: {activeSelectedPart.referenceMassKg} kg</span>}
+              {activeSelectedPart.referenceEnvelopeMm && <span>Stage casting envelope: {activeSelectedPart.referenceEnvelopeMm}{'\u00a0'}mm</span>}
+              {activeSelectedPart.referenceMassKg !== undefined && <span>Stage casting listed mass: {activeSelectedPart.referenceMassKg}{'\u00a0'}kg</span>}
               {activeSelectedPart.instanceIndex !== undefined && activeSelectedPart.instanceCount !== undefined && (
                 <span>Visual instance {activeSelectedPart.instanceIndex} of {activeSelectedPart.instanceCount}</span>
               )}

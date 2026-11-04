@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import type { RefObject } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
   Activity,
@@ -18,6 +18,8 @@ import {
   X,
 } from 'lucide-react'
 import type { EngineStatus, RoutePage, ThemePreference } from './shellLogic'
+import { parseRoute, routeHash } from './app/router'
+import { PUBLISHED_6B03_REFERENCE } from './lib/publishedReference'
 
 const NAV_ITEMS: Array<{ page: RoutePage; label: string; mobileLabel: string; icon: LucideIcon }> = [
   { page: 'overview', label: 'Overview', mobileLabel: 'Overview', icon: Gauge },
@@ -27,8 +29,9 @@ const NAV_ITEMS: Array<{ page: RoutePage; label: string; mobileLabel: string; ic
 ]
 
 function routeHref(page: RoutePage, selectedComponentId: string): string {
-  if (page === 'components') return `#/components/${selectedComponentId || 'compressor'}`
-  return `#/${page}`
+  const current = parseRoute(window.location.hash)
+  const componentId = page === 'components' ? selectedComponentId as typeof current.componentId : current.componentId
+  return routeHash({ ...current, page, componentId, sampleIndex: current.sampleIndex })
 }
 
 function CycleGlyph() {
@@ -182,12 +185,10 @@ function DesktopNav({ page, selectedComponentId }: { page: RoutePage; selectedCo
       href={routeHref(itemPage, selectedComponentId)}
       aria-label={label}
       aria-current={page === itemPage ? 'page' : undefined}
-      aria-describedby={`rail-tooltip-${itemPage}`}
-      title={label}
       key={itemPage}
     >
       <Icon size={16} strokeWidth={1.5} aria-hidden="true" />
-      <span className="rail-tooltip" id={`rail-tooltip-${itemPage}`} role="tooltip">{label}</span>
+      <span className="rail-tooltip" aria-hidden="true">{label}</span>
     </a>
   )
 
@@ -274,7 +275,7 @@ export function PageHeader({
   const close = () => setOverflowOpen(false)
   useDismissOnOutside(overflowOpen, close, root)
   const titles: Record<RoutePage, string> = {
-    overview: 'Gas turbine workbench',
+    overview: 'Overview',
     components: 'Turbine components',
     evidence: 'Evidence',
     assistant: 'Assistant',
@@ -283,7 +284,7 @@ export function PageHeader({
   return (
     <header className="page-header">
       <div className="page-heading-copy">
-        <div className="page-kicker">GE 6B.03 reference · Synthetic</div>
+        <div className="page-context">GE 6B.03 reference · Synthetic</div>
         <h1>{titles[page]}</h1>
       </div>
       <div className="page-header-actions">
@@ -343,9 +344,27 @@ export function BoundarySheet({
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
-    if (open && !dialog.open) dialog.showModal()
+    if (open && !dialog.open) {
+      dialog.showModal()
+      dialog.querySelector<HTMLElement>('.boundary-close')?.focus()
+    }
     if (!open && dialog.open) dialog.close()
   }, [open])
+
+  const keepFocusInside = (event: ReactKeyboardEvent<HTMLDialogElement>) => {
+    if (event.key !== 'Tab') return
+    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')
+    if (!focusable?.length) return
+    const first = focusable[0]
+    const last = focusable[focusable.length - 1]
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault()
+      last.focus()
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault()
+      first.focus()
+    }
+  }
 
   return (
     <dialog
@@ -355,10 +374,11 @@ export function BoundarySheet({
       aria-labelledby="boundary-title"
       aria-describedby="boundary-lede"
       onClose={onClose}
+      onKeyDown={keepFocusInside}
     >
       <div className="boundary-sheet-heading">
         <div>
-          <div className="page-kicker">Data and model scope</div>
+          <div className="page-context">Data and model scope</div>
           <h2 id="boundary-title">Boundary</h2>
         </div>
         <button className="boundary-close" type="button" aria-label="Close boundary" onClick={onClose}><X size={17} aria-hidden="true" /></button>
@@ -374,13 +394,11 @@ export function BoundarySheet({
       <section className="boundary-reference" aria-labelledby="boundary-reference-title">
         <h3 id="boundary-reference-title">GE 6B.03 reference</h3>
         <dl className="boundary-reference-values">
-          <div><dt>Net output</dt><dd>45 MW</dd></div>
-          <div><dt>LHV efficiency</dt><dd>33.4%</dd></div>
-          <div><dt>Pressure ratio</dt><dd>12.8:1</dd></div>
-          <div><dt>Exhaust temperature</dt><dd>561°C</dd></div>
-          <div><dt>Exhaust flow</dt><dd>145.1 kg/s</dd></div>
+          {PUBLISHED_6B03_REFERENCE.values.map(({ label, value, unit }) => (
+            <div key={label}><dt>{label}</dt><dd>{value}{unit && <span className="unit">{unit}</span>}</dd></div>
+          ))}
         </dl>
-        <p>Published ratings at ISO conditions on natural gas. The synthetic replay is not calibrated to these values; model geometry is conceptual, not a dimensioned OEM layout.</p>
+        <p>{PUBLISHED_6B03_REFERENCE.caveat}</p>
       </section>
     </dialog>
   )
