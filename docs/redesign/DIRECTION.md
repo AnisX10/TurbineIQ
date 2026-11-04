@@ -10,11 +10,11 @@ node <taste-skill>/scripts/draw.mjs --app --kind analytics --brief "TurbineIQ: e
 
 Achromatic Ledger suits this engineering workspace because the chrome stays neutral, measurements align like a ledger, and a single blue marks the main data element. Apply `#1d5fbf` only to the synthetic observation series; reference remains ink and comparisons remain grey. The product's own face is the blue-grey meter ground `#f2f4f7`, not the default `#f8f8f8`.
 
-The exact draw selected a 55px icon rail and an analytics report-card-with-legend-table pattern. The earlier plan chose an Open plane with a 240px labelled sidebar. The draw is the visual authority per this task, so sections 3 and 5 of the plan now lock the icon rail; phone navigation uses a bottom bar with short labels. The report-card-with-legend-table pattern is mapped to the existing Component ledger beside the Stage; the timeline keeps direct labels and its table fallback instead of a redundant two-series legend, as section 8 requires. The engineering-specific Stage, station ledger, and screen content remain governed by plan section 6. This composition has not yet been implemented or visually validated in the app.
+The exact draw selected a 55px icon rail and an analytics report-card-with-legend-table pattern. The earlier plan chose an Open plane with a 240px labelled sidebar. The draw is the visual authority per this task, so sections 3 and 5 of the plan now lock the icon rail; phone navigation uses a bottom bar with short labels. The report-card-with-legend-table pattern is mapped to the existing Component ledger beside the Stage; the timeline keeps direct labels and its table fallback instead of a redundant two-series legend, as section 8 requires. The engineering-specific Stage, station ledger, and screen content remain governed by plan section 6. The Phase 2 shell now implements the rail, mobile bar, page header, and boundary sheet; current verification is recorded below.
 
 ## Final design tokens
 
-The light theme is the default. Dark remains selectable when the shell lands. `--control` is reserved for dividers; `--control-strong` is used for field, select, and segmented-control boundaries and measures at least 3:1 on both surface and ground in both themes.
+The shell starts with the System theme preference; users can choose System, Light, or Dark. The light tokens are the fallback, and OS dark preference selects the dark tokens. `--control` is reserved for dividers; `--control-strong` is used for field, select, and segmented-control boundaries and measures at least 3:1 on both surface and ground in both themes.
 
 | Token group | Light | Dark |
 |---|---|---|
@@ -82,7 +82,7 @@ Ran `python docs/redesign/contrast_check.py`. Text and pill ink require 4.5:1; U
 
 Lock Geist (Geist Sans) for text and Geist Mono for every engineering figure. Use tabular numerals so columns align; the mono flag is justified because engineering readouts are a ledger of aligned figures. Weights are Geist 400, 500, 600, 700 and Geist Mono 400, 500.
 
-Six Latin WOFF2 files were copied at development time from Fontsource 5.3.0: [`Geist-400.woff2`](../../frontend/public/fonts/Geist-400.woff2), [`Geist-500.woff2`](../../frontend/public/fonts/Geist-500.woff2), [`Geist-600.woff2`](../../frontend/public/fonts/Geist-600.woff2), [`Geist-700.woff2`](../../frontend/public/fonts/Geist-700.woff2), [`GeistMono-400.woff2`](../../frontend/public/fonts/GeistMono-400.woff2), and [`GeistMono-500.woff2`](../../frontend/public/fonts/GeistMono-500.woff2). Their SIL Open Font License 1.1 texts are beside them as `OFL-Geist-Sans.txt` and `OFL-Geist-Mono.txt`. Source package versions: [`@fontsource/geist-sans@5.3.0`](https://www.npmjs.com/package/@fontsource/geist-sans) and [`@fontsource/geist-mono@5.3.0`](https://www.npmjs.com/package/@fontsource/geist-mono). These packages were packed only to extract the files; neither was added to package manifests or runtime dependencies. The WOFF2 files remain unused; Fira files remain in place.
+Six Latin WOFF2 files were copied at development time from Fontsource 5.3.0: [`Geist-400.woff2`](../../frontend/public/fonts/Geist-400.woff2), [`Geist-500.woff2`](../../frontend/public/fonts/Geist-500.woff2), [`Geist-600.woff2`](../../frontend/public/fonts/Geist-600.woff2), [`Geist-700.woff2`](../../frontend/public/fonts/Geist-700.woff2), [`GeistMono-400.woff2`](../../frontend/public/fonts/GeistMono-400.woff2), and [`GeistMono-500.woff2`](../../frontend/public/fonts/GeistMono-500.woff2). Their SIL Open Font License 1.1 texts are beside them as `OFL-Geist-Sans.txt` and `OFL-Geist-Mono.txt`. Source package versions: [`@fontsource/geist-sans@5.3.0`](https://www.npmjs.com/package/@fontsource/geist-sans) and [`@fontsource/geist-mono@5.3.0`](https://www.npmjs.com/package/@fontsource/geist-mono). These packages were packed only to extract the files; neither was added to package manifests or runtime dependencies. Phase 2 loads Geist and Geist Mono from these local files with `@font-face`; the unused Fira assets were removed.
 
 ## Cycle glyph
 
@@ -94,9 +94,9 @@ Geist and Geist Mono do not include U+2009 or U+202F; Geist Mono does not includ
 
 The exact six requested searches, the two narrow retries, their relevant matches, and what changed are recorded in [UI_UX_FINDINGS.md](UI_UX_FINDINGS.md). They support direct chart labels and table fallback, keyboard focus and skip navigation, accessible icon names and states, reactive reduced motion, and narrow React state consumers. The chart palette and library suggestions were not adopted because Taste and the project plan specify the blue and hand-rolled SVG.
 
-The UI/UX Pro Max canonical pre-delivery checklist and quick-reference sections 1-3 were reviewed. The plan now requires accessible icon states, reactive reduced motion, and sample-update render isolation. In this phase, only the token contrast and glyph preview were verified. App-level keyboard traversal, responsive layout, screen-reader order, touch hit areas, safe areas, and reduced-motion behavior remain unverified because no application source changed.
+The UI/UX Pro Max canonical pre-delivery checklist and quick-reference sections 1-3 were reviewed. The plan requires accessible icon states, reactive reduced motion, and sample-update render isolation. At Phase 1 close, only token contrast and the glyph preview were verified; Phase 2 implementation and its checks are documented below.
 
-## Phase 1 verification
+## Phase 1 verification (historical)
 
 - `npm run build`: passed; the existing lazy 3D chunk advisory remains. The build copies the font assets into `dist`, but `frontend/src` has no Geist references, so the UI does not request them.
 - `npm run lint`: passed (exit 0).
@@ -108,10 +108,19 @@ The UI/UX Pro Max canonical pre-delivery checklist and quick-reference sections 
 
 The Phase 0 Python gates (Ruff and 69 pytest cases) are recorded in [BASELINE.md](BASELINE.md). No Python or application source changed in Phase 1, so they were not rerun after the direction assets were added.
 
-## Assumptions, limits, and deviations
+## Phase 1 assumptions, limits, and deviations (historical)
 
 - Assumed the task's defaults: Geist plus Geist Mono; light first with dark as a later token swap.
 - The direction remains synthetic-only, local-first, and simplified; this phase adds no OEM data, physical connectivity, or runtime network requests.
 - The generated icon rail supersedes the earlier plan's Open plane/labelled sidebar. The plan now records this explicit visual direction change. The report-card-with-legend-table pattern remains in `direction.json`; its fit beside the engineering Stage has not been implemented or checked in a live redesigned UI.
-- Fonts are committed but unused as required. No `@font-face`, app source, Python API, type definition, component ID, GLB contract, or GLB asset was changed.
-- The Taste inspect/lint application gates do not apply to changed application files because none were changed. The Phase 0 build, lint, Ruff, and pytest outputs are recorded in [BASELINE.md](BASELINE.md).
+- At Phase 1 close, fonts were committed but unused. No Python API, type definition, component ID, GLB contract, or GLB asset was changed.
+- Phase 1 changed no application files. Phase 2 adds the shell and token integration described below.
+
+## Phase 2 shell implementation
+
+- Replaced the labelled sidebar with the 55px `IconRail`; its four destinations use 16px Lucide icons, 44px hit areas, accessible names, current-page state, and hover/focus tooltips. The active fill is neutral. Divider lines use `--control`; field/select boundaries use `--control-strong`.
+- Added the safe-area-aware `MobileBottomBar` below 1024px with four labelled destinations. Engine status, theme choice, and boundary controls are available in the header utilities menu; the seed chip continues to open the boundary sheet.
+- Added the 24px/700 `PageHeader`, persisted System/Light/Dark preference, local-engine status popover, and boundary sheet. Existing skip navigation and main landmark are retained. The evidence and assistant panels are routed through their shell destinations.
+- Loaded local Geist fonts and moved the theme tokens into the runtime stylesheet. The app continues to use local deterministic API/data and has no industrial connection or control path.
+- Verification: `npm run lint` and `npm run build` passed; Vite reports the existing lazy 3D viewer chunk at 1,024.10 kB. Ruff passed and pytest passed all 69 cases (five dependency deprecation warnings). `git diff --check` passed, all 40 contrast pairs passed, and the unsupported-glyph scan found none in docs or frontend source.
+- The desktop shell was visually reviewed during integration. A final mobile recapture and full keyboard/screen-reader/axe audit remain outstanding; the responsive layout has not yet been certified at every planned viewport.

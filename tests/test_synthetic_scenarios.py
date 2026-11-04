@@ -50,7 +50,7 @@ def test_compressor_efficiency_perturbation_is_explicit_and_modelled() -> None:
         < baseline["synthetic_truth_electrical_power_kw"].mean()
     )
     assert drift["power_residual_kw"].iloc[-1] < drift["power_residual_kw"].iloc[0]
-    assert "not a real fault signature" in drift.attrs["scenario_description"]
+    assert "does not represent an equipment condition" in drift.attrs["scenario_description"]
 
 
 def test_sensor_fault_is_one_labelled_measurement_perturbation() -> None:

@@ -326,7 +326,7 @@ The product's credibility depends on not over-claiming. Keep the existing bounda
 
 - **Glossary (use exactly):** Reference model · Synthetic observation · Synthetic truth · Residual (observation − reference) · Residual screen · Flagged sample.
 - **Never write:** fault, failure, diagnosis, anomaly detected, AI-powered, smart, insights. A flagged sample is "flagged by the residual screen".
-- **Sentence case** for all UI text. Units after every value (`25.46 MW`): render the unit in its own span with `margin-inline-start: 0.25em`, or use U+00A0 between value and unit. Do not use U+2009 or U+202F; neither Geist face contains those glyphs. Dates and times in 24h UTC with the zone shown once in the sample filter.
+- **Sentence case** for all UI text. Units after every value (`25.46 MW`): render the unit in its own span with `margin-inline-start: 0.25em`, or use U+00A0 between value and unit. Do not use U+2009 or U+202F; neither Geist face contains those glyphs. Direction and flag markers use Lucide icons or SVG shapes, never U+25B2 or U+25BE. Dates and times in 24h UTC with the zone shown once in the sample filter.
 - **Every empty or error message** says what happened, what it means for the data, and the next action in one line each.
 - The words **synthetic** and **simplified model** appear in the header chip and in the Boundary sheet. They must never be removable by a layout change.
 

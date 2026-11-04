@@ -16,7 +16,10 @@ import type { Object3D } from 'three'
 import type { TwinComponentState } from './types'
 
 const MODEL_PATH = '/models/turbine.glb'
-const SELECTED_TONE = '#56d0db'
+
+function readCssColor(token: string, fallback: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(token).trim() || fallback
+}
 
 interface TurbineViewerProps {
   components: TwinComponentState[]
@@ -62,14 +65,15 @@ interface PartProps {
 }
 
 function toneForStatus(status: string): string {
-  if (status === 'scenario_perturbation') return '#bd8b4f'
-  if (status === 'residual_screen' || status === 'synthetic_measurement_fault') return '#b76e60'
-  if (status === 'scenario_context') return '#5b8f9b'
-  return '#607681'
+  if (status === 'scenario_perturbation') return readCssColor('--warning', '#92400e')
+  if (status === 'residual_screen' || status === 'synthetic_measurement_fault') return readCssColor('--negative', '#c4242a')
+  if (status === 'scenario_context') return readCssColor('--chart-2', '#8a8a8a')
+  return readCssColor('--stage-edge', '#8a8f98')
 }
 
 function Part({ id, position, outlineRadius = 0.66, selected, status, onSelect, children }: PartProps) {
   const baseTone = toneForStatus(status)
+  const selectedTone = readCssColor('--stage-selected', '#1d5fbf')
   const onClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation()
     onSelect(id)
@@ -94,8 +98,8 @@ function Part({ id, position, outlineRadius = 0.66, selected, status, onSelect, 
       <mesh rotation={[0, Math.PI / 2, 0]}>
         <torusGeometry args={[outlineRadius, selected ? 0.035 : 0.02, 8, 48]} />
         <meshStandardMaterial
-          color={selected ? SELECTED_TONE : baseTone}
-          emissive={selected ? SELECTED_TONE : '#000000'}
+          color={selected ? selectedTone : baseTone}
+          emissive={selected ? selectedTone : '#000000'}
           emissiveIntensity={selected ? 0.18 : 0}
           metalness={0.62}
           roughness={0.43}
@@ -338,6 +342,7 @@ function GLBModel({
   onSelectComponent,
   onInspectPart,
   onPartsAvailable,
+  selectedTone,
 }: {
   url: string
   selectedComponentId: string
@@ -348,6 +353,7 @@ function GLBModel({
   onSelectComponent: (componentId: string) => void
   onInspectPart: (part: PartInspection) => void
   onPartsAvailable: (parts: PartInspection[]) => void
+  selectedTone: string
 }) {
   const gltf = useGLTF(url)
   const camera = useThree((state) => state.camera)
@@ -422,12 +428,12 @@ function GLBModel({
       const materials = Array.isArray(object.material) ? object.material : [object.material]
       materials.forEach((material) => {
         if (material instanceof MeshStandardMaterial) {
-          material.emissive = new Color(selectedPartMesh ? '#9af4e8' : selected ? SELECTED_TONE : '#000000')
+          material.emissive = new Color(selectedPartMesh || selected ? selectedTone : '#000000')
           material.emissiveIntensity = selectedPartMesh ? 0.48 : selected ? 0.16 : 0
         }
       })
     })
-  }, [exploded, fittedScene, isolated, selectedComponentId, selectedPart])
+  }, [exploded, fittedScene, isolated, selectedComponentId, selectedPart, selectedTone])
 
   useEffect(() => {
     if (!isolated || !controls) return
@@ -497,6 +503,8 @@ class ModelBoundary extends Component<ModelBoundaryProps, ModelBoundaryState> {
 }
 
 export function TurbineViewer({ components, selectedComponentId, onSelectComponent }: TurbineViewerProps) {
+  const stageBackground = readCssColor('--stage-bg', '#ffffff')
+  const stageSelectedTone = readCssColor('--stage-selected', '#1d5fbf')
   const [modelUrl, setModelUrl] = useState<string | null>(null)
   const [modelName, setModelName] = useState<string | null>(null)
   const [modelFailed, setModelFailed] = useState(false)
@@ -629,7 +637,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
           camera={{ position: [-6.4, -4.4, 7.6], fov: 35, near: 0.1, far: 100 }}
           gl={{ antialias: true, alpha: false }}
         >
-          <color attach="background" args={['#0c141c']} />
+          <color attach="background" args={[stageBackground]} />
           <ambientLight intensity={0.8} />
           <directionalLight position={[4, 8, 5]} intensity={2.1} color="#dce8ed" />
           <pointLight position={[-2.5, 1.2, 2.5]} intensity={9} distance={10} color="#a9c6c8" />
@@ -654,6 +662,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
                   onSelectComponent={onSelectComponent}
                   onInspectPart={inspectPart}
                   onPartsAvailable={setPartCatalog}
+                  selectedTone={stageSelectedTone}
                 />
               </ModelBoundary>
             ) : (

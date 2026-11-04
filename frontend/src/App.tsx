@@ -1,21 +1,26 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import {
-  BookOpen,
   Bot,
   ChevronRight,
   Database,
-  Gauge,
   Info,
   Pause,
   Play,
   Search,
   ShieldCheck,
   Sparkles,
-  Wind,
   Zap,
 } from 'lucide-react'
 import { api } from './api'
 import { PowerChart } from './PowerChart'
+import {
+  BoundarySheet,
+  IconRail,
+  MobileBottomBar,
+  PageHeader,
+} from './Shell'
+import { getBoundaryDetails, parseRoute } from './shellLogic'
+import type { RoutePage, ThemePreference } from './shellLogic'
 import type {
   AssistantResponse,
   EvidenceHit,
@@ -27,10 +32,9 @@ import type {
   TwinSnapshot,
 } from './types'
 import './TurbineIQ.css'
+import './Shell.css'
 
 const TurbineViewer = lazy(() => import('./TurbineViewer').then((module) => ({ default: module.TurbineViewer })))
-
-type WorkspacePage = 'twin' | 'evidence'
 
 function formatMW(kw: number): string {
   return `${(kw / 1000).toFixed(2)} MW`
@@ -158,10 +162,12 @@ function EvidenceWorkspace({
   evidence,
   setEvidence,
   selectedTwin,
+  activePanel,
 }: {
   evidence: EvidenceHit[]
   setEvidence: (hits: EvidenceHit[]) => void
   selectedTwin: SelectedTwinSelection | null
+  activePanel: 'evidence' | 'assistant'
 }) {
   const [query, setQuery] = useState('Brayton cycle assumptions')
   const [searching, setSearching] = useState(false)
@@ -212,15 +218,9 @@ function EvidenceWorkspace({
 
   return (
     <div className="evidence-page">
-      <div className="page-title-row">
-        <div>
-          <h1>Evidence workspace</h1>
-          <p>Search local engineering notes and ask the bounded assistant to explain generated results.</p>
-        </div>
-        <span className="mode-badge"><BookOpen size={14} /> Local-first retrieval</span>
-      </div>
-      <div className="evidence-grid">
-        <section className="panel evidence-panel">
+      <p className="page-intro">{activePanel === 'evidence' ? 'Search local engineering notes. Results include source references.' : 'Ask the bounded assistant to explain a generated result.'}</p>
+      <div className="evidence-grid single-panel">
+        <section className="panel evidence-panel" hidden={activePanel !== 'evidence'}>
           <div className="panel-heading">
             <div>
               <h2>Local cited retrieval</h2>
@@ -249,7 +249,7 @@ function EvidenceWorkspace({
             {evidence.length === 0 && <div className="empty-evidence">Search for a model assumption or a section title to see cited passages.</div>}
           </div>
         </section>
-        <section className="panel assistant-panel">
+        <section className="panel assistant-panel" hidden={activePanel !== 'assistant'}>
           <div className="panel-heading">
             <div>
               <h2>Ask about this prototype</h2>
@@ -289,8 +289,19 @@ function EvidenceWorkspace({
   )
 }
 
+function readThemePreference(): ThemePreference {
+  try {
+    const saved = window.localStorage.getItem('turbineiq-theme')
+    return saved === 'light' || saved === 'dark' ? saved : 'system'
+  } catch {
+    return 'system'
+  }
+}
+
 function App() {
-  const [page, setPage] = useState<WorkspacePage>('twin')
+  const [page, setPage] = useState<RoutePage>(() => parseRoute(window.location.hash).page)
+  const [theme, setTheme] = useState<ThemePreference>(readThemePreference)
+  const [boundaryOpen, setBoundaryOpen] = useState(false)
   const [scenarios, setScenarios] = useState<ScenarioDefinition[]>([])
   const [scenarioId, setScenarioId] = useState('compressor_fouling')
   const [seedInput, setSeedInput] = useState('42')
@@ -305,6 +316,29 @@ function App() {
 
   const seed = Number.parseInt(seedInput, 10)
   const validSeed = Number.isInteger(seed) && seed >= 0
+
+  useEffect(() => {
+    const syncRoute = () => {
+      const route = parseRoute(window.location.hash)
+      setPage(route.page)
+      if (route.componentId) setSelectedComponentId(route.componentId)
+      if (!window.location.hash) window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/overview`)
+    }
+    syncRoute()
+    window.addEventListener('hashchange', syncRoute)
+    return () => window.removeEventListener('hashchange', syncRoute)
+  }, [])
+
+  useEffect(() => {
+    const root = document.documentElement
+    if (theme === 'system') root.removeAttribute('data-theme')
+    else root.dataset.theme = theme
+    try {
+      window.localStorage.setItem('turbineiq-theme', theme)
+    } catch {
+      // The session still works when storage is unavailable.
+    }
+  }, [theme])
 
   useEffect(() => {
     let active = true
@@ -365,64 +399,50 @@ function App() {
   const scenario = scenarios.find((item) => item.scenario_id === scenarioId)
   const residualTone = snapshot?.residual_screen_flag ? 'tone-alert' : 'tone-neutral'
   const residualValue = snapshot ? `${snapshot.power_residual_kw >= 0 ? '+' : ''}${(snapshot.power_residual_kw / 1000).toFixed(2)} MW` : '—'
+  const engineStatus = apiStatus === 'ok' ? 'connected' : apiStatus === 'offline' ? 'offline' : 'checking'
+  const boundaryDetails = getBoundaryDetails({ run, snapshot, scenario, scenarioId })
 
   return (
     <div className="app-shell">
-      <aside className="sidebar" aria-label="TurbineIQ workspace navigation">
-        <div className="brand-lockup" title="TurbineIQ">
-          <span className="brand-mark"><Wind size={19} strokeWidth={1.7} /></span>
-          <span className="brand-name">TurbineIQ</span>
-        </div>
-        <div className="side-divider" />
-        <nav className="primary-nav" aria-label="Primary navigation">
-          <button
-            className={`nav-item ${page === 'twin' ? 'active' : ''}`}
-            aria-label="Twin workbench"
-            aria-current={page === 'twin' ? 'page' : undefined}
-            title="Twin workbench"
-            onClick={() => setPage('twin')}
-          >
-            <Gauge size={18} /><span className="nav-item-label">Twin workbench</span>
-          </button>
-          <button
-            className={`nav-item ${page === 'evidence' ? 'active' : ''}`}
-            aria-label="Evidence and assistant"
-            aria-current={page === 'evidence' ? 'page' : undefined}
-            title="Evidence and assistant"
-            onClick={() => setPage('evidence')}
-          >
-            <BookOpen size={18} /><span className="nav-item-label">Evidence & assistant</span>
-          </button>
-        </nav>
-        <div className="sidebar-spacer" />
-        <div
-          className="rail-status"
-          role="status"
-          aria-label={apiStatus === 'ok' ? 'Local engine connected' : apiStatus === 'offline' ? 'Local API unavailable' : 'Checking local engine'}
-          title={apiStatus === 'ok' ? 'Local engine connected' : apiStatus === 'offline' ? 'Local API unavailable' : 'Checking local engine'}
-        >
-          <span className={`status-indicator ${apiStatus}`} />
-        </div>
-        <div className="scope-mark" title="Synthetic data only · no physical connection or control" aria-label="Synthetic data only; no physical connection or control">
-          <ShieldCheck size={16} />
-        </div>
-      </aside>
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault()
+          document.getElementById('main-content')?.focus()
+        }}
+      >
+        Skip to content
+      </a>
+      <IconRail
+        page={page}
+        selectedComponentId={selectedComponentId}
+        engineStatus={engineStatus}
+        theme={theme}
+        onThemeChange={setTheme}
+        boundaryOpen={boundaryOpen}
+        onBoundary={() => setBoundaryOpen(true)}
+      />
 
-      <main className="main-area">
-        <header className="topbar">
-          <div className="breadcrumb"><span>TurbineIQ</span><ChevronRight size={13} /><strong>{page === 'twin' ? 'Twin workbench' : 'Evidence & assistant'}</strong></div>
-          <div className="topbar-right"><span className="mode-badge"><span className="state-dot" /> Synthetic data</span><span className="topbar-divider" /><span className="local-chip"><span className={`status-indicator ${apiStatus}`} /> Local engine</span></div>
-        </header>
+      <main id="main-content" className="main-area" tabIndex={-1} aria-label="TurbineIQ workspace">
+        <PageHeader
+          page={page}
+          seed={seedInput}
+          engineStatus={engineStatus}
+          theme={theme}
+          onThemeChange={setTheme}
+          boundaryOpen={boundaryOpen}
+          onBoundary={() => setBoundaryOpen(true)}
+        />
 
         {errorMessage && <div className="error-banner" role="alert"><Info size={15} />{errorMessage}</div>}
-        {page === 'evidence' ? (
-          <EvidenceWorkspace evidence={evidence} setEvidence={setEvidence} selectedTwin={selectedTwin} />
+        {page === 'evidence' || page === 'assistant' ? (
+          <EvidenceWorkspace evidence={evidence} setEvidence={setEvidence} selectedTwin={selectedTwin} activePanel={page} />
         ) : (
-          <div className="workspace-page">
+          <div className={`workspace-page page-${page}`}>
             <div className="page-title-row twin-title-row">
               <div>
-                <h1>Gas turbine workbench</h1>
-                <p>Simplified open-cycle model · selected sample {snapshot ? formatClock(snapshot.timestamp_utc) : 'loading'}</p>
+                <p>{page === 'overview' ? `Simplified open-cycle model · selected sample ${snapshot ? formatClock(snapshot.timestamp_utc) : 'loading'}` : 'Inspect the simplified turbine sections and their current synthetic metrics.'}</p>
               </div>
               <div className="scenario-controls" aria-label="Synthetic scenario controls">
                 <label className="scenario-field" htmlFor="scenario-select">
@@ -520,7 +540,7 @@ function App() {
                 <div className="trust-strip">
                   <div><span className="trust-icon"><ShieldCheck size={14} /></span><span><strong>Provenance</strong> {snapshot.data_provenance} · seed {snapshot.seed}</span></div>
                   <div><span className="trust-icon"><Info size={14} /></span><span><strong>Model boundary</strong> {run?.run.model_name} · not OEM-validated</span></div>
-                  <button type="button" className="text-link" onClick={() => setPage('evidence')}>Open evidence workspace <ChevronRight size={14} /></button>
+                  <a href="#/evidence" className="text-link">Open evidence workspace <ChevronRight size={14} /></a>
                 </div>
               </>
             )}
@@ -534,6 +554,15 @@ function App() {
         )}
         <footer className="app-footer"><span>TurbineIQ · local engineering prototype</span><span>Simplified model · synthetic data · no physical connection or control</span></footer>
       </main>
+      <MobileBottomBar page={page} selectedComponentId={selectedComponentId} />
+      <BoundarySheet
+        open={boundaryOpen}
+        onClose={() => setBoundaryOpen(false)}
+        seed={seedInput}
+        scenario={boundaryDetails.scenario}
+        modelName={boundaryDetails.modelName}
+        provenance={boundaryDetails.provenance}
+      />
     </div>
   )
 }
