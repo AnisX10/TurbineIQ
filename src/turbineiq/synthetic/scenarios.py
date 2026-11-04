@@ -37,7 +37,7 @@ SCENARIOS: dict[str, ScenarioSpec] = {
         description=(
             "A synthetic compressor-efficiency parameter drifts below the fixed "
             "reference-model assumption. The resulting residual is illustrative; "
-            "it does not represent an equipment condition."
+            "it is not a real fault signature."
         ),
         compressor_efficiency_end=0.80,
     ),
