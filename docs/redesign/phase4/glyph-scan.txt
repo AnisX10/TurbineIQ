@@ -1,0 +1,1 @@
+PASS: no U+2009, U+202F, U+25B2 or U+25BE in frontend source or E2E.

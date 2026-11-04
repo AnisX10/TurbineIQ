@@ -1,0 +1,3 @@
+PASS: git diff --quiet main -- src tests.
+PASS: git diff --quiet main -- frontend/src/types.ts frontend/public/models/turbine.glb.
+Python source and tests, frontend types, and the GLB are byte-identical to main.

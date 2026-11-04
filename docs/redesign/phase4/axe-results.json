@@ -1,0 +1,86 @@
+[
+  {
+    "route": "Overview",
+    "theme": "light",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Component detail",
+    "theme": "light",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Component detail",
+    "theme": "light",
+    "state": "Over time",
+    "findings": []
+  },
+  {
+    "route": "Component detail",
+    "theme": "light",
+    "state": "Evidence",
+    "findings": []
+  },
+  {
+    "route": "Evidence",
+    "theme": "light",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Assistant",
+    "theme": "light",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Assistant",
+    "theme": "light",
+    "state": "Cloud consent",
+    "findings": []
+  },
+  {
+    "route": "Overview",
+    "theme": "dark",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Component detail",
+    "theme": "dark",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Component detail",
+    "theme": "dark",
+    "state": "Over time",
+    "findings": []
+  },
+  {
+    "route": "Component detail",
+    "theme": "dark",
+    "state": "Evidence",
+    "findings": []
+  },
+  {
+    "route": "Evidence",
+    "theme": "dark",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Assistant",
+    "theme": "dark",
+    "state": "default",
+    "findings": []
+  },
+  {
+    "route": "Assistant",
+    "theme": "dark",
+    "state": "Cloud consent",
+    "findings": []
+  }
+]
