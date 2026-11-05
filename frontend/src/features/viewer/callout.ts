@@ -1,40 +1,55 @@
-import { Box3, type Camera, Matrix4, Vector3 } from 'three'
+import { type BufferGeometry, type Camera, Matrix4, Vector3 } from 'three'
+
+export const CALLOUT_GAP_PX = 40
 
 export type CalloutPlacement = {
   position: [number, number, number]
   side: 'left' | 'right'
+  gap: number
+  maxWidth: number
 }
 
-export function getCalloutPlacement(bounds: Box3, camera?: Camera, worldMatrix = new Matrix4()): CalloutPlacement | null {
-  if (bounds.isEmpty()) return null
+export function getGeometryCentroid(geometry: BufferGeometry): Vector3 | null {
+  const position = geometry.getAttribute('position')
+  if (!position || position.count === 0) return null
 
-  const center = bounds.getCenter(new Vector3())
-  const corners = [
-    new Vector3(bounds.min.x, bounds.min.y, bounds.min.z),
-    new Vector3(bounds.min.x, bounds.min.y, bounds.max.z),
-    new Vector3(bounds.min.x, bounds.max.y, bounds.min.z),
-    new Vector3(bounds.min.x, bounds.max.y, bounds.max.z),
-    new Vector3(bounds.max.x, bounds.min.y, bounds.min.z),
-    new Vector3(bounds.max.x, bounds.min.y, bounds.max.z),
-    new Vector3(bounds.max.x, bounds.max.y, bounds.min.z),
-    new Vector3(bounds.max.x, bounds.max.y, bounds.max.z),
-  ]
+  const centroid = new Vector3()
+  for (let index = 0; index < position.count; index += 1) {
+    centroid.x += position.getX(index)
+    centroid.y += position.getY(index)
+    centroid.z += position.getZ(index)
+  }
+  return centroid.multiplyScalar(1 / position.count)
+}
 
-  if (!camera) return { position: [bounds.max.x, bounds.max.y, center.z], side: 'right' }
-
+export function getCalloutPlacement(
+  centroid: Vector3,
+  camera: Camera,
+  worldMatrix: Matrix4,
+  modelCenter: Vector3,
+  viewportWidth: number,
+  label: string,
+): CalloutPlacement | null {
   camera.updateMatrixWorld()
-  const projected = corners.map((point) => ({ point, screen: point.clone().applyMatrix4(worldMatrix).project(camera) }))
-  const centerX = center.clone().applyMatrix4(worldMatrix).project(camera).x
-  const minimumX = Math.min(...projected.map(({ screen }) => screen.x))
-  const maximumX = Math.max(...projected.map(({ screen }) => screen.x))
-  let side: CalloutPlacement['side'] = centerX < 0 ? 'left' : 'right'
-  if (side === 'left' && minimumX < -0.8) side = 'right'
-  if (side === 'right' && maximumX > 0.8) side = 'left'
+  const anchorNdc = centroid.clone().applyMatrix4(worldMatrix).project(camera)
+  const modelCenterNdc = modelCenter.clone().project(camera)
+  const outward: CalloutPlacement['side'] = anchorNdc.x < modelCenterNdc.x ? 'left' : 'right'
+  const anchorX = (anchorNdc.x + 1) * viewportWidth / 2
+  const desiredWidth = Math.min(190, Math.max(64, label.length * 7.2 + 8))
+  const margin = 8
+  const available = (side: CalloutPlacement['side']) => side === 'left' ? anchorX - margin : viewportWidth - anchorX - margin
+  const longestWordWidth = Math.max(40, ...label.split(/\s+/).map((word) => word.length * 7.2 + 4))
+  const minimumSpace = CALLOUT_GAP_PX + Math.min(desiredWidth, longestWordWidth)
+  let side = outward
+  if (available(side) < minimumSpace && available(side === 'left' ? 'right' : 'left') > available(side)) {
+    side = side === 'left' ? 'right' : 'left'
+  }
+  const maxWidth = Math.max(40, Math.min(desiredWidth, available(side) - CALLOUT_GAP_PX))
 
-  const targetX = side === 'left' ? minimumX : maximumX
-  const edge = projected
-    .filter(({ screen }) => Math.abs(screen.x - targetX) < 1e-6)
-    .sort((left, right) => right.screen.y - left.screen.y)[0]
-
-  return { position: edge.point.toArray(), side }
+  return {
+    position: centroid.toArray(),
+    side,
+    gap: CALLOUT_GAP_PX,
+    maxWidth,
+  }
 }

@@ -27,12 +27,12 @@
 .axis-core { left: 50%; transform: translateX(-50%); }
 .axis-output { right: 9px; }
 .viewer-note { right: 8px; bottom: 7px; max-width: calc(100% - 20px); padding: 3px 5px; background: var(--stage-bg); }
-.viewer-selection-label { position: relative; display: block; padding: 2px 4px; color: var(--text); background: var(--stage-bg); font: 12px/1.25 var(--sans); white-space: nowrap; pointer-events: none; }
-.viewer-selection-label--right { transform: translateX(calc(50% + 8px)); }
-.viewer-selection-label--left { transform: translateX(calc(-50% - 8px)); }
-.viewer-selection-label::before { position: absolute; top: 50%; width: 8px; height: 1px; background: var(--text); content: ''; }
-.viewer-selection-label--right::before { left: -8px; }
-.viewer-selection-label--left::before { right: -8px; }
+.viewer-selection-label { position: relative; display: block; width: max-content; padding: 2px; color: var(--text); background: var(--stage-bg); font: 12px/1.25 var(--sans); white-space: normal; overflow-wrap: normal; pointer-events: none; }
+.viewer-selection-label--right { transform: translateX(calc(50% + 40px)); }
+.viewer-selection-label--left { transform: translateX(calc(-50% - 40px)); }
+.viewer-selection-label::before { position: absolute; top: 50%; width: 40px; height: 1px; background: var(--text); content: ''; }
+.viewer-selection-label--right::before { left: -40px; }
+.viewer-selection-label--left::before { right: -40px; }
 .stage-preview { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 8px; color: var(--muted); background: var(--stage-bg); font-size: 11px; }
 .stage-preview svg { width: min(86%, 580px); height: auto; }
 .stage-preview text { fill: var(--muted); font: 11px var(--mono); text-anchor: middle; letter-spacing: 0.08em; }

@@ -6,7 +6,7 @@ import type { Object3D } from 'three'
 import type { CameraFocusTarget, PartInspection, ViewerControls } from './types'
 import { EXPLODED_OFFSETS } from './types'
 import { componentIdFor, inspectObject, isRotorPart, normalizeComponentId, partIdFor } from './selection'
-import { getCalloutPlacement } from './callout'
+import { getCalloutPlacement, getGeometryCentroid } from './callout'
 
 export function GLBModel({
   url,
@@ -42,6 +42,7 @@ export function GLBModel({
   const gltf = useGLTF(url, false, true)
   const camera = useThree((state) => state.camera)
   const gl = useThree((state) => state.gl)
+  const viewportWidth = useThree((state) => state.size.width)
   const controls = useThree((state) => state.controls as unknown as ViewerControls | null)
   const fittedScene = useMemo(() => {
     const scene = gltf.scene.clone(true)
@@ -99,9 +100,14 @@ export function GLBModel({
   const selectedMesh = selectedMeshes[0]
   if (selectedMesh && !selectedMesh.geometry.boundingBox) selectedMesh.geometry.computeBoundingBox()
   selectedMesh?.updateWorldMatrix(true, false)
-  const calloutBounds = selectedMesh?.geometry.boundingBox ?? null
-  const calloutPlacement = calloutBounds && selectedMesh
-    ? getCalloutPlacement(calloutBounds, camera, selectedMesh.matrixWorld)
+  const calloutCentroid = useMemo(
+    () => selectedMesh ? getGeometryCentroid(selectedMesh.geometry) : null,
+    [selectedMesh],
+  )
+  const modelCenter = new Box3().setFromObject(fittedScene).getCenter(new Vector3())
+  const calloutName = selectedPart?.name ?? selectedLabel
+  const calloutPlacement = calloutCentroid && selectedMesh
+    ? getCalloutPlacement(calloutCentroid, camera, selectedMesh.matrixWorld, modelCenter, viewportWidth, calloutName)
     : null
 
   useEffect(() => {
@@ -184,7 +190,12 @@ export function GLBModel({
       </Fragment>)}
       {selectedMesh && calloutPlacement && createPortal(
         <Html position={calloutPlacement.position} center portal={htmlPortal as RefObject<HTMLElement>}>
-          <span className={`viewer-selection-label viewer-selection-label--${calloutPlacement.side}`}>{selectedPart?.name ?? selectedLabel}</span>
+          <span
+            className={`viewer-selection-label viewer-selection-label--${calloutPlacement.side}`}
+            style={{ maxWidth: `${calloutPlacement.maxWidth}px` }}
+          >
+            {calloutName}
+          </span>
         </Html>,
         selectedMesh,
       )}
