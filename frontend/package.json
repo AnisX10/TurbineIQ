@@ -9,7 +9,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:e2e": "npm run build && playwright test"
+    "test:e2e": "npm run build && playwright test",
+    "check:paths": "node ../scripts/check-doc-paths.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",

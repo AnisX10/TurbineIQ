@@ -7,13 +7,15 @@ __pycache__/
 *.egg-info/
 .coverage
 htmlcov/
+.taste-skill/inspect/
+test-results/
+playwright-report/
 .env
 .streamlit/secrets.toml
 data/generated/
 data/documents/uploads/
 *.log
 *.blend1
-.taste-skill/inspect/
 frontend/node_modules/
 frontend/dist/
 frontend/test-results/
