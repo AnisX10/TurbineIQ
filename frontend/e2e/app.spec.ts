@@ -182,6 +182,8 @@ test('keyboard traversal covers tabs, evidence selection, consent, composer, and
   await expect(sample).toHaveAttribute('aria-valuetext', /Sample 96 of 96/)
   await expect(page.getByRole('button', { name: 'First flagged sample' })).toBeDisabled()
   await page.keyboard.press('f')
+  await page.keyboard.press('Home')
+  await expect(sample).toHaveAttribute('aria-valuetext', /Sample 1 of 96/)
   await page.keyboard.press('Space')
   await expect(page.getByRole('button', { name: 'Pause replay' })).toBeVisible()
   await page.keyboard.press('Space')
