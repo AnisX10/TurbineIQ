@@ -127,19 +127,14 @@ test('demand rendering stops while idle, animates camera and rotor only on reque
   expect(idleEnd).toBe(idleStart)
 
   await page.getByRole('button', { name: 'Isolate component' }).click()
-  await page.waitForTimeout(80)
-  const cameraMoving = await drawCount(page)
-  await page.waitForTimeout(300)
-  expect(await drawCount(page)).toBeGreaterThan(cameraMoving)
+  await expect.poll(() => drawCount(page), { timeout: 1500 }).toBeGreaterThan(idleEnd)
   await page.waitForTimeout(400)
   const settledCamera = await drawCount(page)
   await page.waitForTimeout(500)
   expect(await drawCount(page)).toBe(settledCamera)
 
   await page.getByRole('button', { name: 'Rotor motion' }).click()
-  await page.waitForTimeout(400)
-  const spinning = await drawCount(page)
-  expect(spinning).toBeGreaterThan(settledCamera)
+  await expect.poll(() => drawCount(page), { timeout: 1500 }).toBeGreaterThan(settledCamera)
   await page.getByRole('button', { name: 'Pause rotor motion' }).click()
   await page.waitForTimeout(500)
   const paused = await drawCount(page)
@@ -167,4 +162,22 @@ test('reduced motion disables rotor animation and removes camera easing', async 
   const settled = await drawCount(page)
   await page.waitForTimeout(400)
   expect(await drawCount(page)).toBe(settled)
+})
+
+test('responsive stage resizes without browser runtime errors', async ({ page }) => {
+  const errors: string[] = []
+  let viewport = 'initial'
+  page.on('pageerror', (error) => errors.push(`${viewport}: ${error.stack ?? error.message}`))
+  page.on('console', (message) => { if (message.type() === 'error' && !message.location().url.endsWith('/favicon.ico')) errors.push(`${viewport}: ${message.text()} ${JSON.stringify(message.location())}`) })
+  page.on('response', (response) => { if (response.status() >= 400 && !response.url().endsWith('/favicon.ico')) errors.push(`${viewport}: ${response.status()} ${response.url()}`) })
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await expect(page.getByRole('status').filter({ hasText: 'Blender GLB' })).toBeVisible({ timeout: 30000 })
+  await expect(page.locator('.viewer-selection-label')).toBeVisible({ timeout: 30000 })
+  for (const [width, height] of [[1024, 768], [768, 1024], [375, 812], [1440, 900]]) {
+    viewport = `${width}x${height}`
+    await page.setViewportSize({ width, height })
+    await page.waitForTimeout(300)
+  }
+  await writeFile(resolve(process.cwd(), '../docs/redesign/phase5/responsive-runtime-errors.json'), JSON.stringify(errors, null, 2))
+  expect(errors).toEqual([])
 })

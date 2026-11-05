@@ -1,10 +1,15 @@
 import type { TwinComponentState } from '../../types'
 import type { Vector3 } from 'three'
+import type { RefObject } from 'react'
 
 export interface SchematicTurbineProps {
   components: TwinComponentState[]
   selectedComponentId: string
   onSelectComponent: (componentId: string) => void
+}
+
+export interface SchematicTurbineSceneProps extends SchematicTurbineProps {
+  htmlPortal: RefObject<HTMLElement | null>
 }
 
 export interface TurbineViewerProps extends SchematicTurbineProps {

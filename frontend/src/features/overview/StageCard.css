@@ -18,6 +18,7 @@
 .stage-viewport { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--stage-edge); border-radius: 6px; background: var(--stage-bg); }
 .viewer-scene, .viewer-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
 .viewer-stage { overflow: hidden; border-radius: inherit; background: var(--stage-bg); }
+.viewer-html-layer { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
 .viewer-stage canvas { display: block; width: 100%; height: 100%; }
 .viewer-axis-label, .viewer-note { position: absolute; color: var(--muted); font-size: 11px; }
 .viewer-axis-label { top: 9px; }

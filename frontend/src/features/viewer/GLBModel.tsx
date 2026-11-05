@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, type RefObject } from 'react'
 import { Html, Outlines, useGLTF } from '@react-three/drei'
 import { createPortal, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
 import { Box3, Color, Group, Mesh, MeshStandardMaterial, PerspectiveCamera, Sphere, Vector3 } from 'three'
@@ -21,6 +21,7 @@ export function GLBModel({
   stagePart,
   selectedLabel,
   onCameraFocus,
+  htmlPortal,
 }: {
   url: string
   selectedComponentId: string
@@ -35,6 +36,7 @@ export function GLBModel({
   stagePart: string
   selectedLabel: string
   onCameraFocus: (target: CameraFocusTarget | null) => void
+  htmlPortal: RefObject<HTMLElement | null>
 }) {
   const gltf = useGLTF(url, false, true)
   const camera = useThree((state) => state.camera)
@@ -173,7 +175,7 @@ export function GLBModel({
         {createPortal(<Outlines color={selectedTone} thickness={1.5 * gl.getPixelRatio()} toneMapped={false} />, mesh)}
       </Fragment>)}
       {selectedMeshes[0] && createPortal(
-        <Html position={getMeshLabelAnchor(selectedMeshes[0])} center>
+        <Html position={getMeshLabelAnchor(selectedMeshes[0])} center portal={htmlPortal as RefObject<HTMLElement>}>
           <span className="viewer-selection-label">{selectedPart?.name ?? selectedLabel}</span>
         </Html>,
         selectedMeshes[0],

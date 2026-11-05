@@ -34,6 +34,7 @@ function SceneInvalidator({ tokens, components, selectedComponentId, selectionKe
 
 export function TurbineViewer({ components, selectedComponentId, onSelectComponent, view, exploded, isolated, spinning, cameraKey, onModelStatus }: TurbineViewerProps) {
   const stageTokens = useStageTokens()
+  const htmlPortal = useRef<HTMLDivElement>(null)
   const [modelUrl, setModelUrl] = useState<string | null>(null)
   const [modelName, setModelName] = useState<string | null>(null)
   const [modelFailed, setModelFailed] = useState(false)
@@ -99,18 +100,19 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
     <div className="viewer-scene">
       {partPickerHost && createPortal(
         <div className="part-browser">
-          <label htmlFor="model-part-select">Model sub-parts Â· {components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}</label>
+          <label htmlFor="model-part-select">Model sub-parts · {components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}</label>
           <select id="model-part-select" value={activeSelectedPart?.componentId === selectedComponentId ? activeSelectedPart.objectId : ''} disabled={!modelInteractive || !partCatalog.some((part) => part.componentId === selectedComponentId)} onChange={(event) => {
             const part = partCatalog.find((candidate) => candidate.objectId === event.target.value)
             if (part) inspectPart(part)
           }}>
             <option value="">{modelInteractive ? 'Choose a mesh to inspect...' : 'Load the Blender model to inspect meshes...'}</option>
-            {partCatalog.filter((part) => part.componentId === selectedComponentId).map((part) => <option key={part.objectId} value={part.objectId}>{part.name}{part.envelopeMm ? ` Â· ${part.envelopeMm}\u00a0mm single casting` : part.referenceEnvelopeMm ? ` Â· ${part.referenceEnvelopeMm}\u00a0mm stage reference` : ''}</option>)}
+            {partCatalog.filter((part) => part.componentId === selectedComponentId).map((part) => <option key={part.objectId} value={part.objectId}>{part.name}{part.envelopeMm ? ` · ${part.envelopeMm}\u00a0mm single casting` : part.referenceEnvelopeMm ? ` · ${part.referenceEnvelopeMm}\u00a0mm stage reference` : ''}</option>)}
           </select>
         </div>,
         partPickerHost,
       )}
       <div className="viewer-stage">
+        <div className="viewer-html-layer" ref={htmlPortal} aria-hidden="true" />
         <Canvas
           frameloop="demand"
           dpr={[1, 2]}
@@ -124,12 +126,12 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
           <SceneInvalidator tokens={stageTokens} components={components} selectedComponentId={selectedComponentId} selectionKey={activeSelectedPart?.objectId ?? null} view={view} exploded={exploded} isolated={isolated} spinning={spinning} cameraKey={cameraKey} modelUrl={modelUrl} cameraFocus={cameraFocus} />
           
           <StageTokenContext.Provider value={stageTokens}>
-            <Suspense fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}>
+            <Suspense fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} htmlPortal={htmlPortal} />}>
               {modelUrl && view === 'glb' ? (
                 <ModelBoundary
                   key={modelUrl}
                   onFailure={() => { setModelFailed(true); setPartCatalog([]) }}
-                  fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}
+                  fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} htmlPortal={htmlPortal} />}
                 >
                   <GLBModel
                     url={modelUrl}
@@ -145,10 +147,11 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
                     stagePart={stageTokens.part}
                     selectedLabel={components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}
                     onCameraFocus={setCameraFocus}
+                    htmlPortal={htmlPortal}
                   />
                 </ModelBoundary>
               ) : (
-                <SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />
+                <SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} htmlPortal={htmlPortal} />
               )}
             </Suspense>
           </StageTokenContext.Provider>
@@ -187,7 +190,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
             ) : <div className="part-inspection-empty">{modelInteractive ? 'Click any visible mesh in the Blender model to inspect the sub-part and available public metadata.' : 'Sub-part inspection is available when the Blender GLB is loaded.'}</div>}
             {spinning && <div className="visual-only-note">Rotor motion is illustrative only; it is not an RPM or operating-state prediction.</div>}
           </div>
-          <div className="viewer-footnote">{modelName && !modelFailed ? `Loaded locally in this browser Â· ${modelName}` : 'No Blender export found in this workspace. The schematic is an interactive geometry scaffold.'}</div>
+          <div className="viewer-footnote">{modelName && !modelFailed ? `Loaded locally in this browser · ${modelName}` : 'No Blender export found in this workspace. The schematic is an interactive geometry scaffold.'}</div>
         </>,
         stageInfoHost,
       )}

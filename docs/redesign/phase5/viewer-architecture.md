@@ -20,7 +20,9 @@ Reset and isolate camera moves ease over the `--dur-slow` token (240ms). The con
 - B2: added mesh outlines and HTML callouts; removed the previous selected-material emissive glow from both GLB and schematic views.
 - B3: moved reset/focus camera movement into a reduced-motion-aware controller and set the renderer DPR cap to 2.
 - B4: switched the renderer to on-demand frames and added invalidation for theme, selection, view, explode/isolate, model, camera, controls, and rotor state.
+- B5 verification: delayed non-Overview route code in separate chunks, retaining a dimensioned route skeleton so those screens do not add to the initial Overview bundle.
+- Runtime fix: mounted Drei HTML callouts in a stable Stage-owned overlay instead of the Canvas event target. This preserves label positioning and avoids a React `removeChild` error during viewer initialization and responsive resizes. The public `TurbineViewer` props are unchanged.
 
 ## Focused validation
 
-`npm run build --prefix frontend`, `npm run lint --prefix frontend`, and `npm test --prefix frontend` passed (18 tests). The targeted Playwright suite passed all 3 tests: keyboard access through stage controls and mesh pickers for all six components, idle-frame/camera/rotor behavior, and reduced-motion behavior. Command output is recorded in the adjacent `viewer-*.log` files.
+`npm run build --prefix frontend`, `npm run lint --prefix frontend`, and `npm test --prefix frontend` passed (18 tests). The full Playwright suite passed all 16 tests. Its four viewer tests cover keyboard access through stage controls and mesh pickers for all six components, idle-frame/camera/rotor behavior, reduced-motion behavior, and resizing the loaded GLB without browser errors. Final command output is recorded in [`final-build.log`](final-build.log), [`final-lint.log`](final-lint.log), [`final-vitest.log`](final-vitest.log), and [`final-playwright.log`](final-playwright.log).
