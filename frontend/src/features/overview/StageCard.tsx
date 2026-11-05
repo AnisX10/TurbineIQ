@@ -4,7 +4,7 @@ import type { TwinComponentState } from '../../types'
 import { setStageInfoHost } from './partPickerHost'
 import './StageCard.css'
 
-const TurbineCanvas = lazy(() => import('../../TurbineViewer').then((module) => ({ default: module.TurbineViewer })))
+const TurbineCanvas = lazy(() => import('../viewer/TurbineViewer').then((module) => ({ default: module.TurbineViewer })))
 
 type StageView = 'glb' | 'schematic'
 
