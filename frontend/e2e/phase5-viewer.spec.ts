@@ -1,4 +1,6 @@
 import { test, expect, type Locator, type Page } from '@playwright/test'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { resolve } from 'node:path'
 
 async function tabUntil(page: Page, target: Locator, limit = 100) {
   for (let index = 0; index < limit; index += 1) {
@@ -107,10 +109,16 @@ test('viewer actions and every component mesh remain keyboard accessible', async
 
 test('demand rendering stops while idle, animates camera and rotor only on request', async ({ page }) => {
   await installDrawProbe(page)
+  const origins = new Set<string>()
+  page.on('request', (request) => { try { origins.add(new URL(request.url()).origin) } catch { return } })
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
   await expect(page.getByRole('status').filter({ hasText: 'Blender GLB' })).toBeVisible({ timeout: 30000 })
   await page.locator('.viewer-selection-label').waitFor({ timeout: 30000 })
   await expect.poll(() => page.locator('#model-part-select option').count()).toBeGreaterThan(1)
+  expect([...origins]).toEqual(['http://127.0.0.1:8011'])
+  const evidenceDir = resolve(process.cwd(), '../docs/redesign/phase5')
+  await mkdir(evidenceDir, { recursive: true })
+  await writeFile(resolve(evidenceDir, 'viewer-network-origins.json'), JSON.stringify([...origins], null, 2))
   await page.waitForTimeout(700)
   await page.waitForTimeout(500)
   const idleStart = await drawCount(page)

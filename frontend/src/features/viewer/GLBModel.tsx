@@ -36,7 +36,7 @@ export function GLBModel({
   selectedLabel: string
   onCameraFocus: (target: CameraFocusTarget | null) => void
 }) {
-  const gltf = useGLTF(url)
+  const gltf = useGLTF(url, false, true)
   const camera = useThree((state) => state.camera)
   const gl = useThree((state) => state.gl)
   const controls = useThree((state) => state.controls as unknown as ViewerControls | null)

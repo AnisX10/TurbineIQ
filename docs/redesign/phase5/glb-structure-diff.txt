@@ -1,0 +1,1 @@
+Node, mesh, material, and animation counts and names are identical.
