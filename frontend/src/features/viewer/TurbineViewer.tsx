@@ -1,17 +1,36 @@
 ﻿import { Suspense, useEffect, useRef, useState, useSyncExternalStore } from 'react'
 import { OrbitControls } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
 import { createPortal } from 'react-dom'
 import { getPartPickerHost, getStageInfoHost, subscribePartPickerHost } from '../overview/partPickerHost'
-import type { PartInspection, TurbineViewerProps } from './types'
+import type { CameraFocusTarget, PartInspection, TurbineViewerProps } from './types'
 import { useStageTokens, StageTokenContext } from './stageTokens'
+import type { StageTokens } from './stageTokens'
 import { SchematicTurbine } from './SchematicTurbine'
 import { GLBModel } from './GLBModel'
 import { ModelBoundary } from './ModelBoundary'
-import { ViewerCameraReset } from './camera'
+import { ViewerCameraController } from './camera'
 import { StageLights } from './lights'
 
 const MODEL_PATH = '/models/turbine.glb'
+
+function SceneInvalidator({ tokens, components, selectedComponentId, selectionKey, view, exploded, isolated, spinning, cameraKey, modelUrl, cameraFocus }: {
+  tokens: StageTokens
+  components: TurbineViewerProps['components']
+  selectedComponentId: string
+  selectionKey: string | null
+  view: 'glb' | 'schematic'
+  exploded: boolean
+  isolated: boolean
+  spinning: boolean
+  cameraKey: number
+  modelUrl: string | null
+  cameraFocus: CameraFocusTarget | null
+}) {
+  const invalidate = useThree((state) => state.invalidate)
+  useEffect(() => { invalidate() }, [invalidate, tokens, components, selectedComponentId, selectionKey, view, exploded, isolated, spinning, cameraKey, modelUrl, cameraFocus])
+  return null
+}
 
 export function TurbineViewer({ components, selectedComponentId, onSelectComponent, view, exploded, isolated, spinning, cameraKey, onModelStatus }: TurbineViewerProps) {
   const stageTokens = useStageTokens()
@@ -20,6 +39,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
   const [modelFailed, setModelFailed] = useState(false)
   const [partCatalog, setPartCatalog] = useState<PartInspection[]>([])
   const [selectedPart, setSelectedPart] = useState<PartInspection | null>(null)
+  const [cameraFocus, setCameraFocus] = useState<CameraFocusTarget | null>(null)
   const partPickerHost = useSyncExternalStore(subscribePartPickerHost, getPartPickerHost, () => null)
   const stageInfoHost = useSyncExternalStore(subscribePartPickerHost, getStageInfoHost, () => null)
   const previousComponentId = useRef(selectedComponentId)
@@ -92,7 +112,8 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
       )}
       <div className="viewer-stage">
         <Canvas
-          dpr={[1, 1.5]}
+          frameloop="demand"
+          dpr={[1, 2]}
           camera={{ position: [-6.4, -4.4, 7.6], fov: 35, near: 0.1, far: 100 }}
           gl={{ antialias: true, alpha: false }}
           role="img"
@@ -100,6 +121,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
         >
           <color attach="background" args={[stageTokens.background]} />
           <StageLights tokens={stageTokens} />
+          <SceneInvalidator tokens={stageTokens} components={components} selectedComponentId={selectedComponentId} selectionKey={activeSelectedPart?.objectId ?? null} view={view} exploded={exploded} isolated={isolated} spinning={spinning} cameraKey={cameraKey} modelUrl={modelUrl} cameraFocus={cameraFocus} />
           
           <StageTokenContext.Provider value={stageTokens}>
             <Suspense fallback={<SchematicTurbine components={components} selectedComponentId={selectedComponentId} onSelectComponent={selectComponent} />}>
@@ -121,6 +143,8 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
                     onPartsAvailable={setPartCatalog}
                     selectedTone={stageTokens.selected}
                     stagePart={stageTokens.part}
+                    selectedLabel={components.find((component) => component.component_id === selectedComponentId)?.label ?? selectedComponentId}
+                    onCameraFocus={setCameraFocus}
                   />
                 </ModelBoundary>
               ) : (
@@ -129,7 +153,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
             </Suspense>
           </StageTokenContext.Provider>
           <OrbitControls enableDamping dampingFactor={0.08} enablePan panSpeed={0.9} zoomSpeed={0.8} rotateSpeed={0.8} minDistance={0.45} maxDistance={26} minPolarAngle={0.035} maxPolarAngle={Math.PI - 0.035} makeDefault />
-          <ViewerCameraReset resetKey={cameraKey} />
+          <ViewerCameraController resetKey={cameraKey} focusTarget={cameraFocus} />
         </Canvas>
         <div className="viewer-axis-label axis-intake">Air inlet</div>
         <div className="viewer-axis-label axis-core">Core</div>

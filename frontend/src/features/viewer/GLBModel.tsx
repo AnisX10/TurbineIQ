@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from 'react'
-import { useGLTF } from '@react-three/drei'
-import { useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
+import { Fragment, useEffect, useMemo } from 'react'
+import { Html, Outlines, useGLTF } from '@react-three/drei'
+import { createPortal, useFrame, useThree, type ThreeEvent } from '@react-three/fiber'
 import { Box3, Color, Group, Mesh, MeshStandardMaterial, PerspectiveCamera, Sphere, Vector3 } from 'three'
 import type { Object3D } from 'three'
-import type { PartInspection, ViewerControls } from './types'
+import type { CameraFocusTarget, PartInspection, ViewerControls } from './types'
 import { EXPLODED_OFFSETS } from './types'
 import { componentIdFor, inspectObject, isRotorPart, normalizeComponentId, partIdFor } from './selection'
 
@@ -19,6 +19,8 @@ export function GLBModel({
   onPartsAvailable,
   selectedTone,
   stagePart,
+  selectedLabel,
+  onCameraFocus,
 }: {
   url: string
   selectedComponentId: string
@@ -31,9 +33,12 @@ export function GLBModel({
   onPartsAvailable: (parts: PartInspection[]) => void
   selectedTone: string
   stagePart: string
+  selectedLabel: string
+  onCameraFocus: (target: CameraFocusTarget | null) => void
 }) {
   const gltf = useGLTF(url)
   const camera = useThree((state) => state.camera)
+  const gl = useThree((state) => state.gl)
   const controls = useThree((state) => state.controls as unknown as ViewerControls | null)
   const fittedScene = useMemo(() => {
     const scene = gltf.scene.clone(true)
@@ -76,6 +81,18 @@ export function GLBModel({
     })
     return parts
   }, [fittedScene])
+  const selectedMeshes = useMemo(() => {
+    const meshes: Mesh[] = []
+    fittedScene.traverse((object) => {
+      if (!(object instanceof Mesh)) return
+      const componentId = componentIdFor(object)
+      const selected = selectedPart
+        ? partIdFor(object, componentId) === selectedPart.objectId
+        : componentId === selectedComponentId
+      if (selected) meshes.push(object)
+    })
+    return meshes
+  }, [fittedScene, selectedComponentId, selectedPart])
 
   useEffect(() => {
     onPartsAvailable(partCatalog)
@@ -97,17 +114,14 @@ export function GLBModel({
       }
       if (!(object instanceof Mesh)) return
       const objectComponentId = componentIdFor(object)
-      const objectId = partIdFor(object, objectComponentId)
       object.visible = !isolated
-        || (selectedPart ? objectId === selectedPart.objectId : objectComponentId === selectedComponentId)
-      const selected = objectComponentId === selectedComponentId
-      const selectedPartMesh = selectedPart?.objectId === objectId
+        || (selectedPart ? partIdFor(object, objectComponentId) === selectedPart.objectId : objectComponentId === selectedComponentId)
       const materials = Array.isArray(object.material) ? object.material : [object.material]
       materials.forEach((material) => {
         if (material instanceof MeshStandardMaterial) {
           material.color = new Color(stagePart)
-          material.emissive = new Color(selectedPartMesh || selected ? selectedTone : '#000000')
-          material.emissiveIntensity = selectedPartMesh ? 0.22 : selected ? 0.08 : 0
+          material.emissive = new Color('#000000')
+          material.emissiveIntensity = 0
         }
       })
     })
@@ -128,29 +142,51 @@ export function GLBModel({
     direction.normalize()
     const fov = camera instanceof PerspectiveCamera ? camera.fov : 35
     const distance = Math.max(sphere.radius / Math.sin((fov * Math.PI) / 360) * 1.35, 0.45)
-    camera.position.copy(sphere.center).addScaledVector(direction, distance)
-    controls.target.copy(sphere.center)
-    controls.update()
-  }, [camera, controls, exploded, fittedScene, isolated, selectedComponentId, selectedPart])
+    const position = sphere.center.clone().addScaledVector(direction, distance)
+    onCameraFocus({
+      position: [position.x, position.y, position.z],
+      target: [sphere.center.x, sphere.center.y, sphere.center.z],
+    })
+  }, [camera, controls, exploded, fittedScene, isolated, onCameraFocus, selectedComponentId, selectedPart])
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (!spinning) return
     const step = Math.min(delta, 0.05) * 4.2
     rotorParts.forEach((object) => { object.rotation.x += step })
+    state.invalidate()
   })
 
   return (
-    <primitive
-      object={fittedScene}
-      onClick={(event: ThreeEvent<MouseEvent>) => {
-        const componentId = componentIdFor(event.object)
-        if (componentId) {
-          event.stopPropagation()
-          onSelectComponent(componentId)
-          onInspectPart(inspectObject(event.object, componentId))
-        }
-      }}
-    />
+    <>
+      <primitive
+        object={fittedScene}
+        onClick={(event: ThreeEvent<MouseEvent>) => {
+          const componentId = componentIdFor(event.object)
+          if (componentId) {
+            event.stopPropagation()
+            onSelectComponent(componentId)
+            onInspectPart(inspectObject(event.object, componentId))
+          }
+        }}
+      />
+      {selectedMeshes.map((mesh, index) => <Fragment key={`outline-${index}`}>
+        {createPortal(<Outlines color={selectedTone} thickness={1.5 * gl.getPixelRatio()} toneMapped={false} />, mesh)}
+      </Fragment>)}
+      {selectedMeshes[0] && createPortal(
+        <Html position={getMeshLabelAnchor(selectedMeshes[0])} center>
+          <span className="viewer-selection-label">{selectedPart?.name ?? selectedLabel}</span>
+        </Html>,
+        selectedMeshes[0],
+      )}
+    </>
   )
+}
+
+function getMeshLabelAnchor(mesh: Mesh): [number, number, number] {
+  if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox()
+  const bounds = mesh.geometry.boundingBox
+  if (!bounds) return [0, 0, 0]
+  const center = bounds.getCenter(new Vector3())
+  return [center.x, bounds.max.y, center.z]
 }
 

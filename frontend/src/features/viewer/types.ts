@@ -44,7 +44,11 @@ export const EXPLODED_OFFSETS: Record<string, [number, number, number]> = {
 }
 
 export interface ViewerControls {
-  reset: () => void
   target: Vector3
   update: () => void
+}
+
+export interface CameraFocusTarget {
+  position: [number, number, number]
+  target: [number, number, number]
 }

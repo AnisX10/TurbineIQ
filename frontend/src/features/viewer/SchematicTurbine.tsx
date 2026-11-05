@@ -1,4 +1,5 @@
 import { useContext, type ReactNode } from 'react'
+import { Html } from '@react-three/drei'
 import type { ThreeEvent } from '@react-three/fiber'
 import type { SchematicTurbineProps } from './types'
 import { StageTokenContext } from './stageTokens'
@@ -41,16 +42,26 @@ function Part({ id, position, outlineRadius = 0.66, selected, status, onSelect, 
         <torusGeometry args={[outlineRadius, selected ? 0.035 : 0.02, 8, 48]} />
         <meshStandardMaterial
           color={selected ? selectedTone : stageTokens.edge}
-          emissive={selected ? selectedTone : '#000000'}
-          emissiveIntensity={selected ? 0.18 : 0}
           metalness={0.62}
           roughness={0.43}
           transparent={status !== 'nominal' && !selected}
           opacity={status !== 'nominal' && !selected ? 0.78 : 1}
         />
       </mesh>
+      {selected && <Html position={[0, outlineRadius + 0.42, 0]} center>
+        <span className="viewer-selection-label">{COMPONENT_LABELS[id] ?? id}</span>
+      </Html>}
     </group>
   )
+}
+
+const COMPONENT_LABELS: Record<string, string> = {
+  inlet: 'Air inlet',
+  compressor: 'Compressor',
+  combustor: 'Combustor',
+  turbine: 'Turbine',
+  shaft: 'Rotor shaft',
+  generator: 'Generator',
 }
 
 function AxialCylinder({

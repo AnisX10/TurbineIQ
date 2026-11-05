@@ -78,6 +78,7 @@
   --stage-selected: var(--chart-3);
   --sans: 'Geist', system-ui, sans-serif;
   --mono: 'Geist Mono', ui-monospace, Consolas, monospace;
+  --dur-slow: 240ms;
 
   /* Compatibility aliases used by the current screen styles. */
   --bg: var(--ground);
