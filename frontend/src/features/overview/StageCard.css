@@ -6,7 +6,7 @@
 .model-state { flex: 0 0 auto; color: var(--muted); font-size: 11px; }
 .stage-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 6px; margin-bottom: 9px; }
 .stage-segmented { display: inline-grid; grid-template-columns: 44px max-content; width: max-content; min-height: 44px; border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); }
-.stage-segmented button { min-width: 44px; min-height: 42px; padding: 0 8px; color: var(--text); border: 0; border-radius: 5px; background: transparent; font-size: 11px; }
+.stage-segmented button { min-width: 44px; min-height: 44px; padding: 0 8px; color: var(--text); border: 0; border-radius: 5px; background: transparent; font-size: 11px; }
 .stage-segmented button[aria-pressed="true"] { background: var(--raised); font-weight: 600; }
 .stage-segmented button:disabled { color: var(--muted); cursor: not-allowed; }
 .stage-icon-button { position: relative; flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: transparent; }
@@ -14,6 +14,8 @@
 .stage-icon-button[aria-disabled="true"] { color: var(--muted); cursor: not-allowed; }
 .stage-icon-button[data-tooltip]::after { position: absolute; z-index: 9; left: 50%; bottom: calc(100% + 6px); width: max-content; max-width: 180px; padding: 5px 7px; color: var(--surface); border-radius: 4px; background: var(--text); content: attr(data-tooltip); font: 11px var(--sans); opacity: 0; pointer-events: none; transform: translate(-50%, 3px); transition: opacity 100ms ease, transform 100ms ease; }
 .stage-icon-button:hover::after, .stage-icon-button:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+.stage-toolbar > .stage-icon-button:nth-last-child(-n + 2)::after { right: 0; left: auto; transform: translateY(3px); }
+.stage-toolbar > .stage-icon-button:nth-last-child(-n + 2):hover::after, .stage-toolbar > .stage-icon-button:nth-last-child(-n + 2):focus-visible::after { transform: translateY(0); }
 .stage-viewport { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border: 1px solid var(--stage-edge); border-radius: 6px; background: var(--stage-bg); }
 .viewer-scene, .viewer-stage { position: absolute; inset: 0; width: 100%; height: 100%; }
 .viewer-stage { overflow: hidden; border-radius: inherit; background: var(--stage-bg); }
@@ -25,8 +27,12 @@
 .axis-core { left: 50%; transform: translateX(-50%); }
 .axis-output { right: 9px; }
 .viewer-note { right: 8px; bottom: 7px; max-width: calc(100% - 20px); padding: 3px 5px; background: var(--stage-bg); }
-.viewer-selection-label { position: relative; display: block; padding: 2px 4px; color: var(--text); background: var(--stage-bg); font: 12px/1.25 var(--sans); white-space: nowrap; transform: translateX(18px); pointer-events: none; }
-.viewer-selection-label::before { position: absolute; top: 50%; left: -18px; width: 18px; height: 1px; background: var(--text); content: ''; }
+.viewer-selection-label { position: relative; display: block; padding: 2px 4px; color: var(--text); background: var(--stage-bg); font: 12px/1.25 var(--sans); white-space: nowrap; pointer-events: none; }
+.viewer-selection-label--right { transform: translateX(calc(50% + 8px)); }
+.viewer-selection-label--left { transform: translateX(calc(-50% - 8px)); }
+.viewer-selection-label::before { position: absolute; top: 50%; width: 8px; height: 1px; background: var(--text); content: ''; }
+.viewer-selection-label--right::before { left: -8px; }
+.viewer-selection-label--left::before { right: -8px; }
 .stage-preview { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 8px; color: var(--muted); background: var(--stage-bg); font-size: 11px; }
 .stage-preview svg { width: min(86%, 580px); height: auto; }
 .stage-preview text { fill: var(--muted); font: 11px var(--mono); text-anchor: middle; letter-spacing: 0.08em; }

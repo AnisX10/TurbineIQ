@@ -9,7 +9,7 @@ const routes = [
   ['Evidence', '/#/evidence?scenario=compressor_fouling&seed=42&i=48', 'evidence'],
   ['Assistant', '/#/assistant?scenario=compressor_fouling&seed=42&i=48', 'assistant'],
 ] as const
-const evidenceDir = resolve(process.cwd(), '../docs/redesign/phase4')
+const evidenceDir = resolve(process.cwd(), 'test-results/phase6-7-part1')
 
 async function ready(page: import('@playwright/test').Page, kind: string) {
   if (kind === 'overview') await page.locator('.kpi-row').waitFor()
