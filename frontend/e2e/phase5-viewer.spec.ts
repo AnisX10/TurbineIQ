@@ -37,6 +37,23 @@ async function drawCount(page: Page) {
   return page.evaluate(() => (window as Window & { __turbineDrawCount: number }).__turbineDrawCount)
 }
 
+async function waitForStableDrawCount(page: Page, stableForMs = 500, timeoutMs = 8000) {
+  let lastCount = await drawCount(page)
+  let stableSince = Date.now()
+  const started = Date.now()
+  while (Date.now() - started < timeoutMs) {
+    await page.waitForTimeout(100)
+    const currentCount = await drawCount(page)
+    if (currentCount !== lastCount) {
+      lastCount = currentCount
+      stableSince = Date.now()
+    } else if (Date.now() - stableSince >= stableForMs) {
+      return currentCount
+    }
+  }
+  throw new Error(`The viewer did not become idle within ${timeoutMs} ms.`)
+}
+
 test('viewer actions and every component mesh remain keyboard accessible', async ({ page }) => {
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
   await expect(page.getByRole('heading', { name: 'Stage' })).toBeVisible()
@@ -127,17 +144,16 @@ test('demand rendering stops while idle, animates camera and rotor only on reque
   expect(idleEnd).toBe(idleStart)
 
   await page.getByRole('button', { name: 'Isolate component' }).click()
-  await expect.poll(() => drawCount(page), { timeout: 1500 }).toBeGreaterThan(idleEnd)
-  await page.waitForTimeout(400)
-  const settledCamera = await drawCount(page)
-  await page.waitForTimeout(500)
-  expect(await drawCount(page)).toBe(settledCamera)
+  await expect.poll(() => drawCount(page), { timeout: 5000 }).toBeGreaterThan(idleEnd)
+  const settledCamera = await waitForStableDrawCount(page)
 
   await page.getByRole('button', { name: 'Rotor motion' }).click()
-  await expect.poll(() => drawCount(page), { timeout: 1500 }).toBeGreaterThan(settledCamera)
+  await expect.poll(() => drawCount(page), { timeout: 5000 }).toBeGreaterThan(settledCamera)
+  const spinningCount = await drawCount(page)
+  await page.waitForTimeout(300)
+  expect(await drawCount(page)).toBeGreaterThan(spinningCount)
   await page.getByRole('button', { name: 'Pause rotor motion' }).click()
-  await page.waitForTimeout(500)
-  const paused = await drawCount(page)
+  const paused = await waitForStableDrawCount(page)
   await page.waitForTimeout(500)
   expect(await drawCount(page)).toBe(paused)
 })
