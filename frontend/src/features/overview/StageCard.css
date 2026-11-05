@@ -4,12 +4,11 @@
 .viewer-heading h2 { margin: 0; color: var(--text); font-size: 24px; line-height: 1.2; font-weight: 700; }
 .viewer-heading p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
 .model-state { flex: 0 0 auto; color: var(--muted); font-size: 11px; }
-.stage-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 5px; margin-bottom: 9px; }
-.stage-segmented { display: grid; grid-template-columns: repeat(2, 44px); min-height: 44px; border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); }
-.stage-segmented button { min-width: 44px; min-height: 42px; padding: 0 4px; color: var(--text); border: 0; border-radius: 5px; background: transparent; font-size: 11px; }
+.stage-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 6px; margin-bottom: 9px; }
+.stage-segmented { display: inline-grid; grid-template-columns: 44px max-content; width: max-content; min-height: 44px; border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); }
+.stage-segmented button { min-width: 44px; min-height: 42px; padding: 0 8px; color: var(--text); border: 0; border-radius: 5px; background: transparent; font-size: 11px; }
 .stage-segmented button[aria-pressed="true"] { background: var(--raised); font-weight: 600; }
 .stage-segmented button:disabled { color: var(--muted); cursor: not-allowed; }
-.stage-schematic-short { display: none; }
 .stage-icon-button { position: relative; flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: transparent; }
 .stage-icon-button[aria-pressed="true"] { background: var(--raised); }
 .stage-icon-button[aria-disabled="true"] { color: var(--muted); cursor: not-allowed; }
@@ -27,7 +26,7 @@
 .axis-output { right: 9px; }
 .viewer-note { right: 8px; bottom: 7px; max-width: calc(100% - 20px); padding: 3px 5px; background: var(--stage-bg); }
 .viewer-selection-label { position: relative; display: block; padding: 2px 4px; color: var(--text); background: var(--stage-bg); font: 12px/1.25 var(--sans); white-space: nowrap; transform: translateX(18px); pointer-events: none; }
-.viewer-selection-label::before { position: absolute; top: 50%; left: -18px; width: 18px; height: 1px; background: var(--stage-selected); content: ''; }
+.viewer-selection-label::before { position: absolute; top: 50%; left: -18px; width: 18px; height: 1px; background: var(--text); content: ''; }
 .stage-preview { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 8px; color: var(--muted); background: var(--stage-bg); font-size: 11px; }
 .stage-preview svg { width: min(86%, 580px); height: auto; }
 .stage-preview text { fill: var(--muted); font: 11px var(--mono); text-anchor: middle; letter-spacing: 0.08em; }
@@ -49,11 +48,6 @@
   .viewer-panel { padding: 9px; }
   .viewer-heading { align-items: flex-start; }
   .viewer-heading h2 { font-size: 22px; }
-  .stage-toolbar { gap: 0; }
-  .stage-segmented { grid-template-columns: 44px 48px; }
-  .stage-segmented button { padding: 0 2px; font-size: 11px; }
-  .stage-schematic-full { display: none; }
-  .stage-schematic-short { display: inline; }
   .part-browser { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {

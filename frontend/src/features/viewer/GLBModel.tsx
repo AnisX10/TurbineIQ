@@ -6,6 +6,7 @@ import type { Object3D } from 'three'
 import type { CameraFocusTarget, PartInspection, ViewerControls } from './types'
 import { EXPLODED_OFFSETS } from './types'
 import { componentIdFor, inspectObject, isRotorPart, normalizeComponentId, partIdFor } from './selection'
+import { getCalloutAnchor } from './callout'
 
 export function GLBModel({
   url,
@@ -95,6 +96,11 @@ export function GLBModel({
     })
     return meshes
   }, [fittedScene, selectedComponentId, selectedPart])
+  const selectedMesh = selectedMeshes[0]
+  if (selectedMesh && !selectedMesh.geometry.boundingBox) selectedMesh.geometry.computeBoundingBox()
+  const calloutAnchor = selectedMesh?.geometry.boundingBox
+    ? getCalloutAnchor(selectedMesh.geometry.boundingBox)
+    : null
 
   useEffect(() => {
     onPartsAvailable(partCatalog)
@@ -174,21 +180,13 @@ export function GLBModel({
       {selectedMeshes.map((mesh, index) => <Fragment key={`outline-${index}`}>
         {createPortal(<Outlines color={selectedTone} thickness={1.5 * gl.getPixelRatio()} toneMapped={false} />, mesh)}
       </Fragment>)}
-      {selectedMeshes[0] && createPortal(
-        <Html position={getMeshLabelAnchor(selectedMeshes[0])} center portal={htmlPortal as RefObject<HTMLElement>}>
+      {selectedMesh && calloutAnchor && createPortal(
+        <Html position={calloutAnchor} center portal={htmlPortal as RefObject<HTMLElement>}>
           <span className="viewer-selection-label">{selectedPart?.name ?? selectedLabel}</span>
         </Html>,
-        selectedMeshes[0],
+        selectedMesh,
       )}
     </>
   )
-}
-
-function getMeshLabelAnchor(mesh: Mesh): [number, number, number] {
-  if (!mesh.geometry.boundingBox) mesh.geometry.computeBoundingBox()
-  const bounds = mesh.geometry.boundingBox
-  if (!bounds) return [0, 0, 0]
-  const center = bounds.getCenter(new Vector3())
-  return [center.x, bounds.max.y, center.z]
 }
 

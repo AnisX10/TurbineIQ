@@ -104,7 +104,7 @@ export function StageCard({ components, selectedComponentId, onSelectComponent, 
       <div className="stage-toolbar" role="group" aria-label="Stage controls">
         <div className="stage-segmented" role="group" aria-label="Stage view">
           <button type="button" aria-pressed={view === 'glb'} disabled={!modelInteractive} onClick={() => setView('glb')}>GLB</button>
-          <button type="button" aria-label="Schematic" aria-pressed={view === 'schematic'} onClick={() => setView('schematic')}><span className="stage-schematic-full">Schematic</span><span className="stage-schematic-short">Schem.</span></button>
+          <button type="button" aria-label="Schematic" aria-pressed={view === 'schematic'} onClick={() => setView('schematic')}>Schematic</button>
         </div>
         {controls.map(({ label, icon: Icon, onClick, pressed, disabled }) => <button key={label} type="button" className="stage-icon-button" aria-label={label} aria-pressed={pressed} aria-disabled={disabled} data-tooltip={label} onClick={(event) => { if (disabled) { event.preventDefault(); return } onClick() }}><Icon size={17} strokeWidth={1.8} aria-hidden="true" /><span className="sr-only">{label}</span></button>)}
       </div>
