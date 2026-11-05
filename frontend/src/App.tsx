@@ -1,19 +1,28 @@
-import { useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { BoundarySheet, IconRail, MobileBottomBar, PageHeader } from './Shell'
 import { TurbineStoreProvider } from './app/store'
 import { useTurbineStore } from './app/useTurbineStore'
 import { getBoundaryDetails } from './shellLogic'
 import Overview from './features/overview/Overview'
-import ComponentDetail from './features/component-detail/ComponentDetail'
-import Evidence from './features/evidence/Evidence'
-import Assistant from './features/assistant/Assistant'
 import './Shell.css'
+
+const ComponentDetail = lazy(() => import('./features/component-detail/ComponentDetail'))
+const Evidence = lazy(() => import('./features/evidence/Evidence'))
+const Assistant = lazy(() => import('./features/assistant/Assistant'))
+
+function RouteLoadingState({ label }: { label: string }) {
+  return <section className="route-loading" aria-label={`Loading ${label}`} aria-busy="true">
+    <div className="route-loading-title" />
+    <div className="route-loading-panel" />
+    <div className="route-loading-panel route-loading-panel-short" />
+  </section>
+}
 
 function RouteOutlet() {
   const { state } = useTurbineStore()
-  if (state.page === 'components') return <ComponentDetail />
-  if (state.page === 'evidence') return <Evidence />
-  if (state.page === 'assistant') return <Assistant />
+  if (state.page === 'components') return <Suspense fallback={<RouteLoadingState label="component detail" />}><ComponentDetail /></Suspense>
+  if (state.page === 'evidence') return <Suspense fallback={<RouteLoadingState label="Evidence" />}><Evidence /></Suspense>
+  if (state.page === 'assistant') return <Suspense fallback={<RouteLoadingState label="Assistant" />}><Assistant /></Suspense>
   return <Overview />
 }
 

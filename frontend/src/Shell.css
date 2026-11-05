@@ -7,6 +7,10 @@
 }
 
 .main-area { min-width: 0; display: flex; flex-direction: column; }
+.route-loading { display: grid; gap: 12px; width: calc(100% - 64px); max-width: 1180px; margin: 24px auto; }
+.route-loading-title { width: min(260px, 55%); height: 24px; background: var(--raised); }
+.route-loading-panel { min-height: 180px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.route-loading-panel-short { min-height: 120px; }
 
 .skip-link {
   position: fixed;
@@ -224,6 +228,7 @@
   .mobile-nav-link.is-active { color: var(--text); background: var(--raised); }
   .mobile-nav-link svg { width: 16px; height: 16px; }
   .main-area { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
+  .route-loading { width: calc(100% - 36px); margin-top: 18px; }
 }
 
 @media (max-width: 480px) {
