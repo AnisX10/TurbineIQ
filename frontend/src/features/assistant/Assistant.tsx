@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { FormEvent, KeyboardEvent as ReactKeyboardEvent, MouseEvent, RefObject } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { api } from '../../api'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import type { AssistantResponse, SelectedTwinSelection } from '../../types'
-import { ENGINE_START_COMMAND } from '../../lib/engine'
+import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
+import { Sheet } from '../../components/ui/Sheet'
 import './Assistant.css'
 
 interface ConversationItem {
@@ -13,35 +14,14 @@ interface ConversationItem {
   error?: string
 }
 
-function ConsentSheet({ open, onCancel, onConfirm, includeDocuments, onIncludeDocuments, opener }: { open: boolean; onCancel: () => void; onConfirm: () => void; includeDocuments: boolean; onIncludeDocuments: (value: boolean) => void; opener: RefObject<HTMLElement | null> }) {
-  const sheet = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    if (!open) return
-    const dialog = sheet.current
-    const restoreFocusTarget = opener.current
-    const first = dialog?.querySelector<HTMLElement>('[data-first-focus]')
-    first?.focus()
-    const keydown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === 'Escape') { event.preventDefault(); onCancel(); return }
-      if (event.key !== 'Tab' || !dialog) return
-      const focusable = [...dialog.querySelectorAll<HTMLElement>('button, input, [href], [tabindex]:not([tabindex="-1"])')].filter((item) => !item.hasAttribute('disabled'))
-      if (focusable.length === 0) return
-      const firstItem = focusable[0]
-      const lastItem = focusable[focusable.length - 1]
-      if (event.shiftKey && document.activeElement === firstItem) { event.preventDefault(); lastItem.focus() }
-      else if (!event.shiftKey && document.activeElement === lastItem) { event.preventDefault(); firstItem.focus() }
-    }
-    document.addEventListener('keydown', keydown)
-    return () => { document.removeEventListener('keydown', keydown); restoreFocusTarget?.focus() }
-  }, [open, onCancel, opener])
-  if (!open) return null
-  return <div className="assistant-sheet-backdrop"><div ref={sheet} className="assistant-consent-sheet" role="dialog" aria-modal="true" aria-labelledby="cloud-consent-title" aria-describedby="cloud-consent-copy">
+function ConsentSheet({ open, onCancel, onConfirm, includeDocuments, onIncludeDocuments }: { open: boolean; onCancel: () => void; onConfirm: () => void; includeDocuments: boolean; onIncludeDocuments: (value: boolean) => void }) {
+  return <Sheet open={open} onClose={onCancel} className="sheet-consent assistant-consent-sheet" labelledBy="cloud-consent-title" describedBy="cloud-consent-copy">
     <h2 id="cloud-consent-title">Review Cloud sharing</h2>
     <p id="cloud-consent-copy">The configured provider receives your question, TurbineIQ assistant instructions and allowed-tool descriptions, and the server-recomputed synthetic run metadata, selected sample, and selected component when present. It also receives results from local tools used to answer. If you enable the option below and the assistant searches local documents, the matching excerpts and citations are sent too.</p>
     <label className="assistant-consent-check"><input type="checkbox" checked={includeDocuments} onChange={(event) => onIncludeDocuments(event.target.checked)} /> Allow local document excerpts and citations to be sent if the assistant searches local documents.</label>
     <p className="assistant-consent-note">This option is off by default. The server still enforces document consent.</p>
-    <div className="assistant-consent-actions"><button type="button" className="button-quiet" onClick={onCancel}>Cancel</button><button type="button" className="assistant-ask-button" data-first-focus onClick={onConfirm}>Continue to Cloud</button></div>
-  </div></div>
+    <div className="assistant-consent-actions"><button type="button" className="button-quiet" onClick={onCancel}>Cancel</button><button type="button" className="assistant-ask-button" data-sheet-autofocus onClick={onConfirm}>Continue to Cloud</button></div>
+  </Sheet>
 }
 
 export default function Assistant() {
@@ -53,11 +33,11 @@ export default function Assistant() {
   const [messages, setMessages] = useState<ConversationItem[]>([])
   const [busy, setBusy] = useState(false)
   const nextId = useRef(1)
-  const opener = useRef<HTMLElement | null>(null)
   const composer = useRef<HTMLTextAreaElement>(null)
   const snapshot = state.run?.snapshots[state.sampleIndex] ?? null
   const selectedComponentId = state.componentId ?? 'compressor'
   const component = snapshot?.components.find((item) => item.component_id === selectedComponentId)
+  const scenarioName = snapshot?.scenario_name ?? state.run?.run.scenario_name ?? state.scenarios.find((item) => item.scenario_id === state.scenarioId)?.name ?? state.scenarioId
   const selectedTwin: SelectedTwinSelection | null = useMemo(() => snapshot && component ? {
     scenario_id: snapshot.scenario_id,
     seed: snapshot.seed,
@@ -72,9 +52,8 @@ export default function Assistant() {
 
   const cancelConsent = useCallback(() => { setConsentOpen(false); setCloud(false) }, [])
   const confirmConsent = useCallback(() => { setConsentOpen(false); setCloud(true) }, [])
-  const selectCloud = (event: MouseEvent<HTMLButtonElement>) => {
+  const selectCloud = () => {
     if (cloud) return
-    opener.current = event.currentTarget
     setConsentOpen(true)
   }
   const runQuestion = async (text: string, id: number) => {
@@ -115,9 +94,8 @@ export default function Assistant() {
         <div className="assistant-mode-row"><div><h2>Ask about the current sample</h2></div>
           <div className="assistant-mode-segmented" role="group" aria-label="Assistant deployment mode"><button type="button" aria-pressed={!cloud} onClick={() => setCloud(false)}>Local <span>demo-safe</span></button><button type="button" aria-pressed={cloud} onClick={selectCloud}>Cloud</button></div>
         </div>
-        <div className="assistant-context" aria-label="Current server-recomputed context"><span>{snapshot?.scenario_name ?? state.scenarioId}</span><span>Seed {snapshot?.seed ?? state.seed}</span><span>Sample {snapshot ? snapshot.sample_index + 1 : state.sampleIndex + 1}</span><span>{component?.label ?? selectedComponentId}</span></div>
-        {state.engineStatus === 'offline' && <div className="engine-banner" role="alert"><strong>Local engine offline.</strong><span>Start it with</span><code>{ENGINE_START_COMMAND}</code></div>}
-        {busy && <div className="assistant-progress" role="status" aria-label="Assistant is working"><span /></div>}
+        <div className="assistant-context" aria-label="Current server-recomputed context"><span>{scenarioName}</span><span>Seed {snapshot?.seed ?? state.seed}</span><span>Sample {snapshot ? snapshot.sample_index + 1 : state.sampleIndex + 1}</span><span>{component?.label ?? selectedComponentId}</span></div>
+        {state.engineStatus === 'offline' && <EngineOfflineBanner />}
         <div className="assistant-conversation" aria-live="off">
           {messages.map((item) => <article className="assistant-turn" key={item.id}>
             <p className="assistant-question">{item.question}</p>
@@ -130,13 +108,14 @@ export default function Assistant() {
           </article>)}
           {messages.length === 0 && <div className="assistant-suggestions"><span>Suggested questions</span>{suggestions.map((suggestion) => <button key={suggestion} type="button" onClick={() => { setQuestion(suggestion); composer.current?.focus() }}>{suggestion}</button>)}</div>}
         </div>
-        <form className="assistant-composer" onSubmit={(event) => void ask(event)}>
+        <form className={`assistant-composer${busy ? ' is-waiting' : ''}`} onSubmit={(event) => void ask(event)}>
+          {busy && <div className="assistant-progress" role="status" aria-label="Assistant is working"><span /></div>}
           <textarea ref={composer} rows={1} value={question} aria-label="Ask TurbineIQ" placeholder="Ask about the synthetic model or selected sample" onChange={(event) => { setQuestion(event.target.value); const field = event.currentTarget; field.style.height = '36px'; field.style.height = `${Math.min(field.scrollHeight, 120)}px` }} onKeyDown={onComposerKeyDown} />
           <button className="assistant-ask-button" type="submit" disabled={busy || !question.trim()}>{busy ? 'Working' : 'Ask'}</button>
         </form>
         <p className="assistant-composer-hint">Enter sends · Shift+Enter adds a line</p>
       </section>
-      <ConsentSheet open={consentOpen} onCancel={cancelConsent} onConfirm={confirmConsent} includeDocuments={includeDocuments} onIncludeDocuments={setIncludeDocuments} opener={opener} />
+      <ConsentSheet open={consentOpen} onCancel={cancelConsent} onConfirm={confirmConsent} includeDocuments={includeDocuments} onIncludeDocuments={setIncludeDocuments} />
     </div>
   )
 }

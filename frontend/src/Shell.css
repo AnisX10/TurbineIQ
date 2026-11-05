@@ -180,6 +180,8 @@
   background: var(--surface);
 }
 
+.boundary-sheet.sheet-dialog { z-index: 100; }
+
 .boundary-sheet::backdrop { background: rgb(10 10 10 / 24%); }
 .boundary-sheet-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .boundary-sheet-heading h2 { margin: 5px 0 0; font-size: 24px; line-height: 1.2; font-weight: 700; }

@@ -23,6 +23,15 @@ export function formatUtcTime(value: string | null | undefined): string {
   return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' })
 }
 
+export function formatUtcTimestamp(value: string | null | undefined): string {
+  const time = formatUtcTime(value)
+  return time === MISSING_VALUE ? MISSING_VALUE : `${time} UTC`
+}
+
+export function metricDigits(unit?: string): number {
+  return unit === 'K' || unit === '%' ? 1 : 2
+}
+
 export function powerMw(kw: number | null | undefined, digits = 2): string {
   return numberText(kw === null || kw === undefined ? null : kw / 1000, digits)
 }

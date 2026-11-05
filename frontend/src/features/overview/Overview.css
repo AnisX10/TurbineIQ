@@ -7,9 +7,7 @@
 .card-heading { min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 14px 15px 10px; }
 .card-heading > span { flex: 0 0 auto; color: var(--muted); font-size: 11px; }
 .button-quiet { color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: transparent; }
-.engine-banner, .request-banner { display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; margin: 0 0 12px; padding: 10px 12px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; }
-.engine-banner code { overflow-wrap: anywhere; color: var(--text); font: 11px var(--mono); }
-.request-banner { justify-content: space-between; }
+.request-banner { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: space-between; gap: 7px; margin: 0 0 12px; padding: 10px 12px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; }
 .stale-run-note { color: var(--muted); font-size: 11px; }
 .skeleton-line, .skeleton-chart, .skeleton-kpis i { display: block; background: var(--raised); border: 1px solid var(--border); border-radius: 6px; }
 .skeleton-line { width: 70%; height: 28px; }

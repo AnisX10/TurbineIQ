@@ -79,6 +79,11 @@ test('axe audits all four routes, component tabs, and Cloud consent in both them
           await axe(page, name, theme, tab, records)
         }
       }
+      if (kind === 'overview') {
+        await page.locator('.boundary-chip').click()
+        await page.getByRole('dialog', { name: 'Boundary' }).waitFor()
+        await axe(page, name, theme, 'Boundary sheet', records)
+      }
       if (kind === 'assistant') {
         await page.getByRole('button', { name: 'Cloud' }).click()
         await page.getByRole('dialog', { name: 'Review Cloud sharing' }).waitFor()
@@ -181,6 +186,19 @@ test('keyboard traversal covers tabs, evidence selection, consent, composer, and
   await expect(page.getByRole('button', { name: 'Pause replay' })).toBeVisible()
   await page.keyboard.press('Space')
   await expect(page.getByRole('button', { name: 'Play replay' })).toBeVisible()
+
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'overview')
+  const boundaryChip = page.locator('.boundary-chip')
+  await boundaryChip.click()
+  const boundaryDialog = page.getByRole('dialog', { name: 'Boundary' })
+  const boundaryClose = boundaryDialog.getByRole('button', { name: 'Close boundary' })
+  await expect(boundaryClose).toBeFocused()
+  await page.keyboard.press('Tab')
+  await expect(boundaryClose).toBeFocused()
+  await page.keyboard.press('Escape')
+  await expect(boundaryDialog).not.toBeVisible()
+  await expect(boundaryChip).toBeFocused()
 })
 
 test('overview scenario, seed, replay, mesh inspection, Evidence search, and Local Assistant still work', async ({ page }) => {
@@ -289,6 +307,53 @@ test('Assistant request failures expose a retry action', async ({ page }) => {
   await page.getByRole('button', { name: 'Retry question' }).click()
   await expect(page.getByText('Recovered local response.')).toBeVisible()
   expect(attempts).toBe(2)
+})
+
+test('Assistant shows its scenario name and busy rule only during a local request', async ({ page }) => {
+  let releaseRequest!: () => void
+  const requestGate = new Promise<void>((resolve) => { releaseRequest = resolve })
+  await page.route('**/api/assistant/ask', async (route) => {
+    await requestGate
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'Local test response.', mode: 'local', warning: null, tool_calls: [], synthetic_only: true }) })
+  })
+  await page.goto('/#/assistant?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'assistant')
+  await expect(page.getByRole('button', { name: /Local engine.*connected/ })).toBeVisible()
+  await expect(page.locator('.assistant-context')).toContainText('Compressor-performance drift')
+  await expect(page.locator('.assistant-progress')).toHaveCount(0)
+  await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Explain this sample.')
+  await page.getByRole('button', { name: 'Ask', exact: true }).click()
+  await expect(page.locator('.assistant-progress')).toBeVisible()
+  await expect(page.locator('.assistant-composer')).toHaveClass(/is-waiting/)
+  releaseRequest()
+  await expect(page.getByText('Local test response.')).toBeVisible()
+  await expect(page.locator('.assistant-progress')).toHaveCount(0)
+  await expect(page.locator('.assistant-composer')).not.toHaveClass(/is-waiting/)
+})
+
+test('Offline engine guidance uses a portable command with shell activation and copy action', async ({ page }) => {
+  await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.route('**/api/health', (route) => route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ detail: 'offline for test' }) }))
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  await expect(page.locator('.engine-banner')).toContainText('python -m uvicorn turbineiq.api.main:app --host 127.0.0.1 --port 8000')
+  await expect(page.locator('.engine-banner')).toContainText('.\\.venv\\Scripts\\Activate.ps1')
+  await expect(page.locator('.engine-banner')).toContainText('source .venv/bin/activate')
+  const copyButton = page.getByRole('button', { name: 'Copy API start command' })
+  await expect(copyButton).toBeVisible()
+  await copyButton.click()
+  await expect(copyButton).toContainText('Copied')
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toBe('python -m uvicorn turbineiq.api.main:app --host 127.0.0.1 --port 8000')
+})
+
+test('Component ledger formats sample time and percentage values without duplicated reference provenance', async ({ page }) => {
+  await page.goto('/#/components/compressor?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'components')
+  await expect(page.locator('.detail-panel-heading')).toContainText(/Sample 49 · \d{2}:\d{2} UTC/)
+  const efficiencyRow = page.locator('.metric-ledger tbody tr').filter({ hasText: /efficiency/i }).first()
+  await expect(efficiencyRow.locator('td:nth-child(2)')).toHaveText(/\d+\.\d%/)
+  await expect(efficiencyRow.locator('td:nth-child(3)')).toHaveText(/\d+\.\d%/)
+  await expect(efficiencyRow.locator('td:nth-child(5)')).not.toContainText('Reference')
 })
 
 test('viewport screenshots cover every route, width, and theme without horizontal page scroll', async ({ context }) => {

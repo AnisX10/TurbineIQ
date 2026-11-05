@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Expand, Focus, RotateCcw, RotateCw } from 'lucide-react'
 import type { TwinComponentState } from '../../types'
 import { setStageInfoHost } from './partPickerHost'
@@ -30,6 +30,7 @@ function StagePreview() {
 }
 
 export function StageCard({ components, selectedComponentId, onSelectComponent, active }: { components: TwinComponentState[]; selectedComponentId: string; onSelectComponent: (id: string) => void; active: boolean }) {
+  const viewportRef = useRef<HTMLDivElement>(null)
   const [view, setView] = useState<StageView>('glb')
   const [model, setModel] = useState<ModelStatus>({ available: false, failed: false })
   const [exploded, setExploded] = useState(false)
@@ -40,8 +41,47 @@ export function StageCard({ components, selectedComponentId, onSelectComponent, 
   const [reduceMotion, setReduceMotion] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   useEffect(() => {
     if (!active) return
-    const timer = window.setTimeout(() => setCanvasReady(true), 700)
-    return () => window.clearTimeout(timer)
+    const viewport = viewportRef.current
+    if (!viewport) return
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+      cancelIdleCallback?: (handle: number) => void
+    }
+    let idleHandle: number | null = null
+    let timeoutHandle: number | null = null
+    let idleScheduled = false
+    let activated = false
+    const cancelPendingActivation = () => {
+      if (idleHandle !== null) idleWindow.cancelIdleCallback?.(idleHandle)
+      if (timeoutHandle !== null) window.clearTimeout(timeoutHandle)
+      idleHandle = null
+      timeoutHandle = null
+      idleScheduled = false
+    }
+    const activate = () => {
+      idleHandle = null
+      timeoutHandle = null
+      idleScheduled = false
+      if (activated) return
+      activated = true
+      setCanvasReady(true)
+      observer.disconnect()
+    }
+    const scheduleActivation = () => {
+      if (activated || idleScheduled) return
+      idleScheduled = true
+      if (idleWindow.requestIdleCallback) idleHandle = idleWindow.requestIdleCallback(activate, { timeout: 1000 })
+      else timeoutHandle = window.setTimeout(activate, 0)
+    }
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) scheduleActivation()
+      else if (!activated) cancelPendingActivation()
+    }, { rootMargin: '80px' })
+    observer.observe(viewport)
+    return () => {
+      observer.disconnect()
+      cancelPendingActivation()
+    }
   }, [active])
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -68,7 +108,7 @@ export function StageCard({ components, selectedComponentId, onSelectComponent, 
         </div>
         {controls.map(({ label, icon: Icon, onClick, pressed, disabled }) => <button key={label} type="button" className="stage-icon-button" aria-label={label} aria-pressed={pressed} aria-disabled={disabled} data-tooltip={label} onClick={(event) => { if (disabled) { event.preventDefault(); return } onClick() }}><Icon size={17} strokeWidth={1.8} aria-hidden="true" /><span className="sr-only">{label}</span></button>)}
       </div>
-      <div className="stage-viewport">
+      <div className="stage-viewport" ref={viewportRef}>
         {canvasReady ? <Suspense fallback={<StagePreview />}>
           <TurbineCanvas components={components} selectedComponentId={selectedComponentId} onSelectComponent={onSelectComponent} view={view} exploded={exploded} isolated={isolated} spinning={spinning} cameraKey={cameraKey} onModelStatus={setModel} />
         </Suspense> : <StagePreview />}

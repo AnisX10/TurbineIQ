@@ -1,0 +1,393 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--grep",
+      "keyboard traversal|Cloud consent|Assistant shows its scenario|Offline engine|Component ledger formats"
+    ],
+    "configFile": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\playwright.config.ts",
+    "rootDir": "C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\e2e",
+        "snapshotDir": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:8011",
+          "browserName": "chromium",
+          "channel": "chrome",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "launchOptions": {
+            "args": [
+              "--disable-background-networking",
+              "--disable-component-update"
+            ]
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/redesign/phase4/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 6,
+    "webServer": {
+      "command": ".\\.venv\\Scripts\\python.exe -m uvicorn turbineiq.api.main:app --host 127.0.0.1 --port 8011",
+      "cwd": "..",
+      "url": "http://127.0.0.1:8011/api/health",
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "app.spec.ts",
+      "file": "app.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "axe audits all four routes, component tabs, and Cloud consent in both themes",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 24890,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "AXE light Overview default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Overview Boundary sheet: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Component detail default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Component detail Over time: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Component detail Evidence: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Evidence default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Assistant default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE light Assistant Cloud consent: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Overview default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Overview Boundary sheet: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Component detail default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Component detail Over time: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Component detail Evidence: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Evidence default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Assistant default: 0 serious/critical\n"
+                    },
+                    {
+                      "text": "AXE dark Assistant Cloud consent: 0 serious/critical\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T00:21:15.499Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c31ff144dc4fee3acd0a-87017da82a14c2585020",
+          "file": "app.spec.ts",
+          "line": 68,
+          "column": 1
+        },
+        {
+          "title": "keyboard traversal covers tabs, evidence selection, consent, composer, and replay",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4542,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T00:21:41.780Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c31ff144dc4fee3acd0a-c108118fd768f8f0442e",
+          "file": "app.spec.ts",
+          "line": 114,
+          "column": 1
+        },
+        {
+          "title": "Cloud consent always precedes a mocked provider request and document excerpts are opt-in",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1079,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T00:21:46.338Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c31ff144dc4fee3acd0a-4a4e7d116adbc94841bd",
+          "file": "app.spec.ts",
+          "line": 265,
+          "column": 1
+        },
+        {
+          "title": "Assistant shows its scenario name and busy rule only during a local request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 596,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T00:21:47.432Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c31ff144dc4fee3acd0a-52ecb9e2811c02409f76",
+          "file": "app.spec.ts",
+          "line": 312,
+          "column": 1
+        },
+        {
+          "title": "Offline engine guidance uses a portable command with shell activation and copy action",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 783,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T00:21:48.042Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c31ff144dc4fee3acd0a-48bdbd3bbd4440f5009c",
+          "file": "app.spec.ts",
+          "line": 334,
+          "column": 1
+        },
+        {
+          "title": "Component ledger formats sample time and percentage values without duplicated reference provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 540,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T00:21:48.838Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c31ff144dc4fee3acd0a-b6f046a5dddd8e7af077",
+          "file": "app.spec.ts",
+          "line": 349,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T00:21:14.372Z",
+    "duration": 37246.339,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

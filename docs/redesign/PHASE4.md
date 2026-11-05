@@ -92,3 +92,7 @@ The `meshopt` trial reduced the 1,910,712-byte source to 842,968 bytes (55.9% sm
 - Taste warnings are advisories, not hidden failures. Compact engineering sublines/axis ticks stay at 11–12 px; Evidence panels keep equal columns and can show spare space for short result lists.
 - The cloud path was tested only through mocked provider responses. No credential or real cloud model was used. No OEM operating data or confidential FieldCore material was introduced.
 - No Phase 5 work was started. The GLB compression trial was not adopted.
+
+## Follow-up closure in Phase 5 Part A
+
+The Phase 4 follow-up commit supersedes the initial Stage's fixed 700 ms Canvas activation, portable engine-offline guidance, component ledger formatting, and custom Cloud consent panel described above. Canvas activation is now gated by Stage visibility and browser idle time, and Boundary and Cloud consent share the native Sheet. The Assistant progress rule no longer renders while idle. The follow-up tests and requested state screenshots are documented in [`phase5/part-a-followups.md`](phase5/part-a-followups.md).

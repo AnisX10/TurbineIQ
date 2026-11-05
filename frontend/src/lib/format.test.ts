@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatUtcTime, MISSING_VALUE, numberText, powerMw, presentMetricValue, signedNumber, zeroIsMuted } from './format'
+import { formatUtcTime, formatUtcTimestamp, metricDigits, MISSING_VALUE, numberText, powerMw, presentMetricValue, signedNumber, zeroIsMuted } from './format'
 
 describe('engineering formatters', () => {
   it('shows explicit signs and the true minus for residuals', () => {
@@ -23,6 +23,8 @@ describe('engineering formatters', () => {
   it('formats UTC time and missing timestamps', () => {
     expect(formatUtcTime('2026-11-04T18:00:00Z')).toBe('18:00')
     expect(formatUtcTime(null)).toBe(MISSING_VALUE)
+    expect(formatUtcTimestamp('2026-11-04T12:00:00Z')).toBe('12:00 UTC')
+    expect(formatUtcTimestamp('not a timestamp')).toBe(MISSING_VALUE)
   })
 
   it('presents efficiency as a percentage and temperature as kelvin with source provenance', () => {
@@ -39,5 +41,8 @@ describe('engineering formatters', () => {
     expect(presentMetricValue(288.15, 'temperature', 'K', 'Synthetic input').value).toBe('288.2')
     expect(presentMetricValue(25066.453, 'shaft_power_kw', 'kW', 'Synthetic estimate').value).toBe('25066.45')
     expect(numberText(null)).toBe('—')
+    expect(metricDigits('%')).toBe(1)
+    expect(metricDigits('K')).toBe(1)
+    expect(metricDigits('MW')).toBe(2)
   })
 })

@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 import { api } from '../../api'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import type { EvidenceHit } from '../../types'
-import { ENGINE_START_COMMAND } from '../../lib/engine'
+import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
 import './EvidencePanel.css'
 
 function updateSearchUrl(query: string, topK: number) {
@@ -76,7 +76,7 @@ export function EvidencePanel({ initialQuery = '' }: { initialQuery?: string }) 
         <button type="submit" disabled={busy || query.trim().length < 2}>{busy ? 'Searching…' : 'Search'}</button>
       </form>
       {invalid && <p className="evidence-error" role="alert">Enter a query of 2 to 300 characters and a result count from 1 to 8.</p>}
-      {state.engineStatus === 'offline' && <div className="engine-banner" role="alert"><strong>Local engine offline.</strong><span>Start it with</span><code>{ENGINE_START_COMMAND}</code></div>}
+      {state.engineStatus === 'offline' && <EngineOfflineBanner />}
       {error && <div className="request-banner" role="alert"><span>{error}</span><button type="button" className="button-quiet evidence-retry" onClick={() => void search()}>Retry</button></div>}
       <div className="evidence-panels">
         <section className="evidence-results panel" aria-labelledby="evidence-results-title">

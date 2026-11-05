@@ -7,11 +7,12 @@ import { StationLedger } from './StationLedger'
 import { ComponentLedger } from './ComponentLedger'
 import { ReplayTimeline } from './ReplayTimeline'
 import { StageCard } from './StageCard'
+import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
 import './Overview.css'
 
 function RunState() {
   const { state, retry } = useTurbineStore()
-  if (state.engineStatus === 'offline') return <div className="engine-banner" role="alert"><strong>Local engine offline.</strong> Start it with <code>.\\.venv\\Scripts\\python.exe -m uvicorn turbineiq.api.main:app --host 127.0.0.1 --port 8000</code> and retry the request.</div>
+  if (state.engineStatus === 'offline') return <EngineOfflineBanner />
   if (state.requestError) return <div className="request-banner" role="alert"><span>The run request returned an error: {state.requestError}</span><button className="button button-quiet" type="button" onClick={retry}>Retry</button></div>
   return null
 }

@@ -2,11 +2,10 @@ import { useState } from 'react'
 import type { KeyboardEvent } from 'react'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import type { TwinComponentState, TwinMetric } from '../../types'
-import { metricNumber, numberText, signedNumber } from '../../lib/format'
+import { formatUtcTimestamp, metricDigits, metricNumber, numberText, signedNumber } from '../../lib/format'
 import { ValueWithUnit } from '../../lib/ValueWithUnit'
-import { ENGINE_START_COMMAND } from '../../lib/engine'
+import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
 import { presentMetric } from '../overview/metricFormatting'
-import { ReferenceMetric } from '../overview/metricPresentation'
 import { PublishedReferenceBlock } from '../overview/PublishedReference'
 import { ReplayTimeline } from '../overview/ReplayTimeline'
 import { TimelineChart } from '../overview/TimelineChart'
@@ -36,13 +35,13 @@ function MetricLedger({ component }: { component: TwinComponentState }) {
           const current = metricNumber(metric.value, metric.key, metric.unit)
           const reference = metric.reference_value === null ? null : metricNumber(metric.reference_value, metric.key, metric.unit)
           const delta = current === null || reference === null ? null : current - reference
-          const digits = presented.unit === 'K' ? 1 : 2
+          const digits = metricDigits(presented.unit)
           return <tr key={metric.key}>
             <th scope="row">{metric.label}</th>
             <td><MetricValue metric={metric} /></td>
             <td><ValueWithUnit value={reference === null ? '—' : numberText(reference, digits)} unit={presented.unit} /></td>
             <td className={delta === 0 ? 'zero-value' : ''}><ValueWithUnit value={delta === null ? '—' : signedNumber(delta, digits)} unit={presented.unit} /></td>
-            <td className="metric-provenance-cell">{presented.provenance}<ReferenceMetric metric={metric} /></td>
+            <td className="metric-provenance-cell">{presented.provenance}</td>
           </tr>
         })}</tbody>
       </table>
@@ -81,7 +80,7 @@ export default function ComponentDetail() {
   }
 
   if (!state.run || !snapshot || !component) {
-    return <div className="component-detail-page" id="route-outlet"><div className="detail-breadcrumb"><a href="#/overview">Overview</a><span aria-hidden="true">/</span><span>{componentName}</span><span className="neutral-status">Synthetic</span></div>{state.engineStatus === 'offline' ? <div className="engine-banner" role="alert"><strong>Local engine offline.</strong><span>Start it with</span><code>{ENGINE_START_COMMAND}</code></div> : state.requestError ? <div className="request-banner" role="alert"><span>{state.requestError}</span><button type="button" className="button-quiet" onClick={retry}>Retry</button></div> : <LoadingState />}</div>
+    return <div className="component-detail-page" id="route-outlet"><div className="detail-breadcrumb"><a href="#/overview">Overview</a><span aria-hidden="true">/</span><span>{componentName}</span><span className="neutral-status">Synthetic</span></div>{state.engineStatus === 'offline' ? <EngineOfflineBanner /> : state.requestError ? <div className="request-banner" role="alert"><span>{state.requestError}</span><button type="button" className="button-quiet" onClick={retry}>Retry</button></div> : <LoadingState />}</div>
   }
 
   const timeline = state.run.timeline
@@ -116,7 +115,7 @@ export default function ComponentDetail() {
         {activeTab === 'metrics' && <>
           <p className="component-summary">{component.summary}</p>
           <TopMetrics metrics={component.metrics} />
-          <section className="detail-panel panel" aria-labelledby="metric-ledger-title"><div className="detail-panel-heading"><h3 id="metric-ledger-title">Metric ledger</h3><span>Sample {state.sampleIndex + 1} · {snapshot.timestamp_utc}</span></div><MetricLedger component={component} /></section>
+          <section className="detail-panel panel" aria-labelledby="metric-ledger-title"><div className="detail-panel-heading"><h3 id="metric-ledger-title">Metric ledger</h3><span>Sample {state.sampleIndex + 1} · {formatUtcTimestamp(snapshot.timestamp_utc)}</span></div><MetricLedger component={component} /></section>
           {showPublished && <PublishedReferenceBlock />}
         </>}
         {activeTab === 'over-time' && <ReplayTimeline timeline={timeline} selectedIndex={state.sampleIndex} isPlaying={playing} setPlaying={setPlaying} onSelect={(index) => { setPlaying(false); selectSample(index) }} title={`${component.label} over time`} description="Select a sample to compare the synthetic observation with its fixed reference.">

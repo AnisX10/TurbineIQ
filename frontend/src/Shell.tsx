@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from 'react'
+import type { RefObject } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
   Activity,
@@ -20,6 +20,7 @@ import {
 import type { EngineStatus, RoutePage, ThemePreference } from './shellLogic'
 import { parseRoute, routeHash } from './app/router'
 import { PUBLISHED_6B03_REFERENCE } from './lib/publishedReference'
+import { Sheet } from './components/ui/Sheet'
 
 const NAV_ITEMS: Array<{ page: RoutePage; label: string; mobileLabel: string; icon: LucideIcon }> = [
   { page: 'overview', label: 'Overview', mobileLabel: 'Overview', icon: Gauge },
@@ -340,49 +341,14 @@ export function BoundarySheet({
   modelName: string
   provenance: string
 }) {
-  const dialogRef = useRef<HTMLDialogElement>(null)
-
-  useEffect(() => {
-    const dialog = dialogRef.current
-    if (!dialog) return
-    if (open && !dialog.open) {
-      dialog.showModal()
-      dialog.querySelector<HTMLElement>('.boundary-close')?.focus()
-    }
-    if (!open && dialog.open) dialog.close()
-  }, [open])
-
-  const keepFocusInside = (event: ReactKeyboardEvent<HTMLDialogElement>) => {
-    if (event.key !== 'Tab') return
-    const focusable = dialogRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')
-    if (!focusable?.length) return
-    const first = focusable[0]
-    const last = focusable[focusable.length - 1]
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault()
-      last.focus()
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault()
-      first.focus()
-    }
-  }
-
   return (
-    <dialog
-      className="boundary-sheet"
-      id="boundary-sheet"
-      ref={dialogRef}
-      aria-labelledby="boundary-title"
-      aria-describedby="boundary-lede"
-      onClose={onClose}
-      onKeyDown={keepFocusInside}
-    >
+    <Sheet open={open} onClose={onClose} className="boundary-sheet" id="boundary-sheet" labelledBy="boundary-title" describedBy="boundary-lede">
       <div className="boundary-sheet-heading">
         <div>
           <div className="page-context">Data and model scope</div>
           <h2 id="boundary-title">Boundary</h2>
         </div>
-        <button className="boundary-close" type="button" aria-label="Close boundary" onClick={onClose}><X size={17} aria-hidden="true" /></button>
+        <button className="boundary-close" data-sheet-autofocus type="button" aria-label="Close boundary" onClick={onClose}><X size={17} aria-hidden="true" /></button>
       </div>
       <p className="boundary-lede" id="boundary-lede">This workspace uses synthetic operating data and a simplified open-cycle model.</p>
       <dl className="boundary-facts">
@@ -401,6 +367,6 @@ export function BoundarySheet({
         </dl>
         <p>{PUBLISHED_6B03_REFERENCE.caveat}</p>
       </section>
-    </dialog>
+    </Sheet>
   )
 }
