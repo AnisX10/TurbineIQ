@@ -1,0 +1,2 @@
+git diff --quiet main -- src tests: exit 0; Python sources and tests are byte-identical to main.
+git diff --quiet main -- frontend/src/types.ts: exit 0; frontend API types are unchanged.

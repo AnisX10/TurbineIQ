@@ -1,0 +1,11 @@
+node.exe : npm notice run npx
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Users\TL\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run npx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run lighthouse http://127.0.0.1:8011/#/overview?scenario=compressor_fouling&seed=42&i=72
+--only-categories=performance --form-factor=mobile --chrome-flags=--headless --disable-background-networking
+--disable-component-update --no-sandbox --output=json
+--output-path=docs/redesign/phase5/lighthouse/final-mobile-1.json --quiet
