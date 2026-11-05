@@ -2491,36 +2491,36 @@
   {
    "viewport": "desktop",
    "width": 1440,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\desktop-fold.jpg",
+   "fold": "<repo>",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\desktop-page-01.jpg"
+    "<repo>"
    ],
    "film": []
   },
   {
    "viewport": "tablet",
    "width": 1024,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\tablet-1024-fold.jpg",
+   "fold": "<repo>",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\tablet-1024-page-01.jpg"
+    "<repo>"
    ],
    "film": []
   },
   {
    "viewport": "tablet",
    "width": 768,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\tablet-768-fold.jpg",
+   "fold": "<repo>",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\tablet-768-page-01.jpg"
+    "<repo>"
    ],
    "film": []
   },
   {
    "viewport": "mobile",
    "width": 375,
-   "fold": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\mobile-fold.jpg",
+   "fold": "<repo>",
    "pages": [
-    "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\docs\\redesign\\phase5\\taste-inspect\\overview\\mobile-page-01.jpg"
+    "<repo>"
    ],
    "film": []
   }

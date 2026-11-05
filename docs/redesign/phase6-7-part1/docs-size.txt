@@ -1,0 +1,1 @@
+docs/redesign measured 7304769 bytes; target < 8000000 bytes; PASS

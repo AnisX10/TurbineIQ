@@ -38,7 +38,7 @@ The earlier `lighthouse.json` had been mislabeled as desktop: it records `formFa
 | Desktop | 2 | 85 | 96 | 96 | 0.3 s | 0.7 s | 340 ms | 0.034 | 0.8 s | 2.7 s | 3,847 KiB | 2289.5 |
 | Desktop | 3 | 79 | 96 | 96 | 0.3 s | 0.7 s | 480 ms | 0.034 | 1.1 s | 2.9 s | 3,847 KiB | 2378 |
 
-The median mobile performance score is 51 (run 1 selected from the tied median-score runs); the median desktop score is 80 (run 1). Their complete raw JSON reports are [`before/lighthouse-mobile.json`](before/lighthouse-mobile.json) and [`before/lighthouse-desktop.json`](before/lighthouse-desktop.json). `environment.benchmarkIndex` is Lighthouse's CPU calibration value; it varied from 2,079.5 to 2,982.5 on mobile and 1,674 to 2,378 on desktop, so these are local comparison results, not production guarantees.
+The median mobile performance score is 51 (run 1 selected from the tied median-score runs); the median desktop score is 80 (run 1). The raw Lighthouse JSON was removed during the documentation cleanup; these run values and `environment.benchmarkIndex` ranges preserve the comparison summary. The index varied from 2,079.5 to 2,982.5 on mobile and 1,674 to 2,378 on desktop, so these are local comparison results, not production guarantees. The raw reports can be recovered from the archive commit listed in the [redesign index](README.md).
 
 The redesign target is CLS 0.1 or lower on both the mobile and desktop presets. The pre-redesign mobile median was 0.274 and desktop median was 0.034; those are recorded as historical baselines, not acceptance targets. Expect about 5 performance points of run-to-run Lighthouse noise on this machine, so compare repeated runs and supporting metrics rather than treating a small score change as a regression.
 

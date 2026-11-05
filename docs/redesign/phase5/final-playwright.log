@@ -1,6 +1,6 @@
 node.exe : npm notice run frontend@0.0.0 test:e2e
 At line:1 char:1
-+ & "C:\Program Files\nodejs/node.exe" "C:\Users\TL\AppData\Roaming\npm ...
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 test:e2e:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError

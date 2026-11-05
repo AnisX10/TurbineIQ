@@ -2,55 +2,60 @@
 
 ## Runtime shape
 
-The prototype has a React/TypeScript browser workspace backed by a local FastAPI service and deterministic Python modules. The earlier Streamlit interface remains as a local fallback. The optional cloud model can request a small allow-list of local functions; it cannot execute arbitrary code, access the filesystem, or connect to equipment.
+The primary application is a React and TypeScript browser workspace served by a local FastAPI process. The API calls deterministic Python engineering, synthetic-data, analytics, retrieval, and assistant modules. The earlier Streamlit interface remains available through an optional Python extra. A cloud language model is an opt-in adapter; local engineering and data processing do not depend on it.
 
 ```mermaid
 flowchart TD
-    WEB[React + Three.js workspace] --> API[Local FastAPI]
-    UI[Streamlit fallback] --> ENG[Engineering cycle model]
-    API --> ENG
-    WEB --> API
+    WEB[React workspace] --> ROUTER[Hash router and reducer store]
+    ROUTER --> FEATURES[Overview, Components, Evidence, Assistant, Viewer]
+    FEATURES --> API[Local FastAPI]
+    API --> ENG[Brayton-cycle reference]
     API --> SYN[Seeded synthetic scenarios]
-    UI --> SYN
-    SYN --> ENG
-    UI --> ANA[Data quality and residual screening]
-    SYN --> ANA
-    API --> TWIN[Synthetic twin state timeline]
-    UI --> TWIN
+    SYN --> ANA[Data-quality and residual screening]
+    ENG --> TWIN[Synthetic state timeline]
     SYN --> TWIN
-    ENG --> TWIN
     ANA --> TWIN
-    API --> RAG[Local document extraction and lexical retrieval]
-    WEB --> API
-    UI --> RAG
-    API --> AG[Single bounded assistant]
-    UI --> AG
+    API --> RAG[Local lexical retrieval]
+    API --> AG[Bounded assistant tools]
     AG --> ENG
     AG --> SYN
     AG --> RAG
-    AG -. opt-in function calls .-> CLOUD[Configured cloud LLM]
+    AG -. explicit consent .-> CLOUD[Optional cloud LLM]
+    STREAMLIT[Optional Streamlit interface] --> ENG
+    STREAMLIT --> SYN
+    STREAMLIT --> RAG
 ```
 
-## Module responsibilities
+## Python responsibilities
 
-- `engineering/` owns validated inputs, four cycle state points, work and heat calculations, fuel estimate, output estimates, and model assumptions. It has no UI, file, or network dependencies.
-- `synthetic/` calls the engineering model at each time step and adds seeded ambient variation, measurement noise, and explicit fault labels. It never reads external operating data.
-- `analytics/` checks the tabular shape, synthetic labels, timestamps, configured physical validity, flat lines, and robust residual outliers. These are data-quality/screening results, not fault diagnoses.
-- `twin/` constructs a synthetic asset record and time-indexed state snapshots from generated scenarios. It compares model output with generated observations and carries the residual screen label; it cannot ingest real telemetry.
-- `rag/` extracts text from PDF/Markdown/TXT, chunks it with source and page/section metadata, then performs local lexical ranking and citation formatting. It stores no embeddings or external index.
-- `agent/` routes local questions to deterministic functions and optionally runs the Responses API function-calling loop. Function names are allow-listed, requests are capped at three tool rounds, and document retrieval is only offered after the separate UI opt-in.
-- `api/` exposes health, scenario catalog, synthetic twin replay, local evidence search, and bounded assistant endpoints. If a selected replay context is supplied, scenario, seed, sample index, and component are validated and recomputed server-side before the assistant uses it.
-- `frontend/` composes the API into the React replay workspace, charts, evidence view, and selectable R3F turbine scene. A user-selected Blender GLB remains in browser memory; the default workspace model path is local and ignored by Git.
-- `ui/` composes the earlier modules into Streamlit Overview, Cycle analysis, Scenarios & data, Technical documents, and Engineering assistant pages. Uploaded documents are held in Streamlit session memory for the active session.
+- `engineering/` validates inputs and calculates the simplified cycle states, work, heat, fuel estimate, output estimate, and model assumptions. It has no UI or network dependency.
+- `synthetic/` generates seeded sample histories from the engineering model, with explicit scenario perturbation labels and measurement noise. It does not ingest real plant data.
+- `analytics/` checks tabular shape, timestamps, configured physical validity, flat lines, and robust residual outliers. Its flags are screening results, not fault diagnoses.
+- `twin/` packages synthetic scenario frames into a time-indexed state view. The twin is bound only to generated data.
+- `rag/` extracts local PDF/Markdown/TXT content and performs lexical ranking with citation metadata. It uses no remote vector service.
+- `agent/` routes questions through a fixed allow-list of deterministic tools. Its optional cloud adapter cannot run arbitrary code or expand the tool list.
+- `api/` exposes health, scenario catalog, replay, evidence search, and assistant endpoints. Selected context is validated and recomputed by the server before use.
+- `ui/` contains the earlier Streamlit pages. Install the `streamlit` extra to run them.
+
+## Frontend structure
+
+- `frontend/src/app/` owns the hash router, route/query parsing, shared reducer, and context. The URL mirrors route, scenario, seed, sample, and evidence search state.
+- `frontend/src/features/` groups screen and domain code: `overview/` contains filters, KPIs, station/component ledgers, replay, charts, and the stage card; `component-detail/`, `evidence/`, and `assistant/` own their route experiences; `viewer/` owns the React Three Fiber scene, GLB loader, schematic, mesh mapping, camera, lighting, and callouts.
+- `frontend/src/components/ui/` holds shared UI such as the native-dialog Sheet and engine-offline banner.
+- `frontend/src/lib/` contains formatting, local engine state, and the published-reference constant.
+- `frontend/src/index.css` defines semantic design tokens, locally bundled Geist fonts, focus treatment, and global theme behavior. Feature CSS consumes those tokens.
+- `frontend/src/api.ts` preserves the Python API request and response contract in `frontend/src/types.ts`.
+
+The browser loads `frontend/public/models/turbine.glb` from the local application. Mesh names and the six component IDs form its selection contract. The project asset uses Meshopt compression decoded with the local Three/Drei dependency; the viewer also accepts an uncompressed export.
 
 ## Data and trust boundaries
 
-1. Default model assumptions and generated demo records are synthetic/illustrative.
-2. Uploaded documents are parsed locally. On the Technical documents page, retrieval and answer construction remain local.
-3. In cloud assistant mode, the question, selected server-recomputed synthetic sample context, and outputs from selected tools are sent to the configured provider. Retrieved document excerpts are excluded unless separately approved for that answer.
-4. Document text is treated as untrusted evidence. It cannot modify system instructions or expand the tool allow-list.
-5. The twin is synchronized only with the local synthetic scenario timeline; no physical asset binding, DCS, SCADA, PLC, live turbine, or maintenance-action interface exists.
+1. Cycle assumptions and demonstration records are synthetic or illustrative.
+2. Evidence retrieval and the deterministic local assistant run on the local API.
+3. Cloud mode is opt-in. It can send the question, server-recomputed synthetic context, and results from selected tools to the configured provider. Document excerpts require separate per-request consent.
+4. Retrieved text is treated as untrusted evidence and rendered as plain text. It cannot change instructions or expand the tool allow-list.
+5. No physical turbine binding, real-time industrial connectivity, DCS/SCADA/PLC integration, or control action exists.
 
 ## Local state and persistence
 
-There is no database, telemetry service, vector store, or background worker. Scenario frames are generated per request. Uploaded document bytes and chunks live in the current Streamlit session; the app does not write them to disk. Cloud requests set `store=False` and do not maintain provider-side conversation state through this prototype.
+There is no database, telemetry service, vector store, or background worker. Scenario frames are generated per request. Streamlit uploads are held in session memory. The browser's URL holds shareable replay and search state. Cloud requests disable provider-side response storage.

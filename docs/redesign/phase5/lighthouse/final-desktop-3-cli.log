@@ -1,6 +1,6 @@
 node.exe : npm notice run npx
 At line:1 char:1
-+ & "C:\Program Files\nodejs/node.exe" "C:\Users\TL\AppData\Roaming\npm ...
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : NotSpecified: (npm notice run npx:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError

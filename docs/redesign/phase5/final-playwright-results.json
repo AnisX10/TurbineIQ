@@ -1,12 +1,12 @@
 {
   "config": {
     "argv": [
-      "C:\\Program Files\\nodejs\\node.exe",
-      "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "<repo> Files\\nodejs\\node.exe",
+      "<repo>",
       "test"
     ],
-    "configFile": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\playwright.config.ts",
-    "rootDir": "C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend/e2e",
+    "configFile": "<repo>",
+    "rootDir": "<repo>/frontend/e2e",
     "failOnFlakyTests": false,
     "forbidOnly": false,
     "fullyParallel": false,
@@ -22,7 +22,7 @@
     "preserveOutput": "always",
     "projects": [
       {
-        "outputDir": "C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend/test-results",
+        "outputDir": "<repo>/frontend/test-results",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
@@ -30,7 +30,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend/e2e",
+        "testDir": "<repo>/frontend/e2e",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
@@ -42,15 +42,15 @@
       {
         "grep": {},
         "grepInvert": null,
-        "outputDir": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\test-results",
+        "outputDir": "<repo>",
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
           "actualWorkers": 2
         },
         "name": "",
-        "testDir": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\e2e",
-        "snapshotDir": "C:\\Users\\TL\\Documents\\Codex\\2026-11-01\\referenced-chatgpt-conversation-this-is-an\\work\\TurbineIQ\\frontend\\e2e",
+        "testDir": "<repo>",
+        "snapshotDir": "<repo>",
         "testIgnore": [],
         "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
         "timeout": 120000,

@@ -13,7 +13,7 @@ Phase 5 is complete on `redesign/v2`. Part A was committed before the Phase 5 vi
 
 ## Lighthouse
 
-Lighthouse 13.6.0 ran three times per preset against the production build at `127.0.0.1:8011`. Raw results are in [`phase5/lighthouse/`](phase5/lighthouse/). The medians compare with the Phase 0 baseline in [`BASELINE.md`](BASELINE.md) and the Phase 4 results in [`PHASE4.md`](PHASE4.md).
+Lighthouse 13.6.0 ran three times per preset against the local production build. The mobile and desktop run values and medians are preserved in the tables below; raw JSON reports were pruned during the documentation cleanup to keep the docs folder within its size budget. The medians compare with the Phase 0 baseline in [`BASELINE.md`](BASELINE.md) and the Phase 4 results in [`PHASE4.md`](PHASE4.md). The CLI command logs remain in [`phase5/lighthouse/`](phase5/lighthouse/).
 
 | Preset | Runs: Performance | Median Performance | Runs: LCP | Median LCP | Median CLS | Runs: TBT | Median TBT | Median payload |
 |---|---|---:|---|---:|---:|---|---:|---:|
@@ -35,7 +35,7 @@ Lighthouse 13.6.0 ran three times per preset against the production build at `12
 
 Mobile TBT meets the 2,000 ms median target. One run measured 2,039 ms; the observed run range was 1,448–2,039 ms. The median mobile main-thread breakdown was 2,862 ms script evaluation, 347 ms other work, and 193 ms style/layout. The five longest tasks were 561, 369, 302, 298, and 229 ms. Performance medians are 21 points above Phase 0 on mobile and 16 points above Phase 0 on desktop; both differences exceed the roughly five-point run-to-run variation noted in the baseline.
 
-The three mobile commands used `npx --yes lighthouse@13.6.0 http://127.0.0.1:8011/#/overview?scenario=compressor_fouling&seed=42&i=72 --only-categories=performance --form-factor=mobile --chrome-flags="--headless --disable-background-networking --disable-component-update --no-sandbox" --output=json --output-path=<run>.json --quiet`. Desktop used the same command with `--preset=desktop` in place of `--form-factor=mobile`. The six raw outputs are `final-mobile-{1,2,3}.json` and `final-desktop-{1,2,3}.json` in [`phase5/lighthouse/`](phase5/lighthouse/).
+The three mobile commands used `npx --yes lighthouse@13.6.0 http://127.0.0.1:8011/#/overview?scenario=compressor_fouling&seed=42&i=72 --only-categories=performance --form-factor=mobile --chrome-flags="--headless --disable-background-networking --disable-component-update --no-sandbox" --output=json --output-path=<run>.json --quiet`. Desktop used the same command with `--preset=desktop` in place of `--form-factor=mobile`. The six CLI invocations are retained as `final-mobile-{1,2,3}-cli.log` and `final-desktop-{1,2,3}-cli.log` in [`phase5/lighthouse/`](phase5/lighthouse/); the JSON artifacts were removed.
 
 The mobile LCP element probe reported `.viewer-note` at 476 ms; desktop reported `h2 Component ledger` at 192 ms. These unthrottled element observations are recorded in [`phase5/lcp-elements.json`](phase5/lcp-elements.json); the Lighthouse LCP medians above are measured under their respective preset throttling. Both LCP targets and both CLS targets pass.
 
@@ -51,8 +51,8 @@ The approved conversion reduced `frontend/public/models/turbine.glb` from 1,910,
 
 | Gate | Command and result | Evidence |
 |---|---|---|
-| Taste-skill lint | `node C:\Users\TL\.codex\skills\design-taste-frontend\scripts\lint.mjs --app <changed files>` — 0 failures, 6 advisory warnings. Four shadow warnings are for actual overlays/sheets/menus; the two mono warnings are reference values in the Boundary sheet. | [`phase5/final-taste-lint.log`](phase5/final-taste-lint.log) |
-| Taste-skill inspect | Ran `node C:\Users\TL\.codex\skills\design-taste-frontend\scripts\inspect.mjs <route> --app --out <dir> --widths 1440,1024,768,375 --json` for `#/overview?...` and `#/components/compressor?...` — no horizontal overflow, browser errors, or broken images at any width. Maximum measured colour share is 0.4%. | [`phase5/taste-inspect/overview-report.json`](phase5/taste-inspect/overview-report.json), [`phase5/taste-inspect/components-report.json`](phase5/taste-inspect/components-report.json), and each route's screenshots below `phase5/taste-inspect/` |
+| Taste-skill lint | `node <home>/.codex/skills/design-taste-frontend/scripts/lint.mjs --app <changed files>` — 0 failures, 6 advisory warnings. Four shadow warnings are for actual overlays/sheets/menus; the two mono warnings are reference values in the Boundary sheet. | [`phase5/final-taste-lint.log`](phase5/final-taste-lint.log) |
+| Taste-skill inspect | Ran `node <home>/.codex/skills/design-taste-frontend/scripts/inspect.mjs <route> --app --out <dir> --widths 1440,1024,768,375 --json` for Overview and Components — no horizontal overflow, browser errors, or broken images at any width. Maximum measured colour share is 0.4%. | [`phase5/taste-inspect/overview-report.json`](phase5/taste-inspect/overview-report.json), [`phase5/taste-inspect/components-report.json`](phase5/taste-inspect/components-report.json), and route screenshots below `phase5/taste-inspect/` |
 | Build | `npm run build --prefix frontend` — passed. Vite retains its >500 kB viewer-chunk advisory. | [`phase5/final-build.log`](phase5/final-build.log) |
 | Frontend lint | `npm run lint --prefix frontend` — passed. | [`phase5/final-lint.log`](phase5/final-lint.log) |
 | Vitest | `npm run test --prefix frontend` — 18 tests passed across 4 files. | [`phase5/final-vitest.log`](phase5/final-vitest.log) |
@@ -60,7 +60,7 @@ The approved conversion reduced `frontend/public/models/turbine.glb` from 1,910,
 | Network origins | Playwright records only `http://127.0.0.1:8011`; the application made no other-origin request. | [`phase5/viewer-network-origins.json`](phase5/viewer-network-origins.json), [`phase5/final-network-origins.json`](phase5/final-network-origins.json) |
 | Demand-render probe | Playwright observed no draws while idle, draws during camera easing and opt-in rotor motion, then no draws after motion settled or stopped. Reduced-motion coverage passed. | [`phase5/final-playwright.log`](phase5/final-playwright.log), test `demand rendering stops while idle...` in [`phase5/final-playwright-results.json`](phase5/final-playwright-results.json) |
 | Responsive runtime probe | Playwright loaded the real GLB and resized through 1024, 768, 375, and 1440 px with no page or console errors (the browser's `/favicon.ico` 404 is excluded from the runtime assertion). | [`phase5/responsive-runtime-errors.json`](phase5/responsive-runtime-errors.json), [`phase5/final-playwright.log`](phase5/final-playwright.log) |
-| LCP element | `node e2e/lcp-probe.mjs` — mobile `.viewer-note`, desktop `h2 Component ledger`. Lighthouse medians are listed above. | [`phase5/lcp-elements.json`](phase5/lcp-elements.json), [`phase5/lcp-probe-final.log`](phase5/lcp-probe-final.log), six Lighthouse JSON files under [`phase5/lighthouse/`](phase5/lighthouse/) |
+| LCP element | `node e2e/lcp-probe.mjs` — mobile `.viewer-note`, desktop `h2 Component ledger`. Lighthouse medians are listed above. | [`phase5/lcp-elements.json`](phase5/lcp-elements.json), [`phase5/lcp-probe-final.log`](phase5/lcp-probe-final.log), and the six invocation logs in [`phase5/lighthouse/`](phase5/lighthouse/) |
 | Python quality | `.venv\Scripts\python.exe -m ruff check src tests` — passed. `.venv\Scripts\python.exe -m pytest -q` — 69 passed, 5 dependency warnings. | [`phase5/final-ruff.log`](phase5/final-ruff.log), [`phase5/final-pytest.log`](phase5/final-pytest.log) |
 | Source invariants | `git diff --quiet main -- src tests` and `git diff --quiet main -- frontend/src/types.ts` — both exit 0. | [`phase5/python-byte-identical.log`](phase5/python-byte-identical.log) |
 | Blender asset contract | Unchanged `tests/test_blender_asset.py` — 3 passed. Mesh-name/count comparison is identical. | [`phase5/glb-blender-test.log`](phase5/glb-blender-test.log), [`phase5/glb-structure-diff.txt`](phase5/glb-structure-diff.txt) |
@@ -69,11 +69,11 @@ The approved conversion reduced `frontend/public/models/turbine.glb` from 1,910,
 Taste inspection commands were run for the two required routes:
 
 ```powershell
-node C:\Users\TL\.codex\skills\design-taste-frontend\scripts\inspect.mjs 'http://127.0.0.1:8011/#/overview?scenario=compressor_fouling&seed=42&i=72' --app --out docs/redesign/phase5/taste-inspect/overview --widths 1440,1024,768,375 --json
-node C:\Users\TL\.codex\skills\design-taste-frontend\scripts\inspect.mjs 'http://127.0.0.1:8011/#/components/compressor?scenario=compressor_fouling&seed=42&i=72' --app --out docs/redesign/phase5/taste-inspect/components --widths 1440,1024,768,375 --json
+node <home>/.codex/skills/design-taste-frontend/scripts/inspect.mjs 'http://127.0.0.1:8011/#/overview?scenario=compressor_fouling&seed=42&i=72' --app --out <repo>/docs/redesign/phase5/taste-inspect/overview --widths 1440,1024,768,375 --json
+node <home>/.codex/skills/design-taste-frontend/scripts/inspect.mjs 'http://127.0.0.1:8011/#/components/compressor?scenario=compressor_fouling&seed=42&i=72' --app --out <repo>/docs/redesign/phase5/taste-inspect/components --widths 1440,1024,768,375 --json
 ```
 
-The matching lint invocation used `node C:\Users\TL\.codex\skills\design-taste-frontend\scripts\lint.mjs --app` on the changed app shell, Stage CSS, viewer modules, and `frontend/e2e/phase5-viewer.spec.ts`; its output is retained in [`phase5/final-taste-lint.log`](phase5/final-taste-lint.log).
+The matching lint invocation used `node <home>/.codex/skills/design-taste-frontend/scripts/lint.mjs --app` on the changed app shell, Stage CSS, viewer modules, and `frontend/e2e/phase5-viewer.spec.ts`; its output is retained in [`phase5/final-taste-lint.log`](phase5/final-taste-lint.log).
 
 ## Viewer change log and limitations
 

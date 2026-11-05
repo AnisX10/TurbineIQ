@@ -1,13 +1,13 @@
 node.exe : npm notice run frontend@0.0.0 test
 At line:1 char:1
-+ & "C:\Program Files\nodejs/node.exe" "C:\Users\TL\AppData\Roaming\npm ...
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 test:String) [], RemoteException
     + FullyQualifiedErrorId : NativeCommandError
 
 npm notice run vitest run
 
- RUN  v5.1.0 C:/Users/TL/Documents/Codex/2026-11-01/referenced-chatgpt-conversation-this-is-an/work/TurbineIQ/frontend
+ RUN  v5.1.0 <repo>/frontend
 
 
  Test Files  4 passed (4)

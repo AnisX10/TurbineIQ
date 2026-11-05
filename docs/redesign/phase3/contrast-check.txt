@@ -1,4 +1,4 @@
-﻿theme | pair | contrast | minimum | result
+theme | pair | contrast | minimum | result
 light | --text on --surface | 19.80:1 | 4.5:1 | PASS
 light | --text on --ground | 17.97:1 | 4.5:1 | PASS
 light | --muted on --surface | 5.33:1 | 4.5:1 | PASS

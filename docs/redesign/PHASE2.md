@@ -22,18 +22,18 @@ The restored disclaimer wording in src/turbineiq/synthetic/scenarios.py and its 
 | Frontend lint | cd frontend; npm run lint | Pass, exit 0. [Log](phase2/logs/npm-lint.txt) |
 | Unit tests | cd frontend; npm test | 3 files, 11 passed. [Log](phase2/logs/vitest.txt) |
 | Build | cd frontend; npm run build | Pass. Existing lazy Viewer size advisory remains. [Log](phase3/logs/build.txt) |
-| Production Playwright | cd frontend; npm run test:e2e (build then playwright test) | 7 passed. [Console log](phase2/logs/playwright.txt), [machine results](phase2/playwright-results.json). |
+| Production Playwright | cd frontend; npm run test:e2e (build then playwright test) | 7 passed. [Console log](phase2/logs/playwright.txt). |
 | Axe | Four destinations, light and dark | Zero serious/critical findings in new code and zero serious/critical legacy nodes in all eight route/theme checks. [Results](phase2/axe-results.json) |
 | Keyboard | Skip link; shell menus; BoundarySheet focus, trap, Escape, return; replay keys | Pass. Includes Left/Right, Shift+Left/Right, Home/End, Space, F and disabled no-flag behavior. |
 | Legacy interaction regression | Scenario change, valid/invalid seed, replay, mesh picker, 3D part selection, Evidence search, local Assistant | Pass. |
 | Network isolation | Playwright records request origins during API/app interaction | Only http://127.0.0.1:8011. [Result](phase2/network-origins.json) |
-| Responsive screenshots | 375/768/1024/1440, light and dark | Pass, no horizontal overflow. Overview screenshots are in phase2/. |
+| Responsive screenshots | 375/768/1024/1440, light and dark | Pass, no horizontal overflow. The old screenshot matrix was removed from the working tree; it is recoverable from the archive commit listed in the [redesign index](README.md). |
 | Unsupported glyph scan | U+2009, U+202F, U+25B2, U+25BE in frontend source/index | Pass, zero matches. |
 | Python source equality | SHA-256 and byte comparison with git show main:<path> | Pass for both restored files. [Evidence](phase2/logs/source-equivalence.txt) |
 | Ruff | .venv\Scripts\python.exe -m ruff check src tests | Pass. [Log](phase2/logs/ruff.txt) |
 | Pytest | .venv\Scripts\python.exe -m pytest -q | 69 passed, 5 dependency deprecation warnings. [Log](phase2/logs/pytest.txt) |
-| Taste lint | design-taste-frontend lint.mjs on 23 changed frontend files, --app --json | Exit 0, zero FAIL, 18 WARN (engineering mono and overlay shadows). [Output](phase3/taste-lint.json) |
-| Taste inspect | inspect.mjs --app --widths 1440,1024,768,375 on all four routes | Exit 0, zero FAIL. Reports: [Overview](phase3/taste-inspect/overview-final/report.json), [Components](phase3/taste-inspect/components/report.json), [Evidence](phase2/taste-inspect/evidence/report.json), [Assistant](phase2/taste-inspect/assistant/report.json). |
+| Taste lint | design-taste-frontend lint.mjs on 23 changed frontend files, --app --json | Exit 0, zero FAIL, 18 WARN (engineering mono and overlay shadows). Detailed raw output was pruned; the measured result remains here and the files are recoverable from the archive commit listed in the [redesign index](README.md). |
+| Taste inspect | inspect.mjs --app --widths 1440,1024,768,375 on all four routes | Exit 0, zero FAIL. The route/width summary remains in this report; raw inspector output and screenshots were pruned and can be recovered from the archive commit listed in the [redesign index](README.md). |
 
 The palette and type decisions are in DIRECTION.md; performance baseline/noise are in BASELINE.md. Playwright uses the local production build and API on port 8011. The offline banner retains the user-facing API startup command on port 8000.
 
