@@ -42,3 +42,9 @@ The first Playwright run caught a 5 px 320-width overflow caused by Stage toolti
 - No new runtime dependencies or external application requests were added.
 - The repository has no tracked `LICENSE`; the owner must choose a license. [`license-check.txt`](phase6-7-part1/license-check.txt) records the check.
 - The GitHub Actions workflow was added but its remote run was not inspected in this local verification.
+
+## Follow-up: mesh callout placement
+
+The original bounds-edge callout described above was replaced in commit `e135401`. The label now anchors to the average vertex position of the selected mesh, projected through the active camera. Its 1 px `--text` leader is 40 px long and reaches the anchor. The label is positioned away from the projected model center when the available space permits; at narrow edges it uses the opposite side when needed to keep the full label inside the Stage.
+
+The capture script checks the label rectangle against the Stage HTML layer before saving. It measured a 40 px leader and an in-bounds label at 320, 375, 768, and 1440 px in light and dark. Captures are in [`phase6-7-part1/`](phase6-7-part1/).
