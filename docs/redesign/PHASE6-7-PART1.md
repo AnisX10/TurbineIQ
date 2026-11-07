@@ -19,18 +19,20 @@ This part fixes the Phase 5 Stage findings, prunes historical raw evidence, refr
 
 | Gate | Command and result | Evidence |
 | --- | --- | --- |
-| Ruff | `.venv\Scripts\python.exe -m ruff check src tests` — passed. | [`ruff.txt`](phase6-7-part1/ruff.txt) |
-| Python tests | `.venv\Scripts\python.exe -m pytest -q` — **69 passed**, with five existing dependency deprecation warnings. | [`pytest.txt`](phase6-7-part1/pytest.txt) |
-| Frontend lint | `npm run lint --prefix frontend` — passed. | [`frontend-lint.txt`](phase6-7-part1/frontend-lint.txt) |
-| Vitest | `npm run test --prefix frontend` — **22 tests passed in 5 files**, including the callout anchor tests. | [`vitest.txt`](phase6-7-part1/vitest.txt) |
-| Production build | `npm run build --prefix frontend` — passed. Vite reports the existing 1,039.64 kB 3D viewer chunk advisory. | [`build.txt`](phase6-7-part1/build.txt) |
-| Playwright | `npm run test:e2e --prefix frontend` — **16 passed**. Covers route interactions, keyboard access, viewer actions, reduced motion, offline/retry behavior, responsive screenshots, and 320 px overflow. | [`playwright.txt`](phase6-7-part1/playwright.txt) |
+| Clean-clone install | `npm ci` — passed; 162 packages installed, 0 vulnerabilities. | [`npm-ci.txt`](phase6-7-part1/npm-ci.txt) |
+| Python environment | `py -3 -m venv .venv`; `.venv` Python `-m pip install -e ".[dev,streamlit]"` — passed. | [`python-install.txt`](phase6-7-part1/python-install.txt) |
+| Ruff | `ruff check src tests` — passed. | [`ruff.txt`](phase6-7-part1/ruff.txt) |
+| Python tests | `pytest -q` — **69 passed**, one dependency deprecation warning. | [`pytest.txt`](phase6-7-part1/pytest.txt) |
+| Frontend lint | `npm run lint` — passed. | [`lint.txt`](phase6-7-part1/lint.txt) |
+| Vitest | `npm test` — **23 tests passed in 5 files**, including callout anchor coverage. | [`vitest.txt`](phase6-7-part1/vitest.txt) |
+| Production build | `npm run build` — passed. Vite reports the existing 1,040.49 kB 3D viewer chunk advisory. | [`build.txt`](phase6-7-part1/build.txt) |
+| Playwright | `CI=true npm run test:e2e` — **16 passed** with one worker. Covers route interactions, keyboard access, viewer actions, reduced motion, offline/retry behavior, responsive screenshots, and 320 px overflow. | [`playwright.txt`](phase6-7-part1/playwright.txt) |
 | Axe | Sixteen route/theme/tab/consent states have no findings. | [`axe-results.json`](phase6-7-part1/axe-results.json) and the Playwright log |
 | Network | The test recorded only `http://127.0.0.1:8011`; cloud behavior is mocked. | [`network-origins.json`](phase6-7-part1/network-origins.json) |
-| Documentation paths | `npm run check:paths --prefix frontend` — passed for `README.md` and text files under `docs/`. | [`check-paths.txt`](phase6-7-part1/check-paths.txt) |
+| Documentation paths | `npm run check:paths` — passed in the clean clone; the final evidence bundle was scanned again after log replacement. | [`check-paths.txt`](phase6-7-part1/check-paths.txt), [`check-paths-after-docs.txt`](phase6-7-part1/check-paths-after-docs.txt) |
 | Contrast | `.venv\Scripts\python.exe docs\redesign\contrast_check.py` — all 44 measured light/dark checks passed. No new color token was added. | [`contrast-check.txt`](phase6-7-part1/contrast-check.txt), with prior phase results in [`phase3/contrast-check.txt`](phase3/contrast-check.txt) and [`phase4/contrast-check.txt`](phase4/contrast-check.txt) |
 | Protected files | `git diff --quiet main -- src tests`; `git diff --quiet main -- frontend/src/types.ts`; `git diff --quiet HEAD -- frontend/public/models/turbine.glb` — all exited 0. | [`source-invariants.txt`](phase6-7-part1/source-invariants.txt) |
-| Stage screenshots | Before/after captures at 1440 px, light and dark. | [`stage-toolbar-before-light.png`](phase6-7-part1/stage-toolbar-before-light.png), [`stage-toolbar-after-light.png`](phase6-7-part1/stage-toolbar-after-light.png), [`stage-toolbar-before-dark.png`](phase6-7-part1/stage-toolbar-before-dark.png), [`stage-toolbar-after-dark.png`](phase6-7-part1/stage-toolbar-after-dark.png) |
+| Stage screenshots | Before/after at 1440 px, light and dark; final callout fit captured at 320, 375, 768, and 1440 px in both themes. | [`stage-toolbar-before-light.png`](phase6-7-part1/stage-toolbar-before-light.png), [`stage-toolbar-before-dark.png`](phase6-7-part1/stage-toolbar-before-dark.png), plus the eight `stage-callout-followup-*` captures in this folder. |
 | Markdown links | All relative Markdown links in the root README and docs resolve. | [`markdown-links.txt`](phase6-7-part1/markdown-links.txt) |
 | Docs size | The final `docs/redesign/` tree is below the 8,000,000 byte target. | [`docs-size.txt`](phase6-7-part1/docs-size.txt) |
 
@@ -41,10 +43,16 @@ The first Playwright run caught a 5 px 320-width overflow caused by Stage toolti
 - The GLB, Python source/tests, API types, component IDs, and mesh-name contract were not changed in this part.
 - No new runtime dependencies or external application requests were added.
 - The repository has no tracked `LICENSE`; the owner must choose a license. [`license-check.txt`](phase6-7-part1/license-check.txt) records the check.
-- The GitHub Actions workflow was added but its remote run was not inspected in this local verification.
+- CI run **42127760550** for commit `5c8b92e` completed successfully. The preceding run for `772cb93` exposed Playwright contention between the 3D keyboard test and parallel screenshot/accessibility tests. CI now runs the Playwright suite with one worker; the clean-clone serial run and the latest Actions run both passed. Evidence: [`actions-run.json`](phase6-7-part1/actions-run.json).
 
 ## Follow-up: mesh callout placement
 
 The original bounds-edge callout described above was replaced in commit `e135401`. The label now anchors to the average vertex position of the selected mesh, projected through the active camera. Its 1 px `--text` leader is 40 px long and reaches the anchor. The label is positioned away from the projected model center when the available space permits; at narrow edges it uses the opposite side when needed to keep the full label inside the Stage.
 
-The capture script checks the label rectangle against the Stage HTML layer before saving. It measured a 40 px leader and an in-bounds label at 320, 375, 768, and 1440 px in light and dark. Captures are in [`phase6-7-part1/`](phase6-7-part1/).
+The capture script checks the label rectangle against the Stage HTML layer before saving. It measured a 40 px leader and an in-bounds label at 320, 375, 768, and 1440 px in light and dark. Captures are in [`phase6-7-part1/`](phase6-7-part1/). The newer 1440 px captures replace the redundant earlier toolbar-after images; the before images remain for comparison.
+
+## Follow-up: clean-clone and CI fixes
+
+The required deliverables are tracked in commit `1807b8b` (workflow, path checker, frontend script, and optional Streamlit extra). Commit `772cb93` resets the replay keyboard test to sample 1 before testing playback, because starting at sample 96 immediately stops by design. Commit `5c8b92e` configures one Playwright worker in CI after the two-worker run timed out while the browser was under concurrent 3D, screenshot, and accessibility load. The single-worker clean-clone run passed all 16 tests, and GitHub Actions passed on `5c8b92e`.
+
+The final gate logs in this folder were captured from a fresh clone of `origin/redesign/v2` at `5c8b92e`. The path checker was run once more after adding those logs to ensure the updated evidence contains no local usernames or absolute machine paths.

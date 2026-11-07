@@ -1,1 +1,1 @@
-Local Markdown links passed (27 files scanned).
+PHASE6-7-PART1.md relative links checked: 24; missing targets: 0.
