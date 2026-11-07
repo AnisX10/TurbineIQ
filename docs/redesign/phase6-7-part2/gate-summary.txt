@@ -24,4 +24,3 @@ Contrast: all 52 measured light/dark pairs passed. Focus ring, 3D callout text, 
 Documentation size: `docs/redesign` measured 11.1 MB (10.6 MiB), below the 12 MB budget after the final screenshots and reports.
 
 Verification limit: Playwright represented 200% zoom with a 720 CSS px viewport and DPR 2; browser chrome zoom itself was not available in the headless runner. Mobile Lighthouse TBT exceeds its 2,000ms target; per-run metrics and the long-task profile are in lighthouse-summary.json.
-
