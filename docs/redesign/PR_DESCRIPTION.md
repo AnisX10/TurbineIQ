@@ -1,4 +1,4 @@
-﻿# Pull request description
+# Pull request description
 
 ## Title
 

@@ -25,7 +25,26 @@ Each final preset used three Lighthouse 13.6.0 runs against the local production
 
 Here, n/m means the earlier phase did not measure that category. Final LCP element probes, run separately from Lighthouse throttling, identify `.viewer-note` at 252 ms on mobile and `h2#component-ledger-title` at 196 ms on desktop. Both Lighthouse LCP targets and both CLS targets pass. The final payload is 930 KiB below Phase 0 and 1,052 KiB below Phase 4.
 
-Mobile TBT failed its target in all three final runs: 2,746, 3,441, and 2,360 ms (median 2,746 ms). Across these traces, the longest observed main-thread tasks were 1,034 ms from `index-*.js` and 653 ms from `TurbineViewer-*.js`; repeated 300-650 ms tasks also came from the viewer bundle. The run-by-run values and top tasks are in [`lighthouse-summary.json`](phase6-7-part2/lighthouse-summary.json). Desktop performance median was 81, 15 points below Phase 5's 96, while desktop LCP remained about 0.26 s. This is a meaningful performance-score regression that needs a stable trace and further profiling.
+The initial final sample missed the mobile TBT target in all three runs: 2,746, 3,441, and 2,360 ms (median 2,746 ms). Across those traces, the longest observed main-thread tasks were 1,034 ms from `index-*.js` and 653 ms from `TurbineViewer-*.js`; repeated 300-650 ms tasks also came from the viewer bundle. The run-by-run values and top tasks are in [`lighthouse-summary.json`](phase6-7-part2/lighthouse-summary.json). Desktop performance median was 81, 15 points below Phase 5's 96, while desktop LCP remained about 0.26 s. The controlled retest below found this apparent score drop was measurement drift; it did not reproduce a code regression.
+
+### Controlled Phase 5-to-final A/B retest
+
+To check whether that change came from the code, I built commit `08e5d1a` and `176a6b1` in separate worktrees, served them on local ports `8012` and `8013`, and alternated five Lighthouse 13.6.0 runs per build and preset. Each run enabled performance, accessibility, and best-practices categories. The runner records `environment.benchmarkIndex`, host CPU utilization during the run, free memory before and after, payload, and the boot-up cost attributed to each script. The full per-run records and summaries are in [`lighthouse-ab.json`](phase6-7-part2/lighthouse-ab.json).
+
+| Preset | Build | Performance median [range] | Accessibility | Best practices | TBT median [range] | LCP median [range] | CLS median [range] | Payload | benchmarkIndex median [range] |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Mobile | `08e5d1a` | 67 [67–68] | 100 | 96 | 4,724 [4,365–6,065] ms | 930.3 [923.8–933.8] ms | 0.000123 [0.000123–0.037418] | 2,915 KiB | 1,549 [1,078.5–1,649.5] |
+| Mobile | `176a6b1` | 67 [66–67] | 100 | 96 | 4,374 [4,025–5,003] ms | 934.5 [921.1–936.8] ms | 0.000123 [0.000123–0.046438] | 2,917 KiB | 1,590.5 [1,471.5–1,790.5] |
+| Desktop | `08e5d1a` | 74 [72–75] | 100 | 96 | 671 [619–739] ms | 271.1 [265.6–275.0] ms | 0.013613 | 2,915 KiB | 1,683 [927.5–1,875] |
+| Desktop | `176a6b1` | 74 [73–95] | 100 | 96 | 662 [172–700] ms | 265.6 [253.9–275.4] ms | 0.013613 | 2,917 KiB | 1,880.5 [1,612.5–2,620.5] |
+
+The original Phase 5-to-final drop is not reproduced by the paired comparison. Performance medians are equal, desktop TBT is similar, mobile HEAD TBT is lower, and the run ranges overlap. The measured payload changed by only 2,469 bytes. I interpret the earlier score drop as measurement drift; the controlled runs do not show a code regression to bisect. The host was still noisy: CPU utilization ranged from 44.5% to 61.6%, free memory from 1,394 to 2,410 MiB, and benchmarkIndex varied substantially within the run set.
+
+The 2,000 ms mobile TBT target was not met in this low-benchmark-index five-run set. For context, a separate three-pair diagnostic at benchmarkIndex 3,215–3,351 measured the original `176a6b1` at 1,132 ms median and a temporary optimization candidate at 1,122 ms; this diagnostic is recorded in [`lighthouse-candidate-check.json`](phase6-7-part2/lighthouse-candidate-check.json) and is not used to claim the formal five-run target passed. The profile points to startup cost rather than a Phase 5-to-final regression: in the five-run set, mobile boot-up work attributed to `TurbineViewer-*.js` had a 3,846 ms median and `index-*.js` a 3,106 ms median on HEAD. Their minified bundle sizes were 1,040.51 KiB and 275.47 KiB. The earlier trace's longest tasks were 653 ms and 1,034 ms respectively.
+
+I tested narrower Drei subpath imports, a Rolldown vendor split, and a longer idle callback before Canvas activation. The candidate split the app into smaller named chunks but increased transfer by about 1 KiB and changed mobile TBT by only 10 ms in the high-benchmark diagnostic. I reverted those source changes to avoid extra chunks and delaying the 3D Canvas without a measurable gain. The Stage still shows its reserved frame and schematic while the existing idle/visibility activation loads the Canvas.
+
+`npm run perf:lh -- --a <baseline-url> --b <head-url> --runs 5 --presets mobile,desktop` now provides the alternating method and writes UTF-8 JSON without a BOM. Lighthouse is pinned as a development dependency only; application runtime dependencies are unchanged.
 
 ## Accessibility, responsive behavior, and theme
 

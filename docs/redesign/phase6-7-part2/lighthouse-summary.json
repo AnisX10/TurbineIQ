@@ -1,4 +1,4 @@
-﻿{
+{
     "command":  "npx --no-install lighthouse \u003clocal app\u003e --only-categories=performance,accessibility,best-practices (three mobile and three desktop runs; Chrome networking disabled)",
     "target":  "http://127.0.0.1:8011/#/overview",
     "runs":  [
