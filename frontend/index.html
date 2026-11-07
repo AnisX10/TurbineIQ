@@ -3,9 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a1016" />
+    <meta name="theme-color" content="#f2f4f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0f11" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="Local-first synthetic gas-turbine engineering workspace." />
     <title>TurbineIQ · Engineering Workspace</title>
+    <link rel="preload" href="/fonts/Geist-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Geist-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Geist-600.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/GeistMono-500.woff2" as="font" type="font/woff2" crossorigin />
+    <script>
+      try {
+        var theme = localStorage.getItem('turbineiq-theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.setAttribute('data-theme', theme);
+      } catch (_) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

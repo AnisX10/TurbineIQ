@@ -1,0 +1,38 @@
+node.exe : npm notice run frontend@0.0.0 npx
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 npx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run playwright test --grep keyboard traversal|Cloud consent|Assistant shows its scenario|Offline 
+engine|Component ledger formats
+
+Running 6 tests using 1 worker
+
+(node:10136) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+AXE light Overview default: 0 serious/critical
+AXE light Overview Boundary sheet: 0 serious/critical
+AXE light Component detail default: 0 serious/critical
+AXE light Component detail Over time: 0 serious/critical
+AXE light Component detail Evidence: 0 serious/critical
+AXE light Evidence default: 0 serious/critical
+AXE light Assistant default: 0 serious/critical
+AXE light Assistant Cloud consent: 0 serious/critical
+AXE dark Overview default: 0 serious/critical
+AXE dark Overview Boundary sheet: 0 serious/critical
+AXE dark Component detail default: 0 serious/critical
+AXE dark Component detail Over time: 0 serious/critical
+AXE dark Component detail Evidence: 0 serious/critical
+AXE dark Evidence default: 0 serious/critical
+AXE dark Assistant default: 0 serious/critical
+AXE dark Assistant Cloud consent: 0 serious/critical
+  ok 1 e2e\app.spec.ts:68:1 › axe audits all four routes, component tabs, and Cloud consent in both themes (24.9s)
+  ok 2 e2e\app.spec.ts:114:1 › keyboard traversal covers tabs, evidence selection, consent, composer, and replay (4.5s)
+  ok 3 e2e\app.spec.ts:265:1 › Cloud consent always precedes a mocked provider request and document excerpts are opt-in (1.1s)
+  ok 4 e2e\app.spec.ts:312:1 › Assistant shows its scenario name and busy rule only during a local request (596ms)
+  ok 5 e2e\app.spec.ts:334:1 › Offline engine guidance uses a portable command with shell activation and copy action (783ms)
+  ok 6 e2e\app.spec.ts:349:1 › Component ledger formats sample time and percentage values without duplicated reference provenance (540ms)
+
+  6 passed (37.2s)

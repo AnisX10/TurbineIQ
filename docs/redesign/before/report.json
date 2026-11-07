@@ -1,0 +1,1968 @@
+{
+ "url": "http://127.0.0.1:8000/",
+ "at": "2026-11-03T13:05:41.431Z",
+ "allow": [],
+ "viewports": [
+  {
+   "width": 375,
+   "height": 812,
+   "load": "load",
+   "screens": 4,
+   "filled": [
+    0.7,
+    0.91,
+    0.91,
+    0.82
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 375,
+     "h": 812
+    },
+    "page": {
+     "height": 2782,
+     "screens": 3.4,
+     "words": 724,
+     "img": 0,
+     "video": 0,
+     "canvas": 1,
+     "svg": 12,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 22,
+     "vw": 5.9,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 123,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "lines": 1,
+     "size": 22,
+     "font": "Fira Sans"
+    },
+    "headings": [
+     {
+      "text": "Gas turbine workbench",
+      "words": 3,
+      "chars": 21,
+      "lines": 1,
+      "size": 22,
+      "vw": 5.9,
+      "font": "Fira Sans",
+      "weight": 600,
+      "tracking": -0.025,
+      "leading": 1.2,
+      "upper": false,
+      "italic": false,
+      "mono": false,
+      "align": "left",
+      "position": "center",
+      "widthRatio": 0.91,
+      "top": 123,
+      "tag": "h1",
+      "kind": "heading"
+     }
+    ],
+    "headingSummary": {
+     "count": 1,
+     "maxLines": 1,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Fira Sans",
+       "share": 0.91,
+       "mono": false
+      },
+      {
+       "family": "Fira Code",
+       "share": 0.09,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      16,
+      20,
+      22
+     ],
+     "sizeCount": 6,
+     "notLoaded": [],
+     "body": {
+      "font": "Fira Sans",
+      "size": 12,
+      "leading": 1.2,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 9.1
+     },
+     "measureChars": 57,
+     "max": {
+      "size": 22,
+      "vw": 5.9,
+      "font": "Fira Sans",
+      "text": "Gas turbine workbench"
+     },
+     "monoShare": 0.09,
+     "monoProseShare": 0.09,
+     "monoFamilies": [
+      "Fira Code"
+     ],
+     "monoSamples": [
+      "96 samples · 15 min",
+      "26.30 MW",
+      "24.67 MW",
+      "-1.63 MW",
+      "0 / 96",
+      "81.2%"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.07,
+     "smallText": 25
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#101112",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.06,
+      "l": 0.07
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#101112",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.06,
+        "l": 0.07
+       }
+      },
+      {
+       "color": "#08090a",
+       "top": 564,
+       "hsl": {
+        "h": 210,
+        "s": 0.11,
+        "l": 0.04
+       }
+      },
+      {
+       "color": "#0c0d0e",
+       "top": 657,
+       "hsl": {
+        "h": 210,
+        "s": 0.08,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b1b4b6",
+       "share": 0.8
+      },
+      {
+       "color": "#f5f6f7",
+       "share": 0.1
+      },
+      {
+       "color": "#e4e6e7",
+       "share": 0.04
+      },
+      {
+       "color": "#d0d2d3",
+       "share": 0.03
+      },
+      {
+       "color": "#dbb77e",
+       "share": 0.02
+      }
+     ],
+     "button": null,
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 1,
+     "radius": 4,
+     "height": 42,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Schematic"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "aside.sidebar 375px",
+      "header.topbar 375px",
+      "div.metric-row 343px",
+      "div.panel-heading.viewer-heading 341px",
+      "div.viewer-control-row 341px"
+     ],
+     "outlinedBoxes": 3,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.17
+     }
+    ],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "fira sans",
+     "fira code"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 375,
+     "h": 812
+    },
+    "pageH": 2782,
+    "margins": {
+     "left": 16,
+     "right": 17
+    },
+    "sections": [
+     {
+      "sel": "div.page-title-row.twin-title-row",
+      "tag": "div",
+      "top": 119,
+      "height": 164,
+      "words": 21,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Gas turbine workbench",
+       "size": 22,
+       "tag": "h1"
+      },
+      "left": 16,
+      "right": 16,
+      "textLeft": 16,
+      "textRight": 43,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.metric-row",
+      "tag": "div",
+      "top": 347,
+      "height": 205,
+      "words": 31,
+      "media": 0,
+      "middle": 61,
+      "heading": null,
+      "left": 16,
+      "right": 43,
+      "textLeft": 16,
+      "textRight": 43,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.viewer-panel.panel",
+      "tag": "section",
+      "top": 564,
+      "height": 731,
+      "words": 88,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "GE 6B.03 · conceptual reference",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 17,
+      "right": 17,
+      "textLeft": 29,
+      "textRight": 31,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.inspector-panel.panel",
+      "tag": "section",
+      "top": 1311,
+      "height": 778,
+      "words": 108,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Compressor",
+       "size": 20,
+       "tag": "h2"
+      },
+      "left": 31,
+      "right": 31,
+      "textLeft": 31,
+      "textRight": 31,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.timeline-panel.panel",
+      "tag": "section",
+      "top": 2106,
+      "height": 458,
+      "words": 63,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "Electrical output over 24 hours",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 29,
+      "right": 29,
+      "textLeft": 29,
+      "textRight": 29,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Gas turbine workbench",
+      "size": 22,
+      "top": 123,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 29,
+      "n": 3
+     },
+     {
+      "x": 16,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 4,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 375,
+     "h": 812
+    },
+    "dark": true,
+    "ground": "#101112",
+    "sidebar": null,
+    "topbar": {
+     "h": 58
+    },
+    "canvas": {
+     "left": 16,
+     "right": 17
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 22,
+     "vw": 5.9,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 123,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 5,
+    "layout": {
+     "panels": 5,
+     "firstScreen": 2,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 14,
+     "radii": [
+      [
+       0,
+       11
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 1,
+     "kpiMax": 13
+    },
+    "rows": null,
+    "chartHues": 2,
+    "placeholders": [],
+    "type": {
+     "under13": 0.29,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      13,
+      16,
+      20,
+      22
+     ]
+    },
+    "title": {
+     "text": "Gas turbine workbench",
+     "size": 22,
+     "top": 123
+    },
+    "colourShare": 0.019
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 768,
+   "height": 1024,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.71,
+    0.85,
+    0.75
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "page": {
+     "height": 2370,
+     "screens": 2.3,
+     "words": 724,
+     "img": 0,
+     "video": 0,
+     "canvas": 1,
+     "svg": 12,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 3.1,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 134,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "lines": 1,
+     "size": 24,
+     "font": "Fira Sans"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Fira Sans",
+       "share": 0.91,
+       "mono": false
+      },
+      {
+       "family": "Fira Code",
+       "share": 0.09,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      24
+     ],
+     "sizeCount": 7,
+     "notLoaded": [],
+     "body": {
+      "font": "Fira Sans",
+      "size": 12,
+      "leading": 1.2,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 9.1
+     },
+     "measureChars": 119,
+     "max": {
+      "size": 24,
+      "vw": 3.1,
+      "font": "Fira Sans",
+      "text": "Gas turbine workbench"
+     },
+     "monoShare": 0.09,
+     "monoProseShare": 0.09,
+     "monoFamilies": [
+      "Fira Code"
+     ],
+     "monoSamples": [
+      "96 samples · 15 min",
+      "26.30 MW",
+      "24.67 MW",
+      "-1.63 MW",
+      "0 / 96",
+      "81.2%"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.07,
+     "smallText": 20
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#101112",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.06,
+      "l": 0.07
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#101112",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.06,
+        "l": 0.07
+       }
+      },
+      {
+       "color": "#08090a",
+       "top": 421,
+       "hsl": {
+        "h": 210,
+        "s": 0.11,
+        "l": 0.04
+       }
+      },
+      {
+       "color": "#0c0d0e",
+       "top": 484,
+       "hsl": {
+        "h": 210,
+        "s": 0.08,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b1b4b6",
+       "share": 0.8
+      },
+      {
+       "color": "#f5f6f7",
+       "share": 0.1
+      },
+      {
+       "color": "#e4e6e7",
+       "share": 0.04
+      },
+      {
+       "color": "#d0d2d3",
+       "share": 0.03
+      },
+      {
+       "color": "#dbb77e",
+       "share": 0.02
+      }
+     ],
+     "button": null,
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 5,
+     "radius": 4,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Schematic",
+      "Reset camera",
+      "Explode view",
+      "Isolate component",
+      "Pause rotor"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "aside.sidebar 768px",
+      "header.topbar 768px",
+      "div.metric-row 712px",
+      "div.panel-heading.viewer-heading 710px",
+      "div.viewer-control-row 710px"
+     ],
+     "outlinedBoxes": 3,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.38
+     }
+    ],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "fira sans",
+     "fira code"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "pageH": 2370,
+    "margins": {
+     "left": 28,
+     "right": 29
+    },
+    "sections": [
+     {
+      "sel": "div.page-title-row.twin-title-row",
+      "tag": "div",
+      "top": 130,
+      "height": 131,
+      "words": 21,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Gas turbine workbench",
+       "size": 24,
+       "tag": "h1"
+      },
+      "left": 28,
+      "right": 272,
+      "textLeft": 28,
+      "textRight": 272,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "div.visual-workspace",
+      "tag": "div",
+      "top": 421,
+      "height": 1433,
+      "words": 196,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "GE 6B.03 · conceptual reference",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 29,
+      "right": 29,
+      "textLeft": 42,
+      "textRight": 41,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.timeline-panel.panel",
+      "tag": "section",
+      "top": 1869,
+      "height": 366,
+      "words": 63,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "Electrical output over 24 hours",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 45,
+      "right": 45,
+      "textLeft": 45,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Gas turbine workbench",
+      "size": 24,
+      "top": 134,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 44,
+      "n": 3
+     },
+     {
+      "x": 28,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 4,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0,
+    "voidBox": null
+   },
+   "app": {
+    "viewport": {
+     "w": 768,
+     "h": 1024
+    },
+    "dark": true,
+    "ground": "#101112",
+    "sidebar": null,
+    "topbar": {
+     "h": 58
+    },
+    "canvas": {
+     "left": 28,
+     "right": 26
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 3.1,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 134,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 4,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 2,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 10,
+     "radii": [
+      [
+       0,
+       7
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 1,
+     "kpiMax": 13
+    },
+    "rows": null,
+    "chartHues": 2,
+    "placeholders": [],
+    "type": {
+     "under13": 0.25,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      24
+     ]
+    },
+    "title": {
+     "text": "Gas turbine workbench",
+     "size": 24,
+     "top": 134
+    },
+    "colourShare": 0.018
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 1024,
+   "height": 768,
+   "load": "load",
+   "screens": 3,
+   "filled": [
+    0.68,
+    0.9,
+    0.87
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1024,
+     "h": 768
+    },
+    "page": {
+     "height": 2249,
+     "screens": 2.9,
+     "words": 724,
+     "img": 0,
+     "video": 0,
+     "canvas": 1,
+     "svg": 12,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 2.3,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 134,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "lines": 1,
+     "size": 24,
+     "font": "Fira Sans"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Fira Sans",
+       "share": 0.91,
+       "mono": false
+      },
+      {
+       "family": "Fira Code",
+       "share": 0.09,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      24
+     ],
+     "sizeCount": 7,
+     "notLoaded": [],
+     "body": {
+      "font": "Fira Sans",
+      "size": 12,
+      "leading": 1.2,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 9.1
+     },
+     "measureChars": 153,
+     "max": {
+      "size": 24,
+      "vw": 2.3,
+      "font": "Fira Sans",
+      "text": "Gas turbine workbench"
+     },
+     "monoShare": 0.09,
+     "monoProseShare": 0.09,
+     "monoFamilies": [
+      "Fira Code"
+     ],
+     "monoSamples": [
+      "96 samples · 15 min",
+      "26.30 MW",
+      "24.67 MW",
+      "-1.63 MW",
+      "0 / 96",
+      "81.2%"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.07,
+     "smallText": 20
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#101112",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.06,
+      "l": 0.07
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#101112",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.06,
+        "l": 0.07
+       }
+      },
+      {
+       "color": "#08090a",
+       "top": 332,
+       "hsl": {
+        "h": 210,
+        "s": 0.11,
+        "l": 0.04
+       }
+      },
+      {
+       "color": "#0c0d0e",
+       "top": 395,
+       "hsl": {
+        "h": 210,
+        "s": 0.08,
+        "l": 0.05
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b1b4b6",
+       "share": 0.8
+      },
+      {
+       "color": "#f5f6f7",
+       "share": 0.1
+      },
+      {
+       "color": "#e4e6e7",
+       "share": 0.04
+      },
+      {
+       "color": "#d0d2d3",
+       "share": 0.03
+      },
+      {
+       "color": "#dbb77e",
+       "share": 0.02
+      }
+     ],
+     "button": null,
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 1,
+     "radius": 4,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Schematic"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "aside.sidebar 1024px",
+      "header.topbar 1024px",
+      "div.metric-row 968px",
+      "div.panel-heading.viewer-heading 966px",
+      "div.viewer-control-row 966px"
+     ],
+     "outlinedBoxes": 3,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.46
+     }
+    ],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 58,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "fira sans",
+     "fira code"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1024,
+     "h": 768
+    },
+    "pageH": 2249,
+    "margins": {
+     "left": 28,
+     "right": 28
+    },
+    "sections": [
+     {
+      "sel": "section.viewer-panel.panel",
+      "tag": "section",
+      "top": 332,
+      "height": 700,
+      "words": 88,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "GE 6B.03 · conceptual reference",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 29,
+      "right": 29,
+      "textLeft": 42,
+      "textRight": 41,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.inspector-panel.panel",
+      "tag": "section",
+      "top": 1047,
+      "height": 700,
+      "words": 108,
+      "media": 0,
+      "middle": 0,
+      "heading": {
+       "text": "Compressor",
+       "size": 20,
+       "tag": "h2"
+      },
+      "left": 45,
+      "right": 45,
+      "textLeft": 45,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": false,
+      "continues": true,
+      "pinned": false
+     },
+     {
+      "sel": "section.timeline-panel.panel",
+      "tag": "section",
+      "top": 1763,
+      "height": 366,
+      "words": 63,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "Electrical output over 24 hours",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 45,
+      "right": 45,
+      "textLeft": 45,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Gas turbine workbench",
+      "size": 24,
+      "top": 134,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 44,
+      "n": 3
+     },
+     {
+      "x": 28,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 4,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.03,
+    "voidBox": {
+     "x": 299,
+     "y": 307,
+     "w": 384,
+     "h": 51
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1024,
+     "h": 768
+    },
+    "dark": true,
+    "ground": "#101112",
+    "sidebar": null,
+    "topbar": {
+     "h": 58
+    },
+    "canvas": {
+     "left": 28,
+     "right": 28
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 2.3,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 134,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 4,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 2,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 10,
+     "radii": [
+      [
+       0,
+       7
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 1,
+     "kpiMax": 13
+    },
+    "rows": null,
+    "chartHues": 2,
+    "placeholders": [],
+    "type": {
+     "under13": 0.25,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      13,
+      14,
+      16,
+      20,
+      24
+     ]
+    },
+    "title": {
+     "text": "Gas turbine workbench",
+     "size": 24,
+     "top": 134
+    },
+    "colourShare": 0.017
+   },
+   "consoleErrors": []
+  },
+  {
+   "width": 1440,
+   "height": 900,
+   "load": "load",
+   "screens": 2,
+   "filled": [
+    0.75,
+    0.76
+   ],
+   "motion": {
+    "elements": 1,
+    "css": 1,
+    "transitions": 0,
+    "scripted": 0,
+    "videos": 0,
+    "playingVideos": 0
+   },
+   "metrics": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "page": {
+     "height": 1527,
+     "screens": 1.7,
+     "words": 727,
+     "img": 0,
+     "video": 0,
+     "canvas": 1,
+     "svg": 12,
+     "sections": 5,
+     "horizontalOverflow": 0,
+     "overflowCulprits": [],
+     "uiFragments": 0,
+     "uiAbuse": false,
+     "realPictures": 0,
+     "videoCount": 0,
+     "uiPictures": 0,
+     "pictureSamples": [],
+     "blendText": 0,
+     "sideScrollers": 0,
+     "brokenImages": [],
+     "emoji": [],
+     "videosNoPoster": 0
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 1.7,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 77,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "h1": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "lines": 1,
+     "size": 24,
+     "font": "Fira Sans"
+    },
+    "headings": [],
+    "headingSummary": {
+     "count": 0,
+     "maxLines": 0,
+     "over2Lines": 0,
+     "statements": 0,
+     "centered": 0,
+     "medianWords": null,
+     "mixedFontHeadings": 0
+    },
+    "type": {
+     "families": [
+      {
+       "family": "Fira Sans",
+       "share": 0.91,
+       "mono": false
+      },
+      {
+       "family": "Fira Code",
+       "share": 0.09,
+       "mono": true
+      }
+     ],
+     "familyCount": 2,
+     "sizes": [
+      11,
+      12,
+      13,
+      16,
+      20,
+      21,
+      24
+     ],
+     "sizeCount": 7,
+     "notLoaded": [],
+     "body": {
+      "font": "Fira Sans",
+      "size": 12,
+      "leading": 1.2,
+      "weight": 400,
+      "tracking": 0,
+      "contrast": 9.1
+     },
+     "measureChars": 153,
+     "max": {
+      "size": 24,
+      "vw": 1.7,
+      "font": "Fira Sans",
+      "text": "Gas turbine workbench"
+     },
+     "monoShare": 0.09,
+     "monoProseShare": 0.09,
+     "monoFamilies": [
+      "Fira Code"
+     ],
+     "monoSamples": [
+      "96 samples · 15 min",
+      "26.30 MW",
+      "24.67 MW",
+      "-1.63 MW",
+      "0 / 96",
+      "81.2%"
+     ],
+     "microLabels": 0,
+     "microLabelShare": 0,
+     "microSamples": [],
+     "upperShare": 0.02,
+     "centerShare": 0.06,
+     "smallText": 20
+    },
+    "eyebrows": [],
+    "numbered": [],
+    "color": {
+     "bodyBg": "#101112",
+     "bodyBgHsl": {
+      "h": 210,
+      "s": 0.06,
+      "l": 0.07
+     },
+     "dark": true,
+     "sectionBgs": [
+      {
+       "color": "#101112",
+       "top": 0,
+       "hsl": {
+        "h": 210,
+        "s": 0.06,
+        "l": 0.07
+       }
+      },
+      {
+       "color": "#08090a",
+       "top": 280,
+       "hsl": {
+        "h": 210,
+        "s": 0.11,
+        "l": 0.04
+       }
+      }
+     ],
+     "textColors": [
+      {
+       "color": "#b1b4b6",
+       "share": 0.8
+      },
+      {
+       "color": "#f5f6f7",
+       "share": 0.09
+      },
+      {
+       "color": "#e4e6e7",
+       "share": 0.05
+      },
+      {
+       "color": "#d0d2d3",
+       "share": 0.03
+      },
+      {
+       "color": "#dbb77e",
+       "share": 0.02
+      }
+     ],
+     "button": null,
+     "lowContrast": []
+    },
+    "buttons": {
+     "count": 6,
+     "inHero": 5,
+     "radius": 4,
+     "height": 32,
+     "withShadow": 0,
+     "withGradient": 0,
+     "mono": 0,
+     "upper": 0,
+     "heroLabels": [
+      "Schematic",
+      "Reset camera",
+      "Explode view",
+      "Isolate component",
+      "Pause rotor"
+     ]
+    },
+    "surfaces": {
+     "shadowStatic": 0,
+     "shadowOverlay": 0,
+     "shadowSamples": [],
+     "gradients": 0,
+     "scrims": 0,
+     "gradientSamples": [],
+     "gradientText": 0,
+     "hairlines": 21,
+     "hairlineSamples": [
+      "aside.sidebar 58px",
+      "header.topbar 1382px",
+      "div.metric-row 1326px",
+      "div.panel-heading.viewer-heading 918px",
+      "div.viewer-control-row 918px"
+     ],
+     "outlinedBoxes": 3,
+     "dashed": 0,
+     "blurred": 0,
+     "roundedBoxes": 0,
+     "boxRadius": 0,
+     "squareMedia": 1,
+     "roundedMedia": 0,
+     "mediaRadius": 0,
+     "textShadow": 0,
+     "cardRows": []
+    },
+    "heroMedia": [
+     {
+      "type": "canvas",
+      "ratio": 0.3
+     }
+    ],
+    "nav": {
+     "links": 0,
+     "fixed": true,
+     "height": 900,
+     "floatingPill": false,
+     "blur": false
+    },
+    "fontsLoaded": [
+     "fira sans",
+     "fira code"
+    ]
+   },
+   "layout": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "pageH": 1527,
+    "margins": {
+     "left": 84,
+     "right": 28
+    },
+    "sections": [
+     {
+      "sel": "div.visual-workspace",
+      "tag": "div",
+      "top": 280,
+      "height": 754,
+      "words": 196,
+      "media": 1,
+      "middle": 34,
+      "heading": {
+       "text": "Compressor",
+       "size": 20,
+       "tag": "h2"
+      },
+      "left": 87,
+      "right": 45,
+      "textLeft": 100,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": false,
+      "hero": true,
+      "continues": false,
+      "pinned": false
+     },
+     {
+      "sel": "section.timeline-panel.panel",
+      "tag": "section",
+      "top": 1050,
+      "height": 366,
+      "words": 63,
+      "media": 1,
+      "middle": 0,
+      "heading": {
+       "text": "Electrical output over 24 hours",
+       "size": 16,
+       "tag": "h2"
+      },
+      "left": 103,
+      "right": 45,
+      "textLeft": 103,
+      "textRight": 45,
+      "fullBleed": false,
+      "footer": true,
+      "hero": false,
+      "continues": false,
+      "pinned": false
+     }
+    ],
+    "gaps": [],
+    "h1s": [
+     {
+      "text": "Gas turbine workbench",
+      "size": 24,
+      "top": 77,
+      "firstScreen": true
+     }
+    ],
+    "edgeText": [],
+    "edges": [
+     {
+      "x": 102,
+      "n": 2
+     },
+     {
+      "x": 86,
+      "n": 1
+     },
+     {
+      "x": 1039,
+      "n": 1
+     }
+    ],
+    "leftBlocks": 4,
+    "bodySize": 12,
+    "stage": false,
+    "explains": false,
+    "slivers": [],
+    "voidShare": 0.03,
+    "voidBox": {
+     "x": 0,
+     "y": 180,
+     "w": 60,
+     "h": 720
+    }
+   },
+   "app": {
+    "viewport": {
+     "w": 1440,
+     "h": 900
+    },
+    "dark": true,
+    "ground": "#101112",
+    "sidebar": null,
+    "topbar": null,
+    "canvas": {
+     "left": 19,
+     "right": 28
+    },
+    "hero": {
+     "text": "Gas turbine workbench",
+     "words": 3,
+     "chars": 21,
+     "lines": 1,
+     "size": 24,
+     "vw": 1.7,
+     "font": "Fira Sans",
+     "weight": 600,
+     "tracking": -0.02,
+     "leading": 1.2,
+     "top": 77,
+     "tag": "h1",
+     "kind": "heading",
+     "align": "left",
+     "position": "left"
+    },
+    "charts": 4,
+    "layout": {
+     "panels": 4,
+     "firstScreen": 3,
+     "ragged": [],
+     "voids": []
+    },
+    "tiles": 0,
+    "panels": {
+     "count": 10,
+     "radii": [
+      [
+       0,
+       7
+      ],
+      [
+       5,
+       3
+      ]
+     ],
+     "heavyBorders": 0,
+     "borderSamples": [],
+     "heavyShadows": 0,
+     "softShadows": 0,
+     "shadowSamples": [],
+     "glass": 0
+    },
+    "chips": {
+     "count": 0,
+     "hues": 0,
+     "samples": []
+    },
+    "numbers": {
+     "cells": 0,
+     "leftAligned": 0,
+     "figures": 3,
+     "tabularShare": 1,
+     "kpiMax": 13
+    },
+    "rows": null,
+    "chartHues": 2,
+    "placeholders": [],
+    "type": {
+     "under13": 0.25,
+     "tiny": 0,
+     "tinySamples": [],
+     "sizes": [
+      11,
+      12,
+      13,
+      16,
+      20,
+      21,
+      24
+     ]
+    },
+    "title": {
+     "text": "Gas turbine workbench",
+     "size": 24,
+     "top": 77
+    },
+    "colourShare": 0.01
+   },
+   "consoleErrors": []
+  }
+ ],
+ "findings": [],
+ "images": [
+  {
+   "viewport": "mobile",
+   "width": 375,
+   "fold": "docs/redesign/before/mobile-fold.jpg",
+   "pages": [
+    "docs/redesign/before/mobile-filmstrip.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 768,
+   "fold": "docs/redesign/before/tablet-768-fold.jpg",
+   "pages": [
+    "docs/redesign/before/tablet-768-filmstrip.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "tablet",
+   "width": 1024,
+   "fold": "docs/redesign/before/tablet-1024-fold.jpg",
+   "pages": [
+    "docs/redesign/before/tablet-1024-filmstrip.jpg"
+   ],
+   "film": []
+  },
+  {
+   "viewport": "desktop",
+   "width": 1440,
+   "fold": "docs/redesign/before/desktop-fold.jpg",
+   "pages": [
+    "docs/redesign/before/desktop-filmstrip.jpg"
+   ],
+   "film": []
+  }
+ ]
+}

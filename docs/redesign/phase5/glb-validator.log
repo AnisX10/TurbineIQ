@@ -1,0 +1,38 @@
+node.exe : npm notice run npx
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run npx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run gltf-transform validate <home>\AppData\Local\Temp\turbineiq-turbine-meshopt.glb
+
+ ERROR
+ ────────────────────────────────────────────
+info: No errors found.
+
+
+
+ WARNING
+ ────────────────────────────────────────────
+info: No warnings found.
+
+
+
+ INFO
+ ────────────────────────────────────────────
+[90m┌───────────────────────[39m[90m┬──────────────────────────────────────────────────────────────────────────────────────────────────[39m[90m┬──────────[39m[90m┬───────────────────┐[39m
+[90m│[39m[31m code                  [39m[90m│[39m[31m message                                                                                          [39m[90m│[39m[31m severity [39m[90m│[39m[31m pointer           [39m[90m│[39m
+[90m├───────────────────────[39m[90m┼──────────────────────────────────────────────────────────────────────────────────────────────────[39m[90m┼──────────[39m[90m┼───────────────────┤[39m
+[90m│[39m UNSUPPORTED_EXTENSION [90m│[39m Cannot validate an extension as it is not supported by the validator: 'EXT_meshopt_compression'. [90m│[39m 2        [90m│[39m /extensionsUsed/0 [90m│[39m
+[90m├───────────────────────[39m[90m┼──────────────────────────────────────────────────────────────────────────────────────────────────[39m[90m┼──────────[39m[90m┼───────────────────┤[39m
+[90m│[39m UNUSED_OBJECT         [90m│[39m This object may be unused.                                                                       [90m│[39m 2        [90m│[39m /buffers/0        [90m│[39m
+[90m└───────────────────────[39m[90m┴──────────────────────────────────────────────────────────────────────────────────────────────────[39m[90m┴──────────[39m[90m┴───────────────────┘[39m
+
+
+
+ HINT
+ ────────────────────────────────────────────
+info: No hints found.
+
+

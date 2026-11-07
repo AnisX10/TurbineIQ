@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360">
+  <defs>
+    <symbol id="cycle" viewBox="0 0 24 24">
+      <path d="M2.5 21 6.5 7.5Q13 5.5 21.5 2.5L18.8 16.8Q10 20 2.5 21Z" fill="none" stroke="currentColor" stroke-width="1.75" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="2.5" cy="21" r="1.2" fill="currentColor"/>
+      <circle cx="6.5" cy="7.5" r="1.2" fill="currentColor"/>
+      <circle cx="21.5" cy="2.5" r="1.2" fill="currentColor"/>
+      <circle cx="18.8" cy="16.8" r="1.2" fill="currentColor"/>
+    </symbol>
+    <symbol id="cycle-small" viewBox="0 0 24 24">
+      <path d="M2.5 21 6.5 7.5Q13 5.5 21.5 2.5L18.8 16.8Q10 20 2.5 21Z" fill="none" stroke="currentColor" stroke-width="1.75" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <style>
+      text { font-family: ui-monospace, Consolas, monospace; }
+      .label { font-size: 12px; letter-spacing: .04em; }
+      .scale { font-size: 11px; }
+    </style>
+  </defs>
+  <rect width="720" height="180" fill="#f2f4f7"/>
+  <rect y="180" width="720" height="180" fill="#0e0f11"/>
+  <text x="28" y="28" class="label" fill="#0a0a0a">LIGHT GROUND  #f2f4f7</text>
+  <text x="28" y="208" class="label" fill="#f2f3f4">DARK GROUND  #0e0f11</text>
+  <use href="#cycle-small" x="78" y="72" width="16" height="16" color="#0a0a0a"/>
+  <use href="#cycle" x="236" y="70" width="20" height="20" color="#0a0a0a"/>
+  <use href="#cycle" x="392" y="68" width="24" height="24" color="#0a0a0a"/>
+  <use href="#cycle" x="576" y="56" width="48" height="48" color="#0a0a0a"/>
+  <text x="86" y="136" text-anchor="middle" class="scale" fill="#0a0a0a">16 px</text>
+  <text x="246" y="136" text-anchor="middle" class="scale" fill="#0a0a0a">20 px</text>
+  <text x="404" y="136" text-anchor="middle" class="scale" fill="#0a0a0a">24 px</text>
+  <text x="600" y="136" text-anchor="middle" class="scale" fill="#0a0a0a">48 px</text>
+  <use href="#cycle-small" x="78" y="252" width="16" height="16" color="#f2f3f4"/>
+  <use href="#cycle" x="236" y="250" width="20" height="20" color="#f2f3f4"/>
+  <use href="#cycle" x="392" y="248" width="24" height="24" color="#f2f3f4"/>
+  <use href="#cycle" x="576" y="236" width="48" height="48" color="#f2f3f4"/>
+  <text x="86" y="316" text-anchor="middle" class="scale" fill="#f2f3f4">16 px</text>
+  <text x="246" y="316" text-anchor="middle" class="scale" fill="#f2f3f4">20 px</text>
+  <text x="404" y="316" text-anchor="middle" class="scale" fill="#f2f3f4">24 px</text>
+  <text x="600" y="316" text-anchor="middle" class="scale" fill="#f2f3f4">48 px</text>
+</svg>

@@ -1,0 +1,8 @@
+.engine-banner { display: grid; gap: 7px; margin: 0 0 12px; padding: 10px 12px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; }
+.engine-activation-list { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 9px; color: var(--muted); font-size: 11px; }
+.engine-banner code { overflow-wrap: anywhere; color: var(--text); font: 11px var(--mono); }
+.engine-start-row { display: flex; align-items: center; gap: 9px; }
+.engine-start-row > code { min-width: 0; flex: 1; }
+.engine-copy { min-height: 36px; display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 6px; padding: 0 9px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 5px; background: transparent; font-size: 11px; cursor: pointer; }
+.engine-copy-status { min-height: 0; color: var(--muted); font-size: 11px; }
+@media (max-width: 520px) { .engine-start-row { align-items: stretch; flex-direction: column; } .engine-copy { align-self: flex-start; } }

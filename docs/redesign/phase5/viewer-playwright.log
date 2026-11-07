@@ -1,0 +1,18 @@
+node.exe : npm notice run frontend@0.0.0 npx
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 npx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run playwright test e2e/phase5-viewer.spec.ts
+
+Running 3 tests using 1 worker
+
+(node:21500) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\phase5-viewer.spec.ts:38:1 › viewer actions and every component mesh remain keyboard accessible (22.1s)
+  ok 2 e2e\phase5-viewer.spec.ts:108:1 › demand rendering stops while idle, animates camera and rotor only on request (6.9s)
+  ok 3 e2e\phase5-viewer.spec.ts:142:1 › reduced motion disables rotor animation and removes camera easing (3.7s)
+
+  3 passed (36.4s)

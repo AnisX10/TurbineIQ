@@ -1,0 +1,17 @@
+node.exe : npm notice run frontend@0.0.0 test
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 test:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run vitest run
+
+ RUN  v5.1.0 <repo>/frontend
+
+
+ Test Files  3 passed (3)
+      Tests  14 passed (14)
+   Start at  01:16:32
+   Duration  3.85s (environment 98%, transform 1%, import 1%, tests 1%)
+

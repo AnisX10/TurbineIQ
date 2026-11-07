@@ -1,0 +1,32 @@
+
+.component-ledger { min-width: 0; color: var(--text); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.component-ledger { overflow: hidden; }
+.component-rows { border-top: 1px solid var(--rule); }
+.component-row { width: 100%; min-height: 44px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(54px, auto) minmax(78px, auto); align-items: center; gap: 7px; padding: 0 12px; color: var(--text); border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: transparent; text-align: left; cursor: pointer; }
+.component-row:hover, .component-row.is-selected { background: var(--raised); }
+.component-row.is-selected { border-left: 2px solid var(--text); }
+.component-name { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.neutral-status { max-width: 110px; padding: 3px 6px; color: var(--pill-neutral-ink); border: 1px solid var(--control); border-radius: 999px; background: var(--pill-neutral-bg); font-size: 11px; line-height: 1.15; text-align: center; white-space: normal; overflow-wrap: anywhere; }
+.component-primary { color: var(--text); font: 12px var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.published-reference h3 { margin: 0 0 7px; color: var(--text); font-size: 13px; font-weight: 600; }
+.mesh-picker-placeholder { padding: 9px 12px; color: var(--muted); border-bottom: 1px solid var(--border); font-size: 11px; line-height: 1.4; }
+.mesh-picker-slot { min-height: 54px; border-bottom: 1px solid var(--border); }
+.mesh-picker-slot:empty::before { content: "Model sub-parts load with the Stage."; display: block; padding: 18px 12px; color: var(--muted); font-size: 11px; }
+.mesh-picker-slot .part-browser { padding: 9px 12px; }
+.component-ledger .mesh-picker-slot .part-browser { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+.published-reference { padding: 12px; border-bottom: 1px solid var(--border); }
+.published-reference dl { margin: 0; }
+.published-reference dl > div { min-height: 27px; display: flex; justify-content: space-between; align-items: center; gap: 8px; border-top: 1px solid var(--rule); }
+.published-reference dt { color: var(--muted); font-size: 11px; }
+.published-reference dd { margin: 0; color: var(--text); font: 11px var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.published-reference p { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+.component-detail-link { min-height: 44px; display: flex; align-items: center; padding: 0 12px; color: var(--text); font-size: 12px; }
+.component-detail-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 1120px) {
+  .component-ledger { order: 2; }
+}
+@media (max-width: 620px) {
+  .component-row { grid-template-columns: minmax(0, 1fr) minmax(54px, auto) minmax(72px, auto); gap: 5px; padding-inline: 8px; }
+  .component-primary { font-size: 11px; }
+  .neutral-status { max-width: 110px; padding: 3px 5px; font-size: 11px; }
+}

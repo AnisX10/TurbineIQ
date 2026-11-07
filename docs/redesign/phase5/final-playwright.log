@@ -1,0 +1,81 @@
+node.exe : npm notice run frontend@0.0.0 test:e2e
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 test:e2e:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run npm run build && playwright test
+npm warn Unknown env config "global-ignore-file". This will stop working in the next major version of npm. See `npm
+help npmrc` for supported config options.
+
+> frontend@0.0.0 build
+> tsc -b && vite build
+
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2653 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               1.39 kB │ gzip:   0.58 kB
+dist/assets/Evidence-BywM2uOC.css             0.41 kB │ gzip:   0.27 kB
+dist/assets/EvidencePanel-FlwjLijT.css        3.96 kB │ gzip:   1.10 kB
+dist/assets/ComponentDetail-Zj-e8Co-.css      4.75 kB │ gzip:   1.27 kB
+dist/assets/Assistant-C6hAzeH0.css            5.06 kB │ gzip:   1.41 kB
+dist/assets/index-CuYjH2kj.css               37.62 kB │ gzip:   7.65 kB
+dist/assets/Evidence-BhKpYL1T.js              0.22 kB │ gzip:   0.19 kB
+dist/assets/EvidencePanel-Y0N9Q3EK.js         5.88 kB │ gzip:   2.18 kB
+dist/assets/Assistant-DEgUTAyP.js             6.74 kB │ gzip:   2.39 kB
+dist/assets/ComponentDetail-Dd_MLDPn.js       6.86 kB │ gzip:   2.17 kB
+dist/assets/jsx-runtime-Wy9s6hX0.js           8.91 kB │ gzip:   3.39 kB
+dist/assets/index-DnYqf_lc.js               274.73 kB │ gzip:  84.72 kB
+dist/assets/TurbineViewer-CjSnJc77.js     1,039.67 kB │ gzip: 279.14 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking:
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.15s
+
+Running 16 tests using 2 workers
+
+(node:14744) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:27056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  2 e2e\app.spec.ts:30:1 › Overview paints its Stage frame while run data is still loading (1.0s)
+AXE light Overview default: 0 serious/critical
+AXE light Overview Boundary sheet: 0 serious/critical
+AXE light Component detail default: 0 serious/critical
+AXE light Component detail Over time: 0 serious/critical
+AXE light Component detail Evidence: 0 serious/critical
+AXE light Evidence default: 0 serious/critical
+AXE light Assistant default: 0 serious/critical
+AXE light Assistant Cloud consent: 0 serious/critical
+AXE dark Overview default: 0 serious/critical
+AXE dark Overview Boundary sheet: 0 serious/critical
+AXE dark Component detail default: 0 serious/critical
+AXE dark Component detail Over time: 0 serious/critical
+AXE dark Component detail Evidence: 0 serious/critical
+  ok  1 e2e\phase5-viewer.spec.ts:40:1 › viewer actions and every component mesh remain keyboard accessible (19.0s)
+AXE dark Evidence default: 0 serious/critical
+AXE dark Assistant default: 0 serious/critical
+AXE dark Assistant Cloud consent: 0 serious/critical
+  ok  3 e2e\app.spec.ts:68:1 › axe audits all four routes, component tabs, and Cloud consent in both themes (21.6s)
+  ok  5 e2e\app.spec.ts:99:1 › Evidence restores URL searches and explains an honest no-evidence result (892ms)
+  ok  4 e2e\phase5-viewer.spec.ts:110:1 › demand rendering stops while idle, animates camera and rotor only on request (6.9s)
+  ok  6 e2e\app.spec.ts:114:1 › keyboard traversal covers tabs, evidence selection, consent, composer, and replay (6.1s)
+  ok  7 e2e\phase5-viewer.spec.ts:145:1 › reduced motion disables rotor animation and removes camera easing (3.9s)
+  ok  9 e2e\phase5-viewer.spec.ts:167:1 › responsive stage resizes without browser runtime errors (3.5s)
+  ok  8 e2e\app.spec.ts:204:1 › overview scenario, seed, replay, mesh inspection, Evidence search, and Local Assistant still work (3.8s)
+  ok 10 e2e\app.spec.ts:265:1 › Cloud consent always precedes a mocked provider request and document excerpts are opt-in (1.3s)
+  ok 11 e2e\app.spec.ts:293:1 › Assistant request failures expose a retry action (702ms)
+  ok 12 e2e\app.spec.ts:312:1 › Assistant shows its scenario name and busy rule only during a local request (866ms)
+  ok 13 e2e\app.spec.ts:334:1 › Offline engine guidance uses a portable command with shell activation and copy action (821ms)
+  ok 14 e2e\app.spec.ts:349:1 › Component ledger formats sample time and percentage values without duplicated reference provenance (586ms)
+  ok 15 e2e\app.spec.ts:359:1 › viewport screenshots cover every route, width, and theme without horizontal page scroll (23.9s)
+  ok 16 e2e\app.spec.ts:386:1 › 320px layouts have no horizontal page scroll and reduced motion disables rotor motion (1.9s)
+
+  16 passed (1.1m)
