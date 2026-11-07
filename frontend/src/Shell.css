@@ -18,6 +18,7 @@
   top: 8px;
   left: 8px;
   padding: 10px 14px;
+  min-height: 44px;
   color: var(--text);
   border: 1px solid var(--control-strong);
   border-radius: 6px;

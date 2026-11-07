@@ -13,9 +13,20 @@ interface ModelStatus {
   failed: boolean
 }
 
-function StagePreview() {
+function hasWebGLSupport(): boolean {
+  try {
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('webgl2') ?? canvas.getContext('webgl')
+    context?.getExtension('WEBGL_lose_context')?.loseContext()
+    return context !== null
+  } catch {
+    return false
+  }
+}
+
+function StagePreview({ message = 'Loading interactive Stage' }: { message?: string }) {
   return (
-    <div className="stage-preview" role="img" aria-label="Simplified gas turbine schematic loading">
+    <div className="stage-preview" role="img" aria-label={`Simplified gas turbine schematic. ${message}`}>
       <svg viewBox="0 0 640 480" aria-hidden="true">
         <path d="M72 240h496" className="preview-shaft" />
         <path d="M95 188h138l34 52-34 52H95z" className="preview-component" />
@@ -24,7 +35,7 @@ function StagePreview() {
         <path d="M113 212h105m72 0h65m58-1h90" className="preview-detail" />
         <text x="164" y="365">COMPRESSOR</text><text x="324" y="365">COMBUSTOR</text><text x="458" y="365">TURBINE</text>
       </svg>
-      <span>Loading interactive Stage</span>
+      <span>{message}</span>
     </div>
   )
 }
@@ -38,6 +49,7 @@ export function StageCard({ components, selectedComponentId, onSelectComponent, 
   const [spinning, setSpinning] = useState(false)
   const [cameraKey, setCameraKey] = useState(0)
   const [canvasReady, setCanvasReady] = useState(false)
+  const [webglAvailable] = useState(hasWebGLSupport)
   const [reduceMotion, setReduceMotion] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
   useEffect(() => {
     if (!active) return
@@ -100,7 +112,7 @@ export function StageCard({ components, selectedComponentId, onSelectComponent, 
 
   return (
     <section className="viewer-panel panel" aria-labelledby="stage-title">
-      <div className="viewer-heading"><div><h2 id="stage-title">Stage</h2><p>GE 6B.03 · simplified reference</p></div><span className="model-state" role="status">{model.failed ? 'Schematic fallback' : modelInteractive ? 'Blender GLB' : active ? 'Loading local GLB' : 'Preparing synthetic run'}</span></div>
+      <div className="viewer-heading"><div><h2 id="stage-title">Stage</h2><p>GE 6B.03 · simplified reference</p></div><span className="model-state" role="status">{!webglAvailable ? 'Static schematic' : model.failed ? 'Schematic fallback' : modelInteractive ? 'Blender GLB' : active ? 'Loading local GLB' : 'Preparing synthetic run'}</span></div>
       <div className="stage-toolbar" role="group" aria-label="Stage controls">
         <div className="stage-segmented" role="group" aria-label="Stage view">
           <button type="button" aria-pressed={view === 'glb'} disabled={!modelInteractive} onClick={() => setView('glb')}>GLB</button>
@@ -109,10 +121,10 @@ export function StageCard({ components, selectedComponentId, onSelectComponent, 
         {controls.map(({ label, icon: Icon, onClick, pressed, disabled }) => <button key={label} type="button" className="stage-icon-button" aria-label={label} aria-pressed={pressed} aria-disabled={disabled} data-tooltip={label} onClick={(event) => { if (disabled) { event.preventDefault(); return } onClick() }}><Icon size={17} strokeWidth={1.8} aria-hidden="true" /><span className="sr-only">{label}</span></button>)}
       </div>
       <div className="stage-viewport" ref={viewportRef}>
-        {canvasReady ? <Suspense fallback={<StagePreview />}>
-          <TurbineCanvas components={components} selectedComponentId={selectedComponentId} onSelectComponent={onSelectComponent} view={view} exploded={exploded} isolated={isolated} spinning={spinning} cameraKey={cameraKey} onModelStatus={setModel} />
+        {!webglAvailable ? <StagePreview message="WebGL is unavailable; showing the static schematic." /> : canvasReady ? <Suspense fallback={<StagePreview />}>
+          <TurbineCanvas components={components} selectedComponentId={selectedComponentId} onSelectComponent={onSelectComponent} view={view} exploded={exploded} isolated={isolated} spinning={spinning} reduceMotion={reduceMotion} cameraKey={cameraKey} onModelStatus={setModel} />
         </Suspense> : <StagePreview />}
-        <div className="viewer-note">Orbit with drag. Pan with right-drag. Zoom with scroll. Click a part to inspect.</div>
+        <div className="viewer-note">{webglAvailable ? 'Orbit with drag. Pan with right-drag. Zoom with scroll. Click a part to inspect.' : 'WebGL is unavailable; showing the static schematic.'}</div>
       </div>
       <div className="stage-info-slot" ref={setStageInfoHost} />
     </section>

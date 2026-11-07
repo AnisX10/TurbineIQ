@@ -55,6 +55,7 @@
   .viewer-heading { align-items: flex-start; }
   .viewer-heading h2 { font-size: 22px; }
   .part-browser { grid-template-columns: 1fr; }
+  .part-browser select { min-height: 44px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .stage-icon-button[data-tooltip]::after { transition: none; }

@@ -178,6 +178,16 @@ test('reduced motion disables rotor animation and removes camera easing', async 
   const settled = await drawCount(page)
   await page.waitForTimeout(400)
   expect(await drawCount(page)).toBe(settled)
+
+  const viewport = await page.locator('.stage-viewport').boundingBox()
+  if (!viewport) throw new Error('Stage viewport is not available for the reduced-motion orbit probe.')
+  await page.mouse.move(viewport.x + viewport.width * 0.5, viewport.y + viewport.height * 0.5)
+  await page.mouse.down()
+  await page.mouse.move(viewport.x + viewport.width * 0.64, viewport.y + viewport.height * 0.48, { steps: 1 })
+  await page.mouse.up()
+  const orbitSettled = await waitForStableDrawCount(page)
+  await page.waitForTimeout(400)
+  expect(await drawCount(page)).toBe(orbitSettled)
 })
 
 test('responsive stage resizes without browser runtime errors', async ({ page }) => {

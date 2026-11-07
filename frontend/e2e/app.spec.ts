@@ -403,3 +403,213 @@ test('320px layouts have no horizontal page scroll and reduced motion disables r
     expect(box?.height).toBeGreaterThanOrEqual(44)
   }
 })
+
+test('layouts keep all routes, tabs, and sheets inside 320px and 200%-equivalent viewports', async ({ browser }) => {
+  const states = [
+    ['Overview', routes[0][1], 'overview'],
+    ['Component Metrics', routes[1][1], 'components'],
+    ['Evidence', routes[2][1], 'evidence'],
+    ['Assistant', routes[3][1], 'assistant'],
+  ] as const
+  const layouts: Array<Record<string, unknown>> = []
+  for (const theme of ['light', 'dark'] as const) {
+    for (const layout of [{ width: 320, dpr: 1, name: '320px' }, { width: 720, dpr: 2, name: '200%-equivalent' }]) {
+      const context = await browser.newContext({ viewport: { width: layout.width, height: 900 }, deviceScaleFactor: layout.dpr })
+      await context.addInitScript((savedTheme) => localStorage.setItem('turbineiq-theme', savedTheme), theme)
+      await context.route('**/models/turbine.glb', (request) => request.abort())
+      const page = await context.newPage()
+      const checkLayout = async (name: string) => {
+        const dimensions = await page.evaluate(() => ({ scrollWidth: document.documentElement.scrollWidth, clientWidth: document.documentElement.clientWidth }))
+        layouts.push({ theme, viewport: layout.name, state: name, ...dimensions })
+        expect(dimensions.scrollWidth, `${theme} ${layout.name} ${name}`).toBeLessThanOrEqual(dimensions.clientWidth + 1)
+      }
+      for (const [name, route, kind] of states) {
+        await page.goto(route)
+        await ready(page, kind)
+        if (kind === 'components') {
+          for (const tab of ['Metrics', 'Over time', 'Evidence']) {
+            if (tab !== 'Metrics') await page.getByRole('tab', { name: tab }).click()
+            await checkLayout(`${name} ${tab}`)
+          }
+        } else {
+          await checkLayout(name)
+          if (kind === 'overview') {
+            await page.locator('.boundary-chip').click()
+            await page.getByRole('dialog', { name: 'Boundary' }).waitFor()
+            await checkLayout('Boundary sheet')
+            await page.keyboard.press('Escape')
+            await expect(page.getByRole('dialog', { name: 'Boundary' })).not.toBeVisible()
+          }
+          if (kind === 'assistant') {
+            await page.getByRole('button', { name: 'Cloud' }).click()
+            await page.getByRole('dialog', { name: 'Review Cloud sharing' }).waitFor()
+            await checkLayout('Cloud consent sheet')
+            await page.keyboard.press('Escape')
+            await expect(page.getByRole('dialog', { name: 'Review Cloud sharing' })).not.toBeVisible()
+          }
+        }
+      }
+      await context.close()
+    }
+  }
+  await mkdir(evidenceDir, { recursive: true })
+  await writeFile(resolve(evidenceDir, 'responsive-zoom.json'), JSON.stringify(layouts, null, 2))
+})
+
+test('mobile targets are at least 44px in both themes', async ({ browser }) => {
+  const smallTargets: Array<Record<string, unknown>> = []
+  for (const theme of ['light', 'dark'] as const) {
+    const context = await browser.newContext({ viewport: { width: 375, height: 900 } })
+    await context.addInitScript((savedTheme) => localStorage.setItem('turbineiq-theme', savedTheme), theme)
+    await context.route('**/models/turbine.glb', (request) => request.abort())
+    const page = await context.newPage()
+    for (const [name, route, kind] of routes) {
+      await page.goto(route)
+      await ready(page, kind)
+      if (kind === 'components') {
+        for (const tab of ['Metrics', 'Over time', 'Evidence']) {
+          if (tab !== 'Metrics') await page.getByRole('tab', { name: tab }).click()
+          await collectSmallTargets(page, name, tab, theme, smallTargets)
+        }
+      } else {
+        await collectSmallTargets(page, name, 'default', theme, smallTargets)
+        if (kind === 'overview') {
+          await page.locator('.boundary-chip').click()
+          await collectSmallTargets(page, name, 'Boundary sheet', theme, smallTargets, true)
+          await page.keyboard.press('Escape')
+        }
+        if (kind === 'assistant') {
+          await page.getByRole('button', { name: 'Cloud' }).click()
+          await collectSmallTargets(page, name, 'Cloud consent', theme, smallTargets, true)
+          await page.keyboard.press('Escape')
+        }
+      }
+    }
+    await context.close()
+  }
+  console.log(`TOUCH TARGETS UNDER 44px: ${JSON.stringify(smallTargets)}`)
+  expect(smallTargets).toEqual([])
+})
+
+test('mobile navigation accessible names match the visible destination labels', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'overview')
+  const navigation = page.getByRole('navigation', { name: 'Primary navigation' })
+  const parts = navigation.getByRole('link', { name: 'Parts', exact: true })
+  await expect(parts).toBeVisible()
+  await parts.click()
+  await expect(parts).toHaveAttribute('aria-current', 'page')
+})
+
+async function collectSmallTargets(page: import('@playwright/test').Page, route: string, state: string, theme: string, output: Array<Record<string, unknown>>, dialogOnly = false) {
+  const under = await page.evaluate((onlyDialog) => {
+    const scope: ParentNode = onlyDialog ? document.querySelector('dialog[open]') ?? document : document
+    return [...scope.querySelectorAll('a[href],button,input,select,textarea,summary,[role="tab"],[role="slider"]')]
+      .filter((element) => {
+        const style = getComputedStyle(element)
+        const box = element.getBoundingClientRect()
+        return style.display !== 'none' && style.visibility !== 'hidden' && box.width > 0 && box.height > 0
+      })
+      .map((element) => {
+        const box = element.getBoundingClientRect()
+        return {
+          tag: element.tagName,
+          name: (element.getAttribute('aria-label') || element.textContent || element.getAttribute('placeholder') || '').trim().replaceAll(/\s+/g, ' ').slice(0, 64),
+          width: Math.round(box.width),
+          height: Math.round(box.height),
+        }
+      })
+      .filter((element) => element.width < 44 || element.height < 44)
+  }, dialogOnly)
+  output.push(...under.map((element) => ({ route, state, theme, ...element })))
+}
+
+test('theme preference changes live and System follows OS changes before app paint', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await page.addInitScript(() => localStorage.setItem('turbineiq-theme', 'system'))
+  let earlyTheme: string | null = null
+  page.on('domcontentloaded', async () => {
+    earlyTheme = await page.locator('html').getAttribute('data-theme')
+  })
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'overview')
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/)
+  await expect.poll(() => page.locator('html').evaluate((root) => getComputedStyle(root).getPropertyValue('--ground').trim())).toBe('#f2f4f7')
+  await expect(page.getByText(/Loaded locally in this browser/)).toBeVisible({ timeout: 30000 })
+  const lightStage = await page.locator('.stage-viewport').screenshot({ animations: 'disabled' })
+
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await expect.poll(() => page.locator('html').evaluate((root) => getComputedStyle(root).getPropertyValue('--ground').trim())).toBe('#0e0f11')
+  await expect.poll(async () => (await page.locator('.stage-viewport').screenshot({ animations: 'disabled' })).equals(lightStage)).toBe(false)
+
+  await page.getByRole('button', { name: 'Theme: system' }).click()
+  await page.getByRole('menuitemradio', { name: 'Light' }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light')
+  await page.getByRole('button', { name: 'Theme: light' }).click()
+  await page.getByRole('menuitemradio', { name: 'Dark' }).click()
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+  await page.getByRole('button', { name: 'Theme: dark' }).click()
+  await page.getByRole('menuitemradio', { name: 'System' }).click()
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme', /.+/)
+  expect(earlyTheme).toBeNull()
+})
+
+test('saved light and dark themes are applied by the head script before first paint', async ({ browser }) => {
+  for (const theme of ['light', 'dark'] as const) {
+    const context = await browser.newContext({ viewport: { width: 1024, height: 900 } })
+    await context.addInitScript((savedTheme) => localStorage.setItem('turbineiq-theme', savedTheme), theme)
+    const page = await context.newPage()
+    await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48', { waitUntil: 'domcontentloaded' })
+    const earlyTheme = await page.locator('html').getAttribute('data-theme')
+    expect(earlyTheme, `${theme} theme head-script mutation`).toBe(theme)
+    const ground = await page.locator('html').evaluate((root) => getComputedStyle(root).getPropertyValue('--ground').trim())
+    expect(ground, `${theme} theme ground token`).toBe(theme === 'dark' ? '#0e0f11' : '#f2f4f7')
+    await context.close()
+  }
+})
+
+test('forced colors preserve visible focus, control borders, and segmented selections', async ({ page }) => {
+  await page.emulateMedia({ forcedColors: 'active' })
+  for (const [name, route, kind] of routes) {
+    await page.goto(route)
+    await ready(page, kind)
+    const focusTarget = kind === 'components' ? page.getByRole('tab', { name: 'Metrics' }) : page.locator('.boundary-chip')
+    await focusTarget.focus()
+    const outline = await focusTarget.evaluate((element) => getComputedStyle(element).outlineStyle)
+    expect(outline, `${name} focus ring`).not.toBe('none')
+    if (kind === 'overview') {
+      const borders = await page.locator('.stage-segmented').evaluate((element) => ({ style: getComputedStyle(element).borderTopStyle, color: getComputedStyle(element).borderTopColor }))
+      expect(borders.style).not.toBe('none')
+      expect(borders.color).not.toBe('rgba(0, 0, 0, 0)')
+    }
+    if (kind === 'assistant') {
+      const selection = await page.getByRole('button', { name: 'Local demo-safe' }).getAttribute('aria-pressed')
+      expect(selection).toBe('true')
+    }
+  }
+})
+
+test('a failed GLB request leaves the visible interactive schematic fallback', async ({ page }) => {
+  await page.route('**/models/turbine.glb', (request) => request.fulfill({ status: 404, body: 'missing' }))
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'overview')
+  await expect(page.getByText('The 3D model is unavailable; showing the interactive schematic.')).toBeVisible({ timeout: 30000 })
+  await expect(page.locator('.viewer-stage canvas')).toBeVisible()
+  await expect(page.locator('.model-state')).toHaveText('Schematic fallback')
+})
+
+test('unavailable WebGL keeps the static schematic visible and explains the fallback', async ({ page }) => {
+  await page.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext
+    HTMLCanvasElement.prototype.getContext = function getContext(type: string, ...args: unknown[]) {
+      if (type === 'webgl' || type === 'webgl2' || type === 'experimental-webgl') return null
+      return original.call(this, type, ...args as [never])
+    }
+  })
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'overview')
+  await expect(page.getByRole('img', { name: 'Simplified gas turbine schematic. WebGL is unavailable; showing the static schematic.' })).toBeVisible()
+  await expect(page.locator('.model-state')).toHaveText('Static schematic')
+  await expect(page.locator('.viewer-note')).toHaveText('WebGL is unavailable; showing the static schematic.')
+})

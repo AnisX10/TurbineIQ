@@ -26,4 +26,6 @@
   .filter-sample { flex: 1 1 190px; min-width: 200px; }
   .filter-interval { flex: 0 0 auto; }
   .filter-sample .filter-value { font-size: 11px; }
+  .filter-group select, .filter-group input { min-height: 44px; height: 44px; }
+  .filter-seed, .filter-sample, .filter-interval { min-height: 44px; }
 }

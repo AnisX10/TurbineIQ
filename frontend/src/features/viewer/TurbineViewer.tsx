@@ -32,7 +32,7 @@ function SceneInvalidator({ tokens, components, selectedComponentId, selectionKe
   return null
 }
 
-export function TurbineViewer({ components, selectedComponentId, onSelectComponent, view, exploded, isolated, spinning, cameraKey, onModelStatus }: TurbineViewerProps) {
+export function TurbineViewer({ components, selectedComponentId, onSelectComponent, view, exploded, isolated, spinning, reduceMotion = false, cameraKey, onModelStatus }: TurbineViewerProps & { reduceMotion?: boolean }) {
   const stageTokens = useStageTokens()
   const htmlPortal = useRef<HTMLDivElement>(null)
   const [modelUrl, setModelUrl] = useState<string | null>(null)
@@ -155,7 +155,7 @@ export function TurbineViewer({ components, selectedComponentId, onSelectCompone
               )}
             </Suspense>
           </StageTokenContext.Provider>
-          <OrbitControls enableDamping dampingFactor={0.08} enablePan panSpeed={0.9} zoomSpeed={0.8} rotateSpeed={0.8} minDistance={0.45} maxDistance={26} minPolarAngle={0.035} maxPolarAngle={Math.PI - 0.035} makeDefault />
+          <OrbitControls enableDamping={!reduceMotion} dampingFactor={0.08} enablePan panSpeed={0.9} zoomSpeed={0.8} rotateSpeed={0.8} minDistance={0.45} maxDistance={26} minPolarAngle={0.035} maxPolarAngle={Math.PI - 0.035} makeDefault />
           <ViewerCameraController resetKey={cameraKey} focusTarget={cameraFocus} />
         </Canvas>
         <div className="viewer-axis-label axis-intake">Air inlet</div>

@@ -18,7 +18,7 @@ function ConsentSheet({ open, onCancel, onConfirm, includeDocuments, onIncludeDo
   return <Sheet open={open} onClose={onCancel} className="sheet-consent assistant-consent-sheet" labelledBy="cloud-consent-title" describedBy="cloud-consent-copy">
     <h2 id="cloud-consent-title">Review Cloud sharing</h2>
     <p id="cloud-consent-copy">The configured provider receives your question, TurbineIQ assistant instructions and allowed-tool descriptions, and the server-recomputed synthetic run metadata, selected sample, and selected component when present. It also receives results from local tools used to answer. If you enable the option below and the assistant searches local documents, the matching excerpts and citations are sent too.</p>
-    <label className="assistant-consent-check"><input type="checkbox" checked={includeDocuments} onChange={(event) => onIncludeDocuments(event.target.checked)} /> Allow local document excerpts and citations to be sent if the assistant searches local documents.</label>
+    <label className="assistant-consent-check"><input type="checkbox" checked={includeDocuments} onChange={(event) => onIncludeDocuments(event.target.checked)} /><span className="assistant-consent-checkbox-mark" aria-hidden="true" />Allow local document excerpts and citations to be sent if the assistant searches local documents.</label>
     <p className="assistant-consent-note">This option is off by default. The server still enforces document consent.</p>
     <div className="assistant-consent-actions"><button type="button" className="button-quiet" onClick={onCancel}>Cancel</button><button type="button" className="assistant-ask-button" data-sheet-autofocus onClick={onConfirm}>Continue to Cloud</button></div>
   </Sheet>

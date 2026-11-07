@@ -237,12 +237,12 @@ export function IconRail({
 export function MobileBottomBar({ page, selectedComponentId }: { page: RoutePage; selectedComponentId: string }) {
   return (
     <nav className="mobile-bottom-bar" aria-label="Primary navigation">
-      {NAV_ITEMS.map(({ page: itemPage, label, mobileLabel, icon: Icon }) => (
+      {NAV_ITEMS.map(({ page: itemPage, mobileLabel, icon: Icon }) => (
         <a
           className={`mobile-nav-link ${page === itemPage ? 'is-active' : ''}`}
           key={itemPage}
           href={routeHref(itemPage, selectedComponentId)}
-          aria-label={itemPage === 'components' ? 'Components (Parts)' : label}
+          aria-label={mobileLabel}
           aria-current={page === itemPage ? 'page' : undefined}
         >
           <Icon size={16} strokeWidth={1.5} aria-hidden="true" />

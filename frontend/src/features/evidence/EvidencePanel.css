@@ -1,9 +1,9 @@
 .evidence-workspace { min-width: 0; display: grid; gap: 12px; }
 .evidence-search { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 7px; }
 .evidence-query, .evidence-top-k { min-width: 0; min-height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--muted); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); }
-.evidence-query input, .evidence-top-k input { min-width: 0; height: 40px; padding: 0; color: var(--text); border: 0; outline: 0; background: transparent; font: 13px var(--sans); }
+.evidence-query input, .evidence-top-k input { min-width: 0; height: 44px; padding: 0; color: var(--text); border: 0; outline: 0; background: transparent; font: 13px var(--sans); }
 .evidence-query input { width: 100%; }
-.evidence-top-k input { width: 38px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.evidence-top-k input { width: 44px; min-height: 44px; font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .evidence-search > button { min-width: 82px; min-height: 44px; padding: 0 12px; color: var(--surface); border: 1px solid var(--text); border-radius: 6px; background: var(--text); font-size: 12px; font-weight: 600; }
 .evidence-search > button:disabled { opacity: 0.55; cursor: not-allowed; }
 .evidence-error { margin: -5px 0 0; color: var(--negative); font-size: 11px; }
