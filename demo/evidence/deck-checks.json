@@ -217,5 +217,30 @@
       810
     ],
     "bytes": 943567
+  },
+  "speakerNotes": {
+    "slides": 8,
+    "sentencesPerSlide": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "wordsPerSlide": [
+      35,
+      37,
+      36,
+      42,
+      40,
+      36,
+      37,
+      38
+    ],
+    "totalWords": 301,
+    "estimatedMinutesAt100WordsPerMinute": 3.01
   }
 }

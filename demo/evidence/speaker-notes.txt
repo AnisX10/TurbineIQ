@@ -1,0 +1,5 @@
+Slides: 8
+Sentences per slide: 2
+Words per slide: 35, 37, 36, 42, 40, 36, 37, 38
+Total: 301 words
+Estimated time at 100 words per minute: 3.01 minutes
