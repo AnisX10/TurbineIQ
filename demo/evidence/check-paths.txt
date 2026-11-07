@@ -1,0 +1,3 @@
+Command: npm run check:paths (run from frontend/)
+Result: Documentation path scan passed (README.md and docs/).
+Exit code: 0

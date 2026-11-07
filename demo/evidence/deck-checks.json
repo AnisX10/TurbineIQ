@@ -1,0 +1,221 @@
+{
+  "fileProtocol": true,
+  "externalNetworkRequests": [],
+  "fonts": [
+    {
+      "family": "Geist",
+      "weight": "400",
+      "status": "loaded"
+    },
+    {
+      "family": "Geist",
+      "weight": "500",
+      "status": "loaded"
+    },
+    {
+      "family": "Geist",
+      "weight": "600",
+      "status": "loaded"
+    },
+    {
+      "family": "Geist Mono",
+      "weight": "400",
+      "status": "loaded"
+    },
+    {
+      "family": "Geist Mono",
+      "weight": "500",
+      "status": "loaded"
+    }
+  ],
+  "imageStatus": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "viewports": [
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "pageScroll": [
+        1920,
+        1080
+      ],
+      "stage": [
+        0,
+        0,
+        1920,
+        1080
+      ],
+      "controls": [
+        707.6640625,
+        996,
+        1212.3359375,
+        1058
+      ],
+      "controlTargets": [
+        {
+          "label": "Previous slide",
+          "width": 62.2,
+          "height": 44
+        },
+        {
+          "label": "Next slide",
+          "width": 59.59,
+          "height": 44
+        },
+        {
+          "label": "Show speaker notes (N)",
+          "width": 67.44,
+          "height": 44
+        },
+        {
+          "label": "Toggle text editing (E)",
+          "width": 84.06,
+          "height": 44
+        },
+        {
+          "label": "Toggle full screen (F)",
+          "width": 101.38,
+          "height": 44
+        }
+      ],
+      "overflow": []
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "pageScroll": [
+        1280,
+        720
+      ],
+      "stage": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "controls": [
+        387.6640625,
+        636,
+        892.3359375,
+        698
+      ],
+      "controlTargets": [
+        {
+          "label": "Previous slide",
+          "width": 62.2,
+          "height": 44
+        },
+        {
+          "label": "Next slide",
+          "width": 59.59,
+          "height": 44
+        },
+        {
+          "label": "Show speaker notes (N)",
+          "width": 67.44,
+          "height": 44
+        },
+        {
+          "label": "Toggle text editing (E)",
+          "width": 84.06,
+          "height": 44
+        },
+        {
+          "label": "Toggle full screen (F)",
+          "width": 101.38,
+          "height": 44
+        }
+      ],
+      "overflow": []
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "pageScroll": [
+        390,
+        844
+      ],
+      "stage": [
+        0,
+        312.3125,
+        390,
+        219.375
+      ],
+      "controls": [
+        10,
+        766,
+        380,
+        822
+      ],
+      "controlTargets": [
+        {
+          "label": "Previous slide",
+          "width": 47.31,
+          "height": 44
+        },
+        {
+          "label": "Next slide",
+          "width": 45.08,
+          "height": 44
+        },
+        {
+          "label": "Show speaker notes (N)",
+          "width": 51.8,
+          "height": 44
+        },
+        {
+          "label": "Toggle text editing (E)",
+          "width": 66.06,
+          "height": 44
+        },
+        {
+          "label": "Toggle full screen (F)",
+          "width": 80.91,
+          "height": 44
+        }
+      ],
+      "overflow": []
+    }
+  ],
+  "contrast": {
+    "measurement": "Computed foreground against nearest solid CSS background for visible slide text",
+    "minimumRatio": 5.54,
+    "requiredRatio": 4.5,
+    "violations": []
+  },
+  "keyboard": {
+    "home": "01 / 08",
+    "right": "02 / 08",
+    "down": "03 / 08",
+    "end": "08 / 08",
+    "left": "07 / 08",
+    "notesShown": true,
+    "fullscreenKey": true,
+    "counter": "07 / 08"
+  },
+  "reducedMotion": {
+    "activeAnimations": 0,
+    "transitions": 0,
+    "animations": 0
+  },
+  "pdf": {
+    "pages": 8,
+    "pageSizePoints": [
+      1440,
+      810
+    ],
+    "bytes": 943567
+  }
+}

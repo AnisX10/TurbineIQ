@@ -1,0 +1,5 @@
+Command: PowerShell here-string piped to node --input-type=module - using already-installed local Playwright Chromium.
+Method: screenshot each visible .slide at 1920x1080, then combine the 8 slide images into PDF pages with Playwright Chromium print output.
+Source opened as: file://<repo>/demo/turbineiq-demo.html.
+External HTTP(S) requests: 0.
+PDF: demo/turbineiq-demo.pdf (8 pages, 1440 x 810 pt).

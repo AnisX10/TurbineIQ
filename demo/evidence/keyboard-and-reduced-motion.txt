@@ -1,0 +1,3 @@
+Home 01 / 08; ArrowRight 02 / 08; ArrowDown 03 / 08; End 08 / 08; ArrowLeft 07 / 08
+N toggled notes: true; F key enabled full screen: true
+Reduced motion: 0 animations, 0 transitions

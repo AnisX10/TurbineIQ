@@ -1,0 +1,5 @@
+Command: pdfinfo demo/turbineiq-demo.pdf
+Pages: 8
+Page size: 1440 x 810 points
+File size: 943,567 bytes
+PDF version: 1.4

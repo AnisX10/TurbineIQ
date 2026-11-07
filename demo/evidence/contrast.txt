@@ -1,0 +1,4 @@
+Chromium computed-style contrast audit of visible slide text:
+Minimum measured ratio: 5.54:1
+Required minimum: 4.5:1
+Violations: 0
