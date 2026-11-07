@@ -1,0 +1,7 @@
+GitHub Actions workflow: CI
+Run ID: 42384504262
+Commit tested: 58a54a468a9952f50a4c7631f0a4199c1bf323be
+Conclusion: success
+Python job: ruff check and pytest passed.
+Frontend job: npm ci, lint, build, vitest, check:paths and Playwright passed.
+The workflow emitted deprecation notices for Node.js 20 actions and the ubuntu-latest image migration; all checks completed successfully.
