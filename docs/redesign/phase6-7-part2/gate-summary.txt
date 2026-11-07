@@ -1,0 +1,27 @@
+﻿Final audit gate log
+
+Frontend unit tests: `cd frontend && npm test` — 24 tests passed in 6 files.
+Frontend lint: `cd frontend && npm run lint` — passed.
+Production build: `cd frontend && npm run build` — passed. Vite retains its advisory for the 1,040.51 kB minified viewer chunk.
+Production Playwright: `cd frontend && npm run test:e2e -- --workers=1` — 23/23 passed in 3m 18s. The additional saved-theme first-paint test passed separately with `cd frontend && npx playwright test -g "saved light and dark themes are applied" --workers=1` — 1/1 passed.
+Python lint: `ruff check src tests` — passed.
+Python tests: `cd <repo> && .venv/Scripts/python.exe -m pytest -q` — 69 passed, 5 existing dependency deprecation warnings. A system-Python attempt failed collection because that interpreter lacks pypdf; the repository virtual-environment run passed.
+Documentation paths: `cd frontend && npm run check:paths` — passed after each evidence bundle, screenshot conversion, browser report, and documentation update.
+Protected files: `git diff --exit-code main -- src tests` passed; `frontend/src/types.ts`, `frontend/src/app/router.ts`, component IDs, and `frontend/public/models/turbine.glb` are unchanged from the starting commit. No runtime dependency or Python code changed.
+
+Playwright coverage: 16 axe route/tab/sheet states across light and dark had zero serious or critical findings. Keyboard coverage passed for component tabs, evidence selection, Boundary and consent sheets, Assistant composer, replay keys, and every viewer action. The app and viewer network checks recorded only `http://127.0.0.1:8011`; cloud requests were mocked.
+
+Responsive: all four routes and every Component tab, plus Boundary and consent sheets, had no horizontal page overflow at 320px and at 720 CSS px with DPR 2 (the layout equivalent of 200% zoom on a 1440px viewport). At 375px, the touch-target audit found no control below 44x44px in either theme. Before the fixes it found: skip link 144x43; Scenario 277x24; Seed 45x24; mesh picker 317x34; Overview breadcrumb 52x15; evidence query 298x40 and top_k 38x40; Assistant suggestion 343x40, composer 272x36, Ask 64x36; consent checkbox 16x16, Cancel 78x40, and Continue 131x40. Those controls now meet 44px minimums.
+
+Theme and forced colours: System, Light, and Dark switching passed live; a system light-to-dark change recoloured the Stage. The head script applied saved Light and Dark before DOMContentLoaded. Forced-colours emulation kept focus outlines, Stage control borders, and segmented selections visible.
+
+Motion and viewer: reduced-motion checks passed for the rotor, camera easing, and orbit damping. The idle-frame probe passed; no frames rendered while idle. 3D load failure showed the interactive schematic; unavailable WebGL showed the static schematic and note. Chromium, Firefox, and WebKit all passed Overview and Evidence smoke checks, loaded the local GLB, reported WebGL2 available, and recorded no runtime errors or off-origin requests.
+
+Markdown links: the local link checker scanned the root README and 29 Markdown files; zero broken links.
+
+Contrast: all 52 measured light/dark pairs passed. Focus ring, 3D callout text, and selection outline pairs were included. Exact ratios are in contrast-check.txt.
+
+Documentation size: `docs/redesign` measured 11.1 MB (10.6 MiB), below the 12 MB budget after the final screenshots and reports.
+
+Verification limit: Playwright represented 200% zoom with a 720 CSS px viewport and DPR 2; browser chrome zoom itself was not available in the headless runner. Mobile Lighthouse TBT exceeds its 2,000ms target; per-run metrics and the long-task profile are in lighthouse-summary.json.
+

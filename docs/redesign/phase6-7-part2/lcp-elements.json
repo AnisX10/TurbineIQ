@@ -1,0 +1,45 @@
+{
+  "mobile": {
+    "entries": [
+      {
+        "startTime": 252,
+        "tag": "DIV",
+        "id": "",
+        "className": "viewer-note",
+        "text": "Orbit with drag. Pan with right-drag. Zoom with scroll. Click a part to inspect."
+      }
+    ],
+    "final": {
+      "startTime": 252,
+      "tag": "DIV",
+      "id": "",
+      "className": "viewer-note",
+      "text": "Orbit with drag. Pan with right-drag. Zoom with scroll. Click a part to inspect."
+    }
+  },
+  "desktop": {
+    "entries": [
+      {
+        "startTime": 128,
+        "tag": "H1",
+        "id": "",
+        "className": "",
+        "text": "Overview"
+      },
+      {
+        "startTime": 196,
+        "tag": "H2",
+        "id": "component-ledger-title",
+        "className": "",
+        "text": "Component ledger"
+      }
+    ],
+    "final": {
+      "startTime": 196,
+      "tag": "H2",
+      "id": "component-ledger-title",
+      "className": "",
+      "text": "Component ledger"
+    }
+  }
+}

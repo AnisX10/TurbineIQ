@@ -59,6 +59,10 @@ for theme, t in THEMES.items():
         ("--chart-3 on --surface", t["chart-3"], t["surface"], 3.0),
         ("--accent on --surface", t["accent"], t["surface"], 3.0),
         ("--stage-edge on --stage-bg", t["stage-edge"], t["stage-bg"], 3.0),
+        ("--focus-ring on --ground", t["accent"], t["ground"], 3.0),
+        ("--focus-ring on --surface", t["accent"], t["surface"], 3.0),
+        ("3D callout label text on --stage-bg", t["text"], t["stage-bg"], 4.5),
+        ("3D selection outline on --stage-bg", t["chart-3"], t["stage-bg"], 3.0),
         ("--stage-part on --stage-bg", t.get("stage-part", "#d9dde3"), t["stage-bg"], 1.0),
     ]
     checks.extend(
