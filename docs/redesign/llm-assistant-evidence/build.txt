@@ -1,0 +1,34 @@
+node.exe : npm notice run frontend@0.0.0 build
+At line:1 char:1
++ & "<local-path> Files\nodejs/node.exe" "<local-path> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 build:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2656 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                               1.42 kB │ gzip:   0.59 kB
+dist/assets/Evidence-BywM2uOC.css             0.41 kB │ gzip:   0.27 kB
+dist/assets/EvidencePanel-Cdp4XewW.css        3.98 kB │ gzip:   1.10 kB
+dist/assets/ComponentDetail-QM09HnDm.css      4.80 kB │ gzip:   1.28 kB
+dist/assets/Assistant-o42qgfVY.css            5.76 kB │ gzip:   1.56 kB
+dist/assets/index-w5p51xrf.css               38.53 kB │ gzip:   7.76 kB
+dist/assets/Evidence-CJkQmifV.js              0.22 kB │ gzip:   0.19 kB
+dist/assets/EvidencePanel-DxAmm-LO.js         5.88 kB │ gzip:   2.18 kB
+dist/assets/ComponentDetail-S4vM4zvR.js       6.86 kB │ gzip:   2.17 kB
+dist/assets/Assistant-NIyd73V4.js             8.40 kB │ gzip:   2.84 kB
+dist/assets/jsx-runtime-Wy9s6hX0.js           8.91 kB │ gzip:   3.39 kB
+dist/assets/index-By0oJB3O.js               275.60 kB │ gzip:  85.03 kB
+dist/assets/TurbineViewer-BmayUQ4a.js     1,040.51 kB │ gzip: 279.51 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking:
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.83s

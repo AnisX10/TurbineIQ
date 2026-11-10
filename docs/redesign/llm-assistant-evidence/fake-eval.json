@@ -1,0 +1,365 @@
+{
+  "date": "2026-11-10",
+  "mode": "fake",
+  "provider": "custom",
+  "model": "scripted-fake",
+  "case_count": 25,
+  "pass_count": 25,
+  "pass_rate": 1.0,
+  "tool_accuracy": 1.0,
+  "groundedness_rate": 1.0,
+  "numeric_fact_accuracy": 1.0,
+  "groundedness_tolerance": 0.001,
+  "cases": [
+    {
+      "id": "cycle-01",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 21474.226741186656,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-02",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 22939.22730968467,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-03",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 24294.44723383161,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-04",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 25555.773173705635,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-05",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 26734.528072939633,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-06",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 27620.3912862405,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-07",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 28303.949331472366,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "cycle-08",
+      "expected_tool": "calculate_cycle",
+      "observed_tools": [
+        "calculate_cycle"
+      ],
+      "numeric_fact_path": "result.electrical_power_kw",
+      "expected_numeric_fact": 28828.72680444419,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-01",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 25467.20909859538,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-02",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 25467.20909859538,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-03",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 23853.820409482072,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-04",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 23853.820409482072,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-05",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 25467.20909859538,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-06",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 25467.20909859538,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "scenario-07",
+      "expected_tool": "summarize_synthetic_scenario",
+      "observed_tools": [
+        "summarize_synthetic_scenario"
+      ],
+      "numeric_fact_path": "mean_model_electrical_power_kw",
+      "expected_numeric_fact": 25467.20909859538,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "evidence-01",
+      "expected_tool": "search_technical_documents",
+      "observed_tools": [
+        "search_technical_documents"
+      ],
+      "numeric_fact_path": "evidence.0.text",
+      "expected_numeric_fact": 12.0,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "evidence-02",
+      "expected_tool": "search_technical_documents",
+      "observed_tools": [
+        "search_technical_documents"
+      ],
+      "numeric_fact_path": "evidence.0.text",
+      "expected_numeric_fact": 12.0,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "evidence-03",
+      "expected_tool": "search_technical_documents",
+      "observed_tools": [
+        "search_technical_documents"
+      ],
+      "numeric_fact_path": "evidence.0.text",
+      "expected_numeric_fact": 12.0,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "evidence-04",
+      "expected_tool": "search_technical_documents",
+      "observed_tools": [
+        "search_technical_documents"
+      ],
+      "numeric_fact_path": "evidence.0.text",
+      "expected_numeric_fact": 12.0,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "snapshot-01",
+      "expected_tool": "inspect_synthetic_twin_snapshot",
+      "observed_tools": [
+        "inspect_synthetic_twin_snapshot"
+      ],
+      "numeric_fact_path": "snapshot.model_electrical_power_kw",
+      "expected_numeric_fact": 26301.980829140022,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "snapshot-02",
+      "expected_tool": "inspect_synthetic_twin_snapshot",
+      "observed_tools": [
+        "inspect_synthetic_twin_snapshot"
+      ],
+      "numeric_fact_path": "snapshot.model_electrical_power_kw",
+      "expected_numeric_fact": 24959.197247116364,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "snapshot-03",
+      "expected_tool": "inspect_synthetic_twin_snapshot",
+      "observed_tools": [
+        "inspect_synthetic_twin_snapshot"
+      ],
+      "numeric_fact_path": "snapshot.model_electrical_power_kw",
+      "expected_numeric_fact": 23196.37153097281,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "snapshot-04",
+      "expected_tool": "inspect_synthetic_twin_snapshot",
+      "observed_tools": [
+        "inspect_synthetic_twin_snapshot"
+      ],
+      "numeric_fact_path": "snapshot.model_electrical_power_kw",
+      "expected_numeric_fact": 25348.37704564788,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "snapshot-05",
+      "expected_tool": "inspect_synthetic_twin_snapshot",
+      "observed_tools": [
+        "inspect_synthetic_twin_snapshot"
+      ],
+      "numeric_fact_path": "snapshot.model_electrical_power_kw",
+      "expected_numeric_fact": 25628.79106252803,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    },
+    {
+      "id": "snapshot-06",
+      "expected_tool": "inspect_synthetic_twin_snapshot",
+      "observed_tools": [
+        "inspect_synthetic_twin_snapshot"
+      ],
+      "numeric_fact_path": "snapshot.model_electrical_power_kw",
+      "expected_numeric_fact": 25574.533569475225,
+      "mode": "cloud",
+      "tool_correct": true,
+      "grounded": true,
+      "numeric_fact_matched": true,
+      "passed": true
+    }
+  ]
+}

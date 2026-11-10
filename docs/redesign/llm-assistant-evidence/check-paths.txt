@@ -1,0 +1,2 @@
+npm run check:paths
+Documentation path scan passed (README.md and docs/)
