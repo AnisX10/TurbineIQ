@@ -31,5 +31,6 @@ PASS — python -m pytest -q. 69 passed, 5 dependency deprecation warnings.
 PASS — Python src and tests are byte-identical to main; frontend/src/types.ts and the GLB are unchanged from 176a6b1.
 PASS — application runtime dependencies are unchanged. Lighthouse 13.6.0 is a development dependency for the requested measurement script.
 GitHub Actions for pushed commit 5aba0e2649103fe6317b22a8a53ea97743abe867: run 42382268156, conclusion success. A second run on the same commit, 42382262468, also concluded success.
+GitHub Actions for benchmark-index update commit 748ce7db4e449c95c28e126b8f49b99dcc6c2eba: run 42830370162, conclusion success. A second run on the same commit, 42830357552, also concluded success.
 
 Evidence: lighthouse-ab.json, lighthouse-candidate-check.json, and the command outcomes above.
