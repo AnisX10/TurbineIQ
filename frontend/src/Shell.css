@@ -162,6 +162,9 @@
 .page-context { color: var(--muted); font-size: 12px; line-height: 1.35; }
 .page-header h1 { margin: 5px 0 0; color: var(--text); font-size: 24px; line-height: 1.2; font-weight: 700; letter-spacing: -0.025em; }
 .page-header-actions { display: flex; align-items: center; gap: 8px; }
+.assistant-header-ask { min-width: 76px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 0 10px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 999px; background: var(--surface); font-size: 12px; cursor: pointer; }
+.assistant-header-ask:hover { background: var(--raised); }
+.assistant-header-ask kbd { min-width: 18px; height: 18px; display: inline-grid; place-items: center; padding: 0 3px; color: var(--muted); border: 1px solid var(--control); border-radius: 4px; background: var(--ground); font: 10px var(--mono); }
 .boundary-chip { min-height: 36px; display: inline-flex; align-items: center; padding: 0 11px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 999px; background: transparent; font-size: 12px; white-space: nowrap; cursor: pointer; }
 .boundary-chip:hover { background: var(--raised); }
 .header-overflow-anchor { position: relative; display: none; }
@@ -238,6 +241,8 @@
   .page-header-actions { width: 100%; min-width: 0; justify-content: space-between; }
   .page-header h1 { font-size: 24px; }
   .page-header-actions { gap: 6px; }
+  .assistant-header-ask { min-width: 62px; padding-inline: 8px; }
+  .assistant-header-ask kbd { display: none; }
   .boundary-chip { padding: 0 9px; font-size: 11px; }
   .utility-anchor-compact .theme-option { min-height: 44px; }
   .header-overflow-button { width: 44px; height: 44px; }

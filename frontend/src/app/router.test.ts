@@ -26,6 +26,12 @@ describe('URL state', () => {
     expect(parseRoute('#/evidence?q=abc&top_k=0')).toMatchObject({ evidenceQuery: 'abc', evidenceTopK: 4 })
     expect(parseRoute(`#/evidence?q=${'x'.repeat(301)}&top_k=99`)).toMatchObject({ evidenceQuery: '', evidenceTopK: 4 })
   })
+
+  it('preserves a bounded citation selection for the Evidence reader', () => {
+    const route = { page: 'evidence' as const, componentId: 'compressor' as const, scenarioId: 'compressor_fouling', seed: 42, sampleIndex: 72, evidenceQuery: 'Brayton cycle', evidenceTopK: 4, evidenceCitation: '[Cycle note, § 3]' }
+    expect(parseRoute(routeHash(route))).toEqual(route)
+    expect(parseRoute(`#/evidence?cite=${'x'.repeat(181)}`)).not.toHaveProperty('evidenceCitation')
+  })
 })
 
 describe('route validation', () => {

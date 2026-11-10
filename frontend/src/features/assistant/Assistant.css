@@ -45,6 +45,31 @@
 .assistant-consent-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
 .assistant-consent-actions button { min-height: 44px; padding: 0 12px; }
 .assistant-retry { min-height: 36px; padding: 0 10px; }
+.assistant-dock-sheet { position: fixed; inset: 0 0 0 auto; width: min(360px, 100vw); height: 100vh; height: 100dvh; max-width: 100vw; max-height: none; margin: 0; padding: 0; overflow: hidden; border: 0; border-left: 1px solid var(--border); border-radius: 0; box-shadow: -12px 0 32px rgb(0 0 0 / 12%); }
+.assistant-dock-sheet::backdrop { background: rgb(10 10 10 / 38%); }
+.assistant-dock-page { width: 100%; height: 100%; max-width: none; display: flex; padding: 16px; }
+.assistant-dock-page .assistant-workspace { width: 100%; max-width: none; height: 100%; min-height: 0; display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto auto; gap: 0; margin: 0; overflow: hidden; }
+.assistant-dock-page .assistant-mode-row { align-items: center; flex-wrap: wrap; padding-bottom: 10px; }
+.assistant-heading-inline { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 1 1 auto; }
+.assistant-heading-inline h2 { margin: 0; font-size: 17px; font-weight: 600; }
+.assistant-dock-close { width: 44px; height: 44px; flex: 0 0 44px; display: grid; place-items: center; color: var(--muted); border: 1px solid var(--control-strong); border-radius: 6px; background: transparent; cursor: pointer; }
+.assistant-dock-page .assistant-mode-segmented { width: 100%; }
+.assistant-dock-page .assistant-conversation { min-height: 0; grid-template-rows: max-content; overflow: auto; padding: 10px 1px; }
+.assistant-dock-page .assistant-question { max-width: 96%; }
+.assistant-dock-page .assistant-composer { align-self: end; }
+.assistant-answer-actions { display: flex; justify-content: flex-end; margin-top: 7px; }
+.assistant-copy { min-height: 36px; display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; }
+.assistant-turn-context { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+.assistant-turn-context span { min-height: 24px; display: inline-flex; align-items: center; padding: 0 7px; color: var(--muted); border: 1px solid var(--control); border-radius: 999px; font-size: 10px; }
+.assistant-citations { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.assistant-citations .citation-chip { min-height: 36px; display: inline-flex; align-items: center; gap: 5px; padding: 0 8px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 999px; background: var(--surface); font: 10px var(--mono); }
+.assistant-stop, .assistant-stop-all { min-height: 44px; padding: 0 10px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 5px; background: var(--surface); }
+.assistant-stop-all { justify-self: start; margin-top: 4px; }
+.assistant-dock-page .assistant-composer textarea { resize: none; }
+.assistant-dock-page .assistant-trace summary, .assistant-dock-page .assistant-copy, .assistant-dock-page .assistant-citations .citation-chip, .assistant-dock-page .assistant-retry, .assistant-dock-page .assistant-stop { min-height: 44px; }
+@media (min-width: 1024px) and (max-width: 1279px) { .assistant-dock-sheet { width: min(480px, 100vw); } }
+@media (max-width: 1023px) { .assistant-dock-sheet { inset: auto 0 0; width: 100vw; height: min(82dvh, 760px); max-height: calc(100dvh - 16px); border: 1px solid var(--border); border-bottom: 0; border-radius: 12px 12px 0 0; box-shadow: 0 -12px 32px rgb(0 0 0 / 12%); } .assistant-dock-page { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); } }
+@media (max-width: 620px) { .assistant-dock-page .assistant-mode-row { align-items: stretch; flex-direction: row; } .assistant-dock-page .assistant-heading-inline { flex-basis: 100%; } .assistant-dock-page .assistant-mode-segmented { width: 100%; } }
 @keyframes assistant-wait { from { transform: scaleX(0.65); } to { transform: scaleX(2.7); } }
 @media (max-width: 1023px) { .assistant-page { padding: 16px 18px 24px; } }
 @media (max-width: 620px) { .assistant-page { padding: 13px 16px 20px; } .assistant-mode-row { align-items: flex-start; flex-direction: column; } .assistant-mode-segmented { width: 100%; } .assistant-question { max-width: 94%; } }

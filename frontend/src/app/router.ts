@@ -11,6 +11,7 @@ export interface RouteState {
   sampleIndex: number
   evidenceQuery?: string
   evidenceTopK?: number
+  evidenceCitation?: string
 }
 
 export const DEFAULT_SCENARIO = 'compressor_fouling'
@@ -37,7 +38,16 @@ export function parseRoute(hash: string): RouteState {
   const evidenceQuery = rawEvidenceQuery.length <= 300 ? rawEvidenceQuery : ''
   const rawTopK = parseNonNegativeInteger(params.get('top_k'), 4)
   const evidenceTopK = rawTopK >= 1 && rawTopK <= 8 ? rawTopK : 4
-  const shared = { scenarioId, seed, sampleIndex, evidenceQuery, evidenceTopK }
+  const rawCitation = params.get('cite')?.trim() ?? ''
+  const evidenceCitation = rawCitation.length <= 180 ? rawCitation : ''
+  const shared = {
+    scenarioId,
+    seed,
+    sampleIndex,
+    evidenceQuery,
+    evidenceTopK,
+    ...(evidenceCitation ? { evidenceCitation } : {}),
+  }
 
   if (segments[0] === 'components') {
     const componentId = segments[1]
@@ -56,7 +66,7 @@ export function parseRoute(hash: string): RouteState {
   return { page: 'overview', componentId: 'compressor', ...shared }
 }
 
-export function routeHash(state: Pick<RouteState, 'page' | 'componentId' | 'scenarioId' | 'seed' | 'sampleIndex'> & Partial<Pick<RouteState, 'evidenceQuery' | 'evidenceTopK'>>): string {
+export function routeHash(state: Pick<RouteState, 'page' | 'componentId' | 'scenarioId' | 'seed' | 'sampleIndex'> & Partial<Pick<RouteState, 'evidenceQuery' | 'evidenceTopK' | 'evidenceCitation'>>): string {
   const path = state.page === 'components'
     ? `components/${state.componentId && COMPONENT_IDS.includes(state.componentId) ? state.componentId : 'compressor'}`
     : state.page
@@ -64,6 +74,7 @@ export function routeHash(state: Pick<RouteState, 'page' | 'componentId' | 'scen
   if (state.page === 'evidence' || state.evidenceQuery || (state.evidenceTopK !== undefined && state.evidenceTopK !== 4)) {
     params.set('q', state.evidenceQuery ?? '')
     params.set('top_k', String(state.evidenceTopK ?? 4))
+    if (state.evidenceCitation) params.set('cite', state.evidenceCitation)
   }
   if (state.page !== 'components' && state.componentId) params.set('component', state.componentId)
   return `#/${path}?${params.toString()}`

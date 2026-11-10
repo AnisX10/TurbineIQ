@@ -51,13 +51,17 @@ export function EvidencePanel({ initialQuery = '' }: { initialQuery?: string }) 
     try {
       const result = await api.evidence(cleanQuery, topK)
       setEvidence(result)
-      setSelectedIndex(0)
+      const ordered = [...result.evidence].sort((left, right) => right.score - left.score)
+      const citationIndex = state.evidenceCitation
+        ? ordered.findIndex((hit) => hit.citation === state.evidenceCitation)
+        : -1
+      setSelectedIndex(citationIndex >= 0 ? citationIndex : 0)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : 'The local evidence request failed.')
     } finally {
       setBusy(false)
     }
-  }, [query, topK])
+  }, [query, topK, state.evidenceCitation])
 
   useEffect(() => {
     const cleanQuery = (routeQuery || initialQuery).trim()

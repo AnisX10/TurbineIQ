@@ -13,6 +13,7 @@ import {
   Gauge,
   Monitor,
   Moon,
+  MessageSquareText,
   ShieldCheck,
   Sun,
   X,
@@ -261,6 +262,8 @@ export function PageHeader({
   onThemeChange,
   boundaryOpen,
   onBoundary,
+  onOpenAssistant,
+  askButtonRef,
 }: {
   page: RoutePage
   seed: string
@@ -269,6 +272,8 @@ export function PageHeader({
   onThemeChange: (theme: ThemePreference) => void
   boundaryOpen: boolean
   onBoundary: () => void
+  onOpenAssistant: () => void
+  askButtonRef: RefObject<HTMLButtonElement | null>
 }) {
   const [overflowOpen, setOverflowOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -290,6 +295,9 @@ export function PageHeader({
       </div>
       <div className="page-header-actions">
         {page === 'evidence' && <span className="page-route-chip">Local lexical retrieval</span>}
+        <button ref={askButtonRef} className="assistant-header-ask" type="button" onClick={onOpenAssistant} aria-label="Open assistant" aria-keyshortcuts="A">
+          <MessageSquareText size={15} aria-hidden="true" /><span>Ask</span><kbd>A</kbd>
+        </button>
         <button
           className="boundary-chip"
           type="button"

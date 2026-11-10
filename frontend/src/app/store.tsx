@@ -7,10 +7,10 @@ import { readThemePreference, writeThemePreference } from './router'
 import { StoreContext } from './storeContext'
 import type { StoreAction, TurbineState } from './storeContext'
 
-function reducer(state: TurbineState, action: StoreAction): TurbineState {
+export function turbineReducer(state: TurbineState, action: StoreAction): TurbineState {
   switch (action.type) {
     case 'hydrate-route':
-      return { ...state, ...action.route, seedInput: String(action.route.seed), requestError: '' }
+      return { ...state, ...action.route, evidenceCitation: action.route.evidenceCitation, seedInput: String(action.route.seed), requestError: '' }
     case 'scenarios':
       return { ...state, scenarios: action.value }
     case 'run-start':
@@ -35,6 +35,27 @@ function reducer(state: TurbineState, action: StoreAction): TurbineState {
       return { ...state, componentId: action.value }
     case 'navigate':
       return { ...state, ...action.value }
+    case 'assistant-open':
+      return { ...state, assistantOpen: action.value }
+    case 'assistant-mode':
+      return { ...state, assistantMode: action.value }
+    case 'assistant-consent-open':
+      return { ...state, assistantConsentOpen: action.value.open, assistantConsentResumeDock: action.value.resumeDock }
+    case 'assistant-consent-accepted':
+      return { ...state, assistantConsentAccepted: action.value, assistantMode: action.value ? 'cloud' : 'local' }
+    case 'assistant-documents':
+      return { ...state, assistantIncludeDocuments: action.value }
+    case 'assistant-draft':
+      return { ...state, assistantDraft: action.value }
+    case 'assistant-turn-add':
+      return { ...state, assistantTurns: [...state.assistantTurns, action.value] }
+    case 'assistant-turn-patch':
+      return {
+        ...state,
+        assistantTurns: state.assistantTurns.map((turn) => turn.id === action.value.id
+          ? { ...turn, ...action.value.patch }
+          : turn),
+      }
   }
 }
 
@@ -46,6 +67,12 @@ function initialState(): TurbineState {
   } catch {
     theme = 'system'
   }
+  let assistantConsentAccepted = false
+  try {
+    assistantConsentAccepted = window.sessionStorage.getItem('turbineiq-cloud-consent') === 'accepted'
+  } catch {
+    assistantConsentAccepted = false
+  }
   return {
     ...route,
     seedInput: String(route.seed),
@@ -55,11 +82,19 @@ function initialState(): TurbineState {
     engineStatus: 'checking',
     loading: true,
     requestError: '',
+    assistantOpen: false,
+    assistantTurns: [],
+    assistantDraft: '',
+    assistantMode: assistantConsentAccepted ? 'cloud' : 'local',
+    assistantConsentOpen: false,
+    assistantConsentAccepted,
+    assistantConsentResumeDock: false,
+    assistantIncludeDocuments: false,
   }
 }
 
 export function TurbineStoreProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, initialState)
+  const [state, dispatch] = useReducer(turbineReducer, undefined, initialState)
   const stateRef = useRef(state)
   useLayoutEffect(() => { stateRef.current = state }, [state])
 
@@ -91,6 +126,15 @@ export function TurbineStoreProvider({ children }: { children: ReactNode }) {
       return
     }
   }, [state.theme])
+
+  useEffect(() => {
+    try {
+      if (state.assistantConsentAccepted) window.sessionStorage.setItem('turbineiq-cloud-consent', 'accepted')
+      else window.sessionStorage.removeItem('turbineiq-cloud-consent')
+    } catch {
+      return
+    }
+  }, [state.assistantConsentAccepted])
 
   useEffect(() => {
     let active = true

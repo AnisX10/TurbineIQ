@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import type { KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent, ReactNode, RefObject } from 'react'
 import './Sheet.css'
 
 export function Sheet({
@@ -9,6 +9,7 @@ export function Sheet({
   describedBy,
   className,
   id,
+  returnFocusTo,
   children,
 }: {
   open: boolean
@@ -17,6 +18,7 @@ export function Sheet({
   describedBy?: string
   className: string
   id?: string
+  returnFocusTo?: RefObject<HTMLElement | null>
   children: ReactNode
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null)
@@ -42,7 +44,7 @@ export function Sheet({
   }, [])
 
   const restoreFocus = () => {
-    const target = returnFocusRef.current
+    const target = returnFocusTo?.current ?? returnFocusRef.current
     returnFocusRef.current = null
     requestAnimationFrame(() => target?.focus())
   }
