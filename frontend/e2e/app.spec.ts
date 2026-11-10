@@ -11,6 +11,22 @@ const routes = [
 ] as const
 const evidenceDir = resolve(process.cwd(), 'test-results/phase6-7-part1')
 
+function assistantStream(answer: string, mode = 'local', toolCalls: AssistantToolCall[] = []) {
+  const response = { answer, mode, warning: null, tool_calls: toolCalls, synthetic_only: true }
+  const event = (name: string, payload: unknown) => `event: ${name}\ndata: ${JSON.stringify(payload)}\n\n`
+  return [
+    event('status', { state: 'working', message: 'Preparing test context.' }),
+    ...toolCalls.flatMap((call) => [
+      event('tool_start', { name: call.name, arguments: call.arguments }),
+      event('tool_result', call),
+    ]),
+    ...answer.match(/\S+\s*/g)!.map((text) => event('token', { text })),
+    event('done', response),
+  ].join('')
+}
+
+interface AssistantToolCall { name: string; arguments: Record<string, unknown>; result: Record<string, unknown> }
+
 async function ready(page: import('@playwright/test').Page, kind: string) {
   if (kind === 'overview') await page.locator('.kpi-row').waitFor()
   else if (kind === 'components') await page.locator('.detail-kpis').waitFor()
@@ -80,6 +96,10 @@ test('axe audits all four routes, component tabs, and Cloud consent in both them
         }
       }
       if (kind === 'overview') {
+        await page.getByRole('button', { name: 'Open assistant' }).click()
+        await page.getByRole('dialog', { name: 'Ask TurbineIQ' }).waitFor()
+        await axe(page, name, theme, 'Assistant dock', records)
+        await page.keyboard.press('Escape')
         await page.locator('.boundary-chip').click()
         await page.getByRole('dialog', { name: 'Boundary' }).waitFor()
         await axe(page, name, theme, 'Boundary sheet', records)
@@ -259,16 +279,16 @@ test('overview scenario, seed, replay, mesh inspection, Evidence search, and Loc
   await page.getByRole('button', { name: 'Ask', exact: true }).click()
   await expect(page.locator('.assistant-answer')).toBeVisible({ timeout: 20000 })
   await expect(page.locator('.assistant-answer')).toContainText('Local')
-  expect([...origins].filter((origin) => origin !== new URL('http://127.0.0.1:8011').origin)).toEqual([])
+  expect([...origins].filter((origin) => origin !== new URL('http://127.0.0.1:8021').origin)).toEqual([])
   await mkdir(evidenceDir, { recursive: true })
   await writeFile(resolve(evidenceDir, 'network-origins.json'), JSON.stringify([...origins], null, 2))
 })
 
 test('Cloud consent always precedes a mocked provider request and document excerpts are opt-in', async ({ page }) => {
   const bodies: Array<Record<string, unknown>> = []
-  await page.route('**/api/assistant/ask', async (route) => {
+  await page.route('**/api/assistant/stream', async (route) => {
     bodies.push(route.request().postDataJSON() as Record<string, unknown>)
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'Mocked cloud response.', mode: 'cloud', warning: null, tool_calls: [], synthetic_only: true }) })
+    await route.fulfill({ status: 200, contentType: 'text/event-stream', body: assistantStream('Mocked cloud response.', 'cloud') })
   })
   await page.goto('/#/assistant?scenario=compressor_fouling&seed=42&i=48')
   await ready(page, 'assistant')
@@ -282,8 +302,11 @@ test('Cloud consent always precedes a mocked provider request and document excer
   await expect(page.getByText('Mocked cloud response.')).toBeVisible()
   expect(bodies[0]).toMatchObject({ enable_cloud: true, allow_cloud_document_context: false })
 
-  await page.getByRole('button', { name: /Local.*demo-safe/ }).click()
+  await page.evaluate(() => sessionStorage.removeItem('turbineiq-cloud-consent'))
+  await page.reload()
+  await ready(page, 'assistant')
   await page.getByRole('button', { name: 'Cloud' }).click()
+  await expect(dialog).toBeVisible()
   await dialog.getByRole('checkbox').check()
   await dialog.getByRole('button', { name: 'Continue to Cloud' }).click()
   await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Find an excerpt for this question.')
@@ -294,13 +317,13 @@ test('Cloud consent always precedes a mocked provider request and document excer
 
 test('Assistant request failures expose a retry action', async ({ page }) => {
   let attempts = 0
-  await page.route('**/api/assistant/ask', async (route) => {
+  await page.route('**/api/assistant/stream', async (route) => {
     attempts += 1
     if (attempts === 1) {
       await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ detail: 'Local assistant is temporarily unavailable.' }) })
       return
     }
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'Recovered local response.', mode: 'local', warning: null, tool_calls: [], synthetic_only: true }) })
+    await route.fulfill({ status: 200, contentType: 'text/event-stream', body: assistantStream('Recovered local response.') })
   })
   await page.goto('/#/assistant?scenario=compressor_fouling&seed=42&i=48')
   await ready(page, 'assistant')
@@ -314,9 +337,9 @@ test('Assistant request failures expose a retry action', async ({ page }) => {
 test('Assistant shows its scenario name and busy rule only during a local request', async ({ page }) => {
   let releaseRequest!: () => void
   const requestGate = new Promise<void>((resolve) => { releaseRequest = resolve })
-  await page.route('**/api/assistant/ask', async (route) => {
+  await page.route('**/api/assistant/stream', async (route) => {
     await requestGate
-    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ answer: 'Local test response.', mode: 'local', warning: null, tool_calls: [], synthetic_only: true }) })
+    await route.fulfill({ status: 200, contentType: 'text/event-stream', body: assistantStream('Local test response.') })
   })
   await page.goto('/#/assistant?scenario=compressor_fouling&seed=42&i=48')
   await ready(page, 'assistant')
@@ -331,6 +354,107 @@ test('Assistant shows its scenario name and busy rule only during a local reques
   await expect(page.getByText('Local test response.')).toBeVisible()
   await expect(page.locator('.assistant-progress')).toHaveCount(0)
   await expect(page.locator('.assistant-composer')).not.toHaveClass(/is-waiting/)
+})
+
+test('Overview A shortcut opens the shared dock and Esc returns focus to Ask', async ({ page }) => {
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  const dashboardWidth = (await page.locator('.main-area').boundingBox())?.width
+  await page.keyboard.press('a')
+  const dialog = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await expect(dialog).toBeVisible()
+  const composer = dialog.getByRole('textbox', { name: 'Ask TurbineIQ' })
+  await expect(composer).toBeFocused()
+  expect((await page.locator('.main-area').boundingBox())?.width).toBe(dashboardWidth)
+  await composer.fill('Explain the selected synthetic sample.')
+  await dialog.getByRole('button', { name: 'Ask', exact: true }).click()
+  await expect(dialog.locator('.assistant-answer')).toContainText('26.30 MW', { timeout: 20000 })
+  await expect(dialog.locator('.assistant-trace')).toBeVisible()
+  await expect(dialog.locator('.assistant-trace')).not.toHaveAttribute('open', '')
+  await dialog.getByText(/^Tool trace/).click()
+  await expect(dialog.locator('.assistant-trace')).toHaveAttribute('open', '')
+  await page.keyboard.press('Escape')
+  await expect(dialog).not.toBeVisible()
+  await expect(page.getByRole('button', { name: 'Open assistant' })).toBeFocused()
+  await page.keyboard.press('a')
+  await expect(page.getByRole('dialog', { name: 'Ask TurbineIQ' })).toContainText('26.30 MW')
+  await page.keyboard.press('Escape')
+  await page.getByRole('link', { name: 'Assistant' }).click()
+  await expect(page.locator('.assistant-answer')).toContainText('26.30 MW')
+})
+
+test('cloud dock names the fake provider, streams tool results, links citations and labels local fallback', async ({ page }) => {
+  const browserOrigins = new Set<string>()
+  page.on('request', (request) => { browserOrigins.add(new URL(request.url()).origin) })
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  await page.getByRole('button', { name: 'Open assistant' }).click()
+  const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await dock.getByRole('button', { name: 'Cloud' }).click()
+  const consent = page.getByRole('dialog', { name: 'Review Cloud sharing' })
+  await expect(consent).toContainText('custom · 127.0.0.1 · fake-gpt-oss-20b')
+  await expect(consent.getByRole('checkbox')).not.toBeChecked()
+  await consent.getByRole('checkbox').check()
+  await consent.getByRole('button', { name: 'Continue to Cloud' }).click()
+  await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Find a citation for Brayton cycle assumptions.')
+  await dock.getByRole('button', { name: 'Ask', exact: true }).click()
+  await expect(dock.locator('.assistant-answer')).toContainText('supporting passage', { timeout: 30000 })
+  await expect(dock.locator('.assistant-trace')).toContainText('search_technical_documents')
+  await expect(dock.locator('.assistant-citations .citation-chip')).toBeVisible()
+  await dock.locator('.assistant-citations .citation-chip').first().click()
+  await expect(page).toHaveURL(/#\/evidence\?/)
+  await expect(page.locator('.evidence-reader .citation-chip')).toBeVisible({ timeout: 20000 })
+  expect([...browserOrigins].filter((origin) => origin !== new URL('http://127.0.0.1:8021').origin)).toEqual([])
+
+  await page.getByRole('link', { name: 'Overview' }).click()
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  await page.getByRole('button', { name: 'Open assistant' }).click()
+  const reopened = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await reopened.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('force fallback for this test')
+  await reopened.getByRole('button', { name: 'Ask', exact: true }).click()
+  await expect(reopened.locator('.assistant-answer-meta')).toContainText('Local fallback', { timeout: 30000 })
+})
+
+test('assistant dock can stop a slow cloud response and retry a failed stream', async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('turbineiq-cloud-consent', 'accepted'))
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  await page.getByRole('button', { name: 'Open assistant' }).click()
+  const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('slow response for stop testing')
+  await dock.getByRole('button', { name: 'Ask', exact: true }).click()
+  await expect(dock.getByRole('button', { name: 'Stop response' })).toBeVisible()
+  await dock.getByRole('button', { name: 'Stop response' }).click()
+  await expect(dock.getByText('Stopped before the answer was complete.')).toBeVisible()
+
+  let attempts = 0
+  await page.route('**/api/assistant/stream', async (route) => {
+    attempts += 1
+    if (attempts === 1) {
+      await route.fulfill({ status: 503, contentType: 'application/json', body: JSON.stringify({ detail: 'Temporary fake error.' }) })
+      return
+    }
+    await route.fulfill({ status: 200, contentType: 'text/event-stream', body: assistantStream('Recovered with the retry.') })
+  })
+  await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('retry this request')
+  await dock.getByRole('button', { name: 'Ask', exact: true }).click()
+  await expect(dock.getByText('Temporary fake error.')).toBeVisible()
+  await dock.getByRole('button', { name: 'Retry question' }).last().click()
+  await expect(dock.getByText('Recovered with the retry.')).toBeVisible()
+  expect(attempts).toBe(2)
+})
+
+test('assistant dock becomes a bottom sheet at 375px', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  await page.getByRole('button', { name: 'Open assistant' }).click()
+  const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await expect(dock).toBeVisible()
+  const box = await dock.boundingBox()
+  expect(box?.width).toBe(375)
+  expect(box?.y).toBeGreaterThan(0)
+  expect(box?.y! + box!.height).toBeGreaterThanOrEqual(810)
 })
 
 test('Offline engine guidance uses a portable command with shell activation and copy action', async ({ page }) => {
