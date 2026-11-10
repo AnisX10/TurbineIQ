@@ -2,18 +2,27 @@
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from typing import Any, Literal
+from urllib.parse import urlsplit
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from turbineiq.agent import TurbineAssistant
+from turbineiq.agent import CloudLLMSettings, TurbineAssistant
+from turbineiq.agent.orchestrator import ProviderCallFailure
 from turbineiq.rag import DocumentChunk, load_document_path, search_documents
 from turbineiq.synthetic import SCENARIOS
 from turbineiq.twin import create_synthetic_twin
+
+from .assistant_security import (
+    RequestSizeLimitMiddleware,
+    TokenBucketLimiter,
+    install_secret_redaction_filter,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEMO_DOCUMENTS_PATH = PROJECT_ROOT / "data" / "documents"
@@ -30,6 +39,12 @@ def _load_demo_documents() -> list[DocumentChunk]:
 
 DEMO_DOCUMENTS = _load_demo_documents()
 assistant = TurbineAssistant(documents=DEMO_DOCUMENTS)
+assistant_rate_limiter = TokenBucketLimiter()
+install_secret_redaction_filter()
+_probe_cache: dict[tuple[str, str, str], tuple[float, dict[str, Any]]] = {}
+_probe_cache_ttl_seconds = 30.0
+_status_cache: tuple[float, dict[str, Any]] | None = None
+_status_cache_ttl_seconds = 5.0
 
 app = FastAPI(
     title="TurbineIQ local API",
@@ -39,9 +54,11 @@ app = FastAPI(
     ),
     version="0.2.0",
 )
+app.add_middleware(RequestSizeLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
@@ -58,10 +75,46 @@ class SelectedTwinContext(BaseModel):
 
 
 class AssistantRequest(BaseModel):
-    question: str = Field(min_length=1, max_length=2000)
+    question: str = Field(min_length=1, max_length=1000)
     enable_cloud: bool = False
     allow_cloud_document_context: bool = False
     selected_twin: SelectedTwinContext | None = None
+
+
+def _assistant_client_key(request: Request) -> str:
+    return request.client.host if request.client else "unknown"
+
+
+def _rate_limit_assistant(request: Request) -> None:
+    if not assistant_rate_limiter.consume(_assistant_client_key(request)):
+        raise HTTPException(
+            status_code=429,
+            detail="Assistant request limit reached. Try again shortly.",
+        )
+
+
+def _base_url_host(settings: CloudLLMSettings) -> str:
+    try:
+        host = urlsplit(settings.base_url).hostname
+    except ValueError:
+        host = None
+    return host or "not-configured"
+
+
+def _assistant_status_payload() -> dict[str, Any]:
+    global _status_cache
+    now = time.monotonic()
+    if _status_cache is not None and now - _status_cache[0] < _status_cache_ttl_seconds:
+        return dict(_status_cache[1])
+    settings = assistant.cloud_settings
+    payload = {
+        "provider": settings.provider,
+        "model": settings.model,
+        "base_url_host": _base_url_host(settings),
+        "configured": settings.configured,
+    }
+    _status_cache = (now, payload)
+    return dict(payload)
 
 
 @app.get("/api/health")
@@ -123,7 +176,55 @@ def search_evidence(
     }
 
 
-@app.post("/api/assistant/ask")
+@app.get("/api/assistant/status", dependencies=[Depends(_rate_limit_assistant)])
+def assistant_status() -> dict[str, Any]:
+    return _assistant_status_payload()
+
+
+@app.post("/api/assistant/test", dependencies=[Depends(_rate_limit_assistant)])
+def test_assistant_provider() -> dict[str, Any]:
+    status = _assistant_status_payload()
+    cache_key = (status["provider"], status["model"], status["base_url_host"])
+    now = time.monotonic()
+    cached = _probe_cache.get(cache_key)
+    if cached is not None and now - cached[0] < _probe_cache_ttl_seconds:
+        return dict(cached[1])
+    if not status["configured"]:
+        return {
+            "provider": status["provider"],
+            "model": status["model"],
+            "configured": False,
+            "tools_work": False,
+            "latency_ms": None,
+            "message": "Configure this provider before running the tool probe.",
+        }
+    try:
+        latency_ms, tools_work = assistant.probe_cloud()
+        payload = {
+            "provider": status["provider"],
+            "model": status["model"],
+            "configured": True,
+            "tools_work": tools_work,
+            "latency_ms": latency_ms,
+            "message": "Tool probe completed."
+            if tools_work
+            else "The provider replied without the probe tool call.",
+        }
+    except Exception as exc:
+        code = exc.reason_code if isinstance(exc, ProviderCallFailure) else "PROVIDER_UNAVAILABLE"
+        payload = {
+            "provider": status["provider"],
+            "model": status["model"],
+            "configured": True,
+            "tools_work": False,
+            "latency_ms": None,
+            "message": f"Provider test failed ({code}). Check the local server configuration.",
+        }
+    _probe_cache[cache_key] = (now, payload)
+    return dict(payload)
+
+
+@app.post("/api/assistant/ask", dependencies=[Depends(_rate_limit_assistant)])
 def ask_assistant(request: AssistantRequest) -> dict[str, object]:
     question = request.question.strip()
     if not question:

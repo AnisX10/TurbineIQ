@@ -30,6 +30,9 @@ def calculate_cycle_tool(arguments: dict[str, Any]) -> dict[str, object]:
     extra = set(arguments) - CYCLE_FIELDS
     if extra:
         raise ValueError(f"unsupported calculation field(s): {', '.join(sorted(extra))}")
+    missing = CYCLE_FIELDS - set(arguments)
+    if missing:
+        raise ValueError(f"missing calculation field(s): {', '.join(sorted(missing))}")
     inputs = CycleInputs(**arguments)
     result = simulate_cycle(inputs)
     return {"inputs_used": asdict(inputs), "result": result.to_dict()}
@@ -42,6 +45,12 @@ def summarize_scenario_tool(arguments: dict[str, Any]) -> dict[str, object]:
     seed = arguments.get("seed", 42)
     if set(arguments) - {"scenario_id", "seed"}:
         raise ValueError("summarize_scenario accepts only scenario_id and seed")
+    if set(arguments) != {"scenario_id", "seed"}:
+        raise ValueError("summarize_scenario requires scenario_id and seed")
+    if not isinstance(scenario_id, str):
+        raise ValueError("scenario_id must be a string")
+    if isinstance(seed, bool) or not isinstance(seed, int) or not 0 <= seed <= 2_147_483_647:
+        raise ValueError("seed must be an integer in the supported range")
     frame = generate_scenario(scenario_id, seed=seed, samples=96)
     report = assess_data_quality(frame)
     anomalies = detect_anomalies(frame)
@@ -74,6 +83,8 @@ def search_documents_tool(
     query = arguments["query"]
     if not isinstance(query, str) or not query.strip():
         raise ValueError("query must be a non-empty string")
+    if len(query) > 300:
+        raise ValueError("query must be at most 300 characters")
     hits = search_documents(query, documents, top_k=3)
     return {
         "query": query,
