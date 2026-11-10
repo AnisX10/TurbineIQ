@@ -14,7 +14,7 @@ Clean-clone validation for `mvp/llm-assistant` at commit `5c1749477ad527ab82a98c
 | `npm test` | 24 tests passed across 6 files | [`vitest.txt`](llm-assistant-evidence/vitest.txt) |
 | `npm run check:paths` | Passed | [`check-paths.txt`](llm-assistant-evidence/check-paths.txt) |
 | `npm run test:e2e` | 24 Playwright tests passed, including axe, keyboard, responsive, theme, forced-colors and WebGL fallback checks | [`playwright.txt`](llm-assistant-evidence/playwright.txt) |
-| GitHub Actions `CI` | Passed for this commit; run [42905065699](https://github.com/AnisX10/TurbineIQ/actions/runs/42905065699) | Run summary is on GitHub |
+| GitHub Actions `CI` | Passed for implementation commit `5c174947`; run [42905065699](https://github.com/AnisX10/TurbineIQ/actions/runs/42905065699). The evidence commit `41b65d4` also passed CI as run [42906915959](https://github.com/AnisX10/TurbineIQ/actions/runs/42906915959). | Run summaries are on GitHub |
 
 The tests and fake evaluation make no provider requests. The live evaluation was not run. Provider/model defaults and source links, checked on 2026-11-10, are recorded in [`ASSISTANT_PROVIDERS.md`](../ASSISTANT_PROVIDERS.md).
 
