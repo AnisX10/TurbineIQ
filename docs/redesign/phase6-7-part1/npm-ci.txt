@@ -1,0 +1,10 @@
+COMMAND: npm ci
+EXIT: 0
+
+
+added 162 packages, and audited 163 packages in 31s
+
+25 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities

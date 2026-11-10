@@ -1,0 +1,36 @@
+TurbineIQ Phase 6-7 Part 2 performance follow-up
+Branch at measurement: redesign/v2, comparison HEAD 176a6b1
+
+TBT COMPARABILITY RULE
+The mobile TBT target is at most 2,000 ms and is judged only on Lighthouse runs with environment.benchmarkIndex >= 2500. Runs below 2500 are retained for reference but are not comparable. Historical runs with no recorded benchmarkIndex are not classifiable. The perf:lh runner now warns for below-threshold or missing benchmarkIndex values.
+
+PERFORMANCE METHOD
+Baseline: built commit 08e5d1a in a detached worktree, served on 127.0.0.1:8012.
+HEAD: built commit 176a6b1 in the redesign/v2 worktree, served on 127.0.0.1:8013.
+Command: npm run perf:lh -- --a http://127.0.0.1:8012/ --b http://127.0.0.1:8013/ --label-a 08e5d1a --label-b 176a6b1 --runs 5 --presets mobile,desktop
+Result: 20 successful Lighthouse 13.6.0 runs, alternating A then B, with performance, accessibility, and best-practices categories. Per-run records, benchmarkIndex, CPU/free-memory samples, payload, and boot-up attribution: lighthouse-ab.json.
+Mobile median A/B: performance 67/67; TBT 4724/4374 ms (benchmarkIndex 1549/1590.5); LCP 930.3/934.5 ms; CLS 0.000123/0.000123; payload 2,915/2,917 KiB.
+Desktop median A/B: performance 74/74; TBT 671/662 ms (benchmarkIndex 1683/1880.5); LCP 271.1/265.6 ms; CLS 0.013613/0.013613; payload 2,915/2,917 KiB.
+Interpretation: score and metric ranges overlap; no HEAD regression was observed. The historic Phase 5-to-final score change is measurement drift. No bisect was needed. Every run in this five-run A/B set was below benchmarkIndex 2500, so its TBT is not comparable under the redefined target. LCP and CLS targets passed.
+
+PROFILE AND OPTIMIZATION TRIAL
+Current HEAD mobile boot-up median attributed to TurbineViewer-*.js: 3845.6 ms (range 3754.6–4214); index-*.js: 3105.9 ms (range 2980.2–3501.7). Desktop medians: viewer 925.2 ms, index 706.5 ms. The earlier final trace recorded single longest tasks of 653 ms in the viewer and 1034 ms in the app entry.
+Trial: narrow Drei subpath imports, a Rolldown vendor split, and a 4000 ms idle activation timeout. All three unmodified-HEAD and candidate mobile runs had benchmarkIndex >= 2500. The unmodified HEAD TBT median was 1132 ms [1089–1154] at benchmarkIndex median 3258 [3215–3351]; candidate TBT median was 1122 ms [1006–1293] at benchmarkIndex median 3331 [3288–3338]. Both three-run samples met the 2000 ms target, but the improvement was not meaningful; the source changes were reverted. Trial output: lighthouse-candidate-check.json.
+
+CODE AND DOCUMENTATION GATES
+PASS — npm run build. Vite 8.3.5; the existing 1,040.51 KiB viewer chunk warning remains.
+PASS — npm test. 24 tests passed across 6 files.
+PASS — npm run lint. Exit code 0.
+PASS — npm run test:e2e -- --workers=1. 24 passed; axe had zero serious/critical findings; keyboard, network, responsive, theme, forced-colours, reduced-motion, and schematic fallback checks passed.
+PASS — npm run check:paths. Documentation path scan passed.
+PASS — node --check scripts/perf-lh.mjs and npm run perf:lh -- --help.
+PASS — strict UTF-8 JSON parsing for lighthouse-summary.json, lighthouse-ab.json, and lighthouse-candidate-check.json.
+PASS — removed UTF-8 BOM from lighthouse-summary.json and PR_DESCRIPTION.md. The new performance report writer uses UTF-8 without BOM; the GLB name-dump writer already uses UTF-8 without BOM.
+PASS — ruff check src tests. All checks passed.
+PASS — python -m pytest -q. 69 passed, 5 dependency deprecation warnings.
+PASS — Python src and tests are byte-identical to main; frontend/src/types.ts and the GLB are unchanged from 176a6b1.
+PASS — application runtime dependencies are unchanged. Lighthouse 13.6.0 is a development dependency for the requested measurement script.
+GitHub Actions for pushed commit 5aba0e2649103fe6317b22a8a53ea97743abe867: run 42382268156, conclusion success. A second run on the same commit, 42382262468, also concluded success.
+GitHub Actions for benchmark-index update commit 748ce7db4e449c95c28e126b8f49b99dcc6c2eba: run 42830370162, conclusion success. A second run on the same commit, 42830357552, also concluded success.
+
+Evidence: lighthouse-ab.json, lighthouse-candidate-check.json, and the command outcomes above.

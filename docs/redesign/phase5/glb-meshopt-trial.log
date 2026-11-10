@@ -1,0 +1,12 @@
+node.exe : npm notice run npx
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run npx:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run gltf-transform meshopt frontend/public/models/turbine.glb 
+<home>\AppData\Local\Temp\turbineiq-turbine-meshopt.glb --level high
+info: prune: Removed types... Accessor (656)
+info: prune: Removed types... Accessor (320)
+info: turbine.glb (1.91 MB) → turbineiq-turbine-meshopt.glb (842.97 KB)

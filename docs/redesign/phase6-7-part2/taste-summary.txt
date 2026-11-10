@@ -1,0 +1,16 @@
+﻿Taste design checks
+
+Lint command: node <home>/.codex/skills/design-taste-frontend/scripts/lint.mjs src --app --json
+Result: 68 files scanned, 0 failures, 19 advisory warnings (6 overlay shadows, 12 engineering mono readouts, 1 required em dash). The mono use is justified once in docs/redesign/DIRECTION.md.
+
+Inspect command: node <home>/.codex/skills/design-taste-frontend/scripts/inspect.mjs <route> --app --widths 1440,1024,768,375 --json
+Routes: Overview, Component detail, Evidence, Assistant. Result: 0 FAIL findings across all routes and widths.
+
+Advisories retained for review:
+- Overview: 85% of text samples below 13px and a 159px difference between the paired Stage and Component ledger heights.
+- Component detail: 69% of text samples below 13px and a 32% empty first-screen region.
+- Evidence: a 32% empty first-screen region and a 314px blank band under the one-result Results list.
+- Assistant: 75% of text samples below 13px.
+These are inspect advisories; the compact labels, engineering values, reserved Stage, and equal-height evidence panels follow the current direction.
+
+Colour share: Taste inspect measured 0.0–0.4% on the light route captures. The same saturated-pixel threshold applied to the 32 final dark WebP captures measured at most 0.32%. Both are below the 1% budget.

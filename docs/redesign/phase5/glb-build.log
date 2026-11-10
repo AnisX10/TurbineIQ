@@ -1,0 +1,25 @@
+node.exe : npm notice run frontend@0.0.0 build
+At line:1 char:1
++ & "<repo> Files\nodejs/node.exe" "<home>\AppData\Roaming\npm ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 build:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+npm notice run tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2653 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                            1.31 kB │ gzip:   0.55 kB
+dist/assets/index-DlxQEt00.css            50.97 kB │ gzip:   9.57 kB
+dist/assets/index-DvRU4bUl.js            301.36 kB │ gzip:  91.75 kB
+dist/assets/TurbineViewer-CdFNy1kH.js  1,039.35 kB │ gzip: 279.05 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: 
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.16s

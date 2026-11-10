@@ -1,0 +1,5 @@
+COMMAND: npm run lint
+EXIT: 0
+
+npm notice run frontend@0.0.0 lint
+npm notice run oxlint

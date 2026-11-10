@@ -1,0 +1,398 @@
+[
+  {
+    "state": "evidence-results-reader-selected",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-results-reader-selected-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "evidence-no-result",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-no-result-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-over-time",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "component-over-time-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-evidence",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "component-evidence-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-answer-tool-trace-expanded",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-answer-tool-trace-expanded-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "cloud-consent-sheet",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "cloud-consent-sheet-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-local-fallback",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-local-fallback-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "engine-offline",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · offline",
+    "file": "engine-offline-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "request-failed-retry",
+    "width": 1440,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "request-failed-retry-1440-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "evidence-results-reader-selected",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-results-reader-selected-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "evidence-no-result",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-no-result-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-over-time",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "component-over-time-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-evidence",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "component-evidence-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-answer-tool-trace-expanded",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-answer-tool-trace-expanded-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "cloud-consent-sheet",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "cloud-consent-sheet-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-local-fallback",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-local-fallback-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "engine-offline",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · offline",
+    "file": "engine-offline-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "request-failed-retry",
+    "width": 375,
+    "theme": "light",
+    "engineStatus": "Local engine · connected",
+    "file": "request-failed-retry-375-light.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "evidence-results-reader-selected",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-results-reader-selected-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "evidence-no-result",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-no-result-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-over-time",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "component-over-time-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-evidence",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "component-evidence-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-answer-tool-trace-expanded",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-answer-tool-trace-expanded-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "cloud-consent-sheet",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "cloud-consent-sheet-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-local-fallback",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-local-fallback-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "engine-offline",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · offline",
+    "file": "engine-offline-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "request-failed-retry",
+    "width": 1440,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "request-failed-retry-1440-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "evidence-results-reader-selected",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-results-reader-selected-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "evidence-no-result",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "evidence-no-result-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-over-time",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "component-over-time-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "component-evidence",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "component-evidence-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-answer-tool-trace-expanded",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-answer-tool-trace-expanded-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "cloud-consent-sheet",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "cloud-consent-sheet-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": false
+  },
+  {
+    "state": "assistant-local-fallback",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "assistant-local-fallback-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "engine-offline",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · offline",
+    "file": "engine-offline-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  },
+  {
+    "state": "request-failed-retry",
+    "width": 375,
+    "theme": "dark",
+    "engineStatus": "Local engine · connected",
+    "file": "request-failed-retry-375-dark.png",
+    "requestOrigins": [
+      "http://127.0.0.1:8011"
+    ],
+    "mocked": true
+  }
+]

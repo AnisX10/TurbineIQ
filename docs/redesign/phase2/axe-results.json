@@ -1,0 +1,66 @@
+[
+  {
+    "route": "Overview",
+    "theme": "light",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Components",
+    "theme": "light",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Evidence",
+    "theme": "light",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Assistant",
+    "theme": "light",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Overview",
+    "theme": "dark",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Components",
+    "theme": "dark",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Evidence",
+    "theme": "dark",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  },
+  {
+    "route": "Assistant",
+    "theme": "dark",
+    "seriousOrCritical": [],
+    "legacy": [],
+    "newCode": [],
+    "details": []
+  }
+]

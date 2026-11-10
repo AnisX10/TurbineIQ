@@ -1,0 +1,14 @@
+TASTESKILL · LINT   13 file(s)
+
+WARN
+  [shadow] Shadow. Elements at rest carry none; only real overlays (menu, dialog, sticky bar) may.  (4×)
+      frontend/src/Shell.css:88  box-shadow:
+      frontend/src/Shell.css:131  box-shadow:
+      frontend/src/Shell.css:144  box-shadow:
+      frontend/src/Shell.css:168  box-shadow:
+  [mono] Monospace type. Only literal code may be monospace.  (2×)
+      frontend/src/Shell.css:198  font-family: var(--mono
+      frontend/src/Shell.css:203  font-family: var(--mono
+
+RESULT: 0 FAIL, 6 WARN
+Interface fragments marked data-ui keep their own borders and shadows. Any other line that must keep a flagged pattern for a real reason can carry the comment taste-skill-ignore.

@@ -1,0 +1,226 @@
+{
+    "command":  "npx --no-install lighthouse \u003clocal app\u003e --only-categories=performance,accessibility,best-practices (three mobile and three desktop runs; Chrome networking disabled)",
+    "target":  "http://127.0.0.1:8011/#/overview",
+    "runs":  [
+                 {
+                     "run":  "desktop-1",
+                     "preset":  "desktop",
+                     "performance":  81,
+                     "accessibility":  100,
+                     "bestPractices":  96,
+                     "lcpMs":  257,
+                     "cls":  0.0136,
+                     "tbtMs":  424,
+                     "payloadKiB":  2917,
+                     "longTasks":  [
+                                       {
+                                           "durationMs":  215,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  150,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  128,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  108,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  82,
+                                           "source":  "index-DmmK5Urp.js"
+                                       }
+                                   ]
+                 },
+                 {
+                     "run":  "desktop-2",
+                     "preset":  "desktop",
+                     "performance":  84,
+                     "accessibility":  100,
+                     "bestPractices":  96,
+                     "lcpMs":  262,
+                     "cls":  0.0136,
+                     "tbtMs":  368,
+                     "payloadKiB":  2917,
+                     "longTasks":  [
+                                       {
+                                           "durationMs":  178,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  138,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  105,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  103,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  103,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       }
+                                   ]
+                 },
+                 {
+                     "run":  "desktop-3",
+                     "preset":  "desktop",
+                     "performance":  78,
+                     "accessibility":  100,
+                     "bestPractices":  96,
+                     "lcpMs":  263,
+                     "cls":  0.0136,
+                     "tbtMs":  504,
+                     "payloadKiB":  2917,
+                     "longTasks":  [
+                                       {
+                                           "durationMs":  253,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  159,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  139,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  117,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  86,
+                                           "source":  "index-DmmK5Urp.js"
+                                       }
+                                   ]
+                 },
+                 {
+                     "run":  "mobile-1",
+                     "preset":  "mobile",
+                     "performance":  69,
+                     "accessibility":  100,
+                     "bestPractices":  96,
+                     "lcpMs":  919,
+                     "cls":  0.0464,
+                     "tbtMs":  2746,
+                     "payloadKiB":  2917,
+                     "longTasks":  [
+                                       {
+                                           "durationMs":  863,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  572,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  504,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  475,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  341,
+                                           "source":  "index-DmmK5Urp.js"
+                                       }
+                                   ]
+                 },
+                 {
+                     "run":  "mobile-2",
+                     "preset":  "mobile",
+                     "performance":  68,
+                     "accessibility":  100,
+                     "bestPractices":  96,
+                     "lcpMs":  929,
+                     "cls":  0.0476,
+                     "tbtMs":  3441,
+                     "payloadKiB":  2917,
+                     "longTasks":  [
+                                       {
+                                           "durationMs":  1034,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  653,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  617,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  586,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  339,
+                                           "source":  "index-DmmK5Urp.js"
+                                       }
+                                   ]
+                 },
+                 {
+                     "run":  "mobile-3",
+                     "preset":  "mobile",
+                     "performance":  70,
+                     "accessibility":  100,
+                     "bestPractices":  96,
+                     "lcpMs":  922,
+                     "cls":  0.0464,
+                     "tbtMs":  2360,
+                     "payloadKiB":  2917,
+                     "longTasks":  [
+                                       {
+                                           "durationMs":  671,
+                                           "source":  "index-DmmK5Urp.js"
+                                       },
+                                       {
+                                           "durationMs":  542,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  443,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  397,
+                                           "source":  "TurbineViewer-t1jvwLQP.js"
+                                       },
+                                       {
+                                           "durationMs":  365,
+                                           "source":  "index-DmmK5Urp.js"
+                                       }
+                                   ]
+                 }
+             ],
+    "medians":  {
+                    "desktop":  {
+                                    "performance":  81,
+                                    "accessibility":  100,
+                                    "bestPractices":  96,
+                                    "lcpMs":  262,
+                                    "cls":  0.0136,
+                                    "tbtMs":  424,
+                                    "payloadKiB":  2917
+                                },
+                    "mobile":  {
+                                   "performance":  69,
+                                   "accessibility":  100,
+                                   "bestPractices":  96,
+                                   "lcpMs":  922,
+                                   "cls":  0.0464,
+                                   "tbtMs":  2746,
+                                   "payloadKiB":  2917
+                               }
+                },
+    "lcpElementProbe":  "Separate unthrottled PerformanceObserver probe: mobile .viewer-note at 252 ms; desktop h2#component-ledger-title at 196 ms. See lcp-elements.json.",
+    "interpretation":  "Mobile TBT target 2000 ms failed at 2746 ms median. Mobile long tasks are dominated by index-*.js (max 1034 ms) and TurbineViewer-*.js (max 653 ms). Desktop TBT median 424 ms."
+}

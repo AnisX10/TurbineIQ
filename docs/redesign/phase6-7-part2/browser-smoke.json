@@ -1,0 +1,53 @@
+[
+  {
+    "browser": "Chromium",
+    "result": "passed",
+    "pages": [
+      "Overview",
+      "Evidence"
+    ],
+    "stage": {
+      "webgl": true,
+      "webgl2": true,
+      "modelState": "Blender GLB"
+    },
+    "origins": [
+      "http://127.0.0.1:8011"
+    ],
+    "runtimeErrors": []
+  },
+  {
+    "browser": "Firefox",
+    "result": "passed",
+    "pages": [
+      "Overview",
+      "Evidence"
+    ],
+    "stage": {
+      "webgl": true,
+      "webgl2": true,
+      "modelState": "Blender GLB"
+    },
+    "origins": [
+      "http://127.0.0.1:8011"
+    ],
+    "runtimeErrors": []
+  },
+  {
+    "browser": "WebKit",
+    "result": "passed",
+    "pages": [
+      "Overview",
+      "Evidence"
+    ],
+    "stage": {
+      "webgl": true,
+      "webgl2": true,
+      "modelState": "Blender GLB"
+    },
+    "origins": [
+      "http://127.0.0.1:8011"
+    ],
+    "runtimeErrors": []
+  }
+]

@@ -1,0 +1,6 @@
+COMMAND: npm run check:paths
+EXIT: 0
+
+Documentation path scan passed (README.md and docs/).
+npm notice run frontend@0.0.0 check:paths
+npm notice run node ../scripts/check-doc-paths.mjs

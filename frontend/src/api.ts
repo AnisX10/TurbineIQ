@@ -28,8 +28,8 @@ export const api = {
     request<TwinRunPayload>(
       `/api/twin/run?scenario_id=${encodeURIComponent(scenarioId)}&seed=${seed}&samples=96&sample_index=48`,
     ),
-  evidence: (query: string) =>
-    request<EvidenceResponse>(`/api/evidence/search?q=${encodeURIComponent(query)}&top_k=4`),
+  evidence: (query: string, topK = 4) =>
+    request<EvidenceResponse>(`/api/evidence/search?q=${encodeURIComponent(query)}&top_k=${topK}`),
   ask: (
     question: string,
     enableCloud: boolean,

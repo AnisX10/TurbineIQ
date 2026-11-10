@@ -1,0 +1,48 @@
+evidence-results-reader-selected 1440px light: Local engine · connected -> evidence-results-reader-selected-1440-light.png
+evidence-no-result 1440px light: Local engine · connected -> evidence-no-result-1440-light.png
+component-over-time 1440px light: Local engine · connected -> component-over-time-1440-light.png
+component-evidence 1440px light: Local engine · connected -> component-evidence-1440-light.png
+assistant-answer-tool-trace-expanded 1440px light: Local engine · connected -> assistant-answer-tool-trace-expanded-1440-light.png
+cloud-consent-sheet 1440px light: Local engine · connected -> cloud-consent-sheet-1440-light.png
+assistant-local-fallback 1440px light: Local engine · connected -> assistant-local-fallback-1440-light.png
+engine-offline 1440px light: Local engine · offline -> engine-offline-1440-light.png
+request-failed-retry 1440px light: Local engine · connected -> request-failed-retry-1440-light.png
+node : node:internal/modules/run_main:107
+At line:3 char:1
++ node e2e/capture-phase5-states.mjs 2>&1 | Tee-Object -FilePath '../do ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (node:internal/modules/run_main:107:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    triggerUncaughtException(
+    ^
+
+locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('.engine-button') to be visible[22m
+[2m    3 × locator resolved to hidden <button type="button" aria-expanded="false" title="Local engine · checking" 
+aria-controls="engine-status-_r_0_" class="utility-button engine-button" aria-label="Local engine · 
+checking">…</button>[22m
+[2m    59 × locator resolved to hidden <button type="button" aria-expanded="false" title="Local engine · connected" 
+aria-controls="engine-status-_r_0_" class="utility-button engine-button" aria-label="Local engine · 
+connected">…</button>[22m
+
+    at createPage (<repo>\fro
+ntend\e2e\capture-phase5-states.mjs:25:40)
+    at async capture (<repo>\
+frontend\e2e\capture-phase5-states.mjs:34:45)
+    at async file:///<repo>/f
+rontend/e2e/capture-phase5-states.mjs:52:5 {
+  log: [
+    "  - waiting for locator('.engine-button') to be visible",
+    '    3 × locator resolved to hidden <button type="button" aria-expanded="false" title="Local engine · checking" 
+aria-controls="engine-status-_r_0_" class="utility-button engine-button" aria-label="Local engine · 
+checking">…</button>',
+    '    59 × locator resolved to hidden <button type="button" aria-expanded="false" title="Local engine · connected" 
+aria-controls="engine-status-_r_0_" class="utility-button engine-button" aria-label="Local engine · 
+connected">…</button>'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.15.0

@@ -1,0 +1,4 @@
+COMMAND: ruff check src tests
+EXIT: 0
+
+All checks passed!

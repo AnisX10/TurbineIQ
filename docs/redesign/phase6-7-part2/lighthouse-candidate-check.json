@@ -1,0 +1,384 @@
+{
+  "schemaVersion": 1,
+  "method": "Alternating Lighthouse 13.6.0 A/B runs on local production builds; both categories and presets use identical browser flags.",
+  "lighthouseVersion": "13.6.0",
+  "nodeVersion": "v24.15.0",
+  "platform": "win32",
+  "cpuCount": 12,
+  "memoryMiB": 16016,
+  "chromePath": "<configured Chrome binary>",
+  "runsPerPreset": 3,
+  "builds": {
+    "A": "176a6b1",
+    "B": "candidate"
+  },
+  "presets": [
+    "mobile"
+  ],
+  "runs": [
+    {
+      "id": "mobile-1-A",
+      "label": "A",
+      "build": "176a6b1",
+      "preset": "mobile",
+      "index": 1,
+      "startedAt": "2026-11-07T14:23:56.838Z",
+      "url": "http://127.0.0.1:8014/",
+      "performance": 74,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1089,
+      "lcpMs": 914,
+      "cls": 0.046438,
+      "payloadBytes": 2987097,
+      "benchmarkIndex": 3215,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 32.2,
+        "freeMemoryMiBBefore": 1979.5,
+        "freeMemoryMiBAfter": 2087.6,
+        "nodeRssMiB": 42.9,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8014/assets/TurbineViewer-t1jvwLQP.js",
+          "totalMs": 1411.3,
+          "scriptingMs": 1221.3
+        },
+        {
+          "url": "http://127.0.0.1:8014/assets/index-DmmK5Urp.js",
+          "totalMs": 1039.3,
+          "scriptingMs": 954.8
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 401.7,
+          "scriptingMs": 9.8
+        },
+        {
+          "url": "http://127.0.0.1:8014/",
+          "totalMs": 213.8,
+          "scriptingMs": 5.3
+        }
+      ]
+    },
+    {
+      "id": "mobile-1-B",
+      "label": "B",
+      "build": "candidate",
+      "preset": "mobile",
+      "index": 1,
+      "startedAt": "2026-11-07T14:24:09.708Z",
+      "url": "http://127.0.0.1:8013/",
+      "performance": 74,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1006,
+      "lcpMs": 909.2,
+      "cls": 0.046438,
+      "payloadBytes": 2987978,
+      "benchmarkIndex": 3338,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 29.7,
+        "freeMemoryMiBBefore": 2084.2,
+        "freeMemoryMiBAfter": 2079.4,
+        "nodeRssMiB": 45.2,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8013/assets/viewer-vendor-CVhKqqEQ.js",
+          "totalMs": 1365.4,
+          "scriptingMs": 1192.7
+        },
+        {
+          "url": "http://127.0.0.1:8013/assets/react-vendor-C2ZZQvfb.js",
+          "totalMs": 982.4,
+          "scriptingMs": 900.8
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 269,
+          "scriptingMs": 8.7
+        },
+        {
+          "url": "http://127.0.0.1:8013/",
+          "totalMs": 194.9,
+          "scriptingMs": 5.2
+        }
+      ]
+    },
+    {
+      "id": "mobile-2-A",
+      "label": "A",
+      "build": "176a6b1",
+      "preset": "mobile",
+      "index": 2,
+      "startedAt": "2026-11-07T14:24:22.467Z",
+      "url": "http://127.0.0.1:8014/",
+      "performance": 73,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1153.5,
+      "lcpMs": 910,
+      "cls": 0.046316,
+      "payloadBytes": 2987097,
+      "benchmarkIndex": 3258,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 30.9,
+        "freeMemoryMiBBefore": 2075.9,
+        "freeMemoryMiBAfter": 2022.7,
+        "nodeRssMiB": 43.6,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8014/assets/TurbineViewer-t1jvwLQP.js",
+          "totalMs": 1461.7,
+          "scriptingMs": 1301.6
+        },
+        {
+          "url": "http://127.0.0.1:8014/assets/index-DmmK5Urp.js",
+          "totalMs": 1072.7,
+          "scriptingMs": 983.6
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 243.3,
+          "scriptingMs": 8.9
+        },
+        {
+          "url": "http://127.0.0.1:8014/",
+          "totalMs": 189.4,
+          "scriptingMs": 5.2
+        }
+      ]
+    },
+    {
+      "id": "mobile-2-B",
+      "label": "B",
+      "build": "candidate",
+      "preset": "mobile",
+      "index": 2,
+      "startedAt": "2026-11-07T14:24:35.155Z",
+      "url": "http://127.0.0.1:8013/",
+      "performance": 73,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1121.5,
+      "lcpMs": 911.1,
+      "cls": 0.046316,
+      "payloadBytes": 2987978,
+      "benchmarkIndex": 3288,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 33.3,
+        "freeMemoryMiBBefore": 2019.8,
+        "freeMemoryMiBAfter": 2103.4,
+        "nodeRssMiB": 46.1,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8013/assets/viewer-vendor-CVhKqqEQ.js",
+          "totalMs": 1442.5,
+          "scriptingMs": 1270
+        },
+        {
+          "url": "http://127.0.0.1:8013/assets/react-vendor-C2ZZQvfb.js",
+          "totalMs": 1042.3,
+          "scriptingMs": 955.5
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 269.7,
+          "scriptingMs": 10.5
+        },
+        {
+          "url": "http://127.0.0.1:8013/",
+          "totalMs": 171,
+          "scriptingMs": 5.1
+        }
+      ]
+    },
+    {
+      "id": "mobile-3-A",
+      "label": "A",
+      "build": "176a6b1",
+      "preset": "mobile",
+      "index": 3,
+      "startedAt": "2026-11-07T14:24:47.833Z",
+      "url": "http://127.0.0.1:8014/",
+      "performance": 73,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1131.5,
+      "lcpMs": 909.8,
+      "cls": 0.047443,
+      "payloadBytes": 2987097,
+      "benchmarkIndex": 3351,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 29.5,
+        "freeMemoryMiBBefore": 2100.5,
+        "freeMemoryMiBAfter": 2111.6,
+        "nodeRssMiB": 48,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8014/assets/TurbineViewer-t1jvwLQP.js",
+          "totalMs": 1456.4,
+          "scriptingMs": 1295.6
+        },
+        {
+          "url": "http://127.0.0.1:8014/assets/index-DmmK5Urp.js",
+          "totalMs": 1060,
+          "scriptingMs": 963.1
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 256.8,
+          "scriptingMs": 9
+        },
+        {
+          "url": "http://127.0.0.1:8014/",
+          "totalMs": 182.7,
+          "scriptingMs": 5
+        }
+      ]
+    },
+    {
+      "id": "mobile-3-B",
+      "label": "B",
+      "build": "candidate",
+      "preset": "mobile",
+      "index": 3,
+      "startedAt": "2026-11-07T14:25:00.449Z",
+      "url": "http://127.0.0.1:8013/",
+      "performance": 73,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1293,
+      "lcpMs": 911.6,
+      "cls": 0.046316,
+      "payloadBytes": 2987978,
+      "benchmarkIndex": 3331,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 37.5,
+        "freeMemoryMiBBefore": 2107.4,
+        "freeMemoryMiBAfter": 1766.8,
+        "nodeRssMiB": 49.7,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8013/assets/viewer-vendor-CVhKqqEQ.js",
+          "totalMs": 1497,
+          "scriptingMs": 1301.8
+        },
+        {
+          "url": "http://127.0.0.1:8013/assets/react-vendor-C2ZZQvfb.js",
+          "totalMs": 1170.6,
+          "scriptingMs": 1081.6
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 229.3,
+          "scriptingMs": 9.8
+        },
+        {
+          "url": "http://127.0.0.1:8013/",
+          "totalMs": 194.8,
+          "scriptingMs": 5
+        }
+      ]
+    }
+  ],
+  "summaries": {
+    "mobile": {
+      "A": {
+        "performance": {
+          "median": 73,
+          "min": 73,
+          "max": 74
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 1132,
+          "min": 1089,
+          "max": 1154
+        },
+        "lcpMs": {
+          "median": 910,
+          "min": 909.8,
+          "max": 914
+        },
+        "cls": {
+          "median": 0.046438,
+          "min": 0.046316,
+          "max": 0.047443
+        },
+        "payloadBytes": {
+          "median": 2987097,
+          "min": 2987097,
+          "max": 2987097
+        },
+        "benchmarkIndex": {
+          "median": 3258,
+          "min": 3215,
+          "max": 3351
+        }
+      },
+      "B": {
+        "performance": {
+          "median": 73,
+          "min": 73,
+          "max": 74
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 1122,
+          "min": 1006,
+          "max": 1293
+        },
+        "lcpMs": {
+          "median": 911.1,
+          "min": 909.2,
+          "max": 911.6
+        },
+        "cls": {
+          "median": 0.046316,
+          "min": 0.046316,
+          "max": 0.046438
+        },
+        "payloadBytes": {
+          "median": 2987978,
+          "min": 2987978,
+          "max": 2987978
+        },
+        "benchmarkIndex": {
+          "median": 3331,
+          "min": 3288,
+          "max": 3338
+        }
+      }
+    }
+  }
+}
