@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import asyncio
+import json
+import re
 import time
 from pathlib import Path
 from typing import Any, Literal
@@ -9,6 +12,7 @@ from urllib.parse import urlsplit
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -91,6 +95,66 @@ def _rate_limit_assistant(request: Request) -> None:
             status_code=429,
             detail="Assistant request limit reached. Try again shortly.",
         )
+
+
+def _build_twin_context(selection: SelectedTwinContext | None) -> dict[str, Any] | None:
+    if selection is None:
+        return None
+    if selection.scenario_id not in SCENARIOS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"Unknown synthetic scenario: {selection.scenario_id}",
+        )
+    twin_run = create_synthetic_twin(selection.scenario_id, seed=selection.seed, samples=96)
+    twin_snapshot = twin_run.snapshot_at(selection.sample_index).to_dict()
+    component = next(
+        (
+            item
+            for item in twin_snapshot["components"]
+            if item["component_id"] == selection.selected_component_id
+        ),
+        None,
+    )
+    if component is None:
+        raise HTTPException(status_code=422, detail="Selected component is not in the snapshot")
+    return {
+        "run": {
+            "scenario_id": twin_run.scenario_id,
+            "scenario_name": twin_run.scenario_name,
+            "scenario_description": twin_run.scenario_description,
+            "seed": twin_run.seed,
+            "sample_count": twin_run.sample_count,
+            "model_name": twin_run.model_name,
+            "synthetic_only": True,
+        },
+        "snapshot": twin_snapshot,
+        "selected_component": component,
+    }
+
+
+def _validate_assistant_request(request: AssistantRequest) -> dict[str, Any] | None:
+    if not request.question.strip():
+        raise HTTPException(status_code=422, detail="question must not be blank")
+    if request.allow_cloud_document_context and not request.enable_cloud:
+        raise HTTPException(
+            status_code=422,
+            detail="cloud document context requires explicit cloud mode",
+        )
+    return _build_twin_context(request.selected_twin)
+
+
+def _assistant_result_payload(response: Any) -> dict[str, object]:
+    return {
+        "answer": response.answer,
+        "mode": response.mode,
+        "warning": response.warning,
+        "tool_calls": [call.to_dict() for call in response.tool_calls],
+        "synthetic_only": True,
+    }
+
+
+def _sse_event(name: str, payload: dict[str, Any]) -> str:
+    return f"event: {name}\ndata: {json.dumps(payload, ensure_ascii=False, allow_nan=False)}\n\n"
 
 
 def _base_url_host(settings: CloudLLMSettings) -> str:
@@ -226,62 +290,58 @@ def test_assistant_provider() -> dict[str, Any]:
 
 @app.post("/api/assistant/ask", dependencies=[Depends(_rate_limit_assistant)])
 def ask_assistant(request: AssistantRequest) -> dict[str, object]:
-    question = request.question.strip()
-    if not question:
-        raise HTTPException(status_code=422, detail="question must not be blank")
-    if request.allow_cloud_document_context and not request.enable_cloud:
-        raise HTTPException(
-            status_code=422,
-            detail="cloud document context requires explicit cloud mode",
-        )
-
-    twin_context = None
-    if request.selected_twin is not None:
-        selection = request.selected_twin
-        if selection.scenario_id not in SCENARIOS:
-            raise HTTPException(
-                status_code=422,
-                detail=f"Unknown synthetic scenario: {selection.scenario_id}",
-            )
-        twin_run = create_synthetic_twin(selection.scenario_id, seed=selection.seed, samples=96)
-        twin_snapshot = twin_run.snapshot_at(selection.sample_index).to_dict()
-        component = next(
-            (
-                item
-                for item in twin_snapshot["components"]
-                if item["component_id"] == selection.selected_component_id
-            ),
-            None,
-        )
-        if component is None:
-            raise HTTPException(status_code=422, detail="Selected component is not in the snapshot")
-        twin_context = {
-            "run": {
-                "scenario_id": twin_run.scenario_id,
-                "scenario_name": twin_run.scenario_name,
-                "scenario_description": twin_run.scenario_description,
-                "seed": twin_run.seed,
-                "sample_count": twin_run.sample_count,
-                "model_name": twin_run.model_name,
-                "synthetic_only": True,
-            },
-            "snapshot": twin_snapshot,
-            "selected_component": component,
-        }
-
+    twin_context = _validate_assistant_request(request)
     response = assistant.run(
-        question,
+        request.question.strip(),
         enable_cloud=request.enable_cloud,
         allow_cloud_document_context=request.allow_cloud_document_context,
         twin_context=twin_context,
     )
-    return {
-        "answer": response.answer,
-        "mode": response.mode,
-        "warning": response.warning,
-        "tool_calls": [call.to_dict() for call in response.tool_calls],
-        "synthetic_only": True,
-    }
+    return _assistant_result_payload(response)
+
+
+@app.post("/api/assistant/stream", dependencies=[Depends(_rate_limit_assistant)])
+def stream_assistant(request: AssistantRequest) -> StreamingResponse:
+    twin_context = _validate_assistant_request(request)
+
+    async def stream_events():
+        yield _sse_event(
+            "status",
+            {"state": "working", "message": "Preparing the server-recomputed context."},
+        )
+        progress: list[tuple[str, dict[str, Any]]] = []
+        try:
+            response = await asyncio.to_thread(
+                assistant.run,
+                request.question.strip(),
+                enable_cloud=request.enable_cloud,
+                allow_cloud_document_context=request.allow_cloud_document_context,
+                twin_context=twin_context,
+                on_event=lambda name, data: progress.append((name, data)),
+            )
+        except Exception:
+            yield _sse_event(
+                "error",
+                {
+                    "message": (
+                        "The assistant could not complete this request. Retry or use the "
+                        "local assistant."
+                    )
+                },
+            )
+            return
+        for event_name, payload in progress:
+            yield _sse_event(event_name, payload)
+        result = _assistant_result_payload(response)
+        for token in re.findall(r"\S+\s*", str(result["answer"])):
+            yield _sse_event("token", {"text": token})
+        yield _sse_event("done", result)
+
+    return StreamingResponse(
+        stream_events(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 if FRONTEND_DIST_PATH.is_dir():

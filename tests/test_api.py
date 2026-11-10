@@ -116,3 +116,28 @@ def test_assistant_rejects_invalid_synthetic_twin_selection() -> None:
     )
 
     assert response.status_code == 422
+
+
+def test_assistant_stream_emits_tool_progress_tokens_and_final_response() -> None:
+    response = client.post(
+        "/api/assistant/stream",
+        json={
+            "question": "Explain this synthetic compressor sample.",
+            "selected_twin": {
+                "scenario_id": "compressor_fouling",
+                "seed": 42,
+                "sample_index": 72,
+                "selected_component_id": "compressor",
+            },
+        },
+    )
+
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/event-stream")
+    assert "event: status" in response.text
+    assert "event: tool_start" in response.text
+    assert '"name": "inspect_synthetic_twin_snapshot"' in response.text
+    assert "event: tool_result" in response.text
+    assert "event: token" in response.text
+    assert "event: done" in response.text
+    assert "81.2%" in response.text

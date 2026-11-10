@@ -7,7 +7,7 @@ import random
 import re
 import time
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import Any, Callable
 
 from turbineiq.engineering import CycleInputs
 from turbineiq.rag import DocumentChunk, build_local_answer, search_documents
@@ -181,13 +181,14 @@ class TurbineAssistant:
         enable_cloud: bool = False,
         allow_cloud_document_context: bool = False,
         twin_context: dict[str, Any] | None = None,
+        on_event: Callable[[str, dict[str, Any]], None] | None = None,
     ) -> AssistantResponse:
         question = question.strip()
         if not question:
             raise ValueError("question must not be empty")
         if enable_cloud:
             if not self.cloud_settings.configured and self.client is None and self.adapter is None:
-                local = self._run_local(question, twin_context=twin_context)
+                local = self._run_local(question, twin_context=twin_context, on_event=on_event)
                 missing_config = self.cloud_settings.provider in {"ollama", "custom"}
                 return AssistantResponse(
                     answer=local.answer,
@@ -202,22 +203,24 @@ class TurbineAssistant:
                     question,
                     allow_cloud_document_context=allow_cloud_document_context,
                     twin_context=twin_context,
+                    on_event=on_event,
                 )
             except Exception as exc:
-                local = self._run_local(question, twin_context=twin_context)
+                local = self._run_local(question, twin_context=twin_context, on_event=on_event)
                 return AssistantResponse(
                     answer=local.answer,
                     mode="local_fallback",
                     tool_calls=local.tool_calls,
                     warning=self._fallback_warning(exc),
                 )
-        return self._run_local(question, twin_context=twin_context)
+        return self._run_local(question, twin_context=twin_context, on_event=on_event)
 
     def _run_local(
         self,
         question: str,
         *,
         twin_context: dict[str, Any] | None = None,
+        on_event: Callable[[str, dict[str, Any]], None] | None = None,
     ) -> AssistantResponse:
         normalized = question.casefold()
         calls: tuple[ToolInvocation, ...]
@@ -293,6 +296,10 @@ class TurbineAssistant:
                 "The constant-property model inputs are study assumptions, not OEM data or limits."
             )
             calls = (ToolInvocation("calculate_cycle", inputs, result),)
+        if on_event:
+            for call in calls:
+                on_event("tool_start", {"name": call.name, "arguments": call.arguments})
+                on_event("tool_result", call.to_dict())
         return AssistantResponse(answer=answer, mode="local", tool_calls=calls)
 
     def _openai_client(self) -> Any:
@@ -323,6 +330,7 @@ class TurbineAssistant:
         *,
         allow_cloud_document_context: bool,
         twin_context: dict[str, Any] | None,
+        on_event: Callable[[str, dict[str, Any]], None] | None = None,
     ) -> AssistantResponse:
         adapter = self._adapter()
         tools = [dict(tool) for tool in BASE_TOOL_SPECS]
@@ -371,6 +379,8 @@ class TurbineAssistant:
             )
             for call in function_calls:
                 name = call.name
+                if on_event:
+                    on_event("tool_start", {"name": name})
                 try:
                     arguments = self._decode_tool_arguments(
                         call,
@@ -392,6 +402,8 @@ class TurbineAssistant:
                     arguments = {}
                     result = {"error": str(exc)}
                 traces.append(ToolInvocation(name=name, arguments=arguments, result=result))
+                if on_event:
+                    on_event("tool_result", traces[-1].to_dict())
                 messages.append(
                     LLMMessage(
                         role="tool",
