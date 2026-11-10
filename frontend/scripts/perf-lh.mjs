@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 const frontendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const repoRoot = path.resolve(frontendRoot, '..')
 const args = parseArgs(process.argv.slice(2))
+const tbtBenchmarkIndexThreshold = 2500
 const runsPerPreset = Number(args.runs ?? 5)
 const presets = String(args.presets ?? 'mobile,desktop').split(',').map((value) => value.trim())
 const outputPath = args.output
@@ -72,6 +73,7 @@ try {
           after,
         })
         allRuns.push(record)
+        warnIfTbtNotComparable(record)
         console.log(formatRun(record))
       }
     }
@@ -80,6 +82,7 @@ try {
   const result = {
     schemaVersion: 1,
     method: 'Alternating Lighthouse 13.6.0 A/B runs on local production builds; both categories and presets use identical browser flags.',
+    tbtBenchmarkIndexThreshold,
     lighthouseVersion: '13.6.0',
     nodeVersion: process.version,
     platform: process.platform,
@@ -191,6 +194,14 @@ function round(value, digits = 1) {
 
 function formatRun(record) {
   return `  perf ${record.performance} · TBT ${record.tbtMs} ms · LCP ${record.lcpMs} ms · CLS ${record.cls} · payload ${(record.payloadBytes / 1024).toFixed(0)} KiB · benchmarkIndex ${record.benchmarkIndex} · CPU ${record.systemLoad.cpuUtilizationPercentDuringRun}% · free RAM ${record.systemLoad.freeMemoryMiBBefore}→${record.systemLoad.freeMemoryMiBAfter} MiB`
+}
+
+function warnIfTbtNotComparable(record) {
+  if (!Number.isFinite(record.benchmarkIndex)) {
+    console.warn(`WARNING: ${record.id} has no benchmarkIndex; its TBT cannot be compared against the ${tbtBenchmarkIndexThreshold} threshold.`)
+  } else if (record.benchmarkIndex < tbtBenchmarkIndexThreshold) {
+    console.warn(`WARNING: ${record.id} benchmarkIndex ${record.benchmarkIndex} is below ${tbtBenchmarkIndexThreshold}; its TBT is not comparable.`)
+  }
 }
 
 function run(command, commandArgs, options) {
