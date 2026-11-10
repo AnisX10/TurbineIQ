@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
+import queue
 import re
+import threading
 import time
 from pathlib import Path
 from typing import Any, Literal
@@ -303,39 +304,49 @@ def ask_assistant(request: AssistantRequest) -> dict[str, object]:
 @app.post("/api/assistant/stream", dependencies=[Depends(_rate_limit_assistant)])
 def stream_assistant(request: AssistantRequest) -> StreamingResponse:
     twin_context = _validate_assistant_request(request)
+    events: queue.Queue[tuple[str, Any]] = queue.Queue()
 
-    async def stream_events():
-        yield _sse_event(
-            "status",
-            {"state": "working", "message": "Preparing the server-recomputed context."},
-        )
-        progress: list[tuple[str, dict[str, Any]]] = []
+    def run_assistant() -> None:
         try:
-            response = await asyncio.to_thread(
-                assistant.run,
+            response = assistant.run(
                 request.question.strip(),
                 enable_cloud=request.enable_cloud,
                 allow_cloud_document_context=request.allow_cloud_document_context,
                 twin_context=twin_context,
-                on_event=lambda name, data: progress.append((name, data)),
+                on_event=lambda name, data: events.put((name, data)),
             )
+            events.put(("complete", response))
         except Exception:
-            yield _sse_event(
-                "error",
-                {
-                    "message": (
+            events.put(
+                (
+                    "failure",
+                    (
                         "The assistant could not complete this request. Retry or use the "
                         "local assistant."
-                    )
-                },
+                    ),
+                )
             )
-            return
-        for event_name, payload in progress:
-            yield _sse_event(event_name, payload)
-        result = _assistant_result_payload(response)
-        for token in re.findall(r"\S+\s*", str(result["answer"])):
-            yield _sse_event("token", {"text": token})
-        yield _sse_event("done", result)
+
+    def stream_events():
+        yield _sse_event(
+            "status",
+            {"state": "working", "message": "Preparing the server-recomputed context."},
+        )
+        threading.Thread(target=run_assistant, daemon=True).start()
+        while True:
+            event_name, payload = events.get()
+            if event_name in {"tool_start", "tool_result"}:
+                yield _sse_event(event_name, payload)
+                continue
+            if event_name == "failure":
+                yield _sse_event("error", {"message": payload})
+                return
+            if event_name == "complete":
+                result = _assistant_result_payload(payload)
+                for token in re.findall(r"\S+\s*", str(result["answer"])):
+                    yield _sse_event("token", {"text": token})
+                yield _sse_event("done", result)
+                return
 
     return StreamingResponse(
         stream_events(),
