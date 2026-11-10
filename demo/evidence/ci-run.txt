@@ -1,6 +1,6 @@
 GitHub Actions workflow: CI
-Run ID: 42384504262
-Commit tested: 58a54a468a9952f50a4c7631f0a4199c1bf323be
+Run ID: 42833386590
+Commit tested: ecb1c5d764115f94bf022acca9606ee9da4db082
 Conclusion: success
 Python job: ruff check and pytest passed.
 Frontend job: npm ci, lint, build, vitest, check:paths and Playwright passed.
