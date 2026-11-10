@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { api } from '../../api'
+import type { AssistantProviderStatus } from '../../api'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import type { AssistantResponse, SelectedTwinSelection } from '../../types'
 import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
@@ -14,10 +15,24 @@ interface ConversationItem {
   error?: string
 }
 
-function ConsentSheet({ open, onCancel, onConfirm, includeDocuments, onIncludeDocuments }: { open: boolean; onCancel: () => void; onConfirm: () => void; includeDocuments: boolean; onIncludeDocuments: (value: boolean) => void }) {
+function ConsentSheet({ open, onCancel, onConfirm, includeDocuments, onIncludeDocuments, providerStatus }: { open: boolean; onCancel: () => void; onConfirm: () => void; includeDocuments: boolean; onIncludeDocuments: (value: boolean) => void; providerStatus: AssistantProviderStatus | null }) {
+  const providerLabel = providerStatus
+    ? `${providerStatus.configured ? 'Configured provider' : 'Provider not configured'}: ${providerStatus.provider} · ${providerStatus.base_url_host} · ${providerStatus.model}`
+    : 'Provider configuration unavailable'
+  const sharingCopy = providerStatus?.configured
+    ? 'The named provider receives your question, TurbineIQ assistant instructions and allowed-tool descriptions, server-recomputed synthetic run metadata, selected sample and component when present, and results from local tools used to answer.'
+    : providerStatus
+      ? 'The provider is not configured, so Cloud requests currently use local fallback and no prompt is sent to a model provider. If configured later, the provider will receive your question, TurbineIQ assistant instructions and allowed-tool descriptions, server-recomputed synthetic run metadata, selected sample and component when present, and results from local tools used to answer.'
+      : 'Provider details could not be loaded. If a provider is configured, it receives your question, TurbineIQ assistant instructions and allowed-tool descriptions, server-recomputed synthetic run metadata, selected sample and component when present, and results from local tools used to answer. If no provider is configured, the request uses local fallback.'
+  const documentSharingCopy = providerStatus?.configured
+    ? 'The separate option below sends matching document excerpts and citations only when checked and the assistant searches local documents.'
+    : providerStatus
+      ? 'Document excerpts are not sent while the provider is unconfigured; the separate opt-in remains available if a provider is configured later.'
+      : 'Document excerpts remain a separate opt-in; if a provider is configured, matching excerpts and citations may be sent when this option is checked.'
   return <Sheet open={open} onClose={onCancel} className="sheet-consent assistant-consent-sheet" labelledBy="cloud-consent-title" describedBy="cloud-consent-copy">
     <h2 id="cloud-consent-title">Review Cloud sharing</h2>
-    <p id="cloud-consent-copy">The configured provider receives your question, TurbineIQ assistant instructions and allowed-tool descriptions, and the server-recomputed synthetic run metadata, selected sample, and selected component when present. It also receives results from local tools used to answer. If you enable the option below and the assistant searches local documents, the matching excerpts and citations are sent too.</p>
+    <p>{providerLabel}</p>
+    <p id="cloud-consent-copy">{sharingCopy} {documentSharingCopy} Free provider plans may log or retain prompts under their own policies. The API key stays in the local server and is not sent to the browser.</p>
     <label className="assistant-consent-check"><input type="checkbox" checked={includeDocuments} onChange={(event) => onIncludeDocuments(event.target.checked)} /><span className="assistant-consent-checkbox-mark" aria-hidden="true" />Allow local document excerpts and citations to be sent if the assistant searches local documents.</label>
     <p className="assistant-consent-note">This option is off by default. The server still enforces document consent.</p>
     <div className="assistant-consent-actions"><button type="button" className="button-quiet" onClick={onCancel}>Cancel</button><button type="button" className="assistant-ask-button" data-sheet-autofocus onClick={onConfirm}>Continue to Cloud</button></div>
@@ -31,6 +46,7 @@ export default function Assistant() {
   const [includeDocuments, setIncludeDocuments] = useState(false)
   const [question, setQuestion] = useState('')
   const [messages, setMessages] = useState<ConversationItem[]>([])
+  const [providerStatus, setProviderStatus] = useState<AssistantProviderStatus | null>(null)
   const [busy, setBusy] = useState(false)
   const nextId = useRef(1)
   const composer = useRef<HTMLTextAreaElement>(null)
@@ -44,6 +60,15 @@ export default function Assistant() {
     sample_index: snapshot.sample_index,
     selected_component_id: component.component_id,
   } : null, [snapshot, component])
+  useEffect(() => {
+    let active = true
+    void api.assistantStatus().then((status) => {
+      if (active) setProviderStatus(status)
+    }).catch(() => {
+      if (active) setProviderStatus(null)
+    })
+    return () => { active = false }
+  }, [])
   const suggestions = [
     'Explain the selected sample residual.',
     'Which assumption sets the compressor efficiency reference?',
@@ -110,12 +135,12 @@ export default function Assistant() {
         </div>
         <form className={`assistant-composer${busy ? ' is-waiting' : ''}`} onSubmit={(event) => void ask(event)}>
           {busy && <div className="assistant-progress" role="status" aria-label="Assistant is working"><span /></div>}
-          <textarea ref={composer} rows={1} value={question} aria-label="Ask TurbineIQ" placeholder="Ask about the synthetic model or selected sample" onChange={(event) => { setQuestion(event.target.value); const field = event.currentTarget; field.style.height = '36px'; field.style.height = `${Math.min(field.scrollHeight, 120)}px` }} onKeyDown={onComposerKeyDown} />
+          <textarea ref={composer} rows={1} maxLength={1000} value={question} aria-label="Ask TurbineIQ" placeholder="Ask about the synthetic model or selected sample" onChange={(event) => { setQuestion(event.target.value); const field = event.currentTarget; field.style.height = '36px'; field.style.height = `${Math.min(field.scrollHeight, 120)}px` }} onKeyDown={onComposerKeyDown} />
           <button className="assistant-ask-button" type="submit" disabled={busy || !question.trim()}>{busy ? 'Working' : 'Ask'}</button>
         </form>
         <p className="assistant-composer-hint">Enter sends · Shift+Enter adds a line</p>
       </section>
-      <ConsentSheet open={consentOpen} onCancel={cancelConsent} onConfirm={confirmConsent} includeDocuments={includeDocuments} onIncludeDocuments={setIncludeDocuments} />
+      <ConsentSheet open={consentOpen} onCancel={cancelConsent} onConfirm={confirmConsent} includeDocuments={includeDocuments} onIncludeDocuments={setIncludeDocuments} providerStatus={providerStatus} />
     </div>
   )
 }

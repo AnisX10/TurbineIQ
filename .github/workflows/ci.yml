@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+      - 'mvp/**'
       - 'redesign/**'
   pull_request:
     branches:
       - main
+      - 'mvp/**'
       - 'redesign/**'
 
 permissions:
@@ -25,6 +27,7 @@ jobs:
       - run: python -m pip install --editable '.[dev,streamlit]'
       - run: ruff check src tests
       - run: python -m pytest -q
+      - run: python scripts/eval_assistant.py --fake
 
   frontend:
     runs-on: ubuntu-latest

@@ -6,6 +6,13 @@ import type {
   TwinRunPayload,
 } from './types'
 
+export interface AssistantProviderStatus {
+  provider: string
+  model: string
+  base_url_host: string
+  configured: boolean
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, {
     ...init,
@@ -30,6 +37,15 @@ export const api = {
     ),
   evidence: (query: string, topK = 4) =>
     request<EvidenceResponse>(`/api/evidence/search?q=${encodeURIComponent(query)}&top_k=${topK}`),
+  assistantStatus: () => request<AssistantProviderStatus>('/api/assistant/status'),
+  testAssistantProvider: () => request<{
+    provider: string
+    model: string
+    configured: boolean
+    tools_work: boolean
+    latency_ms: number | null
+    message: string
+  }>('/api/assistant/test', { method: 'POST', body: '{}' }),
   ask: (
     question: string,
     enableCloud: boolean,

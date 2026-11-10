@@ -69,7 +69,53 @@ python -m pip install -e '.[streamlit]'
 streamlit run app.py
 ```
 
-Cloud model support is also optional. Install `.[cloud]` and configure `.env` only when you choose to use a provider. The deterministic engineering, synthetic data, local evidence retrieval, and local assistant do not require a cloud key. The UI asks before sending a question and tool results; document excerpts require a separate opt-in.
+## Assistant providers
+
+The assistant runs deterministic local tools by default. To enable Cloud mode, install the optional OpenAI client with `python -m pip install -e '.[cloud]'`, configure `.env`, and restart the API. The provider key stays in the API process. The consent sheet names the provider, model, and host before sharing. Questions, assistant instructions, selected synthetic context, and local tool results go to that provider. Document excerpts are a separate opt-in. Free plans and hosted endpoints can log or retain prompts; read the provider's current terms and retention controls before use. Open-weight model weights can be free to download, while hosted inference can still cost money or have changing limits. TurbineIQ does not hardcode provider quota assumptions.
+
+`TURBINEIQ_LLM_PROVIDER` selects `groq`, `cerebras`, `openrouter`, `ollama`, `openai`, or `custom`. The supplied `.env.example` starts with Groq's GPT-OSS 120B preset. Provider-specific keys are accepted (`GROQ_API_KEY`, `CEREBRAS_API_KEY`, `OPENROUTER_API_KEY`, and `OPENAI_API_KEY`); `TURBINEIQ_LLM_API_KEY` takes precedence. Local Ollama does not require a key. Existing `OPENAI_API_KEY`, `TURBINEIQ_OPENAI_MODEL`, and `TURBINEIQ_OPENAI_BASE_URL` settings continue to work when the new provider selector is unset.
+
+Examples for `.env`:
+
+```dotenv
+# Groq
+TURBINEIQ_LLM_PROVIDER=groq
+GROQ_API_KEY=your-key
+TURBINEIQ_LLM_MODEL=openai/gpt-oss-120b
+TURBINEIQ_LLM_BASE_URL=https://api.groq.com/openai/v1
+
+# Cerebras: gpt-oss-120b is the documented preset.
+# TURBINEIQ_LLM_PROVIDER=cerebras
+# CEREBRAS_API_KEY=your-key
+# TURBINEIQ_LLM_MODEL=gpt-oss-120b
+# TURBINEIQ_LLM_BASE_URL=https://api.cerebras.ai/v1
+
+# OpenRouter: use openai/gpt-oss-120b or openai/gpt-oss-20b.
+# TURBINEIQ_LLM_PROVIDER=openrouter
+# OPENROUTER_API_KEY=your-key
+# TURBINEIQ_LLM_MODEL=openai/gpt-oss-20b
+# TURBINEIQ_LLM_BASE_URL=https://openrouter.ai/api/v1
+
+# Local Ollama: pull gpt-oss:20b before selecting Cloud mode.
+# TURBINEIQ_LLM_PROVIDER=ollama
+# TURBINEIQ_LLM_MODEL=gpt-oss:20b
+# TURBINEIQ_LLM_BASE_URL=http://localhost:11434/v1
+
+# OpenAI Responses API. This is a hosted OpenAI model, not GPT-OSS.
+# TURBINEIQ_LLM_PROVIDER=openai
+# OPENAI_API_KEY=your-key
+# TURBINEIQ_LLM_MODEL=gpt-5.5
+
+# Hugging Face Router/custom compatible endpoint.
+# TURBINEIQ_LLM_PROVIDER=custom
+# HF_TOKEN=your-token
+# TURBINEIQ_LLM_MODEL=openai/gpt-oss-120b
+# TURBINEIQ_LLM_BASE_URL=https://router.huggingface.co/v1
+```
+
+Timeout, answer size, and tool rounds can be adjusted with `TURBINEIQ_LLM_TIMEOUT_SECONDS`, `TURBINEIQ_LLM_MAX_TOKENS`, and `TURBINEIQ_LLM_MAX_TOOL_ROUNDS`. The tool-round value is capped at three. See [verified provider presets and caveats](docs/ASSISTANT_PROVIDERS.md) for current source links and model support notes.
+
+Run a local fake evaluation with `python scripts/eval_assistant.py` or `python scripts/eval_assistant.py --fake`; this never contacts a provider and is suitable for CI. To intentionally evaluate the configured live provider, run `python scripts/eval_assistant.py --live`. This sends the synthetic evaluation questions and tool outputs to that provider and writes its report to `docs/evidence/`. Do not run the live evaluation with confidential data.
 
 ## Verify
 
