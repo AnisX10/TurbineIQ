@@ -216,7 +216,7 @@
       1440,
       810
     ],
-    "bytes": 943567
+    "bytes": 1812267
   },
   "speakerNotes": {
     "slides": 8,
@@ -242,5 +242,122 @@
     ],
     "totalWords": 301,
     "estimatedMinutesAt100WordsPerMinute": 3.01
+  },
+  "slideRevisionChecks": {
+    "fileProtocol": true,
+    "externalRequests": [],
+    "responsive": [
+      {
+        "viewport": {
+          "width": 1920,
+          "height": 1080
+        },
+        "documentSize": [
+          1920,
+          1080
+        ],
+        "captionBottom": 589.109375,
+        "footerTop": 1005,
+        "captionAboveFooter": true,
+        "imageLoaded": true,
+        "imageNaturalSize": [
+          1323,
+          107
+        ]
+      },
+      {
+        "viewport": {
+          "width": 1280,
+          "height": 720
+        },
+        "documentSize": [
+          1280,
+          720
+        ],
+        "captionBottom": 392.7395935058594,
+        "footerTop": 670,
+        "captionAboveFooter": true,
+        "imageLoaded": true,
+        "imageNaturalSize": [
+          1323,
+          107
+        ]
+      },
+      {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "documentSize": [
+          390,
+          844
+        ],
+        "captionBottom": 431.975341796875,
+        "footerTop": 516.453125,
+        "captionAboveFooter": true,
+        "imageLoaded": true,
+        "imageNaturalSize": [
+          1323,
+          107
+        ]
+      }
+    ],
+    "hitTargets": [
+      {
+        "label": "Previous slide",
+        "width": 47.31,
+        "height": 44
+      },
+      {
+        "label": "Next slide",
+        "width": 45.08,
+        "height": 44
+      },
+      {
+        "label": "Show speaker notes (N)",
+        "width": 51.8,
+        "height": 44
+      },
+      {
+        "label": "Toggle text editing (E)",
+        "width": 66.06,
+        "height": 44
+      },
+      {
+        "label": "Toggle full screen (F)",
+        "width": 80.91,
+        "height": 44
+      }
+    ],
+    "keyboard": {
+      "home": "01 / 08",
+      "right": "02 / 08",
+      "down": "03 / 08",
+      "end": "08 / 08",
+      "left": "07 / 08",
+      "notesVisible": true,
+      "fullscreen": true
+    },
+    "contrast": {
+      "minimumRatio": 5.54,
+      "minimumText": "Synthetic · simplified model",
+      "requiredRatio": 4.5,
+      "violations": [],
+      "measuredTextNodes": 71
+    },
+    "motion": {
+      "reducedMotionMatches": true,
+      "runningAnimations": 0,
+      "transitionDurations": [
+        "0s"
+      ]
+    },
+    "screenshots": [
+      "slide-renders/slide-02.webp",
+      "slide-renders/slide-03.webp",
+      "slide-renders/slide-06.webp",
+      "slide-renders/slide-03-1280x720.webp",
+      "slide-renders/slide-03-390x844.webp"
+    ]
   }
 }

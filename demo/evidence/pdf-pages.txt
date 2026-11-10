@@ -1,5 +1,6 @@
 Command: pdfinfo demo/turbineiq-demo.pdf
 Pages: 8
 Page size: 1440 x 810 points
-File size: 943,567 bytes
+File size: 1,812,267 bytes
 PDF version: 1.4
+Selectable text: pdftotext extracted the eight slide pages and HTML slide titles/values.
