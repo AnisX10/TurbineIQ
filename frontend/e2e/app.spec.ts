@@ -64,6 +64,22 @@ test('Overview paints its Stage frame while run data is still loading', async ({
   await expect(page.locator('.kpi-row')).toBeVisible()
 })
 
+test('Overview assistant code loads only when the dock or consent sheet opens', async ({ page }) => {
+  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  const assistantChunks = () => page.evaluate(() => performance.getEntriesByType('resource').map((entry) => entry.name.split('/').pop() ?? '').filter((name) => /Assistant(Dock|Workspace|ConsentHost)/.test(name)))
+  expect(await assistantChunks()).toEqual([])
+
+  await page.locator('.assistant-header-ask').click()
+  const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await expect(dock).toBeVisible()
+  await expect.poll(async () => (await assistantChunks()).some((name) => name.startsWith('AssistantDock-'))).toBe(true)
+  await expect.poll(async () => (await assistantChunks()).some((name) => name.startsWith('AssistantWorkspace-'))).toBe(true)
+  await dock.getByRole('button', { name: 'Cloud' }).click()
+  await expect(page.getByRole('dialog', { name: 'Review Cloud sharing' })).toBeVisible()
+  await expect.poll(async () => (await assistantChunks()).some((name) => name.startsWith('AssistantConsentHost-'))).toBe(true)
+})
+
 async function tabUntil(page: import('@playwright/test').Page, target: import('@playwright/test').Locator, limit = 80) {
   for (let index = 0; index < limit; index += 1) {
     if (await target.evaluate((element) => element === document.activeElement)) return

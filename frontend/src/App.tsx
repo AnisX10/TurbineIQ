@@ -59,8 +59,8 @@ function AppShell() {
       </main>
       <MobileBottomBar page={state.page} selectedComponentId={selectedComponentId} />
       <BoundarySheet open={boundaryOpen} onClose={() => setBoundaryOpen(false)} seed={String(state.seed)} scenario={boundary.scenario} modelName={boundary.modelName} provenance={boundary.provenance} />
-      <Suspense fallback={null}><AssistantDock askButtonRef={askButtonRef} /></Suspense>
-      <Suspense fallback={null}><AssistantConsentHost /></Suspense>
+      {state.assistantOpen && <Suspense fallback={null}><AssistantDock askButtonRef={askButtonRef} /></Suspense>}
+      {state.assistantConsentOpen && <Suspense fallback={null}><AssistantConsentHost /></Suspense>}
     </div>
   )
 }

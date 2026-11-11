@@ -23,11 +23,10 @@ test('capture five assistant dock states at all widths and themes', async ({ pag
       }, theme)
     }
     await page.setViewportSize({ width: 1440, height: 960 })
-    await page.addInitScript((value) => {
-      localStorage.setItem('turbineiq-theme', value)
-      sessionStorage.removeItem('turbineiq-cloud-consent')
-    }, theme)
+    await page.addInitScript((value) => localStorage.setItem('turbineiq-theme', value), theme)
     await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+    await page.evaluate(() => sessionStorage.clear())
+    await page.reload()
     await expect(page.locator('.kpi-row')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Stage' })).toBeVisible()
 
