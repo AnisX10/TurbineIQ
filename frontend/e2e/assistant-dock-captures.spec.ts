@@ -13,10 +13,20 @@ const viewports = [
 test.skip(process.env.CAPTURE_DOCK !== '1', 'Set CAPTURE_DOCK=1 to refresh the documented dock screenshots.')
 
 test('capture five assistant dock states at all widths and themes', async ({ page }) => {
+  test.setTimeout(300000)
   await mkdir(output, { recursive: true })
   for (const theme of ['light', 'dark'] as const) {
+    if (page.url().startsWith('http')) {
+      await page.evaluate((value) => {
+        localStorage.setItem('turbineiq-theme', value)
+        sessionStorage.removeItem('turbineiq-cloud-consent')
+      }, theme)
+    }
     await page.setViewportSize({ width: 1440, height: 960 })
-    await page.addInitScript((value) => localStorage.setItem('turbineiq-theme', value), theme)
+    await page.addInitScript((value) => {
+      localStorage.setItem('turbineiq-theme', value)
+      sessionStorage.removeItem('turbineiq-cloud-consent')
+    }, theme)
     await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
     await expect(page.locator('.kpi-row')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Stage' })).toBeVisible()
@@ -73,6 +83,8 @@ test('capture five assistant dock states at all widths and themes', async ({ pag
     await expect(streamingDock.getByRole('button', { name: 'Stop response' })).toBeVisible()
     await captureWidths(page, theme, 'streaming')
     await streamingDock.getByRole('button', { name: 'Stop response' }).click()
+    await page.keyboard.press('Escape')
+    await expect(streamingDock).not.toBeVisible()
   }
 })
 

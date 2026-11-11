@@ -132,7 +132,7 @@ test('demand rendering stops while idle, animates camera and rotor only on reque
   await expect(page.getByRole('status').filter({ hasText: 'Blender GLB' })).toBeVisible({ timeout: 30000 })
   await page.locator('.viewer-selection-label').waitFor({ timeout: 30000 })
   await expect.poll(() => page.locator('#model-part-select option').count()).toBeGreaterThan(1)
-  expect([...origins]).toEqual(['http://127.0.0.1:8011'])
+  expect([...origins]).toEqual([new URL(page.url()).origin])
   const evidenceDir = resolve(process.cwd(), '../docs/redesign/phase5')
   await mkdir(evidenceDir, { recursive: true })
   await writeFile(resolve(evidenceDir, 'viewer-network-origins.json'), JSON.stringify([...origins], null, 2))
