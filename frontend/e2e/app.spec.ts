@@ -400,7 +400,7 @@ test('cloud dock names the fake provider, streams tool results, links citations 
   await dock.getByRole('button', { name: 'Ask', exact: true }).click()
   await expect(dock.locator('.assistant-answer')).toContainText('supporting passage', { timeout: 30000 })
   await expect(dock.locator('.assistant-trace')).toContainText('search_technical_documents')
-  await expect(dock.locator('.assistant-citations .citation-chip')).toBeVisible()
+  await expect(dock.locator('.assistant-citations .citation-chip').first()).toBeVisible()
   await dock.locator('.assistant-citations .citation-chip').first().click()
   await expect(page).toHaveURL(/#\/evidence\?/)
   await expect(page.locator('.evidence-reader .citation-chip')).toBeVisible({ timeout: 20000 })
