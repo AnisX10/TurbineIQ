@@ -454,7 +454,8 @@ test('assistant dock becomes a bottom sheet at 375px', async ({ page }) => {
   const box = await dock.boundingBox()
   expect(box?.width).toBe(375)
   expect(box?.y).toBeGreaterThan(0)
-  expect(box?.y! + box!.height).toBeGreaterThanOrEqual(810)
+  if (!box) throw new Error('Assistant dock has no layout box at mobile width.')
+  expect(box.y + box.height).toBeGreaterThanOrEqual(810)
 })
 
 test('Offline engine guidance uses a portable command with shell activation and copy action', async ({ page }) => {

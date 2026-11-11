@@ -1,17 +1,18 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { ArrowUpRight, Copy, X } from 'lucide-react'
 import { api } from '../../api'
 import type { AssistantProviderStatus } from '../../api'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import type { AssistantContextSnapshot, AssistantTurn } from '../../app/storeContext'
-import type { AssistantResponse, SelectedTwinSelection } from '../../types'
+import type { AssistantResponse } from '../../types'
 import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
 import { generateAssistantSuggestions } from './suggestions'
 import './Assistant.css'
 
 interface CitationLink { citation: string; query: string }
 let activeAssistantAbort: AbortController | null = null
+let nextAssistantTurnId = 0
 
 function citationsFor(answer: AssistantResponse): CitationLink[] {
   const citations: CitationLink[] = []
@@ -45,7 +46,6 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
   const [announcement, setAnnouncement] = useState('')
   const [copiedTurn, setCopiedTurn] = useState<number | null>(null)
   const composer = useRef<HTMLTextAreaElement>(null)
-  const idRef = useRef(Date.now())
   const snapshot = state.run?.snapshots[state.sampleIndex] ?? null
   const selectedComponentId = state.componentId ?? 'compressor'
   const component = snapshot?.components.find((item) => item.component_id === selectedComponentId)
@@ -53,12 +53,6 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
     ?? state.run?.run.scenario_name
     ?? state.scenarios.find((item) => item.scenario_id === state.scenarioId)?.name
     ?? state.scenarioId
-  const selectedTwin: SelectedTwinSelection | null = useMemo(() => snapshot ? {
-    scenario_id: snapshot.scenario_id,
-    seed: snapshot.seed,
-    sample_index: snapshot.sample_index,
-    selected_component_id: selectedComponentId,
-  } : null, [snapshot, selectedComponentId])
   const context: AssistantContextSnapshot = {
     scenarioId: snapshot?.scenario_id ?? state.scenarioId,
     scenarioName,
@@ -138,7 +132,7 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
     event?.preventDefault()
     const text = state.assistantDraft.trim()
     if (!text || waiting) return
-    const turn: AssistantTurn = { id: ++idRef.current, question: text, context, streaming: true }
+    const turn: AssistantTurn = { id: ++nextAssistantTurnId, question: text, context, streaming: true }
     dispatch({ type: 'assistant-turn-add', value: turn })
     dispatch({ type: 'assistant-draft', value: '' })
     if (composer.current) composer.current.style.height = '36px'
