@@ -29,13 +29,16 @@ class Handler(BaseHTTPRequestHandler):
             "",
         )
         if "force fallback" in question.casefold():
+            error_body = b'{"error":{"message":"fake rate limit"}}'
             self.send_response(429)
             self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(error_body)))
+            self.send_header("Connection", "close")
             self.end_headers()
-            self.wfile.write(b'{"error":{"message":"fake rate limit"}}')
+            self.wfile.write(error_body)
             return
         if "slow response" in question.casefold():
-            time.sleep(2)
+            time.sleep(8 if "for capture" in question.casefold() else 2)
 
         tool_output = next(
             (item.get("content", "") for item in reversed(messages) if item.get("role") == "tool"),

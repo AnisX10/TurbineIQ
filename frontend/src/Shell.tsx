@@ -295,8 +295,8 @@ export function PageHeader({
       </div>
       <div className="page-header-actions">
         {page === 'evidence' && <span className="page-route-chip">Local lexical retrieval</span>}
-        <button ref={askButtonRef} className="assistant-header-ask" type="button" onClick={onOpenAssistant} aria-label="Open assistant" aria-keyshortcuts="A">
-          <MessageSquareText size={15} aria-hidden="true" /><span>Ask</span><kbd>A</kbd>
+        <button ref={askButtonRef} className="assistant-header-ask" type="button" onClick={onOpenAssistant} aria-keyshortcuts="A">
+          <MessageSquareText size={15} aria-hidden="true" /><span>Ask</span><kbd aria-hidden="true">A</kbd>
         </button>
         <button
           className="boundary-chip"

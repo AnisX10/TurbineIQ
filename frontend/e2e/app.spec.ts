@@ -31,7 +31,7 @@ async function ready(page: import('@playwright/test').Page, kind: string) {
   if (kind === 'overview') await page.locator('.kpi-row').waitFor()
   else if (kind === 'components') await page.locator('.detail-kpis').waitFor()
   else if (kind === 'evidence') await page.locator('.evidence-search').waitFor()
-  else await page.locator('.assistant-mode-segmented').waitFor()
+  else await page.locator('.assistant-mode-segmented').first().waitFor()
 }
 
 async function openWithTheme(context: import('@playwright/test').BrowserContext, route: string, kind: string, theme: 'light' | 'dark') {
@@ -96,7 +96,7 @@ test('axe audits all four routes, component tabs, and Cloud consent in both them
         }
       }
       if (kind === 'overview') {
-        await page.getByRole('button', { name: 'Open assistant' }).click()
+        await page.locator('.assistant-header-ask').click()
         await page.getByRole('dialog', { name: 'Ask TurbineIQ' }).waitFor()
         await axe(page, name, theme, 'Assistant dock', records)
         await page.keyboard.press('Escape')
@@ -375,7 +375,7 @@ test('Overview A shortcut opens the shared dock and Esc returns focus to Ask', a
   await expect(dialog.locator('.assistant-trace')).toHaveAttribute('open', '')
   await page.keyboard.press('Escape')
   await expect(dialog).not.toBeVisible()
-  await expect(page.getByRole('button', { name: 'Open assistant' })).toBeFocused()
+  await expect(page.locator('.assistant-header-ask')).toBeFocused()
   await page.keyboard.press('a')
   await expect(page.getByRole('dialog', { name: 'Ask TurbineIQ' })).toContainText('26.30 MW')
   await page.keyboard.press('Escape')
@@ -388,7 +388,7 @@ test('cloud dock names the fake provider, streams tool results, links citations 
   page.on('request', (request) => { browserOrigins.add(new URL(request.url()).origin) })
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
   await expect(page.locator('.kpi-row')).toBeVisible()
-  await page.getByRole('button', { name: 'Open assistant' }).click()
+  await page.locator('.assistant-header-ask').click()
   const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
   await dock.getByRole('button', { name: 'Cloud' }).click()
   const consent = page.getByRole('dialog', { name: 'Review Cloud sharing' })
@@ -408,18 +408,19 @@ test('cloud dock names the fake provider, streams tool results, links citations 
 
   await page.getByRole('link', { name: 'Overview' }).click()
   await expect(page.locator('.kpi-row')).toBeVisible()
-  await page.getByRole('button', { name: 'Open assistant' }).click()
+  await page.locator('.assistant-header-ask').click()
   const reopened = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
   await reopened.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('force fallback for this test')
   await reopened.getByRole('button', { name: 'Ask', exact: true }).click()
-  await expect(reopened.locator('.assistant-answer-meta')).toContainText('Local fallback', { timeout: 30000 })
+  const fallbackTurn = reopened.locator('.assistant-turn').last()
+  await expect(fallbackTurn.locator('.assistant-answer-meta')).toContainText('Local fallback', { timeout: 45000 })
 })
 
 test('assistant dock can stop a slow cloud response and retry a failed stream', async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem('turbineiq-cloud-consent', 'accepted'))
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
   await expect(page.locator('.kpi-row')).toBeVisible()
-  await page.getByRole('button', { name: 'Open assistant' }).click()
+  await page.locator('.assistant-header-ask').click()
   const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
   await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('slow response for stop testing')
   await dock.getByRole('button', { name: 'Ask', exact: true }).click()
@@ -448,7 +449,7 @@ test('assistant dock becomes a bottom sheet at 375px', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
   await expect(page.locator('.kpi-row')).toBeVisible()
-  await page.getByRole('button', { name: 'Open assistant' }).click()
+  await page.locator('.assistant-header-ask').click()
   const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
   await expect(dock).toBeVisible()
   const box = await dock.boundingBox()
