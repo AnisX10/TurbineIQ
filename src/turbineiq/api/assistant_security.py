@@ -130,8 +130,9 @@ class SecretRedactionFilter(logging.Filter):
                 message = pattern.sub(r"\1[REDACTED]", message)
             else:
                 message = pattern.sub("[REDACTED]", message)
-        record.msg = message
-        record.args = ()
+        if message != record.getMessage():
+            record.msg = message
+            record.args = ()
         return True
 
 

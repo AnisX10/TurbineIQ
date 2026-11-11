@@ -395,6 +395,22 @@ def test_secret_redaction_filter_removes_provider_key_shapes() -> None:
     assert "[REDACTED]" in record.getMessage()
 
 
+def test_secret_redaction_filter_preserves_unmodified_uvicorn_access_arguments() -> None:
+    arguments = ("127.0.0.1:50000", "GET", "/api/health", "1.1", 200)
+    record = logging.LogRecord(
+        "uvicorn.access",
+        logging.INFO,
+        "test",
+        1,
+        '%s - "%s %s HTTP/%s" %d',
+        arguments,
+        None,
+    )
+
+    assert SecretRedactionFilter().filter(record)
+    assert record.args == arguments
+
+
 def test_assistant_token_bucket_is_scoped_to_client() -> None:
     now = [0.0]
     limiter = TokenBucketLimiter(capacity=2, refill_per_second=1, clock=lambda: now[0])
