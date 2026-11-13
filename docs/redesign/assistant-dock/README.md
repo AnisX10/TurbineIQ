@@ -16,7 +16,7 @@ Captures are viewport screenshots at four widths in both themes. They were conve
 
 ## Verification
 
-The dock's frontend checks were run from a clean clone of the pushed `c7af346` application commit. The retained logs are under [`evidence/`](evidence/). Final-commit clean-clone checks for commit `21cd21c` are listed below.
+The dock's frontend checks were run from a clean clone of the pushed `c7af346` application commit. The retained logs are under [`evidence/`](evidence/). Clean-clone verification was rerun at commit `21cd21c`, which contains the final application and path-scanner source; the follow-up `1958a42` commit only adds those clean-clone logs.
 
 | Gate | Command | Result |
 |---|---|---|
@@ -29,7 +29,7 @@ The dock's frontend checks were run from a clean clone of the pushed `c7af346` a
 | Documentation paths | `npm run check:paths` | Passed after evidence and report updates. |
 | CI | GitHub Actions workflow `CI` | The run ID and result for the final pushed commit are included in the handoff report. |
 
-### Final-commit clean clone (`21cd21c`)
+### Clean clone of final application commit (`21cd21c`)
 
 This clone was made after pushing the final evidence/path-scanner commit. Python dependencies were installed from the repository extras with `pip install -e ".[dev,streamlit]"`.
 
