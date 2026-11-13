@@ -1,0 +1,748 @@
+{
+  "schemaVersion": 1,
+  "method": "Alternating Lighthouse 13.6.0 A/B runs on local production builds; both categories and presets use identical browser flags.",
+  "tbtBenchmarkIndexThreshold": 2500,
+  "lighthouseVersion": "13.6.0",
+  "nodeVersion": "v24.15.0",
+  "platform": "win32",
+  "cpuCount": 12,
+  "memoryMiB": 16016,
+  "chromePath": "Lighthouse default discovery",
+  "runsPerPreset": 3,
+  "builds": {
+    "A": "redesign-v2-7509f06",
+    "B": "mvp-llm-assistant-b0c4880"
+  },
+  "presets": [
+    "mobile",
+    "desktop"
+  ],
+  "runs": [
+    {
+      "id": "mobile-1-A",
+      "label": "A",
+      "build": "redesign-v2-7509f06",
+      "preset": "mobile",
+      "index": 1,
+      "startedAt": "2026-11-11T11:47:24.133Z",
+      "url": "http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 68,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 2446,
+      "lcpMs": 937.4,
+      "cls": 0.046438,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 2675.5,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 44.7,
+        "freeMemoryMiBBefore": 962.9,
+        "freeMemoryMiBAfter": 1205.3,
+        "nodeRssMiB": 44,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 2494.9,
+          "scriptingMs": 2343.1
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 1819.4,
+          "scriptingMs": 1700
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 312.3,
+          "scriptingMs": 21.5
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 246.6,
+          "scriptingMs": 4.1
+        }
+      ]
+    },
+    {
+      "id": "mobile-1-B",
+      "label": "B",
+      "build": "mvp-llm-assistant-b0c4880",
+      "preset": "mobile",
+      "index": 1,
+      "startedAt": "2026-11-11T11:47:40.535Z",
+      "url": "http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 68,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 2810,
+      "lcpMs": 921.4,
+      "cls": 0.046438,
+      "payloadBytes": 3016290,
+      "benchmarkIndex": 1935,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 46.5,
+        "freeMemoryMiBBefore": 1202,
+        "freeMemoryMiBAfter": 1175.5,
+        "nodeRssMiB": 44.7,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-n2SEIlbS.js",
+          "totalMs": 2708.1,
+          "scriptingMs": 2541.1
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-CS9EfOEU.js",
+          "totalMs": 2050.2,
+          "scriptingMs": 1918.9
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 442.7,
+          "scriptingMs": 16.1
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 344.8,
+          "scriptingMs": 8.8
+        }
+      ]
+    },
+    {
+      "id": "mobile-2-A",
+      "label": "A",
+      "build": "redesign-v2-7509f06",
+      "preset": "mobile",
+      "index": 2,
+      "startedAt": "2026-11-11T11:47:56.536Z",
+      "url": "http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 71,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1784,
+      "lcpMs": 930.3,
+      "cls": 0.047566,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 2413,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 37,
+        "freeMemoryMiBBefore": 1171.1,
+        "freeMemoryMiBAfter": 1368,
+        "nodeRssMiB": 47.2,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 1997.8,
+          "scriptingMs": 1842.5
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 1383.7,
+          "scriptingMs": 1281.3
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 336.4,
+          "scriptingMs": 10.7
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 262.8,
+          "scriptingMs": 3.6
+        }
+      ]
+    },
+    {
+      "id": "mobile-2-B",
+      "label": "B",
+      "build": "mvp-llm-assistant-b0c4880",
+      "preset": "mobile",
+      "index": 2,
+      "startedAt": "2026-11-11T11:48:10.498Z",
+      "url": "http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 69,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1870,
+      "lcpMs": 909.6,
+      "cls": 0.046438,
+      "payloadBytes": 3016290,
+      "benchmarkIndex": 3303,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 38.3,
+        "freeMemoryMiBBefore": 1364.9,
+        "freeMemoryMiBAfter": 1405.1,
+        "nodeRssMiB": 48.9,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-n2SEIlbS.js",
+          "totalMs": 1836.5,
+          "scriptingMs": 1684.2
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-CS9EfOEU.js",
+          "totalMs": 1555.2,
+          "scriptingMs": 1458.5
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 379.2,
+          "scriptingMs": 11.9
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 207.9,
+          "scriptingMs": 5.4
+        }
+      ]
+    },
+    {
+      "id": "mobile-3-A",
+      "label": "A",
+      "build": "redesign-v2-7509f06",
+      "preset": "mobile",
+      "index": 3,
+      "startedAt": "2026-11-11T11:48:24.512Z",
+      "url": "http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 68,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 3235,
+      "lcpMs": 943.2,
+      "cls": 0.046438,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 1886,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 39.7,
+        "freeMemoryMiBBefore": 1403.1,
+        "freeMemoryMiBAfter": 1599.5,
+        "nodeRssMiB": 50.7,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 3107.8,
+          "scriptingMs": 2883.3
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 2275.3,
+          "scriptingMs": 2130.4
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 413.9,
+          "scriptingMs": 13.4
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 360.8,
+          "scriptingMs": 10.8
+        }
+      ]
+    },
+    {
+      "id": "mobile-3-B",
+      "label": "B",
+      "build": "mvp-llm-assistant-b0c4880",
+      "preset": "mobile",
+      "index": 3,
+      "startedAt": "2026-11-11T11:48:38.670Z",
+      "url": "http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 70,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1819.5,
+      "lcpMs": 917.6,
+      "cls": 0.046438,
+      "payloadBytes": 3016290,
+      "benchmarkIndex": 2866.5,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 47.5,
+        "freeMemoryMiBBefore": 1595.9,
+        "freeMemoryMiBAfter": 1546,
+        "nodeRssMiB": 52.3,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-n2SEIlbS.js",
+          "totalMs": 2075.8,
+          "scriptingMs": 1949.1
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-CS9EfOEU.js",
+          "totalMs": 1438.8,
+          "scriptingMs": 1320.9
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 405.7,
+          "scriptingMs": 12.8
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 302.7,
+          "scriptingMs": 4.8
+        }
+      ]
+    },
+    {
+      "id": "desktop-1-A",
+      "label": "A",
+      "build": "redesign-v2-7509f06",
+      "preset": "desktop",
+      "index": 1,
+      "startedAt": "2026-11-11T11:48:53.389Z",
+      "url": "http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 83,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 363.5,
+      "lcpMs": 276.2,
+      "cls": 0.013613,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 1877,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 37.9,
+        "freeMemoryMiBBefore": 1543.9,
+        "freeMemoryMiBAfter": 1496.9,
+        "nodeRssMiB": 49,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 679.3,
+          "scriptingMs": 638.3
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 449,
+          "scriptingMs": 412.7
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 94.8,
+          "scriptingMs": 3.8
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 87,
+          "scriptingMs": 0.8
+        }
+      ]
+    },
+    {
+      "id": "desktop-1-B",
+      "label": "B",
+      "build": "mvp-llm-assistant-b0c4880",
+      "preset": "desktop",
+      "index": 1,
+      "startedAt": "2026-11-11T11:49:08.092Z",
+      "url": "http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 83,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 375,
+      "lcpMs": 257.2,
+      "cls": 0.013613,
+      "payloadBytes": 3016290,
+      "benchmarkIndex": 2503,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 36.8,
+        "freeMemoryMiBBefore": 1495,
+        "freeMemoryMiBAfter": 1632.9,
+        "nodeRssMiB": 50.2,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-n2SEIlbS.js",
+          "totalMs": 674.8,
+          "scriptingMs": 610.8
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-CS9EfOEU.js",
+          "totalMs": 441.6,
+          "scriptingMs": 407.4
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 76.9,
+          "scriptingMs": 1.3
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 69,
+          "scriptingMs": 3.5
+        }
+      ]
+    },
+    {
+      "id": "desktop-2-A",
+      "label": "A",
+      "build": "redesign-v2-7509f06",
+      "preset": "desktop",
+      "index": 2,
+      "startedAt": "2026-11-11T11:49:22.594Z",
+      "url": "http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 86,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 316,
+      "lcpMs": 272,
+      "cls": 0.013613,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 3116,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 36.8,
+        "freeMemoryMiBBefore": 1629.7,
+        "freeMemoryMiBAfter": 1744.2,
+        "nodeRssMiB": 51.4,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 574.2,
+          "scriptingMs": 519.3
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 487.9,
+          "scriptingMs": 450.2
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 74,
+          "scriptingMs": 1.4
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 73,
+          "scriptingMs": 3.8
+        }
+      ]
+    },
+    {
+      "id": "desktop-2-B",
+      "label": "B",
+      "build": "mvp-llm-assistant-b0c4880",
+      "preset": "desktop",
+      "index": 2,
+      "startedAt": "2026-11-11T11:49:36.648Z",
+      "url": "http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 94,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 193.5,
+      "lcpMs": 256.7,
+      "cls": 0.013613,
+      "payloadBytes": 3016290,
+      "benchmarkIndex": 2883.5,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 37.2,
+        "freeMemoryMiBBefore": 1741.3,
+        "freeMemoryMiBAfter": 1673.1,
+        "nodeRssMiB": 52.6,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-n2SEIlbS.js",
+          "totalMs": 497.3,
+          "scriptingMs": 431.2
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-CS9EfOEU.js",
+          "totalMs": 353.9,
+          "scriptingMs": 322.7
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 64.4,
+          "scriptingMs": 1
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 51.5,
+          "scriptingMs": 3.6
+        }
+      ]
+    },
+    {
+      "id": "desktop-3-A",
+      "label": "A",
+      "build": "redesign-v2-7509f06",
+      "preset": "desktop",
+      "index": 3,
+      "startedAt": "2026-11-11T11:49:50.428Z",
+      "url": "http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 80,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 426,
+      "lcpMs": 308,
+      "cls": 0.013613,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 2309.5,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 41.5,
+        "freeMemoryMiBBefore": 1670.8,
+        "freeMemoryMiBAfter": 1589.5,
+        "nodeRssMiB": 53.9,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 706.6,
+          "scriptingMs": 649.1
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 535.1,
+          "scriptingMs": 498.3
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 121,
+          "scriptingMs": 1.1
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 93.8,
+          "scriptingMs": 4.8
+        }
+      ]
+    },
+    {
+      "id": "desktop-3-B",
+      "label": "B",
+      "build": "mvp-llm-assistant-b0c4880",
+      "preset": "desktop",
+      "index": 3,
+      "startedAt": "2026-11-11T11:50:05.198Z",
+      "url": "http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72",
+      "performance": 82,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 400,
+      "lcpMs": 269.9,
+      "cls": 0.013613,
+      "payloadBytes": 3016290,
+      "benchmarkIndex": 1679.5,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 45.9,
+        "freeMemoryMiBBefore": 1585.1,
+        "freeMemoryMiBAfter": 1309.7,
+        "nodeRssMiB": 51.1,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-n2SEIlbS.js",
+          "totalMs": 656.6,
+          "scriptingMs": 605.2
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-CS9EfOEU.js",
+          "totalMs": 559.9,
+          "scriptingMs": 509.4
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 137.7,
+          "scriptingMs": 1.6
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 94.8,
+          "scriptingMs": 4.1
+        }
+      ]
+    }
+  ],
+  "summaries": {
+    "mobile": {
+      "A": {
+        "performance": {
+          "median": 68,
+          "min": 68,
+          "max": 71
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 2446,
+          "min": 1784,
+          "max": 3235
+        },
+        "lcpMs": {
+          "median": 937.4,
+          "min": 930.3,
+          "max": 943.2
+        },
+        "cls": {
+          "median": 0.046438,
+          "min": 0.046438,
+          "max": 0.047566
+        },
+        "payloadBytes": {
+          "median": 2987631,
+          "min": 2987631,
+          "max": 2987631
+        },
+        "benchmarkIndex": {
+          "median": 2413,
+          "min": 1886,
+          "max": 2675.5
+        }
+      },
+      "B": {
+        "performance": {
+          "median": 69,
+          "min": 68,
+          "max": 70
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 1870,
+          "min": 1820,
+          "max": 2810
+        },
+        "lcpMs": {
+          "median": 917.6,
+          "min": 909.6,
+          "max": 921.4
+        },
+        "cls": {
+          "median": 0.046438,
+          "min": 0.046438,
+          "max": 0.046438
+        },
+        "payloadBytes": {
+          "median": 3016290,
+          "min": 3016290,
+          "max": 3016290
+        },
+        "benchmarkIndex": {
+          "median": 2866.5,
+          "min": 1935,
+          "max": 3303
+        }
+      }
+    },
+    "desktop": {
+      "A": {
+        "performance": {
+          "median": 83,
+          "min": 80,
+          "max": 86
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 364,
+          "min": 316,
+          "max": 426
+        },
+        "lcpMs": {
+          "median": 276.2,
+          "min": 272,
+          "max": 308
+        },
+        "cls": {
+          "median": 0.013613,
+          "min": 0.013613,
+          "max": 0.013613
+        },
+        "payloadBytes": {
+          "median": 2987631,
+          "min": 2987631,
+          "max": 2987631
+        },
+        "benchmarkIndex": {
+          "median": 2309.5,
+          "min": 1877,
+          "max": 3116
+        }
+      },
+      "B": {
+        "performance": {
+          "median": 83,
+          "min": 82,
+          "max": 94
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 375,
+          "min": 194,
+          "max": 400
+        },
+        "lcpMs": {
+          "median": 257.2,
+          "min": 256.7,
+          "max": 269.9
+        },
+        "cls": {
+          "median": 0.013613,
+          "min": 0.013613,
+          "max": 0.013613
+        },
+        "payloadBytes": {
+          "median": 3016290,
+          "min": 3016290,
+          "max": 3016290
+        },
+        "benchmarkIndex": {
+          "median": 2503,
+          "min": 1679.5,
+          "max": 2883.5
+        }
+      }
+    }
+  }
+}

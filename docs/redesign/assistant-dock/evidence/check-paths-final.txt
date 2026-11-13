@@ -1,0 +1,2 @@
+Command: cd frontend && npm run check:paths
+Result: Documentation path scan passed (README.md and docs/).

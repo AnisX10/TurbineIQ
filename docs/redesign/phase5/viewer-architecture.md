@@ -8,7 +8,7 @@
 
 Selected GLB meshes use a 1.5 CSS-pixel, screen-scaled outline in `--stage-selected`. A 12px HTML label and a thin leader line follow the selected mesh. The schematic fallback has the matching HTML label and keeps its simple selection ring. The selected material no longer receives emissive highlighting. No bloom, glow, gradient, or added floor reflection is used. Status remains in the Component ledger.
 
-Light and dark Stage captures before and after the selection treatment are in [`stage-before-light.png`](stage-before-light.png), [`stage-before-dark.png`](stage-before-dark.png), [`stage-after-light.png`](stage-after-light.png), and [`stage-after-dark.png`](stage-after-dark.png). The before images were captured from the B1 viewer at the same 1440px viewport and component selection as the after images.
+Light and dark Stage captures before and after the selection treatment are in [`stage-before-light.webp`](stage-before-light.webp), [`stage-before-dark.webp`](stage-before-dark.webp), [`stage-after-light.webp`](stage-after-light.webp), and [`stage-after-dark.webp`](stage-after-dark.webp). The before images were captured from the B1 viewer at the same 1440px viewport and component selection as the after images.
 
 ## Camera and rendering
 

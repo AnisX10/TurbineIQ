@@ -1,0 +1,22 @@
+.\node_modules\.bin\playwright.cmd : [WebServer] INFO:     Started server process [36008]
+At line:2 char:422
++ ... env:CI='1'; .\node_modules\.bin\playwright.cmd test e2e/app.spec.ts - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer] INF...process [36008]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[WebServer] INFO:     Waiting for application startup.
+
+
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8021 (Press CTRL+C to quit)
+
+Running 2 tests using 1 worker
+
+(node:3396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/2] e2e\app.spec.ts:491:1 › viewport screenshots cover every route, width, and theme without horizontal page scroll
+[2/2] e2e\app.spec.ts:518:1 › 320px layouts have no horizontal page scroll and reduced motion disables rotor motion
+  2 passed (44.4s)

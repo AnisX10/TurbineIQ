@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "method": "Alternating Lighthouse 13.6.0 A/B runs on local production builds; both categories and presets use identical browser flags.",
+  "tbtBenchmarkIndexThreshold": 2500,
+  "lighthouseVersion": "13.6.0",
+  "nodeVersion": "v24.15.0",
+  "platform": "win32",
+  "cpuCount": 12,
+  "memoryMiB": 16016,
+  "chromePath": "Lighthouse default discovery",
+  "runsPerPreset": 1,
+  "builds": {
+    "A": "7509f06-pre-dock",
+    "B": "c7af346-dock-repeat"
+  },
+  "presets": [
+    "mobile"
+  ],
+  "runs": [
+    {
+      "id": "mobile-1-A",
+      "label": "A",
+      "build": "7509f06-pre-dock",
+      "preset": "mobile",
+      "index": 1,
+      "startedAt": "2026-11-13T17:12:12.791Z",
+      "url": "http://127.0.0.1:8023/#/overview",
+      "performance": 70,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1738,
+      "lcpMs": 920.7,
+      "cls": 0.046438,
+      "payloadBytes": 2987631,
+      "benchmarkIndex": 2791,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 49.4,
+        "freeMemoryMiBBefore": 691.7,
+        "freeMemoryMiBAfter": 993.7,
+        "nodeRssMiB": 40.4,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8023/assets/TurbineViewer-BmayUQ4a.js",
+          "totalMs": 1797,
+          "scriptingMs": 1592.8
+        },
+        {
+          "url": "http://127.0.0.1:8023/assets/index-By0oJB3O.js",
+          "totalMs": 1536.9,
+          "scriptingMs": 1413.7
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 479,
+          "scriptingMs": 22
+        },
+        {
+          "url": "http://127.0.0.1:8023/",
+          "totalMs": 355,
+          "scriptingMs": 4.7
+        }
+      ]
+    },
+    {
+      "id": "mobile-1-B",
+      "label": "B",
+      "build": "c7af346-dock-repeat",
+      "preset": "mobile",
+      "index": 1,
+      "startedAt": "2026-11-13T17:12:27.100Z",
+      "url": "http://127.0.0.1:8021/#/overview",
+      "performance": 72,
+      "accessibility": 100,
+      "bestPractices": 96,
+      "tbtMs": 1499.5,
+      "lcpMs": 926.9,
+      "cls": 0.046438,
+      "payloadBytes": 2992580,
+      "benchmarkIndex": 3139.5,
+      "systemLoad": {
+        "cpuUtilizationPercentDuringRun": 52.7,
+        "freeMemoryMiBBefore": 990.5,
+        "freeMemoryMiBAfter": 1127.1,
+        "nodeRssMiB": 44.2,
+        "cpuCount": 12
+      },
+      "bootupTasks": [
+        {
+          "url": "http://127.0.0.1:8021/assets/TurbineViewer-Dc9Qydjz.js",
+          "totalMs": 1604.3,
+          "scriptingMs": 1428
+        },
+        {
+          "url": "http://127.0.0.1:8021/assets/index-DgvYfniP.js",
+          "totalMs": 1285.6,
+          "scriptingMs": 1181.5
+        },
+        {
+          "url": "http://127.0.0.1:8021/",
+          "totalMs": 245.6,
+          "scriptingMs": 2.5
+        },
+        {
+          "url": "Unattributable",
+          "totalMs": 235.3,
+          "scriptingMs": 10.6
+        }
+      ]
+    }
+  ],
+  "summaries": {
+    "mobile": {
+      "A": {
+        "performance": {
+          "median": 70,
+          "min": 70,
+          "max": 70
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 1738,
+          "min": 1738,
+          "max": 1738
+        },
+        "lcpMs": {
+          "median": 920.7,
+          "min": 920.7,
+          "max": 920.7
+        },
+        "cls": {
+          "median": 0.046438,
+          "min": 0.046438,
+          "max": 0.046438
+        },
+        "payloadBytes": {
+          "median": 2987631,
+          "min": 2987631,
+          "max": 2987631
+        },
+        "benchmarkIndex": {
+          "median": 2791,
+          "min": 2791,
+          "max": 2791
+        }
+      },
+      "B": {
+        "performance": {
+          "median": 72,
+          "min": 72,
+          "max": 72
+        },
+        "accessibility": {
+          "median": 100,
+          "min": 100,
+          "max": 100
+        },
+        "bestPractices": {
+          "median": 96,
+          "min": 96,
+          "max": 96
+        },
+        "tbtMs": {
+          "median": 1500,
+          "min": 1500,
+          "max": 1500
+        },
+        "lcpMs": {
+          "median": 926.9,
+          "min": 926.9,
+          "max": 926.9
+        },
+        "cls": {
+          "median": 0.046438,
+          "min": 0.046438,
+          "max": 0.046438
+        },
+        "payloadBytes": {
+          "median": 2992580,
+          "min": 2992580,
+          "max": 2992580
+        },
+        "benchmarkIndex": {
+          "median": 3139.5,
+          "min": 3139.5,
+          "max": 3139.5
+        }
+      }
+    }
+  }
+}

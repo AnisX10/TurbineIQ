@@ -1,0 +1,16 @@
+node.exe : npm notice run frontend@0.0.0 test
+At line:1 char:1
++ & <local-path> "<local-path> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 test:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run vitest run
+
+ RUN  v5.1.0 <local-path>
+
+
+ Test Files  9 passed (9)
+      Tests  30 passed (30)
+   Start at  13:31:39
+   Duration  3.74s (environment 90%, transform 5%, import 3%, tests 1%)

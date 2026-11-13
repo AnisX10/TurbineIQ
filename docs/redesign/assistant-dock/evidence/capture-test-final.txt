@@ -1,0 +1,21 @@
+
+.\node_modules\.bin\playwright.cmd : [WebServer] INFO:     Started server process [34536]
+At line:2 char:37
++ ... env:CI='1'; .\node_modules\.bin\playwright.cmd test e2e/assistant-doc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer] INF...process [34536]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[WebServer] INFO:     Waiting for application startup.
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8021 (Press CTRL+C to quit)
+
+
+Running 1 test using 1 worker
+
+
+
+(node:28468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[1/1] e2e\assistant-dock-captures.spec.ts:15:1 › capture five assistant dock states at all widths and themes
+  1 passed (50.7s)

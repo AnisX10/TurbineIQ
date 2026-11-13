@@ -1,0 +1,94 @@
+Running mobile 1/1 A: http://127.0.0.1:8023/#/overview
+  perf 70 · TBT 1738 ms · LCP 920.7 ms · CLS 0.046438 · payload 2918 KiB · benchmarkIndex 2791 · CPU 49.4% · free RAM 691.7→993.7 MiB
+Running mobile 1/1 B: http://127.0.0.1:8021/#/overview
+  perf 72 · TBT 1499.5 ms · LCP 926.9 ms · CLS 0.046438 · payload 2922 KiB · benchmarkIndex 3139.5 · CPU 52.7% · free RAM 990.5→1127.1 MiB
+
+Wrote docs\redesign\assistant-dock\evidence\lighthouse-dock-extra.json
+{
+  "mobile": {
+    "A": {
+      "performance": {
+        "median": 70,
+        "min": 70,
+        "max": 70
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 1738,
+        "min": 1738,
+        "max": 1738
+      },
+      "lcpMs": {
+        "median": 920.7,
+        "min": 920.7,
+        "max": 920.7
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.046438
+      },
+      "payloadBytes": {
+        "median": 2987631,
+        "min": 2987631,
+        "max": 2987631
+      },
+      "benchmarkIndex": {
+        "median": 2791,
+        "min": 2791,
+        "max": 2791
+      }
+    },
+    "B": {
+      "performance": {
+        "median": 72,
+        "min": 72,
+        "max": 72
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 1500,
+        "min": 1500,
+        "max": 1500
+      },
+      "lcpMs": {
+        "median": 926.9,
+        "min": 926.9,
+        "max": 926.9
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.046438
+      },
+      "payloadBytes": {
+        "median": 2992580,
+        "min": 2992580,
+        "max": 2992580
+      },
+      "benchmarkIndex": {
+        "median": 3139.5,
+        "min": 3139.5,
+        "max": 3139.5
+      }
+    }
+  }
+}

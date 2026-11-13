@@ -8,9 +8,9 @@ The project includes an interactive synthetic-twin demonstrator. It is not synch
 
 The Overview connects the sample replay, engineering readouts, interactive stage, component ledger, and timeline. Components provides component metrics, trends, and linked evidence. Evidence searches local technical notes. Assistant defaults to deterministic local mode; using a cloud model requires an explicit choice, and sending retrieved excerpts has a separate consent control.
 
-![Overview with the interactive turbine stage](docs/redesign/phase5/stage-after-light.png)
+![Overview with the interactive turbine stage](docs/redesign/phase5/stage-after-light.webp)
 
-![Assistant answer with its expanded tool trace](docs/redesign/phase5/states/assistant-answer-tool-trace-expanded-1440-light.png)
+![Assistant answer with its expanded tool trace](docs/redesign/phase5/states/assistant-answer-tool-trace-expanded-1440-light.webp)
 
 The stage loads the project-authored `frontend/public/models/turbine.glb`. This conceptual Blender visualization is Meshopt-compressed for delivery; an uncompressed glTF export also loads. See [Blender model integration](docs/BLENDER_INTEGRATION.md) for the name-mapping and export contract.
 

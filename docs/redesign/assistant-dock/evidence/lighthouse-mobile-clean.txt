@@ -1,0 +1,114 @@
+node.exe : npm notice run frontend@0.0.0 perf:lh
+At line:1 char:1
++ & <local-path> "<local-path> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 perf:lh:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run node scripts/perf-lh.mjs --a=http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+--b=http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72 --label-a=current --label-b=current
+--runs=3 --presets=mobile --output=../docs/redesign/assistant-dock/evidence/lighthouse-mobile-clean.json
+Running mobile 1/3 A: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 68 · TBT 2824 ms · LCP 915.7 ms · CLS 0.047566 · payload 2946 KiB · benchmarkIndex 2976.5 · CPU 60.4% · free RAM 1343.5→1536.9 MiB
+Running mobile 1/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 68 · TBT 2587 ms · LCP 915.8 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 2829.5 · CPU 35.6% · free RAM 1533.3→1660.8 MiB
+Running mobile 2/3 A: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 71 · TBT 1732 ms · LCP 915.4 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 2548.5 · CPU 37.3% · free RAM 1658.3→1713.9 MiB
+Running mobile 2/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: mobile-2-B benchmarkIndex 1990.5 is below 2500; its TBT is not comparable.
+  perf 67 · TBT 3035 ms · LCP 916.4 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 1990.5 · CPU 52.6% · free RAM 1711.8→1688.9 MiB
+Running mobile 3/3 A: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: mobile-3-A benchmarkIndex 1784.5 is below 2500; its TBT is not comparable.
+  perf 68 · TBT 2498 ms · LCP 916.6 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 1784.5 · CPU 48.5% · free RAM 1700→1534.2 MiB
+Running mobile 3/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 69 · TBT 2000.5 ms · LCP 913.7 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 2666 · CPU 40.8% · free RAM 1533.4→1609.1 MiB
+
+Wrote docs\redesign\assistant-dock\evidence\lighthouse-mobile-clean.json
+{
+  "mobile": {
+    "A": {
+      "performance": {
+        "median": 68,
+        "min": 68,
+        "max": 71
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 2498,
+        "min": 1732,
+        "max": 2824
+      },
+      "lcpMs": {
+        "median": 915.7,
+        "min": 915.4,
+        "max": 916.6
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.047566
+      },
+      "payloadBytes": {
+        "median": 3016290,
+        "min": 3016290,
+        "max": 3016290
+      },
+      "benchmarkIndex": {
+        "median": 2548.5,
+        "min": 1784.5,
+        "max": 2976.5
+      }
+    },
+    "B": {
+      "performance": {
+        "median": 68,
+        "min": 67,
+        "max": 69
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 2587,
+        "min": 2001,
+        "max": 3035
+      },
+      "lcpMs": {
+        "median": 915.8,
+        "min": 913.7,
+        "max": 916.4
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.046438
+      },
+      "payloadBytes": {
+        "median": 3016290,
+        "min": 3016290,
+        "max": 3016290
+      },
+      "benchmarkIndex": {
+        "median": 2666,
+        "min": 1990.5,
+        "max": 2829.5
+      }
+    }
+  }
+}

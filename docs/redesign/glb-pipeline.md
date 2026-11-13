@@ -33,7 +33,7 @@ Counts and ordered names were extracted from both files and compared:
 
 The JSON name dumps and identical-structure result are in [`phase5/glb-structure-before.json`](phase5/glb-structure-before.json), [`phase5/glb-structure-after.json`](phase5/glb-structure-after.json), and [`phase5/glb-structure-diff.txt`](phase5/glb-structure-diff.txt). The reproducible extractor is [`phase5/dump_glb_names.py`](phase5/dump_glb_names.py).
 
-The unchanged `tests/test_blender_asset.py` passed all three tests against the compressed asset. The glTF Transform validator reported no errors; it reports the unsupported `EXT_meshopt_compression` extension and an unused buffer as warnings. The model was also loaded and rendered through the application viewer using Drei's existing MeshoptDecoder, with a local-origin-only request log in [`phase5/viewer-network-origins.json`](phase5/viewer-network-origins.json). Before/after renders are in [`phase5/stage-after-light.png`](phase5/stage-after-light.png) and [`phase5/stage-compressed-light.png`](phase5/stage-compressed-light.png), and their dark-theme counterparts.
+The unchanged `tests/test_blender_asset.py` passed all three tests against the compressed asset. The glTF Transform validator reported no errors; it reports the unsupported `EXT_meshopt_compression` extension and an unused buffer as warnings. The model was also loaded and rendered through the application viewer using Drei's existing MeshoptDecoder, with a local-origin-only request log in [`phase5/viewer-network-origins.json`](phase5/viewer-network-origins.json). Before/after renders are in [`phase5/stage-after-light.webp`](phase5/stage-after-light.webp) and [`phase5/stage-compressed-light.webp`](phase5/stage-compressed-light.webp), and their dark-theme counterparts.
 
 The screenshot difference at 873 × 841 pixels was:
 
@@ -42,4 +42,4 @@ The screenshot difference at 873 × 841 pixels was:
 | Light | 0.051845 / 255 | 5.3485% | 0.15963% | 0.02166% |
 | Dark | 0.047056 / 255 | 4.9535% | 0.13866% | 0.02138% |
 
-The measured visual difference is very small at this view. The difference images are [`phase5/meshopt-visual-difference-light.png`](phase5/meshopt-visual-difference-light.png) and [`phase5/meshopt-visual-difference-dark.png`](phase5/meshopt-visual-difference-dark.png).
+The measured visual difference is very small at this view. The difference images are [`phase5/meshopt-visual-difference-light.webp`](phase5/meshopt-visual-difference-light.webp) and [`phase5/meshopt-visual-difference-dark.webp`](phase5/meshopt-visual-difference-dark.webp).

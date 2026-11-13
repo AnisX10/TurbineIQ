@@ -1,0 +1,217 @@
+node.exe : npm notice run frontend@0.0.0 perf:lh
+At line:1 char:1
++ & <local-path> "<local-path> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 perf:lh:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run node scripts/perf-lh.mjs --a=http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+--b=http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72 --label-a=redesign-v2-7509f06
+--label-b=mvp-llm-assistant-b0c4880 --runs=3 --presets=mobile,desktop
+--output=../docs/redesign/assistant-dock/evidence/lighthouse-ab.json
+Running mobile 1/3 A: http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 68 · TBT 2446 ms · LCP 937.4 ms · CLS 0.046438 · payload 2918 KiB · benchmarkIndex 2675.5 · CPU 44.7% · free RAM 962.9→1205.3 MiB
+Running mobile 1/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: mobile-1-B benchmarkIndex 1935 is below 2500; its TBT is not comparable.
+  perf 68 · TBT 2810 ms · LCP 921.4 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 1935 · CPU 46.5% · free RAM 1202→1175.5 MiB
+Running mobile 2/3 A: http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: mobile-2-A benchmarkIndex 2413 is below 2500; its TBT is not comparable.
+  perf 71 · TBT 1784 ms · LCP 930.3 ms · CLS 0.047566 · payload 2918 KiB · benchmarkIndex 2413 · CPU 37% · free RAM 1171.1→1368 MiB
+Running mobile 2/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 69 · TBT 1870 ms · LCP 909.6 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 3303 · CPU 38.3% · free RAM 1364.9→1405.1 MiB
+Running mobile 3/3 A: http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 68 · TBT 3235 ms · LCP 943.2 ms · CLS 0.046438 · payload 2918 KiB · benchmarkIndex 1886 · CPU 39.7% · free RAM 1403.1→1599.5 MiB
+WARNING: mobile-3-A benchmarkIndex 1886 is below 2500; its TBT is not comparable.
+Running mobile 3/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 70 · TBT 1819.5 ms · LCP 917.6 ms · CLS 0.046438 · payload 2946 KiB · benchmarkIndex 2866.5 · CPU 47.5% · free RAM 1595.9→1546 MiB
+Running desktop 1/3 A: http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: desktop-1-A benchmarkIndex 1877 is below 2500; its TBT is not comparable.
+  perf 83 · TBT 363.5 ms · LCP 276.2 ms · CLS 0.013613 · payload 2918 KiB · benchmarkIndex 1877 · CPU 37.9% · free RAM 1543.9→1496.9 MiB
+Running desktop 1/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 83 · TBT 375 ms · LCP 257.2 ms · CLS 0.013613 · payload 2946 KiB · benchmarkIndex 2503 · CPU 36.8% · free RAM 1495→1632.9 MiB
+Running desktop 2/3 A: http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 86 · TBT 316 ms · LCP 272 ms · CLS 0.013613 · payload 2918 KiB · benchmarkIndex 3116 · CPU 36.8% · free RAM 1629.7→1744.2 MiB
+Running desktop 2/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+  perf 94 · TBT 193.5 ms · LCP 256.7 ms · CLS 0.013613 · payload 2946 KiB · benchmarkIndex 2883.5 · CPU 37.2% · free RAM 1741.3→1673.1 MiB
+Running desktop 3/3 A: http://127.0.0.1:8023/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: desktop-3-A benchmarkIndex 2309.5 is below 2500; its TBT is not comparable.
+  perf 80 · TBT 426 ms · LCP 308 ms · CLS 0.013613 · payload 2918 KiB · benchmarkIndex 2309.5 · CPU 41.5% · free RAM 1670.8→1589.5 MiB
+Running desktop 3/3 B: http://127.0.0.1:8021/#/overview?scenario=compressor_fouling&seed=42&i=72
+WARNING: desktop-3-B benchmarkIndex 1679.5 is below 2500; its TBT is not comparable.
+  perf 82 · TBT 400 ms · LCP 269.9 ms · CLS 0.013613 · payload 2946 KiB · benchmarkIndex 1679.5 · CPU 45.9% · free RAM 1585.1→1309.7 MiB
+
+Wrote docs\redesign\assistant-dock\evidence\lighthouse-ab.json
+{
+  "mobile": {
+    "A": {
+      "performance": {
+        "median": 68,
+        "min": 68,
+        "max": 71
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 2446,
+        "min": 1784,
+        "max": 3235
+      },
+      "lcpMs": {
+        "median": 937.4,
+        "min": 930.3,
+        "max": 943.2
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.047566
+      },
+      "payloadBytes": {
+        "median": 2987631,
+        "min": 2987631,
+        "max": 2987631
+      },
+      "benchmarkIndex": {
+        "median": 2413,
+        "min": 1886,
+        "max": 2675.5
+      }
+    },
+    "B": {
+      "performance": {
+        "median": 69,
+        "min": 68,
+        "max": 70
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 1870,
+        "min": 1820,
+        "max": 2810
+      },
+      "lcpMs": {
+        "median": 917.6,
+        "min": 909.6,
+        "max": 921.4
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.046438
+      },
+      "payloadBytes": {
+        "median": 3016290,
+        "min": 3016290,
+        "max": 3016290
+      },
+      "benchmarkIndex": {
+        "median": 2866.5,
+        "min": 1935,
+        "max": 3303
+      }
+    }
+  },
+  "desktop": {
+    "A": {
+      "performance": {
+        "median": 83,
+        "min": 80,
+        "max": 86
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 364,
+        "min": 316,
+        "max": 426
+      },
+      "lcpMs": {
+        "median": 276.2,
+        "min": 272,
+        "max": 308
+      },
+      "cls": {
+        "median": 0.013613,
+        "min": 0.013613,
+        "max": 0.013613
+      },
+      "payloadBytes": {
+        "median": 2987631,
+        "min": 2987631,
+        "max": 2987631
+      },
+      "benchmarkIndex": {
+        "median": 2309.5,
+        "min": 1877,
+        "max": 3116
+      }
+    },
+    "B": {
+      "performance": {
+        "median": 83,
+        "min": 82,
+        "max": 94
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 375,
+        "min": 194,
+        "max": 400
+      },
+      "lcpMs": {
+        "median": 257.2,
+        "min": 256.7,
+        "max": 269.9
+      },
+      "cls": {
+        "median": 0.013613,
+        "min": 0.013613,
+        "max": 0.013613
+      },
+      "payloadBytes": {
+        "median": 3016290,
+        "min": 3016290,
+        "max": 3016290
+      },
+      "benchmarkIndex": {
+        "median": 2503,
+        "min": 1679.5,
+        "max": 2883.5
+      }
+    }
+  }
+}

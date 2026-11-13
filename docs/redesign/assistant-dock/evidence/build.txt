@@ -1,0 +1,37 @@
+node.exe : npm notice run frontend@0.0.0 build
+At line:1 char:1
++ & <local-path> "<local-path> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run frontend@0.0.0 build:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2661 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   1.42 kB │ gzip:   0.59 kB
+dist/assets/Evidence-BywM2uOC.css                 0.41 kB │ gzip:   0.27 kB
+dist/assets/EvidencePanel-Cdp4XewW.css            3.98 kB │ gzip:   1.10 kB
+dist/assets/ComponentDetail-QM09HnDm.css          4.80 kB │ gzip:   1.28 kB
+dist/assets/AssistantWorkspace-Gqlct9a-.css       8.99 kB │ gzip:   2.16 kB
+dist/assets/index-CYr-H6W9.css                   39.17 kB │ gzip:   7.85 kB
+dist/assets/Assistant-DhaW9YAl.js                 0.16 kB │ gzip:   0.15 kB
+dist/assets/Evidence-Bb2OuGxu.js                  0.22 kB │ gzip:   0.19 kB
+dist/assets/AssistantDock-DPT8ZXkd.js             0.51 kB │ gzip:   0.32 kB
+dist/assets/AssistantConsentHost-iqIel9n9.js      2.45 kB │ gzip:   1.12 kB
+dist/assets/EvidencePanel-BF0CH9Xq.js             6.03 kB │ gzip:   2.22 kB
+dist/assets/ComponentDetail-CKG-M7NS.js           6.86 kB │ gzip:   2.17 kB
+dist/assets/jsx-runtime-Wy9s6hX0.js               8.91 kB │ gzip:   3.39 kB
+dist/assets/AssistantWorkspace-B0aAmP2a.js       10.28 kB │ gzip:   3.43 kB
+dist/assets/index-DgvYfniP.js                   279.79 kB │ gzip:  86.28 kB
+dist/assets/TurbineViewer-Dc9Qydjz.js         1,040.51 kB │ gzip: 279.52 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking:
+https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.56s

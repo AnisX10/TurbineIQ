@@ -19,7 +19,22 @@ function visit(path) {
   }
   if (!textExtensions.has(path.slice(path.lastIndexOf('.')).toLowerCase())) return
 
-  const content = readFileSync(path).toString('utf8')
+  const bytes = readFileSync(path)
+  let content
+  if (bytes[0] === 0xff && bytes[1] === 0xfe) {
+    content = bytes.toString('utf16le', 2)
+  } else if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+    const littleEndian = Buffer.from(bytes.subarray(2))
+    for (let index = 0; index + 1 < littleEndian.length; index += 2) {
+      const first = littleEndian[index]
+      littleEndian[index] = littleEndian[index + 1]
+      littleEndian[index + 1] = first
+    }
+    content = littleEndian.toString('utf16le')
+  } else {
+    content = bytes.toString('utf8')
+    if (content.includes('\u0000')) content = bytes.toString('utf16le')
+  }
   for (const { label, pattern } of forbidden) {
     pattern.lastIndex = 0
     for (const match of content.matchAll(pattern)) {

@@ -1,0 +1,26 @@
+
+.\node_modules\.bin\playwright.cmd : [WebServer] INFO:     Started server process [31508]
+At line:2 char:402
++ ... env:CI='1'; .\node_modules\.bin\playwright.cmd test e2e/app.spec.ts - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer] INF...process [31508]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[WebServer] INFO:     Waiting for application startup.
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8021 (Press CTRL+C to quit)
+
+
+Running 6 tests using 1 worker
+
+(node:21968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/6] e2e\app.spec.ts:134:1 › keyboard traversal covers tabs, evidence selection, consent, composer, and replay
+[2/6] e2e\app.spec.ts:226:1 › overview scenario, seed, replay, mesh inspection, Evidence search, and Local Assistant still work
+[3/6] e2e\app.spec.ts:288:1 › Cloud consent always precedes a mocked provider request and document excerpts are opt-in
+[4/6] e2e\app.spec.ts:319:1 › Assistant request failures expose a retry action
+[5/6] e2e\app.spec.ts:339:1 › Assistant shows its scenario name and busy rule only during a local request
+[6/6] e2e\app.spec.ts:465:1 › Offline engine guidance uses a portable command with shell activation and copy action
+  6 passed (27.6s)

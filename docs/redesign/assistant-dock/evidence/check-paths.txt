@@ -1,0 +1,9 @@
+node.exe : npm notice run frontend@0.0.0 check:paths
+At line:1 char:1
++ & <local-path> "<local-path> ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (npm notice run ...0.0 check:paths:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+npm notice run node ../scripts/check-doc-paths.mjs
+Documentation path scan passed (README.md and docs/).

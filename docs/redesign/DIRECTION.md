@@ -88,7 +88,7 @@ Six Latin WOFF2 files were copied at development time from Fontsource 5.3.0: [`G
 
 ## Cycle glyph
 
-The final ink-only 24px glyph is [`cycle-glyph.svg`](glyph/cycle-glyph.svg), with a 1.75px closed four-station loop that uses more of the 24px grid; the isobar edges are gently curved. The preview is available as [SVG](glyph/cycle-glyph-preview.svg) and [PNG](glyph/cycle-glyph-preview.png), showing 16px, 20px, 24px, and 48px sizes on light `#f2f4f7` and dark `#0e0f11` grounds. The 16px variant omits station dots.
+The final ink-only 24px glyph is [`cycle-glyph.svg`](glyph/cycle-glyph.svg), with a 1.75px closed four-station loop that uses more of the 24px grid; the isobar edges are gently curved. The preview is available as [SVG](glyph/cycle-glyph-preview.svg) and [WebP](glyph/cycle-glyph-preview.webp), showing 16px, 20px, 24px, and 48px sizes on light `#f2f4f7` and dark `#0e0f11` grounds. The 16px variant omits station dots.
 
 Geist and Geist Mono do not include U+2009 or U+202F; Geist Mono does not include U+25B2, and neither face includes U+25BE. Units are rendered in a separate span with `margin-inline-start: 0.25em` or separated with U+00A0. Direction and flag markers use Lucide icons or SVG shapes. These four unsupported characters are excluded from product UI copy.
 
@@ -105,7 +105,7 @@ The UI/UX Pro Max canonical pre-delivery checklist and quick-reference sections 
 - `python docs/redesign/contrast_check.py`: passed all 40 light/dark contrast pairs, including strong controls, chart 2, status text on both backgrounds, and the stage edge.
 - Unsupported-glyph scan: no U+2009, U+202F, U+25B2, or U+25BE characters remain in docs or frontend source.
 - Font integrity check: all six files have the WOFF2 signature; both complete SIL OFL 1.1 texts are present.
-- Chrome headless rendered the preview PNG at 720x360; the 16px, 20px, 24px, and 48px marks were visually inspected on both grounds. The 16px variant has no station dots.
+- Chrome headless rendered the preview at 720x360; the 16px, 20px, 24px, and 48px marks were visually inspected on both grounds. The 16px variant has no station dots.
 - `git diff --check`: passed.
 
 The Phase 0 Python gates (Ruff and 69 pytest cases) are recorded in [BASELINE.md](BASELINE.md). No Python or application source changed in Phase 1, so they were not rerun after the direction assets were added.

@@ -1,0 +1,213 @@
+Running mobile 1/3 A: http://127.0.0.1:8023/#/overview
+  perf 72 · TBT 1327 ms · LCP 946.4 ms · CLS 0.046438 · payload 2918 KiB · benchmarkIndex 2880.5 · CPU 47.3% · free RAM 1112.9→1164.4 MiB
+Running mobile 1/3 B: http://127.0.0.1:8021/#/overview
+  perf 72 · TBT 1402 ms · LCP 922.1 ms · CLS 0.046438 · payload 2922 KiB · benchmarkIndex 3023 · CPU 49.1% · free RAM 1161.2→1255.9 MiB
+Running mobile 2/3 A: http://127.0.0.1:8023/#/overview
+  perf 72 · TBT 1412 ms · LCP 913.9 ms · CLS 0.046316 · payload 2918 KiB · benchmarkIndex 2920 · CPU 52.7% · free RAM 1253.7→1472 MiB
+Running mobile 2/3 B: http://127.0.0.1:8021/#/overview
+  perf 71 · TBT 1550 ms · LCP 917.5 ms · CLS 0.047443 · payload 2922 KiB · benchmarkIndex 2682 · CPU 46.4% · free RAM 1469.6→1654.7 MiB
+Running mobile 3/3 A: http://127.0.0.1:8023/#/overview
+  perf 71 · TBT 1410 ms · LCP 911.2 ms · CLS 0.046316 · payload 2918 KiB · benchmarkIndex 3012 · CPU 44.8% · free RAM 1651→1663.2 MiB
+Running mobile 3/3 B: http://127.0.0.1:8021/#/overview
+  perf 70 · TBT 2080 ms · LCP 917.2 ms · CLS 0.046438 · payload 2922 KiB · benchmarkIndex 2391.5 · CPU 56.9% · free RAM 1659.9→1074.2 MiB
+node : WARNING: mobile-3-B benchmarkIndex 2391.5 is below 2500; its TBT is not comparable.
+At line:2 char:1
++ node scripts/perf-lh.mjs --a=http://127.0.0.1:8023/#/overview --b=htt ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: mobile...not comparable.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+Running desktop 1/3 A: http://127.0.0.1:8023/#/overview
+WARNING: desktop-1-A benchmarkIndex 2096.5 is below 2500; its TBT is not comparable.
+  perf 83 · TBT 372.5 ms · LCP 256.3 ms · CLS 0.013613 · payload 2918 KiB · benchmarkIndex 2096.5 · CPU 61.4% · free RAM 1072.4→1312.1 MiB
+Running desktop 1/3 B: http://127.0.0.1:8021/#/overview
+WARNING: desktop-1-B benchmarkIndex 2195.5 is below 2500; its TBT is not comparable.
+  perf 88 · TBT 282.5 ms · LCP 264.8 ms · CLS 0.013613 · payload 2922 KiB · benchmarkIndex 2195.5 · CPU 59% · free RAM 1308.7→1431 MiB
+Running desktop 2/3 A: http://127.0.0.1:8023/#/overview
+WARNING: desktop-2-A benchmarkIndex 2287 is below 2500; its TBT is not comparable.
+  perf 91 · TBT 242.5 ms · LCP 255 ms · CLS 0.013613 · payload 2918 KiB · benchmarkIndex 2287 · CPU 57.3% · free RAM 1427.9→1415.9 MiB
+Running desktop 2/3 B: http://127.0.0.1:8021/#/overview
+  perf 89 · TBT 276 ms · LCP 262 ms · CLS 0.013613 · payload 2922 KiB · benchmarkIndex 2072 · CPU 58.3% · free RAM 1416.8→1489.1 MiB
+WARNING: desktop-2-B benchmarkIndex 2072 is below 2500; its TBT is not comparable.
+Running desktop 3/3 A: http://127.0.0.1:8023/#/overview
+WARNING: desktop-3-A benchmarkIndex 1847 is below 2500; its TBT is not comparable.
+  perf 91 · TBT 242.5 ms · LCP 261.3 ms · CLS 0.013613 · payload 2918 KiB · benchmarkIndex 1847 · CPU 58.7% · free RAM 1486.1→1503.5 MiB
+Running desktop 3/3 B: http://127.0.0.1:8021/#/overview
+  perf 89 · TBT 272 ms · LCP 263 ms · CLS 0.013613 · payload 2922 KiB · benchmarkIndex 2088.5 · CPU 56.6% · free RAM 1496.6→1497.7 MiB
+WARNING: desktop-3-B benchmarkIndex 2088.5 is below 2500; its TBT is not comparable.
+
+Wrote docs\redesign\assistant-dock\evidence\lighthouse-dock-ab.json
+{
+  "mobile": {
+    "A": {
+      "performance": {
+        "median": 72,
+        "min": 71,
+        "max": 72
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 1410,
+        "min": 1327,
+        "max": 1412
+      },
+      "lcpMs": {
+        "median": 913.9,
+        "min": 911.2,
+        "max": 946.4
+      },
+      "cls": {
+        "median": 0.046316,
+        "min": 0.046316,
+        "max": 0.046438
+      },
+      "payloadBytes": {
+        "median": 2987631,
+        "min": 2987631,
+        "max": 2987631
+      },
+      "benchmarkIndex": {
+        "median": 2920,
+        "min": 2880.5,
+        "max": 3012
+      }
+    },
+    "B": {
+      "performance": {
+        "median": 71,
+        "min": 70,
+        "max": 72
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 1550,
+        "min": 1402,
+        "max": 2080
+      },
+      "lcpMs": {
+        "median": 917.5,
+        "min": 917.2,
+        "max": 922.1
+      },
+      "cls": {
+        "median": 0.046438,
+        "min": 0.046438,
+        "max": 0.047443
+      },
+      "payloadBytes": {
+        "median": 2992580,
+        "min": 2992580,
+        "max": 2992580
+      },
+      "benchmarkIndex": {
+        "median": 2682,
+        "min": 2391.5,
+        "max": 3023
+      }
+    }
+  },
+  "desktop": {
+    "A": {
+      "performance": {
+        "median": 91,
+        "min": 83,
+        "max": 91
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 243,
+        "min": 243,
+        "max": 373
+      },
+      "lcpMs": {
+        "median": 256.3,
+        "min": 255,
+        "max": 261.3
+      },
+      "cls": {
+        "median": 0.013613,
+        "min": 0.013613,
+        "max": 0.013613
+      },
+      "payloadBytes": {
+        "median": 2987631,
+        "min": 2987631,
+        "max": 2987631
+      },
+      "benchmarkIndex": {
+        "median": 2096.5,
+        "min": 1847,
+        "max": 2287
+      }
+    },
+    "B": {
+      "performance": {
+        "median": 89,
+        "min": 88,
+        "max": 89
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "bestPractices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "tbtMs": {
+        "median": 276,
+        "min": 272,
+        "max": 283
+      },
+      "lcpMs": {
+        "median": 263,
+        "min": 262,
+        "max": 264.8
+      },
+      "cls": {
+        "median": 0.013613,
+        "min": 0.013613,
+        "max": 0.013613
+      },
+      "payloadBytes": {
+        "median": 2992580,
+        "min": 2992580,
+        "max": 2992580
+      },
+      "benchmarkIndex": {
+        "median": 2088.5,
+        "min": 2072,
+        "max": 2195.5
+      }
+    }
+  }
+}

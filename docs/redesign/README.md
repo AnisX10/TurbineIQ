@@ -8,7 +8,7 @@ This folder records the TurbineIQ interface redesign and its measured checks. Ea
 - [Phase 0 baseline](BASELINE.md)
 - [Contrast checker](contrast_check.py)
 - [Contrast results](phase3/contrast-check.txt) and [Phase 4 contrast results](phase4/contrast-check.txt)
-- [Design glyph vector](glyph/cycle-glyph.svg) and [rendered preview](glyph/cycle-glyph-preview.png)
+- [Design glyph vector](glyph/cycle-glyph.svg) and [rendered preview](glyph/cycle-glyph-preview.webp)
 
 ## Phase reports
 
@@ -20,6 +20,7 @@ This folder records the TurbineIQ interface redesign and its measured checks. Ea
 
 - [Phase 6-7, Part 2: final audit](FINAL_REPORT.md)
 - [Future pull request description](PR_DESCRIPTION.md)
+- [Assistant dock on Overview](assistant-dock/README.md)
 
 ## Final visual evidence
 
@@ -30,6 +31,7 @@ This folder records the TurbineIQ interface redesign and its measured checks. Ea
 - [Phase 6-7 Part 2 gate summary](phase6-7-part2/gate-summary.txt)
 - [Final Lighthouse runs and long-task profile](phase6-7-part2/lighthouse-summary.json)
 - [Final browser smoke results](phase6-7-part2/browser-smoke.json)
+- [Assistant dock screenshots and gate evidence](assistant-dock/README.md)
 - [Meshopt evaluation summary](phase4/meshopt-evaluation.md)
 - [Meshopt pipeline](glb-pipeline.md)
 

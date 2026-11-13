@@ -1,0 +1,55 @@
+
+
+.\node_modules\.bin\playwright.cmd : [WebServer] INFO:     Started server process [5048]
+At line:2 char:68
++ ... E_DOCK='1'; .\node_modules\.bin\playwright.cmd test e2e/assistant-doc ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([WebServer] INF... process [5048]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[WebServer] INFO:     Waiting for application startup.
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8021 (Press CTRL+C to quit)
+
+Running 1 test using 1 worker
+
+(node:20152) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[1/1] e2e\assistant-dock-captures.spec.ts:15:1 › capture five assistant dock states at all widths and themes
+[WebServer] ----------------------------------------
+[WebServer] Exception occurred during processing of request from ('127.0.0.1', 54183)
+[WebServer] Traceback (most recent call last):
+[WebServer]   File <local-path>, line 697, in process_request_thread
+[WebServer]     self.finish_request(request, client_address)
+[WebServer]     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+[WebServer]   File <local-path>, line 362, in finish_request
+[WebServer]     self.RequestHandlerClass(request, client_address, self)
+[WebServer]     ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[WebServer]   File <local-path>, line 766, in __init__
+[WebServer]     self.handle()
+[WebServer]     ~~~~~~~~~~~^^
+[WebServer]   File <local-path>, line 436, in handle
+[WebServer]     self.handle_one_request()
+[WebServer]     ~~~~~~~~~~~~~~~~~~~~~~~^^
+[WebServer]   File <local-path>, line 424, in handle_one_request
+[WebServer]     method()
+[WebServer]     ~~~~~~^^
+[WebServer]   File <local-path>, line
+96, in do_POST
+[WebServer]     self.end_headers()
+[WebServer]     ~~~~~~~~~~~~~~~~^^
+[WebServer]   File <local-path>, line 538, in end_headers
+[WebServer]     self.flush_headers()
+[WebServer]     ~~~~~~~~~~~~~~~~~~^^
+[WebServer]   File <local-path>, line 542, in flush_headers
+[WebServer]     self.wfile.write(b"".join(self._headers_buffer))
+[WebServer]     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[WebServer]   File <local-path>, line 845, in write
+[WebServer]     self._sock.sendall(b)
+[WebServer]     ~~~~~~~~~~~~~~~~~~^^^
+[WebServer] ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+[WebServer] ----------------------------------------
+
+  1 passed (44.6s)

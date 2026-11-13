@@ -4,7 +4,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-results-reader-selected-1440-light.png",
+    "file": "evidence-results-reader-selected-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -15,7 +15,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-no-result-1440-light.png",
+    "file": "evidence-no-result-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -26,7 +26,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "component-over-time-1440-light.png",
+    "file": "component-over-time-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -37,7 +37,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "component-evidence-1440-light.png",
+    "file": "component-evidence-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -48,7 +48,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-answer-tool-trace-expanded-1440-light.png",
+    "file": "assistant-answer-tool-trace-expanded-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -59,7 +59,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "cloud-consent-sheet-1440-light.png",
+    "file": "cloud-consent-sheet-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -70,7 +70,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-local-fallback-1440-light.png",
+    "file": "assistant-local-fallback-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -81,7 +81,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · offline",
-    "file": "engine-offline-1440-light.png",
+    "file": "engine-offline-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -92,7 +92,7 @@
     "width": 1440,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "request-failed-retry-1440-light.png",
+    "file": "request-failed-retry-1440-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -103,7 +103,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-results-reader-selected-375-light.png",
+    "file": "evidence-results-reader-selected-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -114,7 +114,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-no-result-375-light.png",
+    "file": "evidence-no-result-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -125,7 +125,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "component-over-time-375-light.png",
+    "file": "component-over-time-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -136,7 +136,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "component-evidence-375-light.png",
+    "file": "component-evidence-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -147,7 +147,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-answer-tool-trace-expanded-375-light.png",
+    "file": "assistant-answer-tool-trace-expanded-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -158,7 +158,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "cloud-consent-sheet-375-light.png",
+    "file": "cloud-consent-sheet-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -169,7 +169,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-local-fallback-375-light.png",
+    "file": "assistant-local-fallback-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -180,7 +180,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · offline",
-    "file": "engine-offline-375-light.png",
+    "file": "engine-offline-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -191,7 +191,7 @@
     "width": 375,
     "theme": "light",
     "engineStatus": "Local engine · connected",
-    "file": "request-failed-retry-375-light.png",
+    "file": "request-failed-retry-375-light.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -202,7 +202,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-results-reader-selected-1440-dark.png",
+    "file": "evidence-results-reader-selected-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -213,7 +213,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-no-result-1440-dark.png",
+    "file": "evidence-no-result-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -224,7 +224,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "component-over-time-1440-dark.png",
+    "file": "component-over-time-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -235,7 +235,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "component-evidence-1440-dark.png",
+    "file": "component-evidence-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -246,7 +246,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-answer-tool-trace-expanded-1440-dark.png",
+    "file": "assistant-answer-tool-trace-expanded-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -257,7 +257,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "cloud-consent-sheet-1440-dark.png",
+    "file": "cloud-consent-sheet-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -268,7 +268,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-local-fallback-1440-dark.png",
+    "file": "assistant-local-fallback-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -279,7 +279,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · offline",
-    "file": "engine-offline-1440-dark.png",
+    "file": "engine-offline-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -290,7 +290,7 @@
     "width": 1440,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "request-failed-retry-1440-dark.png",
+    "file": "request-failed-retry-1440-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -301,7 +301,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-results-reader-selected-375-dark.png",
+    "file": "evidence-results-reader-selected-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -312,7 +312,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "evidence-no-result-375-dark.png",
+    "file": "evidence-no-result-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -323,7 +323,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "component-over-time-375-dark.png",
+    "file": "component-over-time-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -334,7 +334,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "component-evidence-375-dark.png",
+    "file": "component-evidence-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -345,7 +345,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-answer-tool-trace-expanded-375-dark.png",
+    "file": "assistant-answer-tool-trace-expanded-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -356,7 +356,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "cloud-consent-sheet-375-dark.png",
+    "file": "cloud-consent-sheet-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -367,7 +367,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "assistant-local-fallback-375-dark.png",
+    "file": "assistant-local-fallback-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -378,7 +378,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · offline",
-    "file": "engine-offline-375-dark.png",
+    "file": "engine-offline-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],
@@ -389,7 +389,7 @@
     "width": 375,
     "theme": "dark",
     "engineStatus": "Local engine · connected",
-    "file": "request-failed-retry-375-dark.png",
+    "file": "request-failed-retry-375-dark.webp",
     "requestOrigins": [
       "http://127.0.0.1:8011"
     ],

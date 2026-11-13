@@ -1,0 +1,2 @@
+UTF-16 absolute path fixture: rejected as expected.
+Result: PASS

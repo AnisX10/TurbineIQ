@@ -13,7 +13,7 @@
 - Status labels wrap instead of truncating. Station rows use a fixed Synthetic / Reference model / Note grid. The Stage view switch is segmented; Reset, Explode, Isolate and Rotor controls are named icon buttons with keyboard access and 44 px targets.
 - Timeline labels are separated, the residual strip has a zero line and scale, the playhead readout stays with the playhead, and the replay scrubber uses a neutral fill.
 - Overview is split into `features/overview/` modules. Component detail is in `features/component-detail/`.
-- Dark-stage lighting now uses theme-specific values: ambient 0.8 → 4, key 2.1 → 7, fill 9 → 32, rim 4 → 24. Light-stage values are unchanged. The original Phase 4 before/after capture pair was pruned with the old screenshot matrices; the later Stage review is preserved in [Phase 5](phase5/stage-after-dark.png).
+- Dark-stage lighting now uses theme-specific values: ambient 0.8 → 4, key 2.1 → 7, fill 9 → 32, rim 4 → 24. Light-stage values are unchanged. The original Phase 4 before/after capture pair was pruned with the old screenshot matrices; the later Stage review is preserved in [Phase 5](phase5/stage-after-dark.webp).
 
 ### Phase 4 routes
 

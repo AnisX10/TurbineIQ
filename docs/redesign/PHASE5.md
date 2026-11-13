@@ -64,7 +64,7 @@ The approved conversion reduced `frontend/public/models/turbine.glb` from 1,910,
 | Python quality | `.venv\Scripts\python.exe -m ruff check src tests` — passed. `.venv\Scripts\python.exe -m pytest -q` — 69 passed, 5 dependency warnings. | [`phase5/final-ruff.log`](phase5/final-ruff.log), [`phase5/final-pytest.log`](phase5/final-pytest.log) |
 | Source invariants | `git diff --quiet main -- src tests` and `git diff --quiet main -- frontend/src/types.ts` — both exit 0. | [`phase5/python-byte-identical.log`](phase5/python-byte-identical.log) |
 | Blender asset contract | Unchanged `tests/test_blender_asset.py` — 3 passed. Mesh-name/count comparison is identical. | [`phase5/glb-blender-test.log`](phase5/glb-blender-test.log), [`phase5/glb-structure-diff.txt`](phase5/glb-structure-diff.txt) |
-| Stage screenshots | Before/after light and dark at the same 1440 px viewport; selection outline and callout remain visible. | [`stage-before-light.png`](phase5/stage-before-light.png), [`stage-after-light.png`](phase5/stage-after-light.png), [`stage-before-dark.png`](phase5/stage-before-dark.png), [`stage-after-dark.png`](phase5/stage-after-dark.png) |
+| Stage screenshots | Before/after light and dark at the same 1440 px viewport; selection outline and callout remain visible. | [`stage-before-light.webp`](phase5/stage-before-light.webp), [`stage-after-light.webp`](phase5/stage-after-light.webp), [`stage-before-dark.webp`](phase5/stage-before-dark.webp), [`stage-after-dark.webp`](phase5/stage-after-dark.webp) |
 
 Taste inspection commands were run for the two required routes:
 
