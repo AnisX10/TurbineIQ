@@ -1,5 +1,5 @@
 Command: recursively sum regular files under docs/redesign.
-Files (excluding this report): 357
-Bytes (excluding this report): 10353531
+Files (excluding this report): 366
+Bytes (excluding this report): 10377976
 Budget: less than 12000000 bytes
 Result: PASS

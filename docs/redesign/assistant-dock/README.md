@@ -16,7 +16,7 @@ Captures are viewport screenshots at four widths in both themes. They were conve
 
 ## Verification
 
-The fresh-clone frontend checks were run from a clone of the pushed `c7af346` commit. The retained logs are under [`evidence/`](evidence/).
+The dock's frontend checks were run from a clean clone of the pushed `c7af346` application commit. The retained logs are under [`evidence/`](evidence/). Final-commit clean-clone checks for commit `21cd21c` are listed below.
 
 | Gate | Command | Result |
 |---|---|---|
@@ -28,6 +28,20 @@ The fresh-clone frontend checks were run from a clone of the pushed `c7af346` co
 | Contrast | `python docs/redesign/contrast_check.py` | All 52 measured pairs passed. See [`contrast.txt`](evidence/contrast.txt). |
 | Documentation paths | `npm run check:paths` | Passed after evidence and report updates. |
 | CI | GitHub Actions workflow `CI` | The run ID and result for the final pushed commit are included in the handoff report. |
+
+### Final-commit clean clone (`21cd21c`)
+
+This clone was made after pushing the final evidence/path-scanner commit. Python dependencies were installed from the repository extras with `pip install -e ".[dev,streamlit]"`.
+
+| Gate | Command | Result and retained output |
+|---|---|---|
+| Install | `cd frontend && npm ci` | Passed without flags; [`npm-ci.txt`](evidence/fresh-clone/npm-ci.txt). |
+| Frontend | `npm run lint`; `npm run build`; `npm test` | Passed; build and 30 unit tests are recorded in [`lint.txt`](evidence/fresh-clone/lint.txt), [`build.txt`](evidence/fresh-clone/build.txt), and [`vitest.txt`](evidence/fresh-clone/vitest.txt). |
+| Browser | `CI=1 npm run test:e2e` | Passed: 29 tests, one opt-in screenshot test skipped; [`playwright.txt`](evidence/fresh-clone/playwright.txt). CI mode uses one worker and does not reuse an already-running API server. |
+| Python install and tests | `pip install -e ".[dev,streamlit]"`; `ruff check src tests`; `pytest -q` | Passed; 90 pytest tests, with one upstream Starlette/httpx deprecation warning. Logs: [`python-install.txt`](evidence/fresh-clone/python-install.txt), [`ruff.txt`](evidence/fresh-clone/ruff.txt), [`pytest.txt`](evidence/fresh-clone/pytest.txt). |
+| Paths | `cd frontend && npm run check:paths` | Passed; [`check-paths.txt`](evidence/fresh-clone/check-paths.txt). The scanner also rejected a UTF-16 absolute-path fixture; [`path-check-selftest.txt`](evidence/path-check-selftest.txt). |
+
+One initial browser run reused an A/B Lighthouse API server still bound to port 8021, so two cases failed against the wrong server. After stopping those servers, the clean `CI=1 npm run test:e2e` run above passed end to end.
 
 The accessible dock is opened by the header Ask control or `A`, closes with Escape, and returns focus to the opener. At 375 px it is a bottom sheet. The fake provider supports stream, stop, retry, tool trace, citation, fallback, and cloud consent coverage; browser tests make no provider or other off-origin requests.
 

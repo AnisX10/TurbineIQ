@@ -1,0 +1,2 @@
+Command: npm run check:paths
+Output: Documentation path scan passed (README.md and docs/).

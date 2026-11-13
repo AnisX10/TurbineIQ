@@ -1,0 +1,10 @@
+npm notice run frontend@0.0.0 test
+npm notice run vitest run
+
+ RUN  v5.1.0 <local-path>
+
+
+ Test Files  9 passed (9)
+      Tests  30 passed (30)
+   Start at  18:23:26
+   Duration  4.61s (environment 89%, transform 5%, import 4%, tests 2%, worker 1%)

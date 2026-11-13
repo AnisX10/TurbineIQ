@@ -1,0 +1,93 @@
+npm notice run frontend@0.0.0 test:e2e
+npm notice run npm run build && playwright test
+npm notice run frontend@0.0.0 build
+npm notice run tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 2661 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                   1.42 kB │ gzip:   0.59 kB
+dist/assets/Evidence-BywM2uOC.css                 0.41 kB │ gzip:   0.27 kB
+dist/assets/EvidencePanel-Cdp4XewW.css            3.98 kB │ gzip:   1.10 kB
+dist/assets/ComponentDetail-QM09HnDm.css          4.80 kB │ gzip:   1.28 kB
+dist/assets/AssistantWorkspace-Gqlct9a-.css       8.99 kB │ gzip:   2.16 kB
+dist/assets/index-CYr-H6W9.css                   39.17 kB │ gzip:   7.85 kB
+dist/assets/Assistant-DhaW9YAl.js                 0.16 kB │ gzip:   0.15 kB
+dist/assets/Evidence-Bb2OuGxu.js                  0.22 kB │ gzip:   0.19 kB
+dist/assets/AssistantDock-DPT8ZXkd.js             0.51 kB │ gzip:   0.32 kB
+dist/assets/AssistantConsentHost-iqIel9n9.js      2.45 kB │ gzip:   1.12 kB
+dist/assets/EvidencePanel-BF0CH9Xq.js             6.03 kB │ gzip:   2.22 kB
+dist/assets/ComponentDetail-CKG-M7NS.js           6.86 kB │ gzip:   2.17 kB
+dist/assets/jsx-runtime-Wy9s6hX0.js               8.91 kB │ gzip:   3.39 kB
+dist/assets/AssistantWorkspace-B0aAmP2a.js       10.28 kB │ gzip:   3.43 kB
+dist/assets/index-DgvYfniP.js                   279.79 kB │ gzip:  86.28 kB
+dist/assets/TurbineViewer-Dc9Qydjz.js         1,040.51 kB │ gzip: 279.52 kB
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.78s
+[WebServer] INFO:     Started server process [28612]
+[WebServer] INFO:     Waiting for application startup.
+[WebServer] INFO:     Application startup complete.
+[WebServer] INFO:     Uvicorn running on http://127.0.0.1:8021 (Press CTRL+C to quit)
+
+Running 30 tests using 1 worker
+
+(node:4540) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 e2e\app.spec.ts:46:1 › Overview paints its Stage frame while run data is still loading (1.7s)
+  ok  2 e2e\app.spec.ts:67:1 › Overview assistant code loads only when the dock or consent sheet opens (3.5s)
+AXE light Overview default: 0 serious/critical
+AXE light Overview Assistant dock: 0 serious/critical
+AXE light Overview Boundary sheet: 0 serious/critical
+AXE light Component detail default: 0 serious/critical
+AXE light Component detail Over time: 0 serious/critical
+AXE light Component detail Evidence: 0 serious/critical
+AXE light Evidence default: 0 serious/critical
+AXE light Assistant default: 0 serious/critical
+AXE light Assistant Cloud consent: 0 serious/critical
+AXE dark Overview default: 0 serious/critical
+AXE dark Overview Assistant dock: 0 serious/critical
+AXE dark Overview Boundary sheet: 0 serious/critical
+AXE dark Component detail default: 0 serious/critical
+AXE dark Component detail Over time: 0 serious/critical
+AXE dark Component detail Evidence: 0 serious/critical
+AXE dark Evidence default: 0 serious/critical
+AXE dark Assistant default: 0 serious/critical
+AXE dark Assistant Cloud consent: 0 serious/critical
+  ok  3 e2e\app.spec.ts:100:1 › axe audits all four routes, component tabs, and Cloud consent in both themes (24.9s)
+  ok  4 e2e\app.spec.ts:135:1 › Evidence restores URL searches and explains an honest no-evidence result (638ms)
+  ok  5 e2e\app.spec.ts:150:1 › keyboard traversal covers tabs, evidence selection, consent, composer, and replay (16.8s)
+  ok  6 e2e\app.spec.ts:242:1 › overview scenario, seed, replay, mesh inspection, Evidence search, and Local Assistant still work (9.2s)
+  ok  7 e2e\app.spec.ts:304:1 › Cloud consent always precedes a mocked provider request and document excerpts are opt-in (2.1s)
+  ok  8 e2e\app.spec.ts:335:1 › Assistant request failures expose a retry action (681ms)
+  ok  9 e2e\app.spec.ts:355:1 › Assistant shows its scenario name and busy rule only during a local request (614ms)
+  ok 10 e2e\app.spec.ts:378:1 › Overview A shortcut opens the shared dock and Esc returns focus to Ask (6.5s)
+  ok 11 e2e\app.spec.ts:405:1 › cloud dock names the fake provider, streams tool results, links citations and labels local fallback (18.8s)
+  ok 12 e2e\app.spec.ts:438:1 › assistant dock can stop a slow cloud response and retry a failed stream (6.1s)
+  ok 13 e2e\app.spec.ts:467:1 › assistant dock becomes a bottom sheet at 375px (1.9s)
+  ok 14 e2e\app.spec.ts:481:1 › Offline engine guidance uses a portable command with shell activation and copy action (794ms)
+  ok 15 e2e\app.spec.ts:497:1 › Component ledger formats sample time and percentage values without duplicated reference provenance (535ms)
+  ok 16 e2e\app.spec.ts:507:1 › viewport screenshots cover every route, width, and theme without horizontal page scroll (32.7s)
+  ok 17 e2e\app.spec.ts:534:1 › 320px layouts have no horizontal page scroll and reduced motion disables rotor motion (3.2s)
+  ok 18 e2e\app.spec.ts:553:1 › layouts keep all routes, tabs, and sheets inside 320px and 200%-equivalent viewports (12.5s)
+TOUCH TARGETS UNDER 44px: []
+  ok 19 e2e\app.spec.ts:605:1 › mobile targets are at least 44px in both themes (4.8s)
+  ok 20 e2e\app.spec.ts:640:1 › mobile navigation accessible names match the visible destination labels (774ms)
+  ok 21 e2e\app.spec.ts:674:1 › theme preference changes live and System follows OS changes before app paint (5.1s)
+  ok 22 e2e\app.spec.ts:704:1 › saved light and dark themes are applied by the head script before first paint (1.2s)
+  ok 23 e2e\app.spec.ts:718:1 › forced colors preserve visible focus, control borders, and segmented selections (2.0s)
+  ok 24 e2e\app.spec.ts:739:1 › a failed GLB request leaves the visible interactive schematic fallback (1.4s)
+  ok 25 e2e\app.spec.ts:748:1 › unavailable WebGL keeps the static schematic visible and explains the fallback (748ms)
+  -  26 e2e\assistant-dock-captures.spec.ts:15:1 › capture five assistant dock states at all widths and themes
+  ok 27 e2e\phase5-viewer.spec.ts:57:1 › viewer actions and every component mesh remain keyboard accessible (1.2m)
+  ok 28 e2e\phase5-viewer.spec.ts:127:1 › demand rendering stops while idle, animates camera and rotor only on request (14.4s)
+  ok 29 e2e\phase5-viewer.spec.ts:161:1 › reduced motion disables rotor animation and removes camera easing (6.6s)
+  ok 30 e2e\phase5-viewer.spec.ts:193:1 › responsive stage resizes without browser runtime errors (5.2s)
+
+  1 skipped
+  29 passed (4.4m)
