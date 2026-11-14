@@ -65,6 +65,24 @@ export interface TimelinePoint {
   [key: string]: string | number | boolean | null
 }
 
+export interface PublishedReferenceRow {
+  key: string
+  label: string
+  unit: string
+  published: number
+  model: number
+  difference: number
+  difference_percent: number
+}
+
+export interface PublishedReferenceComparison {
+  source: string
+  calibrated: boolean
+  statement: string
+  model_point: string
+  rows: PublishedReferenceRow[]
+}
+
 export interface TwinRunMetadata {
   asset_id: string
   scenario_id: string
@@ -76,6 +94,7 @@ export interface TwinRunMetadata {
   model_name: string
   synthetic_only: boolean
   data_provenance: string
+  published_reference?: PublishedReferenceComparison
 }
 
 export interface TwinRunPayload {

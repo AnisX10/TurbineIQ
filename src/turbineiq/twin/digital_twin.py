@@ -7,6 +7,7 @@ from dataclasses import asdict, dataclass
 import pandas as pd
 
 from turbineiq.analytics import detect_anomalies
+from turbineiq.engineering import compare_to_published
 from turbineiq.synthetic import SCENARIOS, generate_scenario
 
 SYNTHETIC_ASSET_ID = "TIQ-SYNTH-GT-001"
@@ -209,6 +210,7 @@ class DigitalTwinRun:
                 "model_name": self.model_name,
                 "synthetic_only": True,
                 "data_provenance": "seeded synthetic scenario",
+                "published_reference": compare_to_published(),
             },
             "snapshot": snapshots[sample_index],
             "snapshots": snapshots,

@@ -13,6 +13,10 @@ The original MVP milestones, synthetic twin, and local React/API workspace are i
 9. **Complete — integration, tests, and documentation** — setup guide, scope, architecture, supplemental digital-twin research, privacy boundaries, and demo guide. Original MVP checkpoint: 56 passed.
 10. **Complete — interactive browser workspace** — local FastAPI endpoints, React/TypeScript workbench, Three.js component selection, time-aligned output chart, local cited evidence, and selected-snapshot assistant context. Browser lint/build pass; final Python suite: 66 passed. A Blender GLB can be loaded locally when available; the workspace currently uses an interactive geometry scaffold.
 
+## Open items
+
+- **Calibrate the cycle model to the published 6B.03 point** — needs temperature-dependent specific heats, a consistent combustor energy balance (the model uses `cp_air` for heat input and `cp_gas` in the turbine), cooling and leakage flows, and inlet/exhaust losses. The current model is generic and reported as uncalibrated; see `GE_6B03_PUBLIC_DATA_REVIEW.md`. When it is calibrated, update `engineering/reference.py`, the frontend caveat, and the guard in `tests/test_published_reference.py` together.
+
 ## Acceptance target
 
 From a clean install, the browser app and local API start, run deterministic engineering calculations, display a synthetic asset state aligned to a reproducible scenario, show reference/plant/observed output and an explainable residual result, retrieve cited document passages, and explain the selected sample without cloud access. Cloud mode is optional and was not exercised against a live provider during local verification.
