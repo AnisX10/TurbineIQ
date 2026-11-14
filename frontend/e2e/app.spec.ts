@@ -11,8 +11,13 @@ const routes = [
 ] as const
 const evidenceDir = resolve(process.cwd(), 'test-results/phase6-7-part1')
 
-function assistantStream(answer: string, mode = 'local', toolCalls: AssistantToolCall[] = []) {
-  const response = { answer, mode, warning: null, tool_calls: toolCalls, synthetic_only: true }
+function assistantStream(
+  answer: string,
+  mode = 'local',
+  toolCalls: AssistantToolCall[] = [],
+  grounding: { checked: number; verified: number; unverified: string[]; method: string } | null = null,
+) {
+  const response = { answer, mode, warning: null, tool_calls: toolCalls, grounding, synthetic_only: true }
   const event = (name: string, payload: unknown) => `event: ${name}\ndata: ${JSON.stringify(payload)}\n\n`
   return [
     event('status', { state: 'working', message: 'Preparing test context.' }),
@@ -330,6 +335,25 @@ test('Cloud consent always precedes a mocked provider request and document excer
   await page.locator('.assistant-page:not(.assistant-dock-page) .assistant-ask-button').click()
   await expect(page.locator('.assistant-page:not(.assistant-dock-page)').getByText('Mocked cloud response.')).toBeVisible()
   expect(bodies[1]).toMatchObject({ enable_cloud: true, allow_cloud_document_context: true })
+})
+
+test('An answer says which numbers could not be traced to a tool result', async ({ page }) => {
+  let reply = assistantStream('Output is 25.5 MW at 41.8% efficiency.', 'cloud', [], {
+    checked: 2, verified: 1, unverified: ['41.8'], method: 'test',
+  })
+  await page.route('**/api/assistant/stream', (route) => route.fulfill({ status: 200, contentType: 'text/event-stream', body: reply }))
+  await page.goto('/#/assistant?scenario=baseline&seed=42&i=10')
+  await ready(page, 'assistant')
+  const full = page.locator('.assistant-page:not(.assistant-dock-page)')
+  await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('What is the output?')
+  await full.locator('.assistant-ask-button').click()
+  await expect(full.locator('.assistant-grounding')).toContainText('41.8')
+  await expect(full.getByText('Numbers traced to tool results')).toHaveCount(0)
+
+  reply = assistantStream('Output is 25.5 MW.', 'local', [], { checked: 1, verified: 1, unverified: [], method: 'test' })
+  await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('And again?')
+  await full.locator('.assistant-ask-button').click()
+  await expect(full.getByText('Numbers traced to tool results')).toBeVisible()
 })
 
 test('Assistant request failures expose a retry action', async ({ page }) => {

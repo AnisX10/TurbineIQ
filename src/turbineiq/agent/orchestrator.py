@@ -6,13 +6,14 @@ import json
 import random
 import re
 import time
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from typing import Any, Callable
 
 from turbineiq.engineering import CycleInputs
 from turbineiq.rag import DocumentChunk, build_local_answer, search_documents
 from turbineiq.synthetic import SCENARIOS
 
+from .grounding import Grounding, check_numbers
 from .llm import (
     ChatCompletionsAdapter,
     LLMAdapter,
@@ -160,6 +161,7 @@ class AssistantResponse:
     mode: str
     tool_calls: tuple[ToolInvocation, ...]
     warning: str | None = None
+    grounding: Grounding | None = None
 
 
 class ProviderCallFailure(RuntimeError):
@@ -200,6 +202,31 @@ class TurbineAssistant:
         question = question.strip()
         if not question:
             raise ValueError("question must not be empty")
+        response = self._dispatch(
+            question,
+            enable_cloud=enable_cloud,
+            allow_cloud_document_context=allow_cloud_document_context,
+            twin_context=twin_context,
+            on_event=on_event,
+        )
+        grounding = check_numbers(
+            # The fixed help footer holds example inputs ("pressure ratio 18"), not results.
+            response.answer.replace(_LOCAL_HELP, ""),
+            question,
+            twin_context,
+            [call.result for call in response.tool_calls],
+        )
+        return replace(response, grounding=grounding)
+
+    def _dispatch(
+        self,
+        question: str,
+        *,
+        enable_cloud: bool,
+        allow_cloud_document_context: bool,
+        twin_context: dict[str, Any] | None,
+        on_event: Callable[[str, dict[str, Any]], None] | None,
+    ) -> AssistantResponse:
         if enable_cloud:
             if not self.cloud_settings.configured and self.client is None and self.adapter is None:
                 local = self._run_local(question, twin_context=twin_context, on_event=on_event)
@@ -333,6 +360,15 @@ class TurbineAssistant:
             "its default value. The constant-property model is a study assumption, not OEM "
             "data or an operating limit."
         )
+        # Derived differences are recorded in the tool result so the answer's numbers
+        # can be traced to it.
+        changed = {
+            **changed,
+            "comparison_to_default": {
+                "electrical_power_delta_kw": power_delta,
+                "electrical_efficiency_delta_points": efficiency_delta,
+            },
+        }
         return answer, (
             ToolInvocation("calculate_cycle", base_inputs, base),
             ToolInvocation("calculate_cycle", changed_inputs, changed),
@@ -358,6 +394,17 @@ class TurbineAssistant:
             observed = (
                 second["mean_observed_electrical_power_kw"]
                 - first["mean_observed_electrical_power_kw"]
+            )
+            calls[1] = ToolInvocation(
+                calls[1].name,
+                calls[1].arguments,
+                {
+                    **second,
+                    "comparison_to_first": {
+                        "mean_model_electrical_power_delta_kw": delta,
+                        "mean_observed_electrical_power_delta_kw": observed,
+                    },
+                },
             )
             answer += (
                 f" Compared with {first['scenario_name']}, {second['scenario_name']} changes mean "

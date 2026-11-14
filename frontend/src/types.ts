@@ -106,10 +106,18 @@ export interface EvidenceResponse {
   no_evidence: boolean
 }
 
+export interface AnswerGrounding {
+  checked: number
+  verified: number
+  unverified: string[]
+  method: string
+}
+
 export interface AssistantResponse {
   answer: string
   mode: string
   warning: string | null
+  grounding?: AnswerGrounding | null
   tool_calls: Array<{ name: string; arguments: Record<string, unknown>; result: Record<string, unknown> }>
   synthetic_only: boolean
 }

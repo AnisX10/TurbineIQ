@@ -175,3 +175,15 @@ def test_twin_run_api_flags_the_compressor_drift_in_the_timeline() -> None:
     assert len(flagged) > 50
     assert {row["screen_reason"] for row in flagged} == {"drift"}
     assert response.json()["snapshot"]["screen_reason"] == "drift"
+
+
+def test_assistant_response_reports_number_grounding() -> None:
+    response = client.post(
+        "/api/assistant/ask", json={"question": "Calculate the turbine electrical power."}
+    )
+
+    grounding = response.json()["grounding"]
+    assert response.status_code == 200
+    assert grounding["unverified"] == []
+    assert grounding["checked"] >= 1
+    assert grounding["verified"] == grounding["checked"]

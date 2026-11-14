@@ -15,6 +15,14 @@ The single assistant can call only these local functions:
 
 There is no shell, file-writing, network, DCS/SCADA/PLC, or maintenance-action tool. Cloud tool calls are limited to three rounds and unknown tool names are rejected locally.
 
+## Number grounding
+
+After every answer, the API checks the numbers it states against the data the assistant actually had: the question, the server-recomputed context, and the results of the tools that ran (`agent/grounding.py`). The response carries `grounding` with the counts and any numbers it could not find, and the interface shows either "Numbers traced to tool results" or a note listing the unverified numbers.
+
+The check is conservative about what it skips (citations, list numbering, small whole numbers, "sample N" labels, the fixed help footer) and tolerant about presentation: rounding, kW to MW, kelvin to Celsius and fraction to percent all match, and sign is ignored so "1,000.9 kW below" matches a residual of -1,000.9. A number is **unverified**, not wrong, when it cannot be found: a model may state a sum or ratio no tool returned. Local answers record their own derived differences (for example the change against the default case) in the tool result so they trace too.
+
+Limits: this verifies that a number appears in the inputs, not that the sentence around it is true, and a coincidental match with an unrelated value is possible. It is a first guardrail, not a proof of correctness.
+
 ## Cloud mode
 
 The optional OpenAI Responses API integration uses strict function schemas and is disabled unless the user selects the cloud option in the UI. It sends the user's question, current synthetic sample/component context, and outputs of tools selected for that answer to the configured provider. Requests are made without persisted conversation state (`store=False`).
