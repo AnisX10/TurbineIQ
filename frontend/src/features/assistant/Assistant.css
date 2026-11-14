@@ -16,6 +16,7 @@
 .assistant-answer-error { border-color: var(--control-strong); }
 .assistant-answer-meta { display: flex; justify-content: space-between; gap: 9px; color: var(--muted); font-size: 11px; }
 .assistant-warning { margin-top: 9px; padding: 8px 10px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 5px; background: var(--raised); font-size: 11px; line-height: 1.45; }
+.assistant-grounding { margin-top: 9px; padding: 8px 10px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 5px; background: var(--raised); font-size: 11px; line-height: 1.45; }
 .assistant-trace { margin-top: 11px; border-top: 1px solid var(--rule); }
 .assistant-trace summary { min-height: 36px; display: flex; align-items: center; color: var(--muted); font-size: 11px; cursor: pointer; }
 .assistant-trace section { padding: 8px 0; border-top: 1px solid var(--rule); }

@@ -184,8 +184,10 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
               <div className="assistant-answer-meta">
                 <span>{turn.answer.mode === 'local_fallback' || turn.answer.warning ? 'Local fallback' : turn.answer.mode === 'cloud' ? `${providerStatus?.provider ?? 'Cloud'} · ${providerStatus?.model ?? 'configured model'}` : 'Local'}</span>
                 {turn.answer.synthetic_only && <span>Synthetic only</span>}
+                {turn.answer.grounding && turn.answer.grounding.checked > 0 && turn.answer.grounding.unverified.length === 0 && <span>Numbers traced to tool results</span>}
               </div>
               <p>{turn.answer.answer}</p>
+              {turn.answer.grounding && turn.answer.grounding.unverified.length > 0 && <div className="assistant-grounding" role="note">Not found in the question, context or tool results: {turn.answer.grounding.unverified.join(', ')}. Treat {turn.answer.grounding.unverified.length === 1 ? 'it' : 'them'} as unverified.</div>}
               <div className="assistant-turn-context" aria-label="Context used for this answer">{contextForTurn(turn).map((chip) => <span key={chip}>{chip}</span>)}</div>
               {turn.answer.warning && <div className="assistant-warning">{turn.answer.warning}</div>}
               <div className="assistant-answer-actions"><button className="button-quiet assistant-copy" type="button" onClick={() => void copyAnswer(turn)}><Copy size={13} aria-hidden="true" />{copiedTurn === turn.id ? 'Copied' : 'Copy answer'}</button></div>

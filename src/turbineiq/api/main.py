@@ -150,6 +150,7 @@ def _assistant_result_payload(response: Any) -> dict[str, object]:
         "mode": response.mode,
         "warning": response.warning,
         "tool_calls": [call.to_dict() for call in response.tool_calls],
+        "grounding": response.grounding.to_dict() if response.grounding else None,
         "synthetic_only": True,
     }
 
