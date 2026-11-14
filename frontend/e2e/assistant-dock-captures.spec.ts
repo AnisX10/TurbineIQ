@@ -46,6 +46,7 @@ test('capture five assistant dock states at all widths and themes', async ({ pag
     await expect(consent).toBeVisible()
     await captureWidths(page, theme, 'cloud-consent')
     await consent.getByRole('button', { name: 'Continue to Cloud' }).click()
+    await expect(consent).toBeHidden()
 
     await page.route('**/api/assistant/stream', async (route) => {
       const event = (name: string, data: unknown) => `event: ${name}\ndata: ${JSON.stringify(data)}\n\n`

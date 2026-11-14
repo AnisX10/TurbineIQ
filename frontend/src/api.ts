@@ -22,6 +22,39 @@ export interface AssistantStreamEvent {
   error?: { message: string }
 }
 
+export class ConsentRequiredError extends Error {
+  code: string
+
+  constructor(code: string, message: string) {
+    super(message)
+    this.name = 'ConsentRequiredError'
+    this.code = code
+  }
+}
+
+export interface ConsentGrant {
+  consent_token: string
+  expires_in_seconds: number
+  provider: string
+  model: string
+  base_url_host: string
+  include_documents: boolean
+}
+
+function failureFrom(status: number, body: unknown, fallback: string): Error {
+  const detail = (body as { detail?: unknown } | null)?.detail
+  if (typeof detail === 'string') return new Error(detail)
+  if (detail && typeof detail === 'object') {
+    const { code, message } = detail as { code?: unknown; message?: unknown }
+    const text = typeof message === 'string' ? message : fallback
+    if (status === 403 && typeof code === 'string' && code.includes('consent')) {
+      return new ConsentRequiredError(code, text)
+    }
+    return new Error(text)
+  }
+  return new Error(fallback)
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(path, {
     ...init,
@@ -29,8 +62,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   })
   if (!response.ok) {
     const body = await response.json().catch(() => null)
-    const detail = typeof body?.detail === 'string' ? body.detail : `Request failed (${response.status})`
-    throw new Error(detail)
+    throw failureFrom(response.status, body, `Request failed (${response.status})`)
   }
   return (await response.json()) as T
 }
@@ -55,11 +87,22 @@ export const api = {
     latency_ms: number | null
     message: string
   }>('/api/assistant/test', { method: 'POST', body: '{}' }),
+  grantConsent: (includeDocuments: boolean) =>
+    request<ConsentGrant>('/api/assistant/consent', {
+      method: 'POST',
+      body: JSON.stringify({ include_documents: includeDocuments }),
+    }),
+  revokeConsent: (consentToken: string) =>
+    request<{ revoked: boolean }>('/api/assistant/consent/revoke', {
+      method: 'POST',
+      body: JSON.stringify({ consent_token: consentToken }),
+    }),
   ask: (
     question: string,
     enableCloud: boolean,
     allowCloudDocumentContext: boolean,
     selectedTwin: SelectedTwinSelection | null,
+    consentToken: string | null = null,
   ) =>
     request<AssistantResponse>('/api/assistant/ask', {
       method: 'POST',
@@ -68,6 +111,7 @@ export const api = {
         enable_cloud: enableCloud,
         allow_cloud_document_context: allowCloudDocumentContext,
         selected_twin: selectedTwin,
+        consent_token: consentToken,
       }),
     }),
   streamAssistant: async (
@@ -75,6 +119,7 @@ export const api = {
     enableCloud: boolean,
     allowCloudDocumentContext: boolean,
     selectedTwin: SelectedTwinSelection | null,
+    consentToken: string | null,
     onEvent: (name: keyof AssistantStreamEvent, payload: AssistantStreamEvent[keyof AssistantStreamEvent]) => void,
     signal: AbortSignal,
   ): Promise<AssistantResponse> => {
@@ -87,17 +132,18 @@ export const api = {
         enable_cloud: enableCloud,
         allow_cloud_document_context: allowCloudDocumentContext,
         selected_twin: selectedTwin,
+        consent_token: consentToken,
       }),
     })
     if (!response.ok && [404, 405, 415, 501].includes(response.status)) {
-      return api.ask(question, enableCloud, allowCloudDocumentContext, selectedTwin)
+      return api.ask(question, enableCloud, allowCloudDocumentContext, selectedTwin, consentToken)
     }
     if (!response.ok) {
       const body = await response.json().catch(() => null)
-      throw new Error(typeof body?.detail === 'string' ? body.detail : `Assistant request failed (${response.status})`)
+      throw failureFrom(response.status, body, `Assistant request failed (${response.status})`)
     }
     if (!response.headers.get('content-type')?.includes('text/event-stream') || !response.body) {
-      return api.ask(question, enableCloud, allowCloudDocumentContext, selectedTwin)
+      return api.ask(question, enableCloud, allowCloudDocumentContext, selectedTwin, consentToken)
     }
     const reader = response.body.getReader()
     const decoder = new TextDecoder()

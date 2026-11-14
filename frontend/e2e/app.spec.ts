@@ -314,10 +314,13 @@ test('Cloud consent always precedes a mocked provider request and document excer
   await expect(dialog).toBeVisible()
   await expect(dialog.getByRole('checkbox')).not.toBeChecked()
   await dialog.getByRole('button', { name: 'Continue to Cloud' }).click()
+  await expect(dialog).toBeHidden()
   await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Summarize this sample.')
   await page.locator('.assistant-page:not(.assistant-dock-page) .assistant-ask-button').click()
   await expect(page.locator('.assistant-page:not(.assistant-dock-page)').getByText('Mocked cloud response.')).toBeVisible()
   expect(bodies[0]).toMatchObject({ enable_cloud: true, allow_cloud_document_context: false })
+  expect(typeof bodies[0].consent_token).toBe('string')
+  expect((bodies[0].consent_token as string).length).toBeGreaterThan(20)
 
   await page.evaluate(() => sessionStorage.removeItem('turbineiq-cloud-consent'))
   await page.reload()
@@ -326,10 +329,34 @@ test('Cloud consent always precedes a mocked provider request and document excer
   await expect(dialog).toBeVisible()
   await dialog.getByRole('checkbox').check()
   await dialog.getByRole('button', { name: 'Continue to Cloud' }).click()
+  await expect(dialog).toBeHidden()
   await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Find an excerpt for this question.')
   await page.locator('.assistant-page:not(.assistant-dock-page) .assistant-ask-button').click()
   await expect(page.locator('.assistant-page:not(.assistant-dock-page)').getByText('Mocked cloud response.')).toBeVisible()
   expect(bodies[1]).toMatchObject({ enable_cloud: true, allow_cloud_document_context: true })
+})
+
+test('When the server no longer honours Cloud consent the sheet reopens and Local mode returns', async ({ page }) => {
+  await page.route('**/api/assistant/stream', async (route) => {
+    await route.fulfill({
+      status: 403,
+      contentType: 'application/json',
+      body: JSON.stringify({ detail: { code: 'consent_required', message: 'Cloud mode needs your confirmation.' } }),
+    })
+  })
+  await page.goto('/#/assistant?scenario=compressor_fouling&seed=42&i=48')
+  await ready(page, 'assistant')
+  await page.getByRole('button', { name: 'Cloud' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Review Cloud sharing' })
+  await dialog.getByRole('button', { name: 'Continue to Cloud' }).click()
+  await expect(dialog).toBeHidden()
+  await page.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Summarize this sample.')
+  await page.locator('.assistant-page:not(.assistant-dock-page) .assistant-ask-button').click()
+  await expect(dialog).toBeVisible()
+  await expect(page.locator('.assistant-page:not(.assistant-dock-page)').getByText('Cloud mode needs your confirmation.')).toBeVisible()
+  await dialog.getByRole('button', { name: 'Cancel' }).click()
+  await expect(page.locator('.assistant-page:not(.assistant-dock-page)').getByRole('button', { name: /^Local/ })).toHaveAttribute('aria-pressed', 'true')
+  expect(await page.evaluate(() => sessionStorage.getItem('turbineiq-cloud-consent-token'))).toBeNull()
 })
 
 test('Assistant request failures expose a retry action', async ({ page }) => {
@@ -415,6 +442,7 @@ test('cloud dock names the fake provider, streams tool results, links citations 
   await expect(consent.getByRole('checkbox')).not.toBeChecked()
   await consent.getByRole('checkbox').check()
   await consent.getByRole('button', { name: 'Continue to Cloud' }).click()
+  await expect(consent).toBeHidden()
   await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Find a citation for Brayton cycle assumptions.')
   await dock.getByRole('button', { name: 'Ask', exact: true }).click()
   await expect(dock.locator('.assistant-answer')).toContainText('supporting passage', { timeout: 30000 })
@@ -436,11 +464,14 @@ test('cloud dock names the fake provider, streams tool results, links citations 
 })
 
 test('assistant dock can stop a slow cloud response and retry a failed stream', async ({ page }) => {
-  await page.addInitScript(() => sessionStorage.setItem('turbineiq-cloud-consent', 'accepted'))
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
   await expect(page.locator('.kpi-row')).toBeVisible()
   await page.locator('.assistant-header-ask').click()
   const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
+  await dock.getByRole('button', { name: 'Cloud' }).click()
+  const consent = page.getByRole('dialog', { name: 'Review Cloud sharing' })
+  await consent.getByRole('button', { name: 'Continue to Cloud' }).click()
+  await expect(consent).toBeHidden()
   await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('slow response for stop testing')
   await dock.getByRole('button', { name: 'Ask', exact: true }).click()
   await expect(dock.getByRole('button', { name: 'Stop response' })).toBeVisible()

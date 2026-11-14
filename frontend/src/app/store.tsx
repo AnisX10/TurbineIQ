@@ -17,10 +17,13 @@ function initialState(): TurbineState {
     theme = 'system'
   }
   let assistantConsentAccepted = false
+  let assistantConsentToken: string | null = null
   try {
-    assistantConsentAccepted = window.sessionStorage.getItem('turbineiq-cloud-consent') === 'accepted'
+    assistantConsentToken = window.sessionStorage.getItem('turbineiq-cloud-consent-token')
+    assistantConsentAccepted = window.sessionStorage.getItem('turbineiq-cloud-consent') === 'accepted' && !!assistantConsentToken
   } catch {
     assistantConsentAccepted = false
+    assistantConsentToken = null
   }
   return {
     ...route,
@@ -37,6 +40,7 @@ function initialState(): TurbineState {
     assistantMode: assistantConsentAccepted ? 'cloud' : 'local',
     assistantConsentOpen: false,
     assistantConsentAccepted,
+    assistantConsentToken: assistantConsentAccepted ? assistantConsentToken : null,
     assistantConsentResumeDock: false,
     assistantIncludeDocuments: false,
   }
@@ -78,12 +82,17 @@ export function TurbineStoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
-      if (state.assistantConsentAccepted) window.sessionStorage.setItem('turbineiq-cloud-consent', 'accepted')
-      else window.sessionStorage.removeItem('turbineiq-cloud-consent')
+      if (state.assistantConsentAccepted && state.assistantConsentToken) {
+        window.sessionStorage.setItem('turbineiq-cloud-consent', 'accepted')
+        window.sessionStorage.setItem('turbineiq-cloud-consent-token', state.assistantConsentToken)
+      } else {
+        window.sessionStorage.removeItem('turbineiq-cloud-consent')
+        window.sessionStorage.removeItem('turbineiq-cloud-consent-token')
+      }
     } catch {
       return
     }
-  }, [state.assistantConsentAccepted])
+  }, [state.assistantConsentAccepted, state.assistantConsentToken])
 
   useEffect(() => {
     let active = true
