@@ -7,7 +7,7 @@ const state: TurbineState = {
   sampleIndex: 72, evidenceQuery: '', evidenceTopK: 4, seedInput: '42', run: null, scenarios: [],
   theme: 'system', engineStatus: 'checking', loading: false, requestError: '', assistantOpen: false,
   assistantTurns: [], assistantDraft: '', assistantMode: 'local', assistantConsentOpen: false,
-  assistantConsentAccepted: false, assistantConsentResumeDock: false, assistantIncludeDocuments: false,
+  assistantConsentAccepted: false, assistantConsentToken: null, assistantConsentResumeDock: false, assistantIncludeDocuments: false,
 }
 
 describe('assistant conversation store', () => {

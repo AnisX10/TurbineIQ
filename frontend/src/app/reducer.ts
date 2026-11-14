@@ -36,7 +36,14 @@ export function turbineReducer(state: TurbineState, action: StoreAction): Turbin
     case 'assistant-consent-open':
       return { ...state, assistantConsentOpen: action.value.open, assistantConsentResumeDock: action.value.resumeDock }
     case 'assistant-consent-accepted':
-      return { ...state, assistantConsentAccepted: action.value, assistantMode: action.value ? 'cloud' : 'local' }
+      return {
+        ...state,
+        assistantConsentAccepted: action.value,
+        assistantConsentToken: action.value ? state.assistantConsentToken : null,
+        assistantMode: action.value ? 'cloud' : 'local',
+      }
+    case 'assistant-consent-token':
+      return { ...state, assistantConsentToken: action.value }
     case 'assistant-documents':
       return { ...state, assistantIncludeDocuments: action.value }
     case 'assistant-draft':

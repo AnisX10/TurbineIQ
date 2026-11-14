@@ -38,6 +38,7 @@ export interface TurbineState extends RouteState {
   assistantMode: 'local' | 'cloud'
   assistantConsentOpen: boolean
   assistantConsentAccepted: boolean
+  assistantConsentToken: string | null
   assistantConsentResumeDock: boolean
   assistantIncludeDocuments: boolean
 }
@@ -60,6 +61,7 @@ export type StoreAction =
   | { type: 'assistant-mode'; value: 'local' | 'cloud' }
   | { type: 'assistant-consent-open'; value: { open: boolean; resumeDock: boolean } }
   | { type: 'assistant-consent-accepted'; value: boolean }
+  | { type: 'assistant-consent-token'; value: string | null }
   | { type: 'assistant-documents'; value: boolean }
   | { type: 'assistant-draft'; value: string }
   | { type: 'assistant-turn-add'; value: AssistantTurn }

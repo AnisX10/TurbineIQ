@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import logging
+import os
 import queue
 import re
 import threading
@@ -13,6 +15,7 @@ from urllib.parse import urlsplit
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -24,10 +27,12 @@ from turbineiq.synthetic import SCENARIOS
 from turbineiq.twin import create_synthetic_twin
 
 from .assistant_security import (
+    LocalOriginMiddleware,
     RequestSizeLimitMiddleware,
     TokenBucketLimiter,
     install_secret_redaction_filter,
 )
+from .consent import CONSENT_MESSAGES, CloudAuditLog, ConsentRegistry, ConsentScope
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEMO_DOCUMENTS_PATH = PROJECT_ROOT / "data" / "documents"
@@ -45,6 +50,9 @@ def _load_demo_documents() -> list[DocumentChunk]:
 DEMO_DOCUMENTS = _load_demo_documents()
 assistant = TurbineAssistant(documents=DEMO_DOCUMENTS)
 assistant_rate_limiter = TokenBucketLimiter()
+consent_registry = ConsentRegistry()
+cloud_audit_log = CloudAuditLog()
+audit_logger = logging.getLogger("turbineiq.audit")
 install_secret_redaction_filter()
 _probe_cache: dict[tuple[str, str, str], tuple[float, dict[str, Any]]] = {}
 _probe_cache_ttl_seconds = 30.0
@@ -60,6 +68,7 @@ app = FastAPI(
     version="0.2.0",
 )
 app.add_middleware(RequestSizeLimitMiddleware)
+app.add_middleware(LocalOriginMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[],
@@ -68,6 +77,15 @@ app.add_middleware(
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
 )
+
+
+def _allowed_hosts() -> list[str]:
+    configured = os.getenv("TURBINEIQ_ALLOWED_HOSTS", "localhost,127.0.0.1")
+    return [host.strip() for host in configured.split(",") if host.strip()]
+
+
+# Added last so it runs first: a DNS-rebinding page reaches 127.0.0.1 with its own Host header.
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=_allowed_hosts())
 
 
 class SelectedTwinContext(BaseModel):
@@ -84,6 +102,22 @@ class AssistantRequest(BaseModel):
     enable_cloud: bool = False
     allow_cloud_document_context: bool = False
     selected_twin: SelectedTwinContext | None = None
+    consent_token: str | None = Field(default=None, max_length=128)
+
+
+class ConsentRequest(BaseModel):
+    include_documents: bool = False
+
+
+class AssistantRevokeRequest(BaseModel):
+    consent_token: str = Field(min_length=1, max_length=128)
+
+
+def _consent_scope() -> ConsentScope:
+    settings = assistant.cloud_settings
+    return ConsentScope(
+        provider=settings.provider, model=settings.model, host=_base_url_host(settings)
+    )
 
 
 def _assistant_client_key(request: Request) -> str:
@@ -141,7 +175,50 @@ def _validate_assistant_request(request: AssistantRequest) -> dict[str, Any] | N
             status_code=422,
             detail="cloud document context requires explicit cloud mode",
         )
+    if request.enable_cloud:
+        reason = consent_registry.check(
+            request.consent_token,
+            _consent_scope(),
+            need_documents=request.allow_cloud_document_context,
+        )
+        if reason is not None:
+            raise HTTPException(
+                status_code=403,
+                detail={"code": reason, "message": CONSENT_MESSAGES[reason]},
+            )
     return _build_twin_context(request.selected_twin)
+
+
+def _run_assistant(
+    request: AssistantRequest,
+    twin_context: dict[str, Any] | None,
+    on_event: Any = None,
+) -> Any:
+    kwargs: dict[str, Any] = {} if on_event is None else {"on_event": on_event}
+    response = assistant.run(
+        request.question.strip(),
+        enable_cloud=request.enable_cloud,
+        allow_cloud_document_context=request.allow_cloud_document_context,
+        twin_context=twin_context,
+        **kwargs,
+    )
+    if request.enable_cloud:
+        entry = cloud_audit_log.record(
+            scope=_consent_scope(),
+            documents_allowed=request.allow_cloud_document_context,
+            mode=response.mode,
+            tool_names=[call.name for call in response.tool_calls],
+            question_chars=len(request.question.strip()),
+        )
+        audit_logger.info(
+            "cloud request provider=%s model=%s host=%s documents=%s outcome=%s",
+            entry["provider"],
+            entry["model"],
+            entry["host"],
+            entry["documents_allowed"],
+            entry["outcome"],
+        )
+    return response
 
 
 def _assistant_result_payload(response: Any) -> dict[str, object]:
@@ -246,6 +323,30 @@ def assistant_status() -> dict[str, Any]:
     return _assistant_status_payload()
 
 
+@app.post("/api/assistant/consent", dependencies=[Depends(_rate_limit_assistant)])
+def grant_cloud_consent(request: ConsentRequest) -> dict[str, Any]:
+    scope = _consent_scope()
+    token, expires_in = consent_registry.grant(scope, include_documents=request.include_documents)
+    return {
+        "consent_token": token,
+        "expires_in_seconds": expires_in,
+        "provider": scope.provider,
+        "model": scope.model,
+        "base_url_host": scope.host,
+        "include_documents": request.include_documents,
+    }
+
+
+@app.post("/api/assistant/consent/revoke", dependencies=[Depends(_rate_limit_assistant)])
+def revoke_cloud_consent(request: AssistantRevokeRequest) -> dict[str, bool]:
+    return {"revoked": consent_registry.revoke(request.consent_token)}
+
+
+@app.get("/api/assistant/audit", dependencies=[Depends(_rate_limit_assistant)])
+def cloud_audit() -> dict[str, Any]:
+    return {"entries": cloud_audit_log.entries()}
+
+
 @app.post("/api/assistant/test", dependencies=[Depends(_rate_limit_assistant)])
 def test_assistant_provider() -> dict[str, Any]:
     status = _assistant_status_payload()
@@ -292,12 +393,7 @@ def test_assistant_provider() -> dict[str, Any]:
 @app.post("/api/assistant/ask", dependencies=[Depends(_rate_limit_assistant)])
 def ask_assistant(request: AssistantRequest) -> dict[str, object]:
     twin_context = _validate_assistant_request(request)
-    response = assistant.run(
-        request.question.strip(),
-        enable_cloud=request.enable_cloud,
-        allow_cloud_document_context=request.allow_cloud_document_context,
-        twin_context=twin_context,
-    )
+    response = _run_assistant(request, twin_context)
     return _assistant_result_payload(response)
 
 
@@ -308,12 +404,8 @@ def stream_assistant(request: AssistantRequest) -> StreamingResponse:
 
     def run_assistant() -> None:
         try:
-            response = assistant.run(
-                request.question.strip(),
-                enable_cloud=request.enable_cloud,
-                allow_cloud_document_context=request.allow_cloud_document_context,
-                twin_context=twin_context,
-                on_event=lambda name, data: events.put((name, data)),
+            response = _run_assistant(
+                request, twin_context, lambda name, data: events.put((name, data))
             )
             events.put(("complete", response))
         except Exception:

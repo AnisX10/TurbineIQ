@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { FormEvent, KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { ArrowUpRight, Copy, X } from 'lucide-react'
-import { api } from '../../api'
+import { api, ConsentRequiredError } from '../../api'
 import type { AssistantProviderStatus } from '../../api'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import type { AssistantContextSnapshot, AssistantTurn } from '../../app/storeContext'
@@ -99,6 +99,7 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
           sample_index: turn.context.sampleIndex,
           selected_component_id: turn.context.componentId,
         },
+        state.assistantMode === 'cloud' ? state.assistantConsentToken : null,
         (eventName, payload) => {
           if (eventName === 'status') {
             dispatch({ type: 'assistant-turn-patch', value: { id: turn.id, patch: { toolProgress: (payload as { message: string }).message } } })
@@ -118,6 +119,11 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
       dispatch({ type: 'assistant-turn-patch', value: { id: turn.id, patch: { answer, partialAnswer: answer.answer, streaming: false, toolProgress: undefined, error: undefined } } })
       setAnnouncement(`Answer ${turn.id} is ready.`)
     } catch (error) {
+      if (error instanceof ConsentRequiredError) {
+        // The server no longer honours our consent (expired, restarted, provider changed): ask again.
+        dispatch({ type: 'assistant-consent-accepted', value: false })
+        dispatch({ type: 'assistant-consent-open', value: { open: true, resumeDock: variant === 'dock' } })
+      }
       const message = controller.signal.aborted
         ? 'Stopped before the answer was complete.'
         : error instanceof Error ? error.message : 'The assistant request failed. Retry the question.'
@@ -126,7 +132,7 @@ export function AssistantWorkspace({ variant = 'page', onClose }: { variant?: 'p
       if (activeAssistantAbort === controller) activeAssistantAbort = null
       if (variant === 'page' || state.assistantOpen) composer.current?.focus()
     }
-  }, [dispatch, state.assistantMode, state.assistantIncludeDocuments, state.assistantOpen, variant])
+  }, [dispatch, state.assistantMode, state.assistantIncludeDocuments, state.assistantConsentToken, state.assistantOpen, variant])
 
   const submit = (event?: FormEvent) => {
     event?.preventDefault()

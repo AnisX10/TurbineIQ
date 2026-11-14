@@ -52,7 +52,7 @@ The browser loads `frontend/public/models/turbine.glb` from the local applicatio
 
 1. Cycle assumptions and demonstration records are synthetic or illustrative.
 2. Evidence retrieval and the deterministic local assistant run on the local API.
-3. Cloud mode is opt-in. It can send the question, server-recomputed synthetic context, and results from selected tools to the configured provider. Document excerpts require separate per-request consent.
+3. Cloud mode is opt-in. It can send the question, server-recomputed synthetic context, and results from selected tools to the configured provider. The API enforces this with a short-lived, scope-bound consent token (see `docs/AGENT_AND_PRIVACY.md`); document excerpts require a separate approval inside that grant. Host and Origin checks keep other web pages from calling the local API.
 4. Retrieved text is treated as untrusted evidence and rendered as plain text. It cannot change instructions or expand the tool allow-list.
 5. No physical turbine binding, real-time industrial connectivity, DCS/SCADA/PLC integration, or control action exists.
 

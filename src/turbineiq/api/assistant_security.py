@@ -52,6 +52,40 @@ class TokenBucketLimiter:
             self._buckets.clear()
 
 
+LOCAL_ORIGIN_PATTERN = re.compile(r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$")
+
+
+class LocalOriginMiddleware:
+    """Refuse API requests that a web page on another origin sent to this server.
+
+    Browsers attach an ``Origin`` header to cross-origin and to same-origin POST
+    requests. Requests without one (curl, the test client, same-origin GETs) pass.
+    """
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] == "http" and str(scope.get("path", "")).startswith("/api/"):
+            headers = {key.lower(): value for key, value in scope.get("headers", [])}
+            origin = headers.get(b"origin")
+            if origin is not None and not LOCAL_ORIGIN_PATTERN.match(origin.decode("latin-1")):
+                payload = json.dumps({"detail": "Cross-origin requests are not allowed."}).encode()
+                await send(
+                    {
+                        "type": "http.response.start",
+                        "status": 403,
+                        "headers": [
+                            (b"content-type", b"application/json"),
+                            (b"content-length", str(len(payload)).encode()),
+                        ],
+                    }
+                )
+                await send({"type": "http.response.body", "body": payload})
+                return
+        await self.app(scope, receive, send)
+
+
 class RequestSizeLimitMiddleware:
     def __init__(self, app: ASGIApp, limit: int = MAX_ASSISTANT_REQUEST_BYTES) -> None:
         self.app = app
