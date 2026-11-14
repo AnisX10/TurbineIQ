@@ -1,5 +1,9 @@
 # Assistant tools and cloud-data boundaries
 
+## Local mode
+
+With no cloud model, a small rule-based parser (`agent/local_intent.py`) maps the question onto the tools below: numbers named next to a cycle input (pressure ratio, ambient temperature, turbine inlet temperature, air flow, efficiencies) rerun the cycle and report the change against the default case; scenario names select or compare scenario summaries; wording about "this sample" or the selected component explains the replay snapshot. A question it cannot map says so and lists what local mode can answer.
+
 ## Local tools
 
 The single assistant can call only these local functions:

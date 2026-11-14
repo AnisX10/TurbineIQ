@@ -22,6 +22,15 @@ from .llm import (
     LLMToolCall,
     ResponsesAdapter,
 )
+from .local_intent import (
+    CYCLE_LABELS,
+    find_scenarios,
+    mentions_component,
+    parse_cycle_overrides,
+    parse_seed,
+    refers_to_selection,
+    refers_to_whole_run,
+)
 from .tools import (
     CYCLE_FIELDS,
     calculate_cycle_tool,
@@ -31,6 +40,11 @@ from .tools import (
 )
 
 MAX_TOOL_ROUNDS = 3
+_LOCAL_HELP = (
+    "In local mode you can ask me to rerun the cycle with stated inputs (for example "
+    '"pressure ratio 18"), summarise or compare scenarios (for example "compare warm ambient '
+    'against baseline"), search the notes, or explain the selected sample.'
+)
 SYSTEM_INSTRUCTIONS = """You are TurbineIQ, a bounded engineering decision-support prototype.
 Use only the supplied local tools for cycle numbers, scenario results, or indexed-document facts.
 Never invent OEM values, operating limits, field observations, diagnoses, or maintenance actions.
@@ -223,6 +237,9 @@ class TurbineAssistant:
         on_event: Callable[[str, dict[str, Any]], None] | None = None,
     ) -> AssistantResponse:
         normalized = question.casefold()
+        scenarios = find_scenarios(question)
+        selected_scenario = (twin_context or {}).get("run", {}).get("scenario_id")
+        overrides = parse_cycle_overrides(question)
         calls: tuple[ToolInvocation, ...]
         if any(
             term in normalized
@@ -238,52 +255,28 @@ class TurbineAssistant:
                 "no_evidence": not hits,
             }
             calls = (ToolInvocation("search_technical_documents", {"query": question}, result),)
+        elif overrides:
+            answer, calls = self._local_cycle_whatif(overrides)
+        elif scenarios and (
+            len(scenarios) > 1
+            or twin_context is None
+            or scenarios[0] != selected_scenario
+            or not refers_to_selection(question)
+        ):
+            answer, calls = self._local_scenarios(scenarios[:2], parse_seed(question))
+        elif twin_context is not None and refers_to_whole_run(question):
+            run = twin_context["run"]
+            answer, calls = self._local_scenarios([run["scenario_id"]], int(run["seed"]))
         elif twin_context is not None:
-            result = inspect_synthetic_twin_tool({}, twin_context)
-            run = result["run"]
-            snapshot = result["snapshot"]
-            component = result["selected_component"]
-            metrics = component["metrics"]
-            metric_summary = "; ".join(_format_component_metric(metric) for metric in metrics[:4])
-            screen_text = "flagged" if snapshot["residual_screen_flag"] else "not flagged"
-            answer = (
-                f"Selected synthetic replay: {run['scenario_name']} (seed {run['seed']}), "
-                f"sample {snapshot['sample_index'] + 1}/{run['sample_count']} at "
-                f"{snapshot['timestamp_utc']}. Reference output is "
-                f"{snapshot['model_electrical_power_kw'] / 1000:.2f} MW; synthetic plant-model "
-                f"truth is {snapshot['synthetic_truth_electrical_power_kw'] / 1000:.2f} MW; "
-                f"generated observation is "
-                f"{snapshot['synthetic_observed_power_kw'] / 1000:.2f} MW. "
-                f"Observation minus reference is {snapshot['power_residual_kw']:+.1f} kW "
-                f"({snapshot['residual_percent']:+.2f}%). The local residual screen is "
-                f"{screen_text}. Selected component: {component['label']} — "
-                f"{component['status_label']}. {component['summary']}"
+            answer, calls = self._local_snapshot(
+                twin_context,
+                matched=refers_to_selection(question) or mentions_component(question),
             )
-            if metric_summary:
-                answer += f" Key selected values: {metric_summary}."
-            answer += (
-                " All values are generated/model-derived; this is not a fault diagnosis "
-                "or operating limit."
-            )
-            calls = (ToolInvocation("inspect_synthetic_twin_snapshot", {}, result),)
         elif any(
             term in normalized
             for term in ("scenario", "anomaly", "outlier", "data quality", "synthetic data")
         ):
-            scenario_id = next(
-                (key for key in SCENARIOS if key.replace("_", " ") in normalized), "baseline"
-            )
-            arguments = {"scenario_id": scenario_id, "seed": 42}
-            result = summarize_scenario_tool(arguments)
-            answer = (
-                f"{result['scenario_name']} is a seeded synthetic scenario with "
-                f"{result['row_count']} rows. "
-                "Mean modeled electrical output is "
-                f"{result['mean_model_electrical_power_kw']:.1f} kW; "
-                f"the local residual screen flagged {result['robust_outlier_count']} sample(s). "
-                "These are demonstration results, not a real-turbine diagnosis."
-            )
-            calls = (ToolInvocation("summarize_synthetic_scenario", arguments, result),)
+            answer, calls = self._local_scenarios(["baseline"], parse_seed(question))
         else:
             defaults = asdict(CycleInputs())
             inputs = {name: defaults[name] for name in CYCLE_FIELDS}
@@ -293,7 +286,8 @@ class TurbineAssistant:
                 "The illustrative cycle case estimates "
                 f"{cycle['electrical_power_kw']:.1f} kW electrical output "
                 f"and {cycle['electrical_efficiency']:.1%} electrical efficiency. "
-                "The constant-property model inputs are study assumptions, not OEM data or limits."
+                "The constant-property model inputs are study assumptions, not OEM data or limits. "
+                f"{_LOCAL_HELP}"
             )
             calls = (ToolInvocation("calculate_cycle", inputs, result),)
         if on_event:
@@ -301,6 +295,116 @@ class TurbineAssistant:
                 on_event("tool_start", {"name": call.name, "arguments": call.arguments})
                 on_event("tool_result", call.to_dict())
         return AssistantResponse(answer=answer, mode="local", tool_calls=calls)
+
+    @staticmethod
+    def _local_cycle_whatif(
+        overrides: dict[str, float],
+    ) -> tuple[str, tuple[ToolInvocation, ...]]:
+        defaults = asdict(CycleInputs())
+        base_inputs = {name: defaults[name] for name in CYCLE_FIELDS}
+        changed_inputs = {**base_inputs, **overrides}
+        stated = ", ".join(
+            f"{CYCLE_LABELS[name]} {_format_input(value)} "
+            f"(default {_format_input(base_inputs[name])})"
+            for name, value in overrides.items()
+        )
+        try:
+            base = calculate_cycle_tool(base_inputs)
+            changed = calculate_cycle_tool(changed_inputs)
+        except ValueError as exc:
+            return (
+                f"I could not run the cycle with {stated}: {exc}. Try values inside the "
+                "illustrative model's valid range.",
+                (),
+            )
+        base_cycle, cycle = base["result"], changed["result"]
+        power_delta = cycle["electrical_power_kw"] - base_cycle["electrical_power_kw"]
+        efficiency_delta = round(
+            (cycle["electrical_efficiency"] - base_cycle["electrical_efficiency"]) * 100, 1
+        ) + 0.0
+        answer = (
+            f"With {stated}, the illustrative cycle estimates "
+            f"{cycle['electrical_power_kw'] / 1000:.2f} MW electrical output at "
+            f"{cycle['electrical_efficiency']:.1%} electrical efficiency "
+            f"({cycle['heat_rate_kj_per_kwh']:.0f} kJ/kWh heat rate). Against the default case "
+            f"({base_cycle['electrical_power_kw'] / 1000:.2f} MW, "
+            f"{base_cycle['electrical_efficiency']:.1%}) that is {power_delta / 1000:+.2f} MW and "
+            f"{efficiency_delta:+.1f} percentage points. Every input you did not mention keeps "
+            "its default value. The constant-property model is a study assumption, not OEM "
+            "data or an operating limit."
+        )
+        return answer, (
+            ToolInvocation("calculate_cycle", base_inputs, base),
+            ToolInvocation("calculate_cycle", changed_inputs, changed),
+        )
+
+    @staticmethod
+    def _local_scenarios(
+        scenario_ids: list[str], seed: int
+    ) -> tuple[str, tuple[ToolInvocation, ...]]:
+        calls: list[ToolInvocation] = []
+        parts: list[str] = []
+        for scenario_id in scenario_ids:
+            arguments = {"scenario_id": scenario_id, "seed": seed}
+            result = summarize_scenario_tool(arguments)
+            calls.append(ToolInvocation("summarize_synthetic_scenario", arguments, result))
+            parts.append(_describe_scenario(result))
+        answer = " ".join(parts)
+        if len(calls) == 2:
+            first, second = (call.result for call in calls)
+            delta = (
+                second["mean_model_electrical_power_kw"] - first["mean_model_electrical_power_kw"]
+            )
+            observed = (
+                second["mean_observed_electrical_power_kw"]
+                - first["mean_observed_electrical_power_kw"]
+            )
+            answer += (
+                f" Compared with {first['scenario_name']}, {second['scenario_name']} changes mean "
+                f"modeled output by {delta / 1000:+.2f} MW and mean observed output by "
+                f"{observed / 1000:+.2f} MW."
+            )
+        answer += " These are seeded demonstration results, not a real-turbine diagnosis."
+        return answer, tuple(calls)
+
+    @staticmethod
+    def _local_snapshot(
+        twin_context: dict[str, Any], *, matched: bool
+    ) -> tuple[str, tuple[ToolInvocation, ...]]:
+        result = inspect_synthetic_twin_tool({}, twin_context)
+        run = result["run"]
+        snapshot = result["snapshot"]
+        component = result["selected_component"]
+        metrics = component["metrics"]
+        metric_summary = "; ".join(_format_component_metric(metric) for metric in metrics[:4])
+        screen_text = "flagged" if snapshot["residual_screen_flag"] else "not flagged"
+        if snapshot["residual_screen_flag"] and snapshot.get("screen_reason") == "drift":
+            screen_text = "flagged for sustained drift"
+        answer = (
+            f"Selected synthetic replay: {run['scenario_name']} (seed {run['seed']}), "
+            f"sample {snapshot['sample_index'] + 1}/{run['sample_count']} at "
+            f"{snapshot['timestamp_utc']}. Reference output is "
+            f"{snapshot['model_electrical_power_kw'] / 1000:.2f} MW; synthetic plant-model "
+            f"truth is {snapshot['synthetic_truth_electrical_power_kw'] / 1000:.2f} MW; "
+            f"generated observation is "
+            f"{snapshot['synthetic_observed_power_kw'] / 1000:.2f} MW. "
+            f"Observation minus reference is {snapshot['power_residual_kw']:+.1f} kW "
+            f"({snapshot['residual_percent']:+.2f}%). The local residual screen is "
+            f"{screen_text}. Selected component: {component['label']} — "
+            f"{component['status_label']}. {component['summary']}"
+        )
+        if metric_summary:
+            answer += f" Key selected values: {metric_summary}."
+        answer += (
+            " All values are generated/model-derived; this is not a fault diagnosis "
+            "or operating limit."
+        )
+        if not matched:
+            answer = (
+                "I could not tie this question to a specific calculation, scenario or note, "
+                f"so here is the selected sample. {_LOCAL_HELP}\n\n" + answer
+            )
+        return answer, (ToolInvocation("inspect_synthetic_twin_snapshot", {}, result),)
 
     def _openai_client(self) -> Any:
         if self.client is not None:
@@ -550,6 +654,29 @@ class TurbineAssistant:
                 raise ValueError("document excerpts were not approved for cloud use")
             return search_documents_tool(arguments, self.documents)
         raise ValueError(f"tool {name!r} is not in the TurbineIQ allow-list")
+
+
+def _format_input(value: float) -> str:
+    return f"{value:.4g}"
+
+
+def _describe_scenario(result: dict[str, Any]) -> str:
+    text = (
+        f"{result['scenario_name']} (seed {result['seed']}) is a seeded synthetic scenario "
+        f"with {result['row_count']} rows. Mean modeled electrical output is "
+        f"{result['mean_model_electrical_power_kw']:.1f} kW and mean observed output is "
+        f"{result['mean_observed_electrical_power_kw']:.1f} kW. The local residual screen "
+        f"flagged {result['screened_flag_count']} sample(s)"
+    )
+    if result["drift_flag_count"]:
+        text += (
+            f", including sustained drift from {result['first_drift_flag_utc']} "
+            f"({result['drift_flag_count']} samples, direction: "
+            f"{result['drift_direction']})"
+        )
+    if result["robust_outlier_count"]:
+        text += f" and {result['robust_outlier_count']} isolated spike(s)"
+    return text + "."
 
 
 def _format_component_metric(metric: dict[str, Any]) -> str:

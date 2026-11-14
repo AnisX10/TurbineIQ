@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 
 import pandas as pd
 
-from turbineiq.analytics import detect_anomalies
+from turbineiq.analytics import screen_residual
 from turbineiq.synthetic import SCENARIOS, generate_scenario
 
 SYNTHETIC_ASSET_ID = "TIQ-SYNTH-GT-001"
@@ -79,9 +79,12 @@ class TwinSnapshot:
     residual_screen_flag: bool
     components: tuple[TwinComponentState, ...]
     data_provenance: str = "seeded synthetic scenario"
+    screen_reason: str = "none"
 
     @property
     def screen_status(self) -> str:
+        if self.residual_screen_flag and self.screen_reason == "drift":
+            return "Synthetic residual drift flagged"
         if self.residual_screen_flag:
             return "Synthetic residual flagged"
         return "No residual flag at this sample"
@@ -147,11 +150,13 @@ class DigitalTwinRun:
         residual_percent = residual / max(abs(model_power), 1.0) * 100.0
         fault_injected = bool(row["sensor_fault_injected"])
         residual_flag = bool(row["anomaly_flag"])
+        screen_reason = str(row["screen_reason"]) if "screen_reason" in row else "none"
         components = _component_states(
             row,
             scenario_id=self.scenario_id,
             sensor_fault_injected=fault_injected,
             residual_screen_flag=residual_flag,
+            screen_reason=screen_reason,
         )
 
         return TwinSnapshot(
@@ -185,6 +190,7 @@ class DigitalTwinRun:
             sensor_fault_injected=fault_injected,
             residual_screen_flag=residual_flag,
             components=components,
+            screen_reason=screen_reason,
         )
 
     def to_payload(self, sample_index: int) -> dict[str, object]:
@@ -233,6 +239,7 @@ def _component_states(
     scenario_id: str,
     sensor_fault_injected: bool,
     residual_screen_flag: bool,
+    screen_reason: str = "none",
 ) -> tuple[TwinComponentState, ...]:
     compressor_status = (
         "scenario_perturbation" if scenario_id == "compressor_fouling" else "nominal"
@@ -244,6 +251,11 @@ def _component_states(
         generator_status = "residual_screen"
         generator_status_label = "Residual screen"
         generator_summary = "The output residual is flagged by a robust statistical screen."
+        if screen_reason == "drift":
+            generator_summary = (
+                "The output residual has drifted away from its early baseline, caught by a "
+                "causal cumulative-sum screen. This is a screening flag, not a diagnosis."
+            )
     if sensor_fault_injected:
         generator_status = "synthetic_measurement_fault"
         generator_status_label = "Injected sensor event"
@@ -439,7 +451,7 @@ def create_synthetic_twin(
     if scenario_id not in SCENARIOS:
         raise ValueError(f"unknown scenario_id {scenario_id!r}")
     history = generate_scenario(scenario_id, seed=seed, samples=samples)
-    analyzed = detect_anomalies(history)
+    analyzed = screen_residual(history)
     spec = SCENARIOS[scenario_id]
     return DigitalTwinRun(
         scenario_id=scenario_id,

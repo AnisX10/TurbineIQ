@@ -30,7 +30,7 @@ flowchart TD
 
 - `engineering/` validates inputs and calculates the simplified cycle states, work, heat, fuel estimate, output estimate, and model assumptions. It has no UI or network dependency.
 - `synthetic/` generates seeded sample histories from the engineering model, with explicit scenario perturbation labels and measurement noise. It does not ingest real plant data.
-- `analytics/` checks tabular shape, timestamps, configured physical validity, flat lines, and robust residual outliers. Its flags are screening results, not fault diagnoses.
+- `analytics/` checks tabular shape, timestamps, configured physical validity, flat lines, and residual screening: a robust-z spike screen plus a causal CUSUM drift detector that sees only past samples. Its flags are screening results, not fault diagnoses.
 - `twin/` packages synthetic scenario frames into a time-indexed state view. The twin is bound only to generated data.
 - `rag/` extracts local PDF/Markdown/TXT content and performs lexical ranking with citation metadata. It uses no remote vector service.
 - `agent/` routes questions through a fixed allow-list of deterministic tools. Its optional cloud adapter cannot run arbitrary code or expand the tool list.

@@ -1,6 +1,8 @@
 import json
 from types import SimpleNamespace
 
+import pytest
+
 from turbineiq.agent import CloudLLMSettings, TurbineAssistant
 from turbineiq.rag import load_document_bytes
 
@@ -247,3 +249,115 @@ def test_cloud_failure_falls_back_to_local_answer_without_exposing_secret() -> N
     assert "RuntimeError" in response.warning
     assert "secret token" not in response.warning
     assert response.tool_calls[0].name == "calculate_cycle"
+
+
+def _twin_context(
+    scenario_id="compressor_fouling", seed=42, sample_index=60, component="compressor"
+):
+    from turbineiq.twin import create_synthetic_twin
+
+    twin = create_synthetic_twin(scenario_id, seed=seed)
+    snapshot = twin.snapshot_at(sample_index).to_dict()
+    selected = next(c for c in snapshot["components"] if c["component_id"] == component)
+    return {
+        "run": {
+            "scenario_id": scenario_id,
+            "scenario_name": twin.scenario_name,
+            "seed": seed,
+            "sample_count": twin.sample_count,
+            "model_name": twin.model_name,
+            "synthetic_only": True,
+        },
+        "snapshot": snapshot,
+        "selected_component": selected,
+    }
+
+
+def test_local_assistant_reruns_cycle_for_a_stated_pressure_ratio_even_with_selection() -> None:
+    response = TurbineAssistant().run(
+        "What is the efficiency at pressure ratio 18?", twin_context=_twin_context()
+    )
+
+    assert [call.name for call in response.tool_calls] == ["calculate_cycle", "calculate_cycle"]
+    default_call, changed_call = response.tool_calls
+    assert default_call.arguments["pressure_ratio"] == 12
+    assert changed_call.arguments["pressure_ratio"] == 18
+    assert changed_call.result["result"]["electrical_efficiency"] > (
+        default_call.result["result"]["electrical_efficiency"]
+    )
+    assert "pressure ratio 18 (default 12)" in response.answer
+    assert "Selected synthetic replay" not in response.answer
+    efficiency = changed_call.result["result"]["electrical_efficiency"]
+    assert f"{efficiency:.1%}" in response.answer
+
+
+def test_local_assistant_converts_units_in_what_if_questions() -> None:
+    response = TurbineAssistant().run(
+        "What if ambient is 95 F and turbine inlet temperature is 1500 C with 120 kg/s air flow?"
+    )
+
+    changed = response.tool_calls[-1].arguments
+    assert changed["ambient_temperature_c"] == pytest.approx(35.0)
+    assert changed["turbine_inlet_temperature_k"] == pytest.approx(1773.15)
+    assert changed["air_mass_flow_kg_s"] == 120
+    assert changed["pressure_ratio"] == 12
+
+
+def test_local_assistant_reports_invalid_what_if_inputs_instead_of_crashing() -> None:
+    response = TurbineAssistant().run("What about pressure ratio 0.5?")
+
+    assert response.mode == "local"
+    assert response.tool_calls == ()
+    assert "pressure_ratio must be greater than 1" in response.answer
+
+
+def test_local_assistant_compares_named_scenarios() -> None:
+    response = TurbineAssistant().run("Compare warm ambient against baseline with seed 7.")
+
+    assert [call.name for call in response.tool_calls] == ["summarize_synthetic_scenario"] * 2
+    assert [call.arguments["scenario_id"] for call in response.tool_calls] == [
+        "warm_ambient",
+        "baseline",
+    ]
+    assert all(call.arguments["seed"] == 7 for call in response.tool_calls)
+    assert "Compared with Warmer ambient, Baseline changes mean modeled output" in response.answer
+
+
+def test_local_assistant_answers_about_a_named_scenario_even_when_another_is_selected() -> None:
+    response = TurbineAssistant().run(
+        "Tell me about the sensor fault scenario.",
+        twin_context=_twin_context(),
+    )
+
+    assert response.tool_calls[0].arguments["scenario_id"] == "sensor_fault"
+    assert "Selected synthetic replay" not in response.answer
+
+
+def test_local_assistant_summarises_the_whole_run_for_run_level_questions() -> None:
+    response = TurbineAssistant().run(
+        "How many samples are flagged in this run?", twin_context=_twin_context(seed=7)
+    )
+
+    call = response.tool_calls[0]
+    assert call.name == "summarize_synthetic_scenario"
+    assert call.arguments == {"scenario_id": "compressor_fouling", "seed": 7}
+    assert call.result["drift_flag_count"] > 50
+    assert "sustained drift" in response.answer
+
+
+def test_local_assistant_explains_selected_sample_when_asked_about_it() -> None:
+    response = TurbineAssistant().run(
+        "Explain the Compressor metrics at sample 61.", twin_context=_twin_context()
+    )
+
+    assert response.tool_calls[0].name == "inspect_synthetic_twin_snapshot"
+    assert response.answer.startswith("Selected synthetic replay")
+    assert "flagged for sustained drift" in response.answer
+
+
+def test_local_assistant_says_when_it_could_not_match_the_question() -> None:
+    response = TurbineAssistant().run("hello there", twin_context=_twin_context())
+
+    assert response.answer.startswith("I could not tie this question")
+    assert "pressure ratio 18" in response.answer
+    assert "Selected synthetic replay" in response.answer

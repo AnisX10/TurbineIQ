@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import asdict
 from typing import Any
 
-from turbineiq.analytics import assess_data_quality, detect_anomalies
+from turbineiq.analytics import assess_data_quality, screen_residual
 from turbineiq.engineering import CycleInputs, simulate_cycle
 from turbineiq.rag import DocumentChunk, search_documents
 from turbineiq.synthetic import generate_scenario
@@ -53,8 +53,9 @@ def summarize_scenario_tool(arguments: dict[str, Any]) -> dict[str, object]:
         raise ValueError("seed must be an integer in the supported range")
     frame = generate_scenario(scenario_id, seed=seed, samples=96)
     report = assess_data_quality(frame)
-    anomalies = detect_anomalies(frame)
-    flagged = anomalies.loc[anomalies["anomaly_flag"]]
+    screened = screen_residual(frame)
+    flagged = screened.loc[screened["anomaly_flag"]]
+    drifted = screened.loc[screened["drift_flag"]]
     return {
         "scenario_id": scenario_id,
         "scenario_name": frame.attrs["scenario_name"],
@@ -66,7 +67,13 @@ def summarize_scenario_tool(arguments: dict[str, Any]) -> dict[str, object]:
         "mean_model_electrical_power_kw": float(frame["model_electrical_power_kw"].mean()),
         "mean_observed_electrical_power_kw": float(frame["observed_electrical_power_kw"].mean()),
         "quality_report": report.to_dict(),
-        "robust_outlier_count": int(len(flagged)),
+        "robust_outlier_count": int(screened["spike_flag"].sum()),
+        "drift_flag_count": int(len(drifted)),
+        "first_drift_flag_utc": (
+            drifted["timestamp_utc"].iloc[0].isoformat() if len(drifted) else None
+        ),
+        "drift_direction": str(drifted["drift_direction"].iloc[0]) if len(drifted) else "none",
+        "screened_flag_count": int(len(flagged)),
         "labelled_sensor_fault_count": int(frame["sensor_fault_injected"].sum()),
         "flagged_timestamps_utc": [value.isoformat() for value in flagged["timestamp_utc"]],
     }
