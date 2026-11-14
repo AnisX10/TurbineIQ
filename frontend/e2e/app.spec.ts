@@ -332,6 +332,17 @@ test('Cloud consent always precedes a mocked provider request and document excer
   expect(bodies[1]).toMatchObject({ enable_cloud: true, allow_cloud_document_context: true })
 })
 
+test('The published 6B.03 ratings are shown next to an explicit uncalibrated model comparison', async ({ page }) => {
+  await page.goto('/#/overview?scenario=baseline&seed=42&i=10')
+  await expect(page.locator('.kpi-row')).toBeVisible()
+  const block = page.locator('.component-ledger .published-reference')
+  await expect(block).toContainText('uncalibrated')
+  await block.getByText('Model at its reference point, not calibrated').click()
+  const output = block.locator('.published-comparison dl > div', { hasText: 'Net output' })
+  await expect(output).toContainText('MW')
+  await expect(output).toContainText('−43%')
+})
+
 test('Assistant request failures expose a retry action', async ({ page }) => {
   let attempts = 0
   await page.route('**/api/assistant/stream', async (route) => {

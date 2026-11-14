@@ -141,3 +141,20 @@ def test_assistant_stream_emits_tool_progress_tokens_and_final_response() -> Non
     assert "event: token" in response.text
     assert "event: done" in response.text
     assert "81.2%" in response.text
+
+
+def test_twin_run_api_states_the_published_reference_gap() -> None:
+    run = client.get("/api/twin/run?scenario_id=baseline&seed=42&sample_index=10").json()["run"]
+    reference = run["published_reference"]
+
+    assert reference["calibrated"] is False
+    assert {row["key"] for row in reference["rows"]} == {
+        "net_output",
+        "lhv_efficiency",
+        "pressure_ratio",
+        "exhaust_temperature",
+        "exhaust_flow",
+    }
+    output = next(row for row in reference["rows"] if row["key"] == "net_output")
+    assert output["published"] == 45.0
+    assert output["model"] < output["published"]
