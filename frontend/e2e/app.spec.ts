@@ -203,7 +203,7 @@ test('keyboard traversal covers tabs, evidence selection, consent, composer, and
   await page.keyboard.press('Enter')
   await expect(page.locator('.assistant-page:not(.assistant-dock-page) .assistant-answer')).toBeVisible({ timeout: 20000 })
 
-  await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
+  await page.goto('/#/overview?scenario=baseline&seed=42&i=72')
   await ready(page, 'overview')
   const timeline = page.locator('.timeline-card')
   await tabUntil(page, timeline)
@@ -252,7 +252,7 @@ test('overview scenario, seed, replay, mesh inspection, Evidence search, and Loc
   await expect(page.locator('.station-row').first()).toContainText('101.3 kPa')
   await expect(page.getByText('Reference model', { exact: true }).first()).toBeVisible()
   const statusLabels = await page.locator('.neutral-status').allTextContents()
-  expect(statusLabels).toEqual(expect.arrayContaining(['Drift', 'Modelled', 'Comparison']))
+  expect(statusLabels).toEqual(expect.arrayContaining(['Drift', 'Modelled', 'Residual screen']))
   expect(statusLabels.every((label) => !label.includes('…'))).toBe(true)
 
   const seed = page.getByRole('textbox', { name: 'Seed' })

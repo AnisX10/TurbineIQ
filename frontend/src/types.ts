@@ -42,6 +42,7 @@ export interface TwinSnapshot {
   residual_screen_flag: boolean
   screen_status: string
   scenario_perturbation_label: string
+  screen_reason?: 'none' | 'spike' | 'drift' | 'spike and drift'
   components: TwinComponentState[]
   data_provenance: string
 }
@@ -61,6 +62,10 @@ export interface TimelinePoint {
   observed_electrical_power_kw: number
   power_residual_kw: number
   anomaly_flag: boolean
+  spike_flag: boolean
+  drift_flag: boolean
+  drift_score: number
+  screen_reason: string
   robust_z_score: number
   [key: string]: string | number | boolean | null
 }

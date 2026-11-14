@@ -141,3 +141,37 @@ def test_assistant_stream_emits_tool_progress_tokens_and_final_response() -> Non
     assert "event: token" in response.text
     assert "event: done" in response.text
     assert "81.2%" in response.text
+
+
+def test_assistant_answers_the_what_if_question_even_with_a_selected_sample() -> None:
+    response = client.post(
+        "/api/assistant/ask",
+        json={
+            "question": "What is the efficiency at pressure ratio 18?",
+            "selected_twin": {
+                "scenario_id": "compressor_fouling",
+                "seed": 42,
+                "sample_index": 60,
+                "selected_component_id": "compressor",
+            },
+        },
+    )
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["mode"] == "local"
+    assert [call["name"] for call in payload["tool_calls"]] == ["calculate_cycle"] * 2
+    assert "pressure ratio 18 (default 12)" in payload["answer"]
+
+
+def test_twin_run_api_flags_the_compressor_drift_in_the_timeline() -> None:
+    response = client.get(
+        "/api/twin/run",
+        params={"scenario_id": "compressor_fouling", "seed": 42, "sample_index": 80},
+    )
+
+    timeline = response.json()["timeline"]
+    flagged = [row for row in timeline if row["anomaly_flag"]]
+    assert len(flagged) > 50
+    assert {row["screen_reason"] for row in flagged} == {"drift"}
+    assert response.json()["snapshot"]["screen_reason"] == "drift"

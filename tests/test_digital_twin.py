@@ -94,3 +94,26 @@ def test_run_payload_contains_timeline_and_component_provenance() -> None:
         if component["component_id"] == "compressor"
     )
     assert compressor["metrics"][0]["provenance"] == "Known synthetic scenario truth"
+
+
+def test_compressor_drift_is_flagged_from_early_samples_not_at_the_start() -> None:
+    twin = create_synthetic_twin("compressor_fouling", seed=42)
+
+    early = twin.snapshot_at(5)
+    late = twin.snapshot_at(60)
+
+    assert early.residual_screen_flag is False
+    assert late.residual_screen_flag is True
+    assert late.screen_reason == "drift"
+    assert late.screen_status == "Synthetic residual drift flagged"
+    generator = next(item for item in late.components if item.component_id == "generator")
+    assert generator.status == "residual_screen"
+    assert generator.status_label == "Residual screen"
+    assert "drifted away from its early baseline" in generator.summary
+
+
+def test_spike_scenario_still_reports_a_spike_not_drift() -> None:
+    snapshot = create_synthetic_twin("sensor_fault", seed=42).snapshot_at(48)
+
+    assert snapshot.screen_reason == "spike"
+    assert snapshot.screen_status == "Synthetic residual flagged"
