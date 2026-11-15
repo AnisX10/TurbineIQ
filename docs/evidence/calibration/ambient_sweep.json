@@ -1,0 +1,98 @@
+[
+  {
+    "ambient_c": -10,
+    "net_output_mw": 53.95034169782518,
+    "lhv_efficiency": 0.3446167968290255,
+    "heat_rate_kj_per_kwh": 10446.385762752201,
+    "exhaust_flow_kg_s": 159.06535155816192,
+    "exhaust_temperature_c": 559.8131987130347
+  },
+  {
+    "ambient_c": -5,
+    "net_output_mw": 52.0245607027545,
+    "lhv_efficiency": 0.34258153384798923,
+    "heat_rate_kj_per_kwh": 10508.447316361766,
+    "exhaust_flow_kg_s": 156.06393034075384,
+    "exhaust_temperature_c": 560.0503498426893
+  },
+  {
+    "ambient_c": 0,
+    "net_output_mw": 50.170345439295986,
+    "lhv_efficiency": 0.340503674069679,
+    "heat_rate_kj_per_kwh": 10572.573144286582,
+    "exhaust_flow_kg_s": 153.1724060439911,
+    "exhaust_temperature_c": 560.287617487791
+  },
+  {
+    "ambient_c": 5,
+    "net_output_mw": 48.383853115459466,
+    "lhv_efficiency": 0.33838180638376886,
+    "heat_rate_kj_per_kwh": 10638.869856723719,
+    "exhaust_flow_kg_s": 150.38485245644765,
+    "exhaust_temperature_c": 560.5249996216932
+  },
+  {
+    "ambient_c": 10,
+    "net_output_mw": 46.661511853307545,
+    "lhv_efficiency": 0.3362144517375466,
+    "heat_rate_kj_per_kwh": 10707.451691607257,
+    "exhaust_flow_kg_s": 147.69576194390774,
+    "exhaust_temperature_c": 560.7624943124489
+  },
+  {
+    "ambient_c": 15,
+    "net_output_mw": 44.99999715088287,
+    "lhv_efficiency": 0.3340000588808595,
+    "heat_rate_kj_per_kwh": 10778.44121364107,
+    "exhaust_flow_kg_s": 145.10000913280447,
+    "exhaust_temperature_c": 561.000099727596
+  },
+  {
+    "ambient_c": 20,
+    "net_output_mw": 43.396210754601235,
+    "lhv_efficiency": 0.3317369998047946,
+    "heat_rate_kj_per_kwh": 10851.97009112147,
+    "exhaust_flow_kg_s": 142.59281831021318,
+    "exhaust_temperature_c": 561.2378141394191
+  },
+  {
+    "ambient_c": 25,
+    "net_output_mw": 41.847261659304735,
+    "lhv_efficiency": 0.32942356484912155,
+    "heat_rate_kj_per_kwh": 10928.17996080161,
+    "exhaust_flow_kg_s": 140.16973410411,
+    "exhaust_temperature_c": 561.4756359292953
+  },
+  {
+    "ambient_c": 30,
+    "net_output_mw": 40.35044899018117,
+    "lhv_efficiency": 0.32705795744830285,
+    "heat_rate_kj_per_kwh": 11007.223392719445,
+    "exhaust_flow_kg_s": 137.82659506517555,
+    "exhaust_temperature_c": 561.7135635923293
+  },
+  {
+    "ambient_c": 35,
+    "net_output_mw": 38.90324655287665,
+    "lhv_efficiency": 0.324638288484931,
+    "heat_rate_kj_per_kwh": 11089.26496871642,
+    "exhaust_flow_kg_s": 135.55950982058098,
+    "exhaust_temperature_c": 561.9515957413164
+  },
+  {
+    "ambient_c": 40,
+    "net_output_mw": 37.50328886527625,
+    "lhv_efficiency": 0.32216257021478295,
+    "heat_rate_kj_per_kwh": 11174.4824906255,
+    "exhaust_flow_kg_s": 133.36483551229338,
+    "exhaust_temperature_c": 562.1897311106077
+  },
+  {
+    "ambient_c": 45,
+    "net_output_mw": 36.14835850791692,
+    "lhv_efficiency": 0.31962870972436225,
+    "heat_rate_kj_per_kwh": 11263.0683367102,
+    "exhaust_flow_kg_s": 131.23915826857723,
+    "exhaust_temperature_c": 562.4279685600299
+  }
+]

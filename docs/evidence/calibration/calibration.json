@@ -1,0 +1,145 @@
+{
+  "targets": {
+    "net_output_mw": 45.0,
+    "lhv_efficiency": 0.334,
+    "exhaust_temperature_c": 561.0,
+    "exhaust_flow_kg_s": 145.1
+  },
+  "fits": [
+    {
+      "cooling_flow_fraction": 0.0,
+      "parameters": {
+        "air_mass_flow_kg_s": 142.4053971944234,
+        "effective_firing_temperature_k": 1405.4937743795494,
+        "component_polytropic_efficiency": 0.8743271419648365,
+        "drivetrain_efficiency": 0.9417505030970936
+      },
+      "model": {
+        "net_output_mw": 44.99999756186927,
+        "lhv_efficiency": 0.33400002706856824,
+        "exhaust_temperature_c": 561.00003341987,
+        "exhaust_flow_kg_s": 145.10000760848968
+      },
+      "relative_residual": {
+        "net_output_mw": -5.418068285381297e-08,
+        "lhv_efficiency": 8.104361742578469e-08,
+        "exhaust_temperature_c": 5.9571960721472164e-08,
+        "exhaust_flow_kg_s": 5.2436179750812626e-08
+      },
+      "at_bound": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "cooling_flow_fraction": 0.04,
+      "parameters": {
+        "air_mass_flow_kg_s": 142.4054578760564,
+        "effective_firing_temperature_k": 1433.1011647909606,
+        "component_polytropic_efficiency": 0.874326058588646,
+        "drivetrain_efficiency": 0.9417542575748417
+      },
+      "model": {
+        "net_output_mw": 44.999978909363634,
+        "lhv_efficiency": 0.33400023234527737,
+        "exhaust_temperature_c": 561.000287935751,
+        "exhaust_flow_kg_s": 145.10006551709805
+      },
+      "relative_residual": {
+        "net_output_mw": -4.686808081386415e-07,
+        "lhv_efficiency": 6.95644542967559e-07,
+        "exhaust_temperature_c": 5.132544580668822e-07,
+        "exhaust_flow_kg_s": 4.515306550710175e-07
+      },
+      "at_bound": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "cooling_flow_fraction": 0.08,
+      "parameters": {
+        "air_mass_flow_kg_s": 142.40539899696236,
+        "effective_firing_temperature_k": 1462.8344584322026,
+        "component_polytropic_efficiency": 0.8743271097621533,
+        "drivetrain_efficiency": 0.9417506139279772
+      },
+      "model": {
+        "net_output_mw": 44.99999697328414,
+        "lhv_efficiency": 0.33400003289909924,
+        "exhaust_temperature_c": 561.0000410109282,
+        "exhaust_flow_kg_s": 145.10000932874507
+      },
+      "relative_residual": {
+        "net_output_mw": -6.726035242839619e-08,
+        "lhv_efficiency": 9.850029707383463e-08,
+        "exhaust_temperature_c": 7.310325874767875e-08,
+        "exhaust_flow_kg_s": 6.429183376656612e-08
+      },
+      "at_bound": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "cooling_flow_fraction": 0.12,
+      "parameters": {
+        "air_mass_flow_kg_s": 142.40538922397153,
+        "effective_firing_temperature_k": 1494.9493116261556,
+        "component_polytropic_efficiency": 0.8743272842570898,
+        "drivetrain_efficiency": 0.9417500096765314
+      },
+      "model": {
+        "net_output_mw": 44.99999999908756,
+        "lhv_efficiency": 0.3340000000063276,
+        "exhaust_temperature_c": 561.0000000102045,
+        "exhaust_flow_kg_s": 145.10000000230897
+      },
+      "relative_residual": {
+        "net_output_mw": -2.027652120280739e-11,
+        "lhv_efficiency": 1.8944925468708434e-11,
+        "exhaust_temperature_c": 1.8189894035458565e-11,
+        "exhaust_flow_kg_s": 1.591302325379753e-11
+      },
+      "at_bound": [
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "cooling_flow_fraction": 0.16,
+      "parameters": {
+        "air_mass_flow_kg_s": 142.40538922237891,
+        "effective_firing_temperature_k": 1529.7464322347296,
+        "component_polytropic_efficiency": 0.8743272842851894,
+        "drivetrain_efficiency": 0.9417500095835971
+      },
+      "model": {
+        "net_output_mw": 44.99999999975764,
+        "lhv_efficiency": 0.3340000000025992,
+        "exhaust_temperature_c": 561.0000000033432,
+        "exhaust_flow_kg_s": 145.10000000078654
+      },
+      "relative_residual": {
+        "net_output_mw": -5.385756038675835e-12,
+        "lhv_efficiency": 7.782031838626303e-12,
+        "exhaust_temperature_c": 5.9593383901596484e-12,
+        "exhaust_flow_kg_s": 5.4206918454652e-12
+      },
+      "at_bound": [
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ]
+}

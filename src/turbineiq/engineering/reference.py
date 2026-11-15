@@ -23,6 +23,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .core import CycleInputs, CycleResult, simulate_cycle
+from .real_gas import CALIBRATED_6B03, simulate_real_gas_cycle
 
 PUBLISHED_SOURCE = "GE Vernova 2025 Gas Power catalog, 6B.03 table"
 
@@ -94,3 +95,33 @@ def compare_to_published(inputs: CycleInputs | None = None) -> dict[str, object]
         "model_point": "Reference operating point of the synthetic scenarios (ISO ambient)",
         "rows": rows,
     }
+
+
+def compare_calibrated_to_published() -> dict[str, object]:
+    """Compare the variable-property model, fitted to these ratings, with the ratings.
+
+    Agreement at the fitted point is by construction (four parameters, four targets) and is
+    not validation; see ``docs/CALIBRATION.md`` for what is and is not established.
+    """
+
+    result = simulate_real_gas_cycle(CALIBRATED_6B03)
+    model = {
+        "net_output": result.net_electrical_power_mw,
+        "lhv_efficiency": result.lhv_efficiency * 100.0,
+        "pressure_ratio": CALIBRATED_6B03.pressure_ratio,
+        "exhaust_temperature": result.exhaust_temperature_k - 273.15,
+        "exhaust_flow": result.exhaust_mass_flow_kg_s,
+    }
+    rows = [
+        {
+            "key": r.key,
+            "label": r.label,
+            "unit": r.unit,
+            "published": r.published,
+            "model": model[r.key],
+            "difference": model[r.key] - r.published,
+            "difference_percent": (model[r.key] - r.published) / r.published * 100.0,
+        }
+        for r in PUBLISHED_6B03
+    ]
+    return {"source": PUBLISHED_SOURCE, "fitted": True, "rows": rows}
