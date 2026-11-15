@@ -261,9 +261,15 @@ Phased timeline, assuming about 24 weeks from now and a mechanical/energy (C2) f
 
 Step 3 is independent of Steps 1–2 and can run in parallel if the thesis has an AI/CS focus.
 
-## 11. Open questions for the author and supervisor
+## 11. Decisions and open questions
 
-The answers can change the priorities above:
+Answered by the author on 2026-11-15:
+
+- **Degree:** mechanical engineering with a digital-twin and AI focus. Primary contribution is therefore **C2** (closed-loop, self-calibrating twin, RQ1–RQ3), with **C3** (the tool-grounded assistant, RQ4) as a supporting chapter that uses the simulator built for C2. WP6 keeps its evaluation benchmark but is scheduled after WP4 has started, not in parallel from week 1.
+- **Supervisor requirements:** none. The tool choices above (Python, optional OpenModelica cross-check) and the DNV-RP-A204 scale stand. It is still worth showing the supervisor sections 2, 3 and 6 early, since an examiner may expect a different maturity scale or more emphasis on one RQ.
+- **Deadline:** next year (2027), month not yet given. The 24-week timeline fits a deadline from about June 2027. An earlier deadline cuts WP5 autonomy to advisory (level 4); a later one allows the OpenModelica plant for model mismatch and an MPC variant in WP5.
+
+Originally asked (kept for reference):
 
 1. **Deadline.** The timeline assumes about 24 weeks. A shorter deadline means dropping WP5's autonomous mode to "advisory only" (level 4) and stating level 5 as future work.
 2. **Domain and degree.** Mechanical/energy engineering favours C2 (physics, estimation, control). AI/CS favours C3 (LLM, retrieval, evaluation) with a lighter simulation.
