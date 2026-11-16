@@ -1,0 +1,37 @@
+{
+  "net_output_mw": {
+    "real_gas": 44.99999715088287,
+    "cantera": 45.01006639562385,
+    "difference": 0.010069244740982697
+  },
+  "lhv_efficiency": {
+    "real_gas": 0.3340000588808595,
+    "cantera": 0.33328605650407733,
+    "difference": -0.0007140023767821524
+  },
+  "exhaust_temperature_c": {
+    "real_gas": 561.000099727596,
+    "cantera": 561.0447244725476,
+    "difference": 0.0446247449516477
+  },
+  "exhaust_flow_kg_s": {
+    "real_gas": 145.10000913280447,
+    "cantera": 145.10638606605045,
+    "difference": 0.0063769332459742145
+  },
+  "compressor_discharge_k": {
+    "real_gas": 652.156706887035,
+    "cantera": 652.1567068788984,
+    "difference": -8.136680662573781e-09
+  },
+  "mixed_turbine_inlet_k": {
+    "real_gas": 1405.4937645913922,
+    "cantera": 1405.5035842717814,
+    "difference": 0.00981968038922787
+  },
+  "fuel_to_air_ratio": {
+    "real_gas": 0.01892210654741034,
+    "cantera": 0.018966886684194214,
+    "difference": 4.478013678387363e-05
+  }
+}
