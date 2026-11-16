@@ -23,7 +23,7 @@ from scipy.optimize import brentq
 from turbineiq.engineering.real_gas import CALIBRATED_6B03, simulate_real_gas_cycle
 
 AIR = "N2:0.7809,O2:0.2095,AR:0.0096"
-N = 60
+N = 400
 
 
 def _step_path(gas: ct.Solution, p_ratio: float, eta: float, compress: bool) -> None:

@@ -244,9 +244,9 @@ test('overview scenario, seed, replay, mesh inspection, Evidence search, and Loc
   page.on('request', (request) => { try { origins.add(new URL(request.url()).origin) } catch { return } })
   await page.goto('/#/overview?scenario=compressor_fouling&seed=42&i=72')
   await ready(page, 'overview')
-  await expect(page.getByText('26.30', { exact: false }).first()).toBeVisible()
+  await expect(page.getByText('46.33', { exact: false }).first()).toBeVisible()
   const efficiency = page.locator('.component-row').filter({ hasText: 'Compressor' }).locator('.component-primary')
-  await expect(efficiency).toHaveAttribute('title', /81\.2 %/)
+  await expect(efficiency).toHaveAttribute('title', /83\.6 %/)
   await expect(efficiency.locator('.unit')).toHaveText('%')
   await expect(page.locator('.station-row').first()).toContainText('284.2')
   await expect(page.locator('.station-row').first()).toContainText('101.3 kPa')
@@ -332,15 +332,15 @@ test('Cloud consent always precedes a mocked provider request and document excer
   expect(bodies[1]).toMatchObject({ enable_cloud: true, allow_cloud_document_context: true })
 })
 
-test('The published 6B.03 ratings are shown next to an explicit uncalibrated model comparison', async ({ page }) => {
+test('The published 6B.03 ratings are shown next to a fitted-model comparison that says it agrees by construction', async ({ page }) => {
   await page.goto('/#/overview?scenario=baseline&seed=42&i=10')
   await expect(page.locator('.kpi-row')).toBeVisible()
   const block = page.locator('.component-ledger .published-reference')
-  await expect(block).toContainText('uncalibrated')
-  await block.getByText('Model at its reference point, not calibrated').click()
+  await expect(block).toContainText('by construction')
+  await block.getByText('Fitted model at ISO ambient, agrees by construction').click()
   const output = block.locator('.published-comparison dl > div', { hasText: 'Net output' })
   await expect(output).toContainText('MW')
-  await expect(output).toContainText('−43%')
+  await expect(output).not.toContainText('−43%')
 })
 
 test('Assistant request failures expose a retry action', async ({ page }) => {
@@ -398,7 +398,7 @@ test('Overview A shortcut opens the shared dock and Esc returns focus to Ask', a
   expect((await page.locator('.main-area').boundingBox())?.width).toBe(dashboardWidth)
   await composer.fill('Explain the selected synthetic sample.')
   await dialog.getByRole('button', { name: 'Ask', exact: true }).click()
-  await expect(dialog.locator('.assistant-answer')).toContainText('26.30 MW', { timeout: 20000 })
+  await expect(dialog.locator('.assistant-answer')).toContainText('46.33 MW', { timeout: 20000 })
   await expect(dialog.locator('.assistant-trace')).toBeVisible()
   await expect(dialog.locator('.assistant-trace')).not.toHaveAttribute('open', '')
   await dialog.getByText(/^Tool trace/).click()
@@ -407,10 +407,10 @@ test('Overview A shortcut opens the shared dock and Esc returns focus to Ask', a
   await expect(dialog).not.toBeVisible()
   await expect(page.locator('.assistant-header-ask')).toBeFocused()
   await page.keyboard.press('a')
-  await expect(page.getByRole('dialog', { name: 'Ask TurbineIQ' })).toContainText('26.30 MW')
+  await expect(page.getByRole('dialog', { name: 'Ask TurbineIQ' })).toContainText('46.33 MW')
   await page.keyboard.press('Escape')
   await page.getByRole('link', { name: 'Assistant' }).click()
-  await expect(page.locator('.assistant-page:not(.assistant-dock-page) .assistant-answer')).toContainText('26.30 MW')
+  await expect(page.locator('.assistant-page:not(.assistant-dock-page) .assistant-answer')).toContainText('46.33 MW')
 })
 
 test('cloud dock names the fake provider, streams tool results, links citations and labels local fallback', async ({ page }) => {

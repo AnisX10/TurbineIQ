@@ -29,12 +29,12 @@ export function PublishedReferenceBlock() {
       <p>{PUBLISHED_6B03_REFERENCE.caveat}</p>
       {comparison && (
         <details className="published-comparison">
-          <summary>Model at its reference point, not calibrated</summary>
+          <summary>{comparison.calibrated ? 'Fitted model at ISO ambient, agrees by construction' : 'Model at its reference point, not calibrated'}</summary>
           <dl>{comparison.rows.map((row) => {
             const model = modelValue(row)
             return <div key={row.key}><dt>{row.label}</dt><dd><ValueWithUnit value={model.value} unit={model.unit} /> <span className="published-delta">{signedPercent(row.difference_percent)}</span></dd></div>
           })}</dl>
-          <p>{comparison.model_point}. Percentages are model versus published.</p>
+          <p>{comparison.model_point}. Percentages are model versus published.{comparison.calibrated ? ` ${comparison.statement}` : ''}</p>
         </details>
       )}
       <small>Source: {PUBLISHED_6B03_REFERENCE.source}{originalTemperature ? `. Original exhaust temperature: ${originalTemperature.value} ${originalTemperature.unit}.` : ''}</small>

@@ -1,6 +1,8 @@
 import json
 from types import SimpleNamespace
 
+import pytest
+
 from turbineiq.agent import CloudLLMSettings, TurbineAssistant
 from turbineiq.rag import load_document_bytes
 
@@ -40,8 +42,8 @@ def test_local_assistant_runs_calculation_tool() -> None:
 
     assert response.mode == "local"
     assert response.tool_calls[0].name == "calculate_cycle"
-    assert "illustrative cycle case" in response.answer
-    assert response.tool_calls[0].result["result"]["electrical_power_kw"] > 0
+    assert "calibrated cycle case" in response.answer
+    assert response.tool_calls[0].result["result"]["net_electrical_power_mw"] > 0
 
 
 def test_local_assistant_runs_synthetic_scenario_tool() -> None:
@@ -71,19 +73,18 @@ def test_cloud_tool_loop_executes_local_calculation_and_returns_answer() -> None
     inputs = {
         "ambient_temperature_c": 15,
         "ambient_pressure_kpa": 101.325,
-        "pressure_ratio": 12,
-        "air_mass_flow_kg_s": 100,
-        "turbine_inlet_temperature_k": 1300,
-        "compressor_efficiency": 0.85,
-        "turbine_efficiency": 0.9,
-        "combustor_pressure_loss_fraction": 0.04,
-        "mechanical_efficiency": 0.98,
-        "generator_efficiency": 0.97,
+        "pressure_ratio": 12.8,
+        "air_mass_flow_kg_s": None,
+        "effective_firing_temperature_k": None,
+        "compressor_polytropic_efficiency": None,
+        "turbine_polytropic_efficiency": None,
+        "cooling_flow_fraction": None,
+        "drivetrain_efficiency": None,
     }
     client = FakeClient(
         [
             SimpleNamespace(output=[tool_call("calculate_cycle", inputs)], output_text=""),
-            text_response("The local model estimates 26 MW for this illustrative case."),
+            text_response("The local model estimates 45 MW for this calibrated case."),
         ]
     )
     assistant = TurbineAssistant(
@@ -100,7 +101,7 @@ def test_cloud_tool_loop_executes_local_calculation_and_returns_answer() -> None
     assert client.responses.calls[0]["store"] is False
     tool_output = client.responses.calls[1]["input"][-1]
     assert tool_output["type"] == "function_call_output"
-    assert json.loads(tool_output["output"])["result"]["electrical_power_kw"] > 0
+    assert json.loads(tool_output["output"])["result"]["net_electrical_power_mw"] > 0
 
 
 def test_cloud_document_tool_is_hidden_unless_user_opted_in() -> None:
@@ -247,3 +248,22 @@ def test_cloud_failure_falls_back_to_local_answer_without_exposing_secret() -> N
     assert "RuntimeError" in response.warning
     assert "secret token" not in response.warning
     assert response.tool_calls[0].name == "calculate_cycle"
+
+
+def test_calculate_cycle_tool_defaults_to_the_calibrated_rated_point() -> None:
+    from turbineiq.agent.tools import calculate_cycle_tool
+
+    result = calculate_cycle_tool({})
+    assert result["result"]["net_electrical_power_mw"] == pytest.approx(45.0, rel=1e-3)
+    assert result["inputs_used"]["pressure_ratio"] == 12.8
+
+
+def test_calculate_cycle_tool_applies_overrides_and_rejects_bad_fields() -> None:
+    from turbineiq.agent.tools import calculate_cycle_tool
+
+    hot = calculate_cycle_tool({"ambient_temperature_c": 35.0, "air_mass_flow_kg_s": 130.0})
+    assert hot["result"]["net_electrical_power_mw"] < 45.0
+    with pytest.raises(ValueError):
+        calculate_cycle_tool({"turbine_inlet_temperature_k": 1300})
+    with pytest.raises(ValueError):
+        calculate_cycle_tool({"pressure_ratio": "12"})

@@ -25,18 +25,17 @@ from turbineiq.api.assistant_security import SecretRedactionFilter, TokenBucketL
 from turbineiq.rag import load_document_bytes
 
 
-def _cycle_inputs() -> dict[str, float]:
+def _cycle_inputs() -> dict[str, float | None]:
     return {
         "ambient_temperature_c": 15,
         "ambient_pressure_kpa": 101.325,
-        "pressure_ratio": 12,
-        "air_mass_flow_kg_s": 100,
-        "turbine_inlet_temperature_k": 1300,
-        "compressor_efficiency": 0.85,
-        "turbine_efficiency": 0.9,
-        "combustor_pressure_loss_fraction": 0.04,
-        "mechanical_efficiency": 0.98,
-        "generator_efficiency": 0.97,
+        "pressure_ratio": 12.8,
+        "air_mass_flow_kg_s": 140,
+        "effective_firing_temperature_k": None,
+        "compressor_polytropic_efficiency": None,
+        "turbine_polytropic_efficiency": None,
+        "cooling_flow_fraction": None,
+        "drivetrain_efficiency": None,
     }
 
 
@@ -256,7 +255,7 @@ def test_malformed_tool_json_gets_one_repair_attempt() -> None:
     response = _assistant(adapter).run("Calculate output", enable_cloud=True)
 
     assert response.mode == "cloud"
-    assert response.tool_calls[0].result["result"]["electrical_power_kw"] > 0
+    assert response.tool_calls[0].result["result"]["net_electrical_power_mw"] > 0
     assert len(adapter.calls) == 3
     assert adapter.calls[1]["tools"] == []
 
@@ -286,7 +285,7 @@ def test_parallel_tool_calls_execute_each_allowlisted_tool() -> None:
         "calculate_cycle",
         "summarize_synthetic_scenario",
     ]
-    assert response.tool_calls[0].result["result"]["electrical_power_kw"] > 0
+    assert response.tool_calls[0].result["result"]["net_electrical_power_mw"] > 0
     assert response.tool_calls[1].result["row_count"] == 96
     assert len(adapter.calls) == 2
 

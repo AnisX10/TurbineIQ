@@ -40,8 +40,7 @@ def test_twin_run_api_returns_selected_component_state_and_timeline() -> None:
     )
     assert payload["snapshot"]["power_residual_kw"] < 0
     assert any(
-        component["component_id"] == "compressor"
-        for component in payload["snapshot"]["components"]
+        component["component_id"] == "compressor" for component in payload["snapshot"]["components"]
     )
 
 
@@ -93,9 +92,9 @@ def test_assistant_explains_server_recomputed_selected_twin_sample() -> None:
     assert response.status_code == 200
     result = response.json()
     assert result["mode"] == "local"
-    assert "compressor-efficiency drift" in result["answer"]
-    assert "81.2%" in result["answer"]
-    assert "85.0% reference" in result["answer"]
+    assert "polytropic-efficiency drift" in result["answer"]
+    assert "83.6%" in result["answer"]
+    assert "87.4% reference" in result["answer"]
     assert "not a fault diagnosis" in result["answer"]
     assert result["tool_calls"][0]["name"] == "inspect_synthetic_twin_snapshot"
     assert result["tool_calls"][0]["result"]["snapshot"]["seed"] == 42
@@ -140,14 +139,16 @@ def test_assistant_stream_emits_tool_progress_tokens_and_final_response() -> Non
     assert "event: tool_result" in response.text
     assert "event: token" in response.text
     assert "event: done" in response.text
-    assert "81.2%" in response.text
+    assert "83.6%" in response.text
 
 
-def test_twin_run_api_states_the_published_reference_gap() -> None:
+def test_twin_run_api_reports_the_calibrated_model_against_published_ratings() -> None:
     run = client.get("/api/twin/run?scenario_id=baseline&seed=42&sample_index=10").json()["run"]
     reference = run["published_reference"]
 
-    assert reference["calibrated"] is False
+    assert reference["calibrated"] is True
+    assert "by construction" in reference["statement"]
+    assert run["model_name"].startswith("Variable-property")
     assert {row["key"] for row in reference["rows"]} == {
         "net_output",
         "lhv_efficiency",
@@ -157,4 +158,4 @@ def test_twin_run_api_states_the_published_reference_gap() -> None:
     }
     output = next(row for row in reference["rows"] if row["key"] == "net_output")
     assert output["published"] == 45.0
-    assert output["model"] < output["published"]
+    assert abs(output["difference_percent"]) < 0.1

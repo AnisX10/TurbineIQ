@@ -32,6 +32,8 @@ The BHEL notice says detailed specifications and drawings are sent to shortliste
 
 ## Published ratings versus the cycle model
 
+> Update: the sections below describe the earlier constant-property model, which is no longer used by the workspace. The app now uses a variable-property model fitted to these ratings; see `CALIBRATION.md`.
+
 The workspace shows the published 6B.03 ratings next to a simplified constant-property Brayton model. The model is **not calibrated** to those ratings. At its reference point (ISO ambient, pressure ratio 12, 100 kg/s air, 1,300 K turbine inlet) it gives about 25.5 MW, 37.5% efficiency, 495 °C exhaust and 101 kg/s exhaust flow, against the published 45 MW, 33.4%, 561 °C and 145.1 kg/s. The run payload (`run.published_reference`) and the component panel report this difference instead of leaving the two sets of numbers to be compared by eye.
 
 A calibration was tried. With constant specific heats, no cooling or leakage flows and no inlet or exhaust losses, a random search over air flow, turbine inlet temperature, component efficiencies and combustor loss at pressure ratio 12.8 did not find a point that matches output, efficiency, exhaust temperature and exhaust flow together; the best fit left the exhaust about 50 K high and the efficiency about 2 points high. Tuning free inputs until the headline numbers agree would also hide that mismatch behind fitted efficiencies that no longer mean what they say. Matching all four needs temperature-dependent properties and cooling and loss modelling, tracked in `DEVELOPMENT_BACKLOG.md`.

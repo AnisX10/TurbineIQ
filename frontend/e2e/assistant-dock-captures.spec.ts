@@ -36,7 +36,7 @@ test('capture five assistant dock states at all widths and themes', async ({ pag
     const dock = page.getByRole('dialog', { name: 'Ask TurbineIQ' })
     await dock.getByRole('textbox', { name: 'Ask TurbineIQ' }).fill('Explain the compressor output at this synthetic sample.')
     await dock.getByRole('button', { name: 'Ask', exact: true }).click()
-    await expect(dock.locator('.assistant-answer').first()).toContainText('26.30 MW', { timeout: 30000 })
+    await expect(dock.locator('.assistant-answer').first()).toContainText('46.33 MW', { timeout: 30000 })
     await dock.locator('.assistant-trace summary').first().click()
     await expect(dock.locator('.assistant-trace').first()).toHaveAttribute('open', '')
     await captureWidths(page, theme, 'answer-tool-trace')

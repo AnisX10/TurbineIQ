@@ -9,7 +9,6 @@ import time
 from dataclasses import asdict, dataclass
 from typing import Any, Callable
 
-from turbineiq.engineering import CycleInputs
 from turbineiq.rag import DocumentChunk, build_local_answer, search_documents
 from turbineiq.synthetic import SCENARIOS
 
@@ -46,36 +45,14 @@ BASE_TOOL_SPECS: list[dict[str, object]] = [
         "type": "function",
         "name": "calculate_cycle",
         "description": (
-            "Run the local simplified open-cycle Brayton model using explicit "
-            "illustrative study inputs."
+            "Run the calibrated variable-property open-cycle model (fitted to published "
+            "GE 6B.03 ISO ratings). Pass null for any field to keep its fitted value."
         ),
         "strict": True,
         "parameters": {
             "type": "object",
-            "properties": {
-                "ambient_temperature_c": {"type": "number"},
-                "ambient_pressure_kpa": {"type": "number"},
-                "pressure_ratio": {"type": "number"},
-                "air_mass_flow_kg_s": {"type": "number"},
-                "turbine_inlet_temperature_k": {"type": "number"},
-                "compressor_efficiency": {"type": "number"},
-                "turbine_efficiency": {"type": "number"},
-                "combustor_pressure_loss_fraction": {"type": "number"},
-                "mechanical_efficiency": {"type": "number"},
-                "generator_efficiency": {"type": "number"},
-            },
-            "required": [
-                "ambient_temperature_c",
-                "ambient_pressure_kpa",
-                "pressure_ratio",
-                "air_mass_flow_kg_s",
-                "turbine_inlet_temperature_k",
-                "compressor_efficiency",
-                "turbine_efficiency",
-                "combustor_pressure_loss_fraction",
-                "mechanical_efficiency",
-                "generator_efficiency",
-            ],
+            "properties": {name: {"type": ["number", "null"]} for name in sorted(CYCLE_FIELDS)},
+            "required": sorted(CYCLE_FIELDS),
             "additionalProperties": False,
         },
     },
@@ -285,15 +262,15 @@ class TurbineAssistant:
             )
             calls = (ToolInvocation("summarize_synthetic_scenario", arguments, result),)
         else:
-            defaults = asdict(CycleInputs())
-            inputs = {name: defaults[name] for name in CYCLE_FIELDS}
+            inputs: dict[str, Any] = {}
             result = calculate_cycle_tool(inputs)
             cycle = result["result"]
             answer = (
-                "The illustrative cycle case estimates "
-                f"{cycle['electrical_power_kw']:.1f} kW electrical output "
-                f"and {cycle['electrical_efficiency']:.1%} electrical efficiency. "
-                "The constant-property model inputs are study assumptions, not OEM data or limits."
+                "The calibrated cycle case at ISO conditions estimates "
+                f"{cycle['net_electrical_power_mw']:.1f} MW net electrical output "
+                f"and {cycle['lhv_efficiency']:.1%} LHV efficiency. "
+                "The model is fitted to published GE 6B.03 ratings, so agreement at this point "
+                "is by construction; it is not OEM data or an operating limit."
             )
             calls = (ToolInvocation("calculate_cycle", inputs, result),)
         if on_event:

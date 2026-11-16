@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
+from dataclasses import replace
 from typing import Any
 
 from turbineiq.analytics import assess_data_quality, detect_anomalies
-from turbineiq.engineering import CycleInputs, simulate_cycle
+from turbineiq.engineering import CALIBRATED_6B03, simulate_real_gas_cycle
 from turbineiq.rag import DocumentChunk, search_documents
 from turbineiq.synthetic import generate_scenario
 
@@ -15,27 +15,41 @@ CYCLE_FIELDS = {
     "ambient_pressure_kpa",
     "pressure_ratio",
     "air_mass_flow_kg_s",
-    "turbine_inlet_temperature_k",
-    "compressor_efficiency",
-    "turbine_efficiency",
-    "combustor_pressure_loss_fraction",
-    "mechanical_efficiency",
-    "generator_efficiency",
+    "effective_firing_temperature_k",
+    "compressor_polytropic_efficiency",
+    "turbine_polytropic_efficiency",
+    "cooling_flow_fraction",
+    "drivetrain_efficiency",
 }
 
 
 def calculate_cycle_tool(arguments: dict[str, Any]) -> dict[str, object]:
-    """Run the local deterministic cycle solver with supplied study inputs."""
+    """Run the calibrated variable-property cycle model.
+
+    Every field is optional: a missing or null field keeps the value fitted to the published
+    GE 6B.03 ratings, so ``{}`` returns the ISO rated point.
+    """
 
     extra = set(arguments) - CYCLE_FIELDS
     if extra:
         raise ValueError(f"unsupported calculation field(s): {', '.join(sorted(extra))}")
-    missing = CYCLE_FIELDS - set(arguments)
-    if missing:
-        raise ValueError(f"missing calculation field(s): {', '.join(sorted(missing))}")
-    inputs = CycleInputs(**arguments)
-    result = simulate_cycle(inputs)
-    return {"inputs_used": asdict(inputs), "result": result.to_dict()}
+    overrides: dict[str, float] = {}
+    for name, value in arguments.items():
+        if value is None:
+            continue
+        if isinstance(value, bool) or not isinstance(value, int | float):
+            raise ValueError(f"{name} must be a number")
+        overrides[name] = float(value)
+    inputs = replace(CALIBRATED_6B03, **overrides)
+    result = simulate_real_gas_cycle(inputs)
+    return {
+        "inputs_used": {name: getattr(inputs, name) for name in sorted(CYCLE_FIELDS)},
+        "result": result.to_dict(),
+        "model_note": (
+            "Variable-property model fitted to published GE 6B.03 ISO ratings; see "
+            "docs/CALIBRATION.md. Not OEM data or operating limits."
+        ),
+    }
 
 
 def summarize_scenario_tool(arguments: dict[str, Any]) -> dict[str, object]:

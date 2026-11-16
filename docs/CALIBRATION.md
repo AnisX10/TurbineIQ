@@ -10,9 +10,20 @@ The constant-property model in `core.py` gives about 25.5 MW against the publish
 - a combustor energy balance on sensible enthalpy and fuel lower heating value (methane, 50 MJ/kg), with burned-gas composition computed from the fuel flow;
 - a cooling-flow fraction that bypasses the combustor and is mixed in before the turbine;
 - fixed inlet (1%), combustor (4%) and exhaust (1%) pressure losses;
-- compression and expansion integrated in 60 small steps with a polytropic efficiency.
+- compression and expansion with a polytropic (small-stage) efficiency, integrated with fourth-order Runge-Kutta in ln p.
 
-The old model is unchanged and still feeds the API and the synthetic twin. Switching the twin to the new model is a separate step.
+The old constant-property model in `core.py` is kept (it backs the optional Streamlit page and `tests/test_engineering_core.py`), but the app no longer uses it: see [In the app](#in-the-app).
+
+## In the app
+
+The synthetic scenario generator, the digital twin, the API's published-reference panel and the assistant's `calculate_cycle` tool all use the calibrated model (`CALIBRATED_6B03`). What this changes:
+
+- **Numbers.** The rated point is now 45 MW, 33.4%, 561 °C and 145.1 kg/s instead of about 25.5 MW, 37.5%, 495 °C and 101 kg/s.
+- **Compressor drift scenario.** The synthetic parameter is now a polytropic efficiency, drifting from 0.874 to 0.824 (5 points; it was 0.85 to 0.80 isentropic). The power loss at the end of the run is larger than before (about 7.5% at sample 73 of 96).
+- **Turbine inlet temperature** on the Combustor panel is the mixed value after cooling air (about 1,406 K), not the effective firing temperature (1,463 K).
+- **Assistant tool.** `calculate_cycle` takes nine optional inputs (pass null to keep the fitted value) and returns `net_electrical_power_mw` and `lhv_efficiency`. The old ten-field tool contract is gone, so any branch that edits the tool schema (PR #2, #3 and #5 touch the orchestrator) will need a small merge.
+- **Speed.** Property evaluation uses merged polynomials and a Runge-Kutta path instead of per-step root finding: about 0.13 ms per cycle, so a 96-sample scenario takes about 0.07 s (it took about 5 s with the first implementation).
+- **Published-reference panel.** It now says the fit agrees by construction, instead of reporting an uncalibrated gap.
 
 ## The fit
 
@@ -41,8 +52,8 @@ At the fitted point the model gives 45.00 MW, 33.40%, 561.0 °C, 145.1 kg/s and 
 
 **Implementation and property data (done).**
 
-- **Cantera cross-check** (`crosscheck_cantera.json`): the same cycle with Cantera thermo objects and equilibrium combustion products (so dissociation is included). Net output differs by +0.02%, exhaust temperature by +0.04 K, exhaust flow by +0.005%, and efficiency by 0.2% relative (fuel flow +0.26%). This checks my mixture, combustion and integration code, not the data, because both use the same GRI-Mech NASA-7 polynomials.
-- **CoolProp cross-check** (`crosscheck_coolprop.json`): CoolProp's Helmholtz-energy mixture properties are independent of the NASA polynomials. Specific heat agrees within 0.4% at 300 K and within 0.11% from 500 to 1,400 K for dry air and for a burned-gas composition. Enthalpy differences from 400 K agree within 0.13%. Polytropic compression of air at the fitted efficiency gives a discharge temperature 0.8 K higher and compression work 0.24% higher in CoolProp. Property data are therefore not a significant error source here.
+- **Cantera cross-check** (`crosscheck_cantera.json`): the same cycle with Cantera thermo objects and equilibrium combustion products (so dissociation is included). Net output differs by +0.03%, exhaust temperature by +0.09 K, exhaust flow by +0.005%, and efficiency by 0.2% relative (fuel flow +0.24%). Cantera uses 400 small steps to approximate the polytropic limit. This checks my mixture, combustion and integration code, not the data, because both use the same GRI-Mech NASA-7 polynomials.
+- **CoolProp cross-check** (`crosscheck_coolprop.json`): CoolProp's Helmholtz-energy mixture properties are independent of the NASA polynomials. Specific heat agrees within 0.11% from 500 to 1,400 K, the range the cycle uses, for dry air and for a burned-gas composition. Enthalpy differences from 400 K agree within 0.13%. Polytropic compression of air at the fitted efficiency gives a discharge temperature 0.6 K higher and compression work 0.21% higher in CoolProp. Property data are therefore not a significant error source here.
 - **Heat rate** 10,778 vs the published 10,779 kJ/kWh follows from output and efficiency and is only a consistency check.
 - **Unit tests** (`tests/test_real_gas.py`): fitted point, energy balance, ambient signs, compressor-degradation direction, air cp, input validation.
 
@@ -52,7 +63,7 @@ At the fitted point the model gives 45.00 MW, 33.40%, 561.0 °C, 145.1 kg/s and 
 | ---: | ---: | ---: | ---: |
 | 0 °C | 109.3 / 111.5 | 97.9 / 98.1 | 106.2 / 105.6 |
 | 25 °C | 93.8 / 93.0 | 101.4 / 101.4 | 95.8 / 96.6 |
-| 35 °C | 87.6 / 86.5 | 102.9 / 102.9 | 91.7 / 93.4 |
+| 35 °C | 87.6 / 86.4 | 102.9 / 102.9 | 91.7 / 93.4 |
 | 45 °C | 81.4 / 80.3 | 104.3 / 104.5 | 87.5 / 90.4 |
 
 Over 0 to 45 °C the RMS difference is 1.1 points for output, 0.12 for heat rate and 1.6 for exhaust flow. The largest gaps are output at 0 °C (+2.2 points, the model gains more in the cold) and exhaust flow at 45 °C (+2.9 points, GE's flow falls faster). Heat rate agrees almost exactly; I did not tune toward this, and I would not lean on that coincidence. A 20-case regression test keeps the model within 2.5, 1.0 and 3.5 points on output, heat rate and flow.

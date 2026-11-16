@@ -5,7 +5,7 @@ ideal-gas properties (NASA-7 polynomials, species data in ``data/nasa7_species.j
 a combustor energy balance on sensible enthalpy and the fuel lower heating value,
 a fraction of compressor air that bypasses the combustor as turbine cooling flow,
 and pressure losses at the inlet, combustor and exhaust. Compression and expansion
-are integrated in small steps with a polytropic (small-stage) efficiency.
+use a polytropic (small-stage) efficiency integrated with Runge-Kutta in ln p.
 
 It is still a zero-dimensional steady-state model: no humidity, no dissociation, no
 off-design component maps, and cooling air is simply mixed in before the turbine.
@@ -21,10 +21,8 @@ from functools import lru_cache
 from importlib import resources
 from math import isfinite, log
 
-import numpy as np
-
 T_REF_K = 298.15
-_N_STEPS = 60
+_N_STEPS = 12
 
 # Dry ISO air, mole fractions (CO2 neglected).
 _AIR_MOLES = {"N2": 0.7809, "O2": 0.2095, "AR": 0.0096}
@@ -88,7 +86,10 @@ class RealGasResult:
     fuel_to_air_ratio: float
     compressor_power_mw: float
     turbine_power_mw: float
+    shaft_power_mw: float
     net_electrical_power_mw: float
+    heat_added_mw: float
+    fuel_mass_flow_kg_s: float
     fuel_input_power_mw: float
     lhv_efficiency: float
     heat_rate_kj_per_kwh: float
@@ -101,68 +102,56 @@ class RealGasResult:
         return payload
 
 
-class _Species:
-    def __init__(self, entry: dict[str, object]) -> None:
-        self.molar_mass = float(entry["molar_mass_kg_kmol"])  # type: ignore[arg-type]
-        self.t_mid = float(entry["t_mid"])  # type: ignore[arg-type]
-        self.high = np.array(entry["coeffs_high"], dtype=float)  # type: ignore[arg-type]
-        self.low = np.array(entry["coeffs_low"], dtype=float)  # type: ignore[arg-type]
-
-    def _c(self, t: float) -> np.ndarray:
-        return self.high if t >= self.t_mid else self.low
-
-    def cp_over_r(self, t: float) -> float:
-        a = self._c(t)
-        return a[0] + t * (a[1] + t * (a[2] + t * (a[3] + t * a[4])))
-
-    def h_over_rt(self, t: float) -> float:
-        a = self._c(t)
-        return a[0] + t * (a[1] / 2 + t * (a[2] / 3 + t * (a[3] / 4 + t * a[4] / 5))) + a[5] / t
-
-    def s_over_r(self, t: float) -> float:
-        """Standard-state entropy / R (pressure term excluded)."""
-        a = self._c(t)
-        return a[0] * log(t) + t * (a[1] + t * (a[2] / 2 + t * (a[3] / 3 + t * a[4] / 4))) + a[6]
-
-
 @lru_cache(maxsize=1)
-def _species() -> tuple[dict[str, _Species], float]:
+def _species() -> tuple[dict[str, dict[str, object]], float]:
     text = resources.files("turbineiq.engineering").joinpath("data/nasa7_species.json")
     data = json.loads(text.read_text(encoding="utf-8"))
-    return (
-        {name: _Species(entry) for name, entry in data["species"].items()},
-        float(data["gas_constant_j_mol_k"]),
-    )
+    return data["species"], float(data["gas_constant_j_mol_k"])
+
+
+def _merge(species: dict[str, dict[str, object]], frac: dict[str, float], key: str) -> list[float]:
+    merged = [0.0] * 6
+    for name, x in frac.items():
+        coeffs = species[name][key]
+        for i in range(6):
+            merged[i] += x * coeffs[i]  # type: ignore[index]
+    return merged
 
 
 class _Mixture:
-    """Ideal-gas mixture given by kilomoles of each species."""
+    """Ideal-gas mixture given by kilomoles of each species.
+
+    NASA-7 coefficients are merged by mole fraction once, so property evaluation is a single
+    polynomial per temperature range (all species share the 1000 K range break).
+    """
 
     def __init__(self, kmol: dict[str, float]) -> None:
-        self.species, r_mol = _species()
+        species, r_mol = _species()
         self.kmol = {k: v for k, v in kmol.items() if v > 0}
         total = sum(self.kmol.values())
-        self.mass = sum(v * self.species[k].molar_mass for k, v in self.kmol.items())
+        self.mass = sum(v * float(species[k]["molar_mass_kg_kmol"]) for k, v in self.kmol.items())  # type: ignore[arg-type]
         self.molar_mass = self.mass / total
         self.r = r_mol * 1000.0 / self.molar_mass  # J/(kg K)
-        self._r_mol = r_mol * 1000.0  # J/(kmol K)
-        self._frac = {k: v / total for k, v in self.kmol.items()}
+        frac = {k: v / total for k, v in self.kmol.items()}
+        self._hi = _merge(species, frac, "coeffs_high")
+        self._lo = _merge(species, frac, "coeffs_low")
+        self._h_ref = self._h_mol(T_REF_K)
+
+    def _coeffs(self, t: float) -> list[float]:
+        return self._hi if t >= 1000.0 else self._lo
+
+    def _h_mol(self, t: float) -> float:
+        a = self._coeffs(t)
+        return t * (a[0] + t * (a[1] / 2 + t * (a[2] / 3 + t * (a[3] / 4 + t * a[4] / 5)))) + a[5]
 
     def cp(self, t: float) -> float:
         """Specific heat, J/(kg K)."""
-        return sum(x * self.species[k].cp_over_r(t) for k, x in self._frac.items()) * self.r
+        a = self._coeffs(t)
+        return (a[0] + t * (a[1] + t * (a[2] + t * (a[3] + t * a[4])))) * self.r
 
     def h(self, t: float) -> float:
         """Sensible enthalpy relative to 298.15 K, J/kg."""
-
-        def h_mol(temp: float) -> float:
-            return sum(x * self.species[k].h_over_rt(temp) for k, x in self._frac.items()) * temp
-
-        return (h_mol(t) - h_mol(T_REF_K)) * self.r
-
-    def s0(self, t: float) -> float:
-        """Temperature part of entropy (mixing term cancels between states), J/(kg K)."""
-        return sum(x * self.species[k].s_over_r(t) for k, x in self._frac.items()) * self.r
+        return (self._h_mol(t) - self._h_ref) * self.r
 
 
 def _air(kmol_total: float = 1.0) -> _Mixture:
@@ -188,22 +177,24 @@ def _t_from_h(mix: _Mixture, h_target: float, t_guess: float) -> float:
 def _polytropic_path(
     mix: _Mixture, t_in: float, pressure_ratio: float, eta: float, *, compress: bool
 ) -> float:
-    """Exit temperature of a polytropic compression or expansion, integrated in steps."""
-    step = pressure_ratio ** (1.0 / _N_STEPS)
+    """Exit temperature of a polytropic compression or expansion.
+
+    Integrates the small-stage relation ``dT/d(ln p) = +-(eta^k) R T / cp(T)`` (k = -1 for
+    compression, +1 for expansion) with fourth-order Runge-Kutta in ln p.
+    """
+
+    def slope(t: float) -> float:
+        g = mix.r * t / mix.cp(t)
+        return g / eta if compress else -eta * g
+
+    h = log(pressure_ratio) / _N_STEPS
     t = t_in
     for _ in range(_N_STEPS):
-        ds = mix.r * log(step)
-        s_target = mix.s0(t) + ds if compress else mix.s0(t) - ds
-        # Isentropic exit of this step: solve s0(t_is) = s_target.
-        t_is = t
-        for _ in range(40):
-            f = mix.s0(t_is) - s_target
-            if abs(f) < 1e-7:
-                break
-            t_is -= f / (mix.cp(t_is) / t_is)
-        dh_is = mix.h(t_is) - mix.h(t)
-        dh = dh_is / eta if compress else dh_is * eta
-        t = _t_from_h(mix, mix.h(t) + dh, t_is)
+        k1 = slope(t)
+        k2 = slope(t + 0.5 * h * k1)
+        k3 = slope(t + 0.5 * h * k2)
+        k4 = slope(t + h * k3)
+        t += h * (k1 + 2 * k2 + 2 * k3 + k4) / 6.0
     return t
 
 
@@ -247,16 +238,22 @@ def simulate_real_gas_cycle(inputs: RealGasInputs | None = None) -> RealGasResul
         h_in = (1 - xc) * h_air_t2 + released
         return h_in - gas.mass * gas.h(p.effective_firing_temperature_k)
 
-    lo, hi = 0.0, 0.04
-    if combustor_residual(lo) * combustor_residual(hi) > 0:
-        raise ValueError("no fuel flow satisfies the combustor energy balance")
-    for _ in range(80):
-        mid = 0.5 * (lo + hi)
-        if combustor_residual(lo) * combustor_residual(mid) <= 0:
-            hi = mid
-        else:
-            lo = mid
-    fuel = 0.5 * (lo + hi)
+    # Secant iteration on the (nearly linear) combustor energy residual.
+    f0, f1 = 0.015, 0.020
+    r0, r1 = combustor_residual(f0), combustor_residual(f1)
+    for _ in range(30):
+        if r1 == r0:
+            break
+        f2 = f1 - r1 * (f1 - f0) / (r1 - r0)
+        if not 0.0 < f2 < 0.05:
+            raise ValueError("no fuel flow satisfies the combustor energy balance")
+        f0, r0 = f1, r1
+        f1, r1 = f2, combustor_residual(f2)
+        if abs(f1 - f0) < 1e-13:
+            break
+    else:
+        raise ValueError("combustor energy balance did not converge")
+    fuel = f1
 
     # Mix cooling air (at T2) into the burned gas before the turbine.
     gas = burned_gas(fuel)
@@ -286,7 +283,7 @@ def simulate_real_gas_cycle(inputs: RealGasInputs | None = None) -> RealGasResul
         "Combustor: sensible-enthalpy energy balance with combustor efficiency applied to LHV.",
         "Cooling flow bypasses the combustor and is mixed in before the turbine (no partial "
         "expansion credit), so effective_firing_temperature_k is an effective value.",
-        "Polytropic efficiency integrated in small steps; fixed pressure losses.",
+        "Polytropic efficiency from the small-stage relation (RK4 in ln p); fixed pressure losses.",
         "Drivetrain efficiency covers mechanical, gearbox and generator losses together.",
         "Parameters are fitted to public catalog ratings, not OEM data or limits.",
     )
@@ -298,7 +295,10 @@ def simulate_real_gas_cycle(inputs: RealGasInputs | None = None) -> RealGasResul
         fuel_to_air_ratio=fuel,
         compressor_power_mw=compressor_work * mdot / 1e6,
         turbine_power_mw=turbine_work * mdot / 1e6,
+        shaft_power_mw=net_shaft * mdot / 1e6,
         net_electrical_power_mw=electrical_mw,
+        heat_added_mw=fuel_mw * p.combustor_efficiency,
+        fuel_mass_flow_kg_s=fuel * mdot,
         fuel_input_power_mw=fuel_mw,
         lhv_efficiency=efficiency,
         heat_rate_kj_per_kwh=3600.0 / efficiency,
@@ -310,11 +310,11 @@ def simulate_real_gas_cycle(inputs: RealGasInputs | None = None) -> RealGasResul
 # Fit to the published GE 6B.03 ISO ratings (scripts/calibrate_cycle.py, cooling flow fixed
 # at 8 percent). See docs/CALIBRATION.md for what the fit does and does not establish.
 CALIBRATED_6B03 = RealGasInputs(
-    air_mass_flow_kg_s=142.405399,
-    effective_firing_temperature_k=1462.834458,
-    compressor_polytropic_efficiency=0.874327,
-    turbine_polytropic_efficiency=0.874327,
-    drivetrain_efficiency=0.941751,
+    air_mass_flow_kg_s=142.405396,
+    effective_firing_temperature_k=1463.220349,
+    compressor_polytropic_efficiency=0.874264,
+    turbine_polytropic_efficiency=0.874264,
+    drivetrain_efficiency=0.941750,
     cooling_flow_fraction=0.08,
 )
 

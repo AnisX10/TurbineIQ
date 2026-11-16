@@ -14,7 +14,7 @@ export function getBoundaryDetails({
   scenarioId: string
 }): { modelName: string; provenance: string; scenario: string } {
   return {
-    modelName: run?.run.model_name ?? 'Simplified open-cycle reference model',
+    modelName: run?.run.model_name ?? 'Variable-property open-cycle model (fitted to public 6B.03 ratings)',
     provenance: snapshot?.data_provenance ?? 'Locally generated synthetic operating data.',
     scenario: scenario?.name ?? scenarioId,
   }

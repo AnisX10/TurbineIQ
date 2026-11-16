@@ -58,7 +58,7 @@ def main(path: Path) -> None:
     p = CALIBRATED_6B03
     t1 = p.ambient_temperature_c + 273.15
     p1 = p.ambient_pressure_kpa * 1000.0 * (1 - p.inlet_pressure_loss_fraction)
-    steps = 60
+    steps = 200
     ratio = p.pressure_ratio ** (1 / steps)
     t, pr = t1, p1
     h_start = PropsSI("HMASS", "T", t, "P", pr, AIR_FLUID)

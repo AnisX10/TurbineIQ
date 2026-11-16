@@ -358,10 +358,10 @@ export function BoundarySheet({
         </div>
         <button className="boundary-close" data-sheet-autofocus type="button" aria-label="Close boundary" onClick={onClose}><X size={17} aria-hidden="true" /></button>
       </div>
-      <p className="boundary-lede" id="boundary-lede">This workspace uses synthetic operating data and a simplified open-cycle model.</p>
+      <p className="boundary-lede" id="boundary-lede">This workspace uses synthetic operating data and an open-cycle model fitted to public 6B.03 ratings.</p>
       <dl className="boundary-facts">
         <div><dt>Data provenance</dt><dd>{provenance}</dd></div>
-        <div><dt>Model</dt><dd>{modelName} · simplified, not OEM-validated</dd></div>
+        <div><dt>Model</dt><dd>{modelName} · fitted to public ratings, not OEM-validated</dd></div>
         <div><dt>Connection</dt><dd>No physical connection or control.</dd></div>
         <div><dt>Seed</dt><dd className="boundary-mono">{seed}</dd></div>
         <div><dt>Scenario</dt><dd>{scenario}</dd></div>

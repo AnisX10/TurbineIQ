@@ -9,7 +9,7 @@ flowchart TD
     WEB[React workspace] --> ROUTER[Hash router and reducer store]
     ROUTER --> FEATURES[Overview, Components, Evidence, Assistant, Viewer]
     FEATURES --> API[Local FastAPI]
-    API --> ENG[Brayton-cycle reference]
+    API --> ENG[Variable-property cycle model fitted to public 6B.03 ratings]
     API --> SYN[Seeded synthetic scenarios]
     SYN --> ANA[Data-quality and residual screening]
     ENG --> TWIN[Synthetic state timeline]
@@ -28,7 +28,7 @@ flowchart TD
 
 ## Python responsibilities
 
-- `engineering/` validates inputs and calculates the simplified cycle states, work, heat, fuel estimate, output estimate, and model assumptions. It has no UI or network dependency.
+- `engineering/` validates inputs and calculates cycle states, work, heat, fuel estimate, output estimate and model assumptions. `real_gas.py` is the calibrated variable-property model used by the twin, scenarios and assistant (`docs/CALIBRATION.md`); `core.py` is the older constant-property model. It has no UI or network dependency.
 - `synthetic/` generates seeded sample histories from the engineering model, with explicit scenario perturbation labels and measurement noise. It does not ingest real plant data.
 - `analytics/` checks tabular shape, timestamps, configured physical validity, flat lines, and robust residual outliers. Its flags are screening results, not fault diagnoses.
 - `twin/` packages synthetic scenario frames into a time-indexed state view. The twin is bound only to generated data.

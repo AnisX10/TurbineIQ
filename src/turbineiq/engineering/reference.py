@@ -35,6 +35,14 @@ CALIBRATION_STATEMENT = (
 )
 
 
+CALIBRATED_STATEMENT = (
+    "The variable-property cycle model is fitted to these ratings: four parameters are "
+    "adjusted to match four of the targets, so agreement at this point is by construction, "
+    "not validation. Its ambient-temperature trend was checked against a generic GE "
+    "single-shaft curve; see docs/CALIBRATION.md for the limits."
+)
+
+
 @dataclass(frozen=True)
 class PublishedRating:
     key: str
@@ -124,4 +132,10 @@ def compare_calibrated_to_published() -> dict[str, object]:
         }
         for r in PUBLISHED_6B03
     ]
-    return {"source": PUBLISHED_SOURCE, "fitted": True, "rows": rows}
+    return {
+        "source": PUBLISHED_SOURCE,
+        "calibrated": True,
+        "statement": CALIBRATED_STATEMENT,
+        "model_point": "Calibrated model at ISO ambient (15 °C, 101.325 kPa)",
+        "rows": rows,
+    }
