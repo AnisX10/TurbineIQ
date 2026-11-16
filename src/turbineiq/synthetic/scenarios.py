@@ -7,7 +7,9 @@ from dataclasses import dataclass, replace
 import numpy as np
 import pandas as pd
 
-from turbineiq.engineering import CycleInputs, simulate_cycle
+from turbineiq.engineering import CALIBRATED_6B03, RealGasInputs, simulate_real_gas_cycle
+
+MODEL_NAME = "Variable-property open-cycle model (fitted to public 6B.03 ratings)"
 
 
 @dataclass(frozen=True)
@@ -15,7 +17,7 @@ class ScenarioSpec:
     name: str
     description: str
     ambient_shift_c: float = 0.0
-    compressor_efficiency_end: float = 0.85
+    compressor_efficiency_drop: float = 0.0
     inject_power_spike: bool = False
 
 
@@ -35,11 +37,11 @@ SCENARIOS: dict[str, ScenarioSpec] = {
     "compressor_fouling": ScenarioSpec(
         name="Compressor-performance drift",
         description=(
-            "A synthetic compressor-efficiency parameter drifts below the fixed "
-            "reference-model assumption. The resulting residual is illustrative; "
+            "A synthetic compressor polytropic-efficiency parameter drifts 5 points "
+            "below the fixed reference-model assumption. The resulting residual is illustrative; "
             "it is not a real fault signature."
         ),
-        compressor_efficiency_end=0.80,
+        compressor_efficiency_drop=0.05,
     ),
     "sensor_fault": ScenarioSpec(
         name="Power-sensor spike",
@@ -57,11 +59,13 @@ def generate_scenario(
     *,
     seed: int = 42,
     samples: int = 96,
-    base_inputs: CycleInputs | None = None,
+    base_inputs: RealGasInputs | None = None,
 ) -> pd.DataFrame:
     """Return a seeded, model-derived scenario at 15-minute intervals.
 
-    Mass flow varies with inlet density under a stated fixed-volume assumption.
+    The operating point comes from the variable-property cycle model fitted to the
+    published GE 6B.03 ratings (``docs/CALIBRATION.md``). Mass flow varies with inlet
+    density under a stated fixed-volume assumption.
     Measurement noise and the optional sensor fault are generated from a local
     NumPy random generator; no network or external dataset is used.
     """
@@ -76,7 +80,7 @@ def generate_scenario(
         raise ValueError("samples must be an integer of at least 8")
 
     spec = SCENARIOS[scenario_id]
-    base = base_inputs or CycleInputs()
+    base = base_inputs or CALIBRATED_6B03
     rng = np.random.default_rng(seed)
     rows: list[dict[str, object]] = []
     ambient_ref_k = base.ambient_temperature_c + 273.15
@@ -96,8 +100,7 @@ def generate_scenario(
 
         drift_fraction = index / max(samples - 1, 1)
         compressor_efficiency = (
-            base.compressor_efficiency
-            + (spec.compressor_efficiency_end - base.compressor_efficiency) * drift_fraction
+            base.compressor_polytropic_efficiency - spec.compressor_efficiency_drop * drift_fraction
         )
         operating_point = replace(
             base,
@@ -105,15 +108,13 @@ def generate_scenario(
             ambient_pressure_kpa=ambient_pressure,
             air_mass_flow_kg_s=air_mass_flow,
         )
-        reference_inputs = replace(
-            operating_point,
-            compressor_efficiency=base.compressor_efficiency,
+        reference_result = simulate_real_gas_cycle(operating_point)
+        plant_inputs = replace(
+            operating_point, compressor_polytropic_efficiency=compressor_efficiency
         )
-        plant_inputs = replace(operating_point, compressor_efficiency=compressor_efficiency)
-        reference_result = simulate_cycle(reference_inputs)
-        plant_result = simulate_cycle(plant_inputs)
-        modeled_power = reference_result.electrical_power_kw
-        plant_power = plant_result.electrical_power_kw
+        plant_result = simulate_real_gas_cycle(plant_inputs)
+        modeled_power = reference_result.net_electrical_power_mw * 1000.0
+        plant_power = plant_result.net_electrical_power_mw * 1000.0
         observed_power = plant_power + float(rng.normal(0, plant_power * 0.002))
         fault_injected = bool(spec.inject_power_spike and index == fault_index)
         if fault_injected:
@@ -131,26 +132,28 @@ def generate_scenario(
                 "ambient_pressure_kpa": ambient_pressure,
                 "pressure_ratio": base.pressure_ratio,
                 "combustor_pressure_loss_fraction": base.combustor_pressure_loss_fraction,
-                "compressor_efficiency_assumption": base.compressor_efficiency,
+                "compressor_efficiency_assumption": base.compressor_polytropic_efficiency,
                 "synthetic_true_compressor_efficiency": compressor_efficiency,
                 "air_mass_flow_kg_s_assumption": air_mass_flow,
-                "compressor_discharge_temperature_k": plant_result.states[1].temperature_k,
+                "compressor_discharge_temperature_k": (
+                    plant_result.compressor_discharge_temperature_k
+                ),
                 "reference_compressor_discharge_temperature_k": (
-                    reference_result.states[1].temperature_k
+                    reference_result.compressor_discharge_temperature_k
                 ),
-                "turbine_inlet_temperature_k": plant_result.states[2].temperature_k,
-                "reference_turbine_inlet_temperature_k": reference_result.states[2].temperature_k,
-                "exhaust_temperature_k": plant_result.states[3].temperature_k,
-                "reference_exhaust_temperature_k": reference_result.states[3].temperature_k,
-                "compressor_power_kw": plant_result.compressor_power_kw,
-                "reference_compressor_power_kw": reference_result.compressor_power_kw,
-                "combustor_heat_input_kw": (
-                    plant_result.heat_added_kj_per_kg_air * air_mass_flow
+                "turbine_inlet_temperature_k": plant_result.mixed_turbine_inlet_temperature_k,
+                "reference_turbine_inlet_temperature_k": (
+                    reference_result.mixed_turbine_inlet_temperature_k
                 ),
-                "turbine_power_kw": plant_result.turbine_power_kw,
-                "reference_turbine_power_kw": reference_result.turbine_power_kw,
-                "shaft_power_kw": plant_result.shaft_power_kw,
-                "reference_shaft_power_kw": reference_result.shaft_power_kw,
+                "exhaust_temperature_k": plant_result.exhaust_temperature_k,
+                "reference_exhaust_temperature_k": reference_result.exhaust_temperature_k,
+                "compressor_power_kw": plant_result.compressor_power_mw * 1000.0,
+                "reference_compressor_power_kw": reference_result.compressor_power_mw * 1000.0,
+                "combustor_heat_input_kw": plant_result.heat_added_mw * 1000.0,
+                "turbine_power_kw": plant_result.turbine_power_mw * 1000.0,
+                "reference_turbine_power_kw": reference_result.turbine_power_mw * 1000.0,
+                "shaft_power_kw": plant_result.shaft_power_mw * 1000.0,
+                "reference_shaft_power_kw": reference_result.shaft_power_mw * 1000.0,
                 "model_electrical_power_kw": modeled_power,
                 "synthetic_truth_electrical_power_kw": plant_power,
                 "observed_electrical_power_kw": observed_power,
@@ -165,7 +168,7 @@ def generate_scenario(
     frame.attrs["scenario_description"] = spec.description
     frame.attrs["seed"] = seed
     frame.attrs["synthetic_only"] = True
-    frame.attrs["model_name"] = "Simplified single-shaft open-cycle Brayton model"
+    frame.attrs["model_name"] = MODEL_NAME
     frame.attrs["mass_flow_assumption"] = (
         "Inlet mass flow scales with ambient density at a fixed inlet-volume assumption."
     )

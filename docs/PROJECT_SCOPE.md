@@ -26,7 +26,7 @@
 
 ## Modeling and safety boundaries
 
-The cycle model is a transparent constant-property approximation. The twin represents a synthetic asset and is synchronized only to generated samples; it does not mirror or predict a real machine. Inputs and assumptions are illustrative and are not certified as safe for any real equipment. Synthetic anomalies demonstrate software behavior, not actual failure modes.
+The cycle model used by the twin is a variable-property model fitted to public GE 6B.03 ratings (`CALIBRATION.md`); the older constant-property approximation remains for the optional Streamlit page. The twin represents a synthetic asset and is synchronized only to generated samples; it does not mirror or predict a real machine. Inputs and assumptions are illustrative and are not certified as safe for any real equipment. Synthetic anomalies demonstrate software behavior, not actual failure modes.
 
 ## Scope change
 

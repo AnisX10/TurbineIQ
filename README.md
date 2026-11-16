@@ -1,6 +1,6 @@
 # TurbineIQ
 
-TurbineIQ is a local-first prototype for exploring a simplified, single-shaft, open-cycle industrial gas turbine. Its primary interface is a React and Three.js engineering workspace backed by a local FastAPI service and deterministic Python modules. The workspace brings together a simplified Brayton-cycle reference, reproducible synthetic scenarios, data-quality screening, cited local document search, and a bounded assistant.
+TurbineIQ is a local-first prototype for exploring a simplified, single-shaft, open-cycle industrial gas turbine. Its primary interface is a React and Three.js engineering workspace backed by a local FastAPI service and deterministic Python modules. The workspace brings together an open-cycle reference model fitted to published GE 6B.03 ratings (see [calibration notes](docs/CALIBRATION.md)), reproducible synthetic scenarios, data-quality screening, cited local document search, and a bounded assistant.
 
 The project includes an interactive synthetic-twin demonstrator. It is not synchronized to a physical turbine and is not an OEM performance model, maintenance authorization system, or control system. No real turbine data, fabricated OEM specifications, live industrial connectivity, DCS/SCADA/PLC control, or confidential FieldCore material is included.
 
@@ -162,7 +162,7 @@ The exported geometry is a conceptual visualization, not a dimensionally accurat
 ## Project map
 
 ```text
-src/turbineiq/engineering/   Simplified cycle calculations and validation
+src/turbineiq/engineering/   Cycle models (variable-property, fitted to public 6B.03 ratings; plus the older constant-property model) and validation
 src/turbineiq/synthetic/     Seeded synthetic scenario generation
 src/turbineiq/analytics/     Data-quality checks and residual screening
 src/turbineiq/twin/          Synthetic-only state and replay data

@@ -7,11 +7,11 @@ from dataclasses import asdict, dataclass
 import pandas as pd
 
 from turbineiq.analytics import detect_anomalies
-from turbineiq.engineering import compare_to_published
+from turbineiq.engineering import compare_calibrated_to_published
 from turbineiq.synthetic import SCENARIOS, generate_scenario
 
 SYNTHETIC_ASSET_ID = "TIQ-SYNTH-GT-001"
-MODEL_NAME = "Simplified single-shaft open-cycle Brayton model"
+MODEL_NAME = "Variable-property open-cycle model (fitted to public 6B.03 ratings)"
 
 
 @dataclass(frozen=True)
@@ -165,9 +165,7 @@ class DigitalTwinRun:
             ambient_temperature_c=float(row["ambient_temperature_c"]),
             ambient_pressure_kpa=float(row["ambient_pressure_kpa"]),
             compressor_efficiency_assumption=float(row["compressor_efficiency_assumption"]),
-            synthetic_true_compressor_efficiency=float(
-                row["synthetic_true_compressor_efficiency"]
-            ),
+            synthetic_true_compressor_efficiency=float(row["synthetic_true_compressor_efficiency"]),
             compressor_discharge_temperature_k=float(row["compressor_discharge_temperature_k"]),
             reference_compressor_discharge_temperature_k=float(
                 row["reference_compressor_discharge_temperature_k"]
@@ -176,9 +174,7 @@ class DigitalTwinRun:
             exhaust_temperature_k=float(row["exhaust_temperature_k"]),
             reference_exhaust_temperature_k=float(row["reference_exhaust_temperature_k"]),
             model_electrical_power_kw=model_power,
-            synthetic_truth_electrical_power_kw=float(
-                row["synthetic_truth_electrical_power_kw"]
-            ),
+            synthetic_truth_electrical_power_kw=float(row["synthetic_truth_electrical_power_kw"]),
             synthetic_observed_power_kw=observed_power,
             power_residual_kw=residual,
             residual_percent=residual_percent,
@@ -210,7 +206,7 @@ class DigitalTwinRun:
                 "model_name": self.model_name,
                 "synthetic_only": True,
                 "data_provenance": "seeded synthetic scenario",
-                "published_reference": compare_to_published(),
+                "published_reference": compare_calibrated_to_published(),
             },
             "snapshot": snapshots[sample_index],
             "snapshots": snapshots,
@@ -292,7 +288,7 @@ def _component_states(
                 else "Modelled"
             ),
             summary=(
-                "Synthetic compressor-efficiency drift is compared with a fixed "
+                "Synthetic compressor polytropic-efficiency drift is compared with a fixed "
                 "reference assumption."
                 if compressor_status == "scenario_perturbation"
                 else "Compressor state calculated from the selected scenario inputs."
@@ -300,7 +296,7 @@ def _component_states(
             metrics=(
                 _metric(
                     "compressor_efficiency",
-                    "Synthetic efficiency parameter",
+                    "Synthetic polytropic efficiency",
                     float(row["synthetic_true_compressor_efficiency"]),
                     "fraction",
                     "Known synthetic scenario truth",
@@ -329,11 +325,14 @@ def _component_states(
             label="Combustor",
             status="nominal",
             status_label="Modelled",
-            summary="Combustor values are simplified cycle-model calculations and assumptions.",
+            summary=(
+                "Combustor values come from the fitted cycle model; the temperature is the "
+                "mixed turbine-inlet value after cooling air."
+            ),
             metrics=(
                 _metric(
                     "turbine_inlet_temperature_k",
-                    "Turbine inlet temperature",
+                    "Turbine inlet temperature (mixed)",
                     float(row["turbine_inlet_temperature_k"]),
                     "K",
                     "Synthetic plant-model state",
@@ -344,14 +343,14 @@ def _component_states(
                     "Pressure-loss assumption",
                     float(row["combustor_pressure_loss_fraction"]),
                     "fraction",
-                    "Illustrative cycle-model assumption",
+                    "Fixed cycle-model assumption",
                 ),
                 _metric(
                     "combustor_heat_input_kw",
                     "Heat input estimate",
                     float(row["combustor_heat_input_kw"]),
                     "kW",
-                    "Simplified cycle-model calculation",
+                    "Cycle-model calculation",
                 ),
             ),
         ),
@@ -360,7 +359,7 @@ def _component_states(
             label="Turbine",
             status="nominal",
             status_label="Modelled",
-            summary="Turbine gas-path values come from the simplified cycle calculation.",
+            summary="Turbine gas-path values come from the fitted cycle calculation.",
             metrics=(
                 _metric(
                     "exhaust_temperature_k",
@@ -385,7 +384,10 @@ def _component_states(
             label="Single shaft",
             status="nominal",
             status_label="Modelled",
-            summary="Shaft power is derived from net cycle power and mechanical efficiency.",
+            summary=(
+                "Shaft power is turbine power minus compressor power; drivetrain and "
+                "auxiliary losses are applied afterwards."
+            ),
             metrics=(
                 _metric(
                     "shaft_power_kw",

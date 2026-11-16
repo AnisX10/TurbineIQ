@@ -15,7 +15,7 @@ The original MVP milestones, synthetic twin, and local React/API workspace are i
 
 ## Open items
 
-- **Calibrate the cycle model to the published 6B.03 point** — needs temperature-dependent specific heats, a consistent combustor energy balance (the model uses `cp_air` for heat input and `cp_gas` in the turbine), cooling and leakage flows, and inlet/exhaust losses. The current model is generic and reported as uncalibrated; see `GE_6B03_PUBLIC_DATA_REVIEW.md`. When it is calibrated, update `engineering/reference.py`, the frontend caveat, and the guard in `tests/test_published_reference.py` together.
+- **Calibrate the cycle model to the published 6B.03 point** — needs temperature-dependent specific heats, a consistent combustor energy balance (the model uses `cp_air` for heat input and `cp_gas` in the turbine), cooling and leakage flows, and inlet/exhaust losses. The current model is generic and reported as uncalibrated; see `GE_6B03_PUBLIC_DATA_REVIEW.md`. A variable-property model fitted to the published point now exists in `engineering/real_gas.py` (see `CALIBRATION.md`); switching the synthetic twin and API to it, and validating it against numeric correction curves, remain open. When it is calibrated, update `engineering/reference.py`, the frontend caveat, and the guard in `tests/test_published_reference.py` together.
 
 ## Acceptance target
 

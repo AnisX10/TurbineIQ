@@ -1,0 +1,92 @@
+{
+  "frame_px": {
+    "x_left": 728.5,
+    "x_right": 1406.0,
+    "y_top": 1729.5,
+    "y_bottom": 2241.0
+  },
+  "reading_error_percentage_points": 0.4,
+  "comparison": [
+    {
+      "ambient_c": 0,
+      "ger_output_percent": 109.32192621318173,
+      "model_output_percent": 111.49707880530941,
+      "ger_heat_rate_percent": 97.85072040066406,
+      "model_heat_rate_percent": 98.0860026993798,
+      "ger_exhaust_flow_percent": 106.22560965457157,
+      "model_exhaust_flow_percent": 105.56338543825281
+    },
+    {
+      "ambient_c": 10,
+      "ger_output_percent": 103.10730873772724,
+      "model_output_percent": 103.69462510865748,
+      "ger_heat_rate_percent": 99.28357346688801,
+      "model_heat_rate_percent": 99.33997230147898,
+      "ger_exhaust_flow_percent": 102.07520321819052,
+      "model_exhaust_flow_percent": 101.78895720375209
+    },
+    {
+      "ambient_c": 15,
+      "ger_output_percent": 100.0,
+      "model_output_percent": 100.0,
+      "ger_heat_rate_percent": 100.0,
+      "model_heat_rate_percent": 100.0,
+      "ger_exhaust_flow_percent": 100.0,
+      "model_exhaust_flow_percent": 100.0
+    },
+    {
+      "ambient_c": 20,
+      "ger_output_percent": 96.89269126227276,
+      "model_output_percent": 96.43375495870498,
+      "ger_heat_rate_percent": 100.71642653311199,
+      "model_heat_rate_percent": 100.68366384563916,
+      "ger_exhaust_flow_percent": 97.92479678180948,
+      "model_exhaust_flow_percent": 98.27207859764606
+    },
+    {
+      "ambient_c": 25,
+      "ger_output_percent": 93.78538252454553,
+      "model_output_percent": 92.9894608226207,
+      "ger_heat_rate_percent": 101.43285306622396,
+      "model_heat_rate_percent": 101.39228372836111,
+      "ger_exhaust_flow_percent": 95.84959356361897,
+      "model_exhaust_flow_percent": 96.6021224111357
+    },
+    {
+      "ambient_c": 30,
+      "ger_output_percent": 90.67807378681827,
+      "model_output_percent": 89.66111123796784,
+      "ger_heat_rate_percent": 102.14927959933596,
+      "model_heat_rate_percent": 102.12728154794664,
+      "ger_exhaust_flow_percent": 93.77439034542844,
+      "model_exhaust_flow_percent": 94.98726342259756
+    },
+    {
+      "ambient_c": 35,
+      "ger_output_percent": 87.57076504909104,
+      "model_output_percent": 86.44308830203585,
+      "ger_heat_rate_percent": 102.86570613244793,
+      "model_heat_rate_percent": 102.89019128899058,
+      "ger_exhaust_flow_percent": 91.69918712723792,
+      "model_exhaust_flow_percent": 93.42481974734409
+    },
+    {
+      "ambient_c": 40,
+      "ger_output_percent": 84.4634563113638,
+      "model_output_percent": 83.33013150085966,
+      "ger_heat_rate_percent": 103.58213266555991,
+      "model_heat_rate_percent": 103.68267030866087,
+      "ger_exhaust_flow_percent": 89.62398390904738,
+      "model_exhaust_flow_percent": 91.91228077383307
+    },
+    {
+      "ambient_c": 45,
+      "ger_output_percent": 81.35614757363653,
+      "model_output_percent": 80.31730915377813,
+      "ger_heat_rate_percent": 104.29855919867191,
+      "model_heat_rate_percent": 104.50651256490178,
+      "ger_exhaust_flow_percent": 87.54878069085687,
+      "model_exhaust_flow_percent": 90.44729370488122
+    }
+  ]
+}

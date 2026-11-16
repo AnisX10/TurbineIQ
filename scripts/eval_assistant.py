@@ -23,31 +23,34 @@ GROUNDED_TOLERANCE = 0.001
 
 
 def _golden_cases() -> list[dict[str, Any]]:
-    base = {
+    base: dict[str, Any] = {
         "ambient_temperature_c": 15,
         "ambient_pressure_kpa": 101.325,
-        "pressure_ratio": 12,
-        "air_mass_flow_kg_s": 100,
-        "turbine_inlet_temperature_k": 1300,
-        "compressor_efficiency": 0.85,
-        "turbine_efficiency": 0.9,
-        "combustor_pressure_loss_fraction": 0.04,
-        "mechanical_efficiency": 0.98,
-        "generator_efficiency": 0.97,
+        "pressure_ratio": 12.8,
+        "air_mass_flow_kg_s": None,
+        "effective_firing_temperature_k": None,
+        "compressor_polytropic_efficiency": None,
+        "turbine_polytropic_efficiency": None,
+        "cooling_flow_fraction": None,
+        "drivetrain_efficiency": None,
     }
     cases: list[dict[str, Any]] = []
     for index, pressure_ratio in enumerate((8, 9, 10, 11, 12, 14, 16, 18), start=1):
-        arguments = {**base, "pressure_ratio": pressure_ratio, "air_mass_flow_kg_s": 80 + index * 5}
+        arguments = {
+            **base,
+            "pressure_ratio": pressure_ratio,
+            "air_mass_flow_kg_s": 130 + index * 2,
+        }
         cases.append(
             {
                 "id": f"cycle-{index:02d}",
                 "question": (
-                    "For this illustrative cycle case, what electrical output does the model "
-                    f"calculate at pressure ratio {pressure_ratio}?"
+                    "For this calibrated cycle case, what net electrical output in MW does "
+                    f"the model calculate at pressure ratio {pressure_ratio}?"
                 ),
                 "expected_tool": "calculate_cycle",
                 "arguments": arguments,
-                "fact_path": "result.electrical_power_kw",
+                "fact_path": "result.net_electrical_power_mw",
             }
         )
     scenario_cases = (

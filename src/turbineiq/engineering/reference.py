@@ -23,6 +23,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .core import CycleInputs, CycleResult, simulate_cycle
+from .real_gas import CALIBRATED_6B03, simulate_real_gas_cycle
 
 PUBLISHED_SOURCE = "GE Vernova 2025 Gas Power catalog, 6B.03 table"
 
@@ -31,6 +32,14 @@ CALIBRATION_STATEMENT = (
     "not tuned to the published 6B.03 ratings, and only the trends it produces "
     "(for example the response to ambient temperature or compressor efficiency) "
     "are meant to be meaningful."
+)
+
+
+CALIBRATED_STATEMENT = (
+    "The variable-property cycle model is fitted to these ratings: four parameters are "
+    "adjusted to match four of the targets, so agreement at this point is by construction, "
+    "not validation. Its ambient-temperature trend was checked against a generic GE "
+    "single-shaft curve; see docs/CALIBRATION.md for the limits."
 )
 
 
@@ -92,5 +101,41 @@ def compare_to_published(inputs: CycleInputs | None = None) -> dict[str, object]
         "calibrated": False,
         "statement": CALIBRATION_STATEMENT,
         "model_point": "Reference operating point of the synthetic scenarios (ISO ambient)",
+        "rows": rows,
+    }
+
+
+def compare_calibrated_to_published() -> dict[str, object]:
+    """Compare the variable-property model, fitted to these ratings, with the ratings.
+
+    Agreement at the fitted point is by construction (four parameters, four targets) and is
+    not validation; see ``docs/CALIBRATION.md`` for what is and is not established.
+    """
+
+    result = simulate_real_gas_cycle(CALIBRATED_6B03)
+    model = {
+        "net_output": result.net_electrical_power_mw,
+        "lhv_efficiency": result.lhv_efficiency * 100.0,
+        "pressure_ratio": CALIBRATED_6B03.pressure_ratio,
+        "exhaust_temperature": result.exhaust_temperature_k - 273.15,
+        "exhaust_flow": result.exhaust_mass_flow_kg_s,
+    }
+    rows = [
+        {
+            "key": r.key,
+            "label": r.label,
+            "unit": r.unit,
+            "published": r.published,
+            "model": model[r.key],
+            "difference": model[r.key] - r.published,
+            "difference_percent": (model[r.key] - r.published) / r.published * 100.0,
+        }
+        for r in PUBLISHED_6B03
+    ]
+    return {
+        "source": PUBLISHED_SOURCE,
+        "calibrated": True,
+        "statement": CALIBRATED_STATEMENT,
+        "model_point": "Calibrated model at ISO ambient (15 °C, 101.325 kPa)",
         "rows": rows,
     }
