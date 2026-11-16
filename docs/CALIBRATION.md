@@ -1,6 +1,6 @@
 # Cycle model calibration to the published GE 6B.03 point
 
-Status: step 1 of `THESIS_ROADMAP.md`. Code: `src/turbineiq/engineering/real_gas.py`. Evidence: `docs/evidence/calibration/`. Scripts: `export_nasa_coefficients.py`, `calibrate_cycle.py`, `ambient_sweep.py`, `calibration_uncertainty.py`, `crosscheck_cantera.py`, `crosscheck_coolprop.py` in `scripts/`.
+Status: step 1 of `THESIS_ROADMAP.md`. Code: `src/turbineiq/engineering/real_gas.py`. Evidence: `docs/evidence/calibration/`. Scripts: `export_nasa_coefficients.py`, `calibrate_cycle.py`, `ambient_sweep.py`, `calibration_uncertainty.py`, `crosscheck_cantera.py`, `crosscheck_coolprop.py`, `digitize_ger3567_fig9.py` in `scripts/`.
 
 ## What changed
 
@@ -46,11 +46,26 @@ At the fitted point the model gives 45.00 MW, 33.40%, 561.0 °C, 145.1 kg/s and 
 - **Heat rate** 10,778 vs the published 10,779 kJ/kWh follows from output and efficiency and is only a consistency check.
 - **Unit tests** (`tests/test_real_gas.py`): fitted point, energy balance, ambient signs, compressor-degradation direction, air cp, input validation.
 
-**Ambient trend (signs checked, sizes not).** With mass flow scaled with inlet density and firing temperature held constant (`ambient_sweep.json`), output is 3.6% lower at 20 °C and 13.5% lower at 35 °C than at ISO, and 11.5% higher at 0 °C; heat rate is 2.9% higher at 35 °C. Refitting under all 45 assumption combinations moves the 35 °C output change only between -14.1% and -13.1%, and the 0 °C change between +11.1% and +11.9%, so the trend is insensitive to what the targets cannot pin down. The signs match what GER-3567 and Brun and Kurz (Turbomachinery International, 2019) describe qualitatively: higher ambient temperature lowers output and raises heat rate, with a smaller effect on heat rate. **No numeric public source for the magnitude was found.** GER-3567H (10/00) gives the ambient effect only in Figure 9, and the two Turbomachinery International articles checked contain no numbers. Exhaust temperature stays almost flat here because firing temperature is held constant, whereas real machines follow an exhaust-temperature control curve; that is a known simplification.
+**Ambient trend against GER-3567H Figure 9 (done, generic family only).** The author supplied the GER-3567H PDF. Figure 9 gives output, heat rate and exhaust flow of a single-shaft **MS7001** against compressor inlet temperature as straight lines normalised to design. I digitized it by pixel colour with the axes calibrated from the plot frame (`scripts/digitize_ger3567_fig9.py`, `ger3567_fig9.json`; reading error about ±0.4 percentage points). The model uses mass flow scaled with inlet density and constant firing temperature (`ambient_sweep.json`). Relative to ISO (15 °C = 100):
 
-## What is still needed to validate the ambient trend
+| Ambient | Output GER / model | Heat rate GER / model | Exhaust flow GER / model |
+| ---: | ---: | ---: | ---: |
+| 0 °C | 109.3 / 111.5 | 97.9 / 98.1 | 106.2 / 105.6 |
+| 25 °C | 93.8 / 93.0 | 101.4 / 101.4 | 95.8 / 96.6 |
+| 35 °C | 87.6 / 86.5 | 102.9 / 102.9 | 91.7 / 93.4 |
+| 45 °C | 81.4 / 80.3 | 104.3 / 104.5 | 87.5 / 90.4 |
 
-A numeric ambient correction curve for a heavy-duty single-shaft machine. The most direct source is GER-3567 Figure 9 (an MS7001 curve, so a generic-family check, not a 6B.03 check), read from the PDF with a stated reading error. The PDF could not be downloaded from this environment (the host was blocked), so this needs the PDF supplied locally, or another public numeric source. Until then the model should be used for ambient trends with the stated sign-only validation.
+Over 0 to 45 °C the RMS difference is 1.1 points for output, 0.12 for heat rate and 1.6 for exhaust flow. The largest gaps are output at 0 °C (+2.2 points, the model gains more in the cold) and exhaust flow at 45 °C (+2.9 points, GE's flow falls faster). Heat rate agrees almost exactly; I did not tune toward this, and I would not lean on that coincidence. A 20-case regression test keeps the model within 2.5, 1.0 and 3.5 points on output, heat rate and flow.
+
+How far this goes: it checks the **shape of the ambient response of the model structure** against a published curve for the same machine family. It does not validate the 6B.03: GE states that "each turbine model has its own temperature-effect curve". The refit grid (`uncertainty.json`) moves the 35 °C output change only between -14.1% and -13.1%, so it cannot explain a gap of this size by itself; the remaining difference is most plausibly the model's constant firing temperature and fixed-volume-flow assumptions versus GE's control schedule. The original GER-3567H and its figure are GE's copyright and are not committed; only derived values are.
+
+Exhaust temperature stays almost flat in the model because firing temperature is held constant, whereas real machines follow an exhaust-temperature control curve. Figure 9 does not show exhaust temperature, so this simplification remains unchecked.
+
+## What is still needed
+
+- A 6B-specific ambient curve (GER-3567 Figure 9 is MS7001) and part-load behaviour; Figure 9 gives neither exhaust temperature nor part load.
+- Digitizing with a stated error from more than one figure (for example the part-load figures in other GE references) if part-load operation is used.
+- Parameter uncertainty carried into every later result as an error band (the grid in `uncertainty.json` is the starting point).
 
 ## Reproduce
 
@@ -63,6 +78,8 @@ python scripts/ambient_sweep.py docs/evidence/calibration/ambient_sweep.json
 python scripts/calibration_uncertainty.py docs/evidence/calibration/uncertainty.json
 python scripts/crosscheck_cantera.py docs/evidence/calibration/crosscheck_cantera.json
 python scripts/crosscheck_coolprop.py docs/evidence/calibration/crosscheck_coolprop.json
+# needs the GER-3567H PDF supplied locally: pdftoppm -r 250 -f 12 -l 12 -png GER-3567H.pdf amb
+python scripts/digitize_ger3567_fig9.py amb-12.png docs/evidence/calibration/ger3567_fig9.json
 ```
 
 Only numpy is needed at run time; the `calibration` extra (scipy, Cantera, CoolProp) is needed only for these scripts.

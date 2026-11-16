@@ -1,5 +1,6 @@
 import json
 from importlib import resources
+from pathlib import Path
 
 import pytest
 
@@ -76,3 +77,18 @@ def test_invalid_inputs_are_rejected():
         RealGasInputs(pressure_ratio=0.9)
     with pytest.raises(ValueError):
         RealGasInputs(cooling_flow_fraction=0.7)
+
+
+def test_ambient_trend_is_close_to_digitized_ger3567_figure_9():
+    """Generic-family check against GER-3567H Figure 9 (MS7001), digitized by
+    scripts/digitize_ger3567_fig9.py with about +/-0.4 point reading error.
+
+    This guards against regressions; it is not validation of the 6B.03 itself.
+    """
+
+    path = Path(__file__).resolve().parents[1] / "docs/evidence/calibration/ger3567_fig9.json"
+    rows = json.loads(path.read_text(encoding="utf-8"))["comparison"]
+    for row in rows:
+        assert abs(row["model_output_percent"] - row["ger_output_percent"]) < 2.5
+        assert abs(row["model_heat_rate_percent"] - row["ger_heat_rate_percent"]) < 1.0
+        assert abs(row["model_exhaust_flow_percent"] - row["ger_exhaust_flow_percent"]) < 3.5
