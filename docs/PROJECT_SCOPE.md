@@ -32,3 +32,4 @@ The cycle model used by the twin is a variable-property model fitted to public G
 
 On 2 November 2026, the user changed the earlier no-digital-twin exclusion. TurbineIQ now includes a **synthetic, offline digital-twin demonstrator**. No real-time connection, industrial interface, or control capability was added.
 
+On 17 November 2026, for the thesis, the project added operator commands (start, stop, load setpoint, IGV, trip) on a **simulated** plant (`docs/DYNAMIC_MODEL.md`, `/api/sim`). Real-time connection, industrial interfaces, and control of a real machine remain out of scope.

@@ -28,6 +28,7 @@ from .assistant_security import (
     TokenBucketLimiter,
     install_secret_redaction_filter,
 )
+from .simulation import router as simulation_router
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEMO_DOCUMENTS_PATH = PROJECT_ROOT / "data" / "documents"
@@ -55,10 +56,12 @@ app = FastAPI(
     title="TurbineIQ local API",
     description=(
         "Local deterministic engineering services for a synthetic, offline gas-turbine "
-        "demonstrator. No industrial connectivity or control endpoints are provided."
+        "demonstrator. The /api/sim endpoints operate a simulated plant only; there is no "
+        "industrial connectivity and nothing here can control a real machine."
     ),
     version="0.2.0",
 )
+app.include_router(simulation_router)
 app.add_middleware(RequestSizeLimitMiddleware)
 app.add_middleware(
     CORSMiddleware,

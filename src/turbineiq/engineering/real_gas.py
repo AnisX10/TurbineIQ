@@ -57,8 +57,8 @@ class RealGasInputs:
             raise ValueError("ambient_temperature_c outside the supported range (-73 to 60 C)")
         if self.pressure_ratio <= 1 or self.air_mass_flow_kg_s <= 0:
             raise ValueError("pressure_ratio must exceed 1 and air flow must be positive")
-        if not 700 <= self.effective_firing_temperature_k <= 2000:
-            raise ValueError("effective_firing_temperature_k outside 700 to 2000 K")
+        if not 200 <= self.effective_firing_temperature_k <= 2000:
+            raise ValueError("effective_firing_temperature_k outside 200 to 2000 K")
         for name in (
             "compressor_polytropic_efficiency",
             "turbine_polytropic_efficiency",
@@ -198,7 +198,16 @@ def _polytropic_path(
     return t
 
 
-def simulate_real_gas_cycle(inputs: RealGasInputs | None = None) -> RealGasResult:
+def simulate_real_gas_cycle(
+    inputs: RealGasInputs | None = None, *, allow_negative_work: bool = False
+) -> RealGasResult:
+    """Solve the cycle for the given inputs.
+
+    ``allow_negative_work`` keeps results whose net shaft work is zero or negative (a
+    machine below no-load fuel flow); it exists for off-design map generation and is off
+    for ordinary use, where such inputs are almost certainly a mistake.
+    """
+
     p = inputs or RealGasInputs()
     t1 = p.ambient_temperature_c + 273.15
     p1 = p.ambient_pressure_kpa * (1 - p.inlet_pressure_loss_fraction)
@@ -270,7 +279,7 @@ def simulate_real_gas_cycle(inputs: RealGasInputs | None = None) -> RealGasResul
     turbine_work = turbine_gas.mass * (turbine_gas.h(t3) - turbine_gas.h(t4))  # J per kg air
 
     net_shaft = turbine_work - compressor_work
-    if net_shaft <= 0:
+    if net_shaft <= 0 and not allow_negative_work:
         raise ValueError("the selected inputs produce non-positive net work")
     mdot = p.air_mass_flow_kg_s
     electrical_mw = net_shaft * p.drivetrain_efficiency * mdot / 1e6
