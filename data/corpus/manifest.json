@@ -1,0 +1,4 @@
+{
+  "note": "Public documents only, each with its source URL and licence. Add entries here, then run scripts/corpus_manifest.py fetch --update. Files are git-ignored; only redistributable ones may be committed.",
+  "documents": []
+}
