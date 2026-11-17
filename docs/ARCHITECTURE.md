@@ -34,7 +34,8 @@ flowchart TD
 - `twin/` packages synthetic scenario frames into a time-indexed state view. The twin is bound only to generated data.
 - `rag/` extracts local PDF/Markdown/TXT content and performs lexical ranking with citation metadata. It uses no remote vector service.
 - `agent/` routes questions through a fixed allow-list of deterministic tools. Its optional cloud adapter cannot run arbitrary code or expand the tool list.
-- `api/` exposes health, scenario catalog, replay, evidence search, and assistant endpoints. Selected context is validated and recomputed by the server before use.
+- `simulation/` is the Rowen-type dynamic plant: maps generated from the calibrated cycle, fuel system, rotor, controls, start/stop/trip state machine, and seeded event-logged sessions with bit-for-bit replay (`docs/DYNAMIC_MODEL.md`). It operates a simulated unit only.
+- `api/` exposes health, scenario catalog, replay, evidence search, assistant endpoints, and the `/api/sim` operating-session endpoints. Selected context is validated and recomputed by the server before use.
 - `ui/` contains the earlier Streamlit pages. Install the `streamlit` extra to run them.
 
 ## Frontend structure
@@ -54,8 +55,8 @@ The browser loads `frontend/public/models/turbine.glb` from the local applicatio
 2. Evidence retrieval and the deterministic local assistant run on the local API.
 3. Cloud mode is opt-in. It can send the question, server-recomputed synthetic context, and results from selected tools to the configured provider. Document excerpts require separate per-request consent.
 4. Retrieved text is treated as untrusted evidence and rendered as plain text. It cannot change instructions or expand the tool allow-list.
-5. No physical turbine binding, real-time industrial connectivity, DCS/SCADA/PLC integration, or control action exists.
+5. No physical turbine binding, real-time industrial connectivity, or DCS/SCADA/PLC integration exists. The only commands in the system (`/api/sim`) act on a simulated plant held in memory.
 
 ## Local state and persistence
 
-There is no database, telemetry service, vector store, or background worker. Scenario frames are generated per request. Streamlit uploads are held in session memory. The browser's URL holds shareable replay and search state. Cloud requests disable provider-side response storage.
+There is no database, telemetry service, vector store, or background worker. Simulation sessions live in process memory (at most 16) and are lost on restart; their event logs can be downloaded and replayed. Scenario frames are generated per request. Streamlit uploads are held in session memory. The browser's URL holds shareable replay and search state. Cloud requests disable provider-side response storage.
