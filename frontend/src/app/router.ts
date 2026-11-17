@@ -1,6 +1,6 @@
 export const COMPONENT_IDS = ['inlet', 'compressor', 'combustor', 'turbine', 'shaft', 'generator'] as const
 export type ComponentId = typeof COMPONENT_IDS[number]
-export type RoutePage = 'overview' | 'components' | 'evidence' | 'assistant'
+export type RoutePage = 'overview' | 'components' | 'operate' | 'evidence' | 'assistant'
 export type ThemePreference = 'system' | 'light' | 'dark'
 
 export interface RouteState {
@@ -17,7 +17,7 @@ export interface RouteState {
 export const DEFAULT_SCENARIO = 'compressor_fouling'
 export const DEFAULT_SEED = 42
 export const DEFAULT_SAMPLE_INDEX = 72
-const ROUTE_PAGES = new Set<RoutePage>(['overview', 'components', 'evidence', 'assistant'])
+const ROUTE_PAGES = new Set<RoutePage>(['overview', 'components', 'operate', 'evidence', 'assistant'])
 
 function parseNonNegativeInteger(value: string | null, fallback: number): number {
   if (value === null || !/^\d+$/.test(value)) return fallback

@@ -41,7 +41,7 @@ flowchart TD
 ## Frontend structure
 
 - `frontend/src/app/` owns the hash router, route/query parsing, shared reducer, and context. The URL mirrors route, scenario, seed, sample, and evidence search state.
-- `frontend/src/features/` groups screen and domain code: `overview/` contains filters, KPIs, station/component ledgers, replay, charts, and the stage card; `component-detail/`, `evidence/`, and `assistant/` own their route experiences; `viewer/` owns the React Three Fiber scene, GLB loader, schematic, mesh mapping, camera, lighting, and callouts.
+- `frontend/src/features/` groups screen and domain code: `overview/` contains filters, KPIs, station/component ledgers, replay, charts, and the stage card; `component-detail/`, `evidence/`, and `assistant/` own their route experiences; `operate/` is the simulated-plant console over `/api/sim` (`docs/DYNAMIC_MODEL.md`); `viewer/` owns the React Three Fiber scene, GLB loader, schematic, mesh mapping, camera, lighting, and callouts.
 - `frontend/src/components/ui/` holds shared UI such as the native-dialog Sheet and engine-offline banner.
 - `frontend/src/lib/` contains formatting, local engine state, and the published-reference constant.
 - `frontend/src/index.css` defines semantic design tokens, locally bundled Geist fonts, focus treatment, and global theme behavior. Feature CSS consumes those tokens.

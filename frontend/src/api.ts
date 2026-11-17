@@ -1,4 +1,11 @@
 import type {
+  SimAdvanceResult,
+  SimCommandResult,
+  SimConfig,
+  SimCreated,
+  SimState,
+} from './features/operate/simTypes'
+import type {
   AssistantResponse,
   EvidenceResponse,
   ScenarioDefinition,
@@ -33,6 +40,22 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(detail)
   }
   return (await response.json()) as T
+}
+
+export const simApi = {
+  create: (config: Partial<SimConfig>) =>
+    request<SimCreated>('/api/sim/sessions', { method: 'POST', body: JSON.stringify(config) }),
+  state: (id: string) => request<SimState>(`/api/sim/sessions/${encodeURIComponent(id)}`),
+  command: (id: string, command: string, params: Record<string, unknown> = {}) =>
+    request<SimCommandResult>(`/api/sim/sessions/${encodeURIComponent(id)}/commands`, {
+      method: 'POST',
+      body: JSON.stringify({ command, params }),
+    }),
+  advance: (id: string, seconds: number) =>
+    request<SimAdvanceResult>(`/api/sim/sessions/${encodeURIComponent(id)}/advance`, {
+      method: 'POST',
+      body: JSON.stringify({ seconds }),
+    }),
 }
 
 export const api = {

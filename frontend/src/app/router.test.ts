@@ -34,6 +34,14 @@ describe('URL state', () => {
   })
 })
 
+describe('operate route', () => {
+  it('round trips the operate page', () => {
+    const route = parseRoute('#/operate')
+    expect(route.page).toBe('operate')
+    expect(parseRoute(routeHash(route)).page).toBe('operate')
+  })
+})
+
 describe('route validation', () => {
   it('accepts only the six existing component identifiers', () => {
     for (const id of ['inlet', 'compressor', 'combustor', 'turbine', 'shaft', 'generator']) {
