@@ -388,3 +388,28 @@ def test_measurements_are_noisy_but_true_state_is_exact() -> None:
         clean.snapshot()["measured"]["electrical_power_mw"]
         == clean.snapshot()["electrical_power_mw"]
     )
+
+
+def test_available_commands_follow_breaker_and_grid_state() -> None:
+    infinite = Session(SessionConfig(seed=1, measurement_noise=False))
+    infinite.apply("start", {})
+    infinite.advance_seconds(240)
+    assert infinite.plant.breaker_closed
+    commands = infinite.allowed_commands()
+    assert "open_breaker" in commands and "close_breaker" not in commands
+    assert "set_grid_frequency" in commands and "set_island_load" not in commands
+
+    infinite.apply("open_breaker", {})
+    commands = infinite.allowed_commands()
+    assert "close_breaker" in commands and "open_breaker" not in commands
+
+    island = Session(SessionConfig(seed=1, measurement_noise=False, grid="island"))
+    island.apply("start", {})
+    island.advance_seconds(240)
+    commands = island.allowed_commands()
+    assert "set_island_load" in commands and "set_grid_frequency" not in commands
+
+    cranking = Session(SessionConfig(seed=1, measurement_noise=False))
+    cranking.apply("start", {})
+    cranking.advance_seconds(5)
+    assert "close_breaker" not in cranking.allowed_commands()

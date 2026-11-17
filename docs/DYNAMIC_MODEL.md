@@ -113,7 +113,23 @@ curl -X POST localhost:8000/api/sim/sessions/$ID/commands -d '{"command":"set_lo
 Speed on this container: a session advances about 4,700 steps per second (a step is 50 ms
 of simulated time), roughly 235 times real time, so one simulated hour takes about 15 s.
 
+## Operator console
+
+`#/operate` in the web app drives a session through the API above. It creates a unit (seed,
+ambient, grid), then offers Start, Normal stop, Reject load (open breaker), Close breaker,
+Reset trip and Emergency trip, a load setpoint with ramp, IGV auto/manual, ambient, and grid
+frequency (infinite bus) or island load. Buttons are enabled only for commands the server
+lists in `available_commands`, which follows the unit state, the breaker and the grid type.
+While running, the page polls `advance` every 0.5 s at 1x, 10x or 60x simulated time and
+plots power, speed, exhaust temperature (with the limit) and fuel flow. It is labelled
+"Simulated plant" throughout; the page, the API and the model are not connected to a real
+machine. The page keeps its own short log of commands and alarms; the authoritative event
+log with the replay digest is `GET /sessions/{id}/log`.
+
+Limits: one session per page load (a reload creates a new unit), no stored sessions, no
+fault injection, and the console does not yet show the replay digest.
+
 ## Next
 
-Step 3 of the roadmap (assistant benchmark before the RAG upgrade) is next. The operator
-console UI (the rest of WP3) and fault injection come after the dynamic core is accepted.
+Step 3 of the roadmap (assistant benchmark before the RAG upgrade) is next. Fault injection
+and showing the replay digest in the console come after the dynamic core is accepted.

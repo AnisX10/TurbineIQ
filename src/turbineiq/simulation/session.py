@@ -203,8 +203,20 @@ class Session:
         return event.to_dict()
 
     def allowed_commands(self) -> list[str]:
-        state = self.plant.state
-        return list(_ALLOWED.get(state, _RUNNING))
+        plant = self.plant
+        fixed = _ALLOWED.get(plant.state)
+        if fixed is not None:
+            return list(fixed)
+        commands = list(_RUNNING)
+        # Only offer commands that can act on the present state.
+        if plant.breaker_closed:
+            commands.remove("close_breaker")
+        else:
+            commands.remove("open_breaker")
+        if plant.state not in (UnitState.FSNL, UnitState.LOADED) and "close_breaker" in commands:
+            commands.remove("close_breaker")
+        commands.remove("set_island_load" if plant.grid == "infinite_bus" else "set_grid_frequency")
+        return commands
 
     # ------------------------------------------------------------------ stepping
     def advance(self, steps: int) -> None:
