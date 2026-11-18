@@ -1,0 +1,376 @@
+{
+  "configs": {
+    "bm25": {
+      "answerable": {
+        "context_recall_at_3": 0.7631578947368421,
+        "hit_at_1": 0.5789473684210527,
+        "hit_at_10": 0.9473684210526315,
+        "hit_at_3": 0.7631578947368421,
+        "hit_at_3_ci95": [
+          0.6710526315789473,
+          0.8552631578947368
+        ],
+        "hit_at_5": 0.868421052631579,
+        "hit_at_5_ci95": [
+          0.7894736842105263,
+          0.9342105263157895
+        ],
+        "mrr_at_10": 0.69765559732665,
+        "mrr_at_10_ci95": [
+          0.6108239348370927,
+          0.7743734335839599
+        ],
+        "precision_at_3": 0.2894736842105263,
+        "questions": 76
+      },
+      "by_category": {
+        "conceptual": {
+          "context_recall_at_3": 0.8076923076923077,
+          "hit_at_1": 0.6153846153846154,
+          "hit_at_10": 0.9230769230769231,
+          "hit_at_3": 0.8076923076923077,
+          "hit_at_5": 0.8461538461538461,
+          "mrr_at_10": 0.7250000000000001,
+          "precision_at_3": 0.3205128205128205,
+          "questions": 26
+        },
+        "factual_document": {
+          "context_recall_at_3": 0.8,
+          "hit_at_1": 0.68,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.8,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.7684920634920636,
+          "precision_at_3": 0.28,
+          "questions": 25
+        },
+        "numeric_document": {
+          "context_recall_at_3": 0.68,
+          "hit_at_1": 0.44,
+          "hit_at_10": 0.92,
+          "hit_at_3": 0.68,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.5983809523809523,
+          "precision_at_3": 0.26666666666666666,
+          "questions": 25
+        }
+      },
+      "note": "refusal_auc is the probability that an answerable question's top retrieval score exceeds an unanswerable one's (0.5 = no signal). Scores are only comparable within one configuration.",
+      "refusal_auc": 0.9166666666666666,
+      "unanswerable_questions": 12
+    },
+    "dense": {
+      "answerable": {
+        "context_recall_at_3": 0.6513157894736842,
+        "hit_at_1": 0.3026315789473684,
+        "hit_at_10": 0.8947368421052632,
+        "hit_at_3": 0.6447368421052632,
+        "hit_at_3_ci95": [
+          0.5263157894736842,
+          0.75
+        ],
+        "hit_at_5": 0.7894736842105263,
+        "hit_at_5_ci95": [
+          0.6842105263157895,
+          0.881578947368421
+        ],
+        "mrr_at_10": 0.49362990810359225,
+        "mrr_at_10_ci95": [
+          0.41561194653299915,
+          0.5755221386800334
+        ],
+        "precision_at_3": 0.22807017543859648,
+        "questions": 76
+      },
+      "by_category": {
+        "conceptual": {
+          "context_recall_at_3": 0.6346153846153846,
+          "hit_at_1": 0.2692307692307692,
+          "hit_at_10": 0.9615384615384616,
+          "hit_at_3": 0.6538461538461539,
+          "hit_at_5": 0.8846153846153846,
+          "mrr_at_10": 0.4824175824175824,
+          "precision_at_3": 0.23076923076923078,
+          "questions": 26
+        },
+        "factual_document": {
+          "context_recall_at_3": 0.64,
+          "hit_at_1": 0.32,
+          "hit_at_10": 0.88,
+          "hit_at_3": 0.64,
+          "hit_at_5": 0.76,
+          "mrr_at_10": 0.4905396825396825,
+          "precision_at_3": 0.21333333333333332,
+          "questions": 25
+        },
+        "numeric_document": {
+          "context_recall_at_3": 0.68,
+          "hit_at_1": 0.32,
+          "hit_at_10": 0.84,
+          "hit_at_3": 0.64,
+          "hit_at_5": 0.72,
+          "mrr_at_10": 0.5083809523809524,
+          "precision_at_3": 0.24,
+          "questions": 25
+        }
+      },
+      "note": "refusal_auc is the probability that an answerable question's top retrieval score exceeds an unanswerable one's (0.5 = no signal). Scores are only comparable within one configuration.",
+      "refusal_auc": 0.9791666666666666,
+      "unanswerable_questions": 12
+    },
+    "hybrid": {
+      "answerable": {
+        "context_recall_at_3": 0.7763157894736842,
+        "hit_at_1": 0.4868421052631579,
+        "hit_at_10": 0.9736842105263158,
+        "hit_at_3": 0.7763157894736842,
+        "hit_at_3_ci95": [
+          0.6842105263157895,
+          0.868421052631579
+        ],
+        "hit_at_5": 0.881578947368421,
+        "hit_at_5_ci95": [
+          0.8026315789473685,
+          0.9473684210526315
+        ],
+        "mrr_at_10": 0.6524644945697577,
+        "mrr_at_10_ci95": [
+          0.5720708020050126,
+          0.7281798245614035
+        ],
+        "precision_at_3": 0.27192982456140347,
+        "questions": 76
+      },
+      "by_category": {
+        "conceptual": {
+          "context_recall_at_3": 0.8076923076923077,
+          "hit_at_1": 0.46153846153846156,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.8461538461538461,
+          "hit_at_5": 0.9615384615384616,
+          "mrr_at_10": 0.6596153846153846,
+          "precision_at_3": 0.2948717948717948,
+          "questions": 26
+        },
+        "factual_document": {
+          "context_recall_at_3": 0.76,
+          "hit_at_1": 0.52,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.76,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.6759999999999999,
+          "precision_at_3": 0.2533333333333333,
+          "questions": 25
+        },
+        "numeric_document": {
+          "context_recall_at_3": 0.76,
+          "hit_at_1": 0.48,
+          "hit_at_10": 0.92,
+          "hit_at_3": 0.72,
+          "hit_at_5": 0.8,
+          "mrr_at_10": 0.6214920634920635,
+          "precision_at_3": 0.26666666666666666,
+          "questions": 25
+        }
+      },
+      "note": "refusal_auc is the probability that an answerable question's top retrieval score exceeds an unanswerable one's (0.5 = no signal). Scores are only comparable within one configuration.",
+      "refusal_auc": 0.8267543859649122,
+      "unanswerable_questions": 12
+    },
+    "hybrid_rerank": {
+      "answerable": {
+        "context_recall_at_3": 0.8947368421052632,
+        "hit_at_1": 0.7631578947368421,
+        "hit_at_10": 0.9868421052631579,
+        "hit_at_3": 0.9078947368421053,
+        "hit_at_3_ci95": [
+          0.8289473684210527,
+          0.9605263157894737
+        ],
+        "hit_at_5": 0.9868421052631579,
+        "hit_at_5_ci95": [
+          0.9605263157894737,
+          1.0
+        ],
+        "mrr_at_10": 0.8495614035087719,
+        "mrr_at_10_ci95": [
+          0.7831140350877193,
+          0.9109649122807018
+        ],
+        "precision_at_3": 0.3333333333333333,
+        "questions": 76
+      },
+      "by_category": {
+        "conceptual": {
+          "context_recall_at_3": 0.8846153846153846,
+          "hit_at_1": 0.7307692307692307,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.9230769230769231,
+          "hit_at_5": 1.0,
+          "mrr_at_10": 0.8333333333333334,
+          "precision_at_3": 0.34615384615384615,
+          "questions": 26
+        },
+        "factual_document": {
+          "context_recall_at_3": 0.92,
+          "hit_at_1": 0.84,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.92,
+          "hit_at_5": 1.0,
+          "mrr_at_10": 0.898,
+          "precision_at_3": 0.30666666666666664,
+          "questions": 25
+        },
+        "numeric_document": {
+          "context_recall_at_3": 0.88,
+          "hit_at_1": 0.72,
+          "hit_at_10": 0.96,
+          "hit_at_3": 0.88,
+          "hit_at_5": 0.96,
+          "mrr_at_10": 0.818,
+          "precision_at_3": 0.3466666666666666,
+          "questions": 25
+        }
+      },
+      "note": "refusal_auc is the probability that an answerable question's top retrieval score exceeds an unanswerable one's (0.5 = no signal). Scores are only comparable within one configuration.",
+      "refusal_auc": 1.0,
+      "unanswerable_questions": 12
+    },
+    "lexical_baseline": {
+      "answerable": {
+        "context_recall_at_3": 0.7631578947368421,
+        "hit_at_1": 0.5789473684210527,
+        "hit_at_10": 0.9473684210526315,
+        "hit_at_3": 0.7631578947368421,
+        "hit_at_3_ci95": [
+          0.6710526315789473,
+          0.8552631578947368
+        ],
+        "hit_at_5": 0.868421052631579,
+        "hit_at_5_ci95": [
+          0.7894736842105263,
+          0.9342105263157895
+        ],
+        "mrr_at_10": 0.69765559732665,
+        "mrr_at_10_ci95": [
+          0.6108239348370927,
+          0.7743734335839599
+        ],
+        "precision_at_3": 0.2894736842105263,
+        "questions": 76
+      },
+      "by_category": {
+        "conceptual": {
+          "context_recall_at_3": 0.8076923076923077,
+          "hit_at_1": 0.6153846153846154,
+          "hit_at_10": 0.9230769230769231,
+          "hit_at_3": 0.8076923076923077,
+          "hit_at_5": 0.8461538461538461,
+          "mrr_at_10": 0.7250000000000001,
+          "precision_at_3": 0.3205128205128205,
+          "questions": 26
+        },
+        "factual_document": {
+          "context_recall_at_3": 0.8,
+          "hit_at_1": 0.68,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.8,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.7684920634920636,
+          "precision_at_3": 0.28,
+          "questions": 25
+        },
+        "numeric_document": {
+          "context_recall_at_3": 0.68,
+          "hit_at_1": 0.44,
+          "hit_at_10": 0.92,
+          "hit_at_3": 0.68,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.5983809523809523,
+          "precision_at_3": 0.26666666666666666,
+          "questions": 25
+        }
+      },
+      "note": "refusal_auc is the probability that an answerable question's top retrieval score exceeds an unanswerable one's (0.5 = no signal). Scores are only comparable within one configuration.",
+      "refusal_auc": 0.9166666666666666,
+      "unanswerable_questions": 12
+    }
+  },
+  "corpus": [
+    {
+      "file": "arxiv-1111.0233.pdf",
+      "sha256": "e0f77e6ef0b1673283bb10bce86dd4c6aa6a1071eb55c5eaf8db7d0dbe50bcaf"
+    },
+    {
+      "file": "arxiv-2104.14842.pdf",
+      "sha256": "45f658baf5133f7fdb44154a4149539645df97c5a7d434c017a9583b9123d2b6"
+    },
+    {
+      "file": "arxiv-2209.09168.pdf",
+      "sha256": "3171b728e0f84e69601259e8d3e8294a35d5e67f33299d9b9f5b1cd7bcf7e41a"
+    },
+    {
+      "file": "arxiv-2406.07572.pdf",
+      "sha256": "b26351e0cd98b014ab607ff3de2fa51ebca75ef09b0ea1116acf7c4e6923aa9c"
+    },
+    {
+      "file": "arxiv-2506.19503.pdf",
+      "sha256": "3885c2ad7a26af67c2eb45c6bf20ed11fb1a02755d7222392b25907981430ecc"
+    },
+    {
+      "file": "arxiv-2507.08697.pdf",
+      "sha256": "f4e877652d7f973e546ab810fdbc61426811300c1bfdf087540a7ba926d9d4f3"
+    },
+    {
+      "file": "arxiv-2606.26710.pdf",
+      "sha256": "4d849ed6ff4c36b4165d1781e3319adca02aa81f6b396bbbce169b57b75f303b"
+    },
+    {
+      "file": "ntrs-19780019107.pdf",
+      "sha256": "d339f243496cdbba44a83042fd296b57f6fa4e02e107be72eeabeab96c6aa6a8"
+    },
+    {
+      "file": "ntrs-19840004098.pdf",
+      "sha256": "0c2d0b80636529c5f35341228ac7e7b0361520611be9097fa8ffd711c744ace9"
+    },
+    {
+      "file": "ntrs-19860013216.pdf",
+      "sha256": "dc0ccce8215092f380b73dae562c554eceab4fcbda9877fe936d7101b35e7988"
+    },
+    {
+      "file": "ntrs-20030003697.pdf",
+      "sha256": "c866aa711e0c4a5cf4e29f4234b24010ce848b2fe968f4315531f7fbe8a06111"
+    },
+    {
+      "file": "ntrs-20070034949.pdf",
+      "sha256": "bc336b255603699c7a0b40fea5004f33363223fb7391995ddf8445acd1951a9b"
+    },
+    {
+      "file": "ntrs-20100024368.pdf",
+      "sha256": "fe262bf67f474b304c2432553e48b6e136d5b4668cb9d413b2c948fa2c605ac6"
+    },
+    {
+      "file": "ntrs-20100029602.pdf",
+      "sha256": "1cf3e11a50b1ef91e06d2cc535c23057c5fb3879b166234d541b88d3e511fdfc"
+    },
+    {
+      "file": "ntrs-20160001158.pdf",
+      "sha256": "8823064ab9713ae458dfdf5cd1ff295c2c83fc1869f6bf5f8e62c5045c82915c"
+    },
+    {
+      "file": "ntrs-20160012485.pdf",
+      "sha256": "88f7bf99be577826f5ec3e0f0539dd057f303c4758272f17fe382ee3311ea0a1"
+    }
+  ],
+  "meta": {
+    "chunking": "900 characters, 120 overlap",
+    "chunks": 1160,
+    "corpus_files": 16,
+    "date_utc": "2026-11-17 17:20",
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "git_commit": "5493638",
+    "questions": 88,
+    "reranker_model": "BAAI/bge-reranker-v2-m3",
+    "skipped": "none"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "configs": {
+    "lexical_baseline": {
+      "answerable": {
+        "context_recall_at_3": 0.7631578947368421,
+        "hit_at_1": 0.5789473684210527,
+        "hit_at_10": 0.9473684210526315,
+        "hit_at_3": 0.7631578947368421,
+        "hit_at_3_ci95": [
+          0.6710526315789473,
+          0.8552631578947368
+        ],
+        "hit_at_5": 0.868421052631579,
+        "hit_at_5_ci95": [
+          0.7894736842105263,
+          0.9342105263157895
+        ],
+        "mrr_at_10": 0.69765559732665,
+        "mrr_at_10_ci95": [
+          0.6108239348370927,
+          0.7743734335839599
+        ],
+        "precision_at_3": 0.2894736842105263,
+        "questions": 76
+      },
+      "by_category": {
+        "conceptual": {
+          "context_recall_at_3": 0.8076923076923077,
+          "hit_at_1": 0.6153846153846154,
+          "hit_at_10": 0.9230769230769231,
+          "hit_at_3": 0.8076923076923077,
+          "hit_at_5": 0.8461538461538461,
+          "mrr_at_10": 0.7250000000000001,
+          "precision_at_3": 0.3205128205128205,
+          "questions": 26
+        },
+        "factual_document": {
+          "context_recall_at_3": 0.8,
+          "hit_at_1": 0.68,
+          "hit_at_10": 1.0,
+          "hit_at_3": 0.8,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.7684920634920636,
+          "precision_at_3": 0.28,
+          "questions": 25
+        },
+        "numeric_document": {
+          "context_recall_at_3": 0.68,
+          "hit_at_1": 0.44,
+          "hit_at_10": 0.92,
+          "hit_at_3": 0.68,
+          "hit_at_5": 0.88,
+          "mrr_at_10": 0.5983809523809523,
+          "precision_at_3": 0.26666666666666666,
+          "questions": 25
+        }
+      },
+      "note": "refusal_auc is the probability that an answerable question's top retrieval score exceeds an unanswerable one's (0.5 = no signal). Scores are only comparable within one configuration.",
+      "refusal_auc": 0.9166666666666666,
+      "unanswerable_questions": 12
+    }
+  },
+  "corpus": [
+    {
+      "file": "arxiv-1111.0233.pdf",
+      "sha256": "e0f77e6ef0b1673283bb10bce86dd4c6aa6a1071eb55c5eaf8db7d0dbe50bcaf"
+    },
+    {
+      "file": "arxiv-2104.14842.pdf",
+      "sha256": "45f658baf5133f7fdb44154a4149539645df97c5a7d434c017a9583b9123d2b6"
+    },
+    {
+      "file": "arxiv-2209.09168.pdf",
+      "sha256": "3171b728e0f84e69601259e8d3e8294a35d5e67f33299d9b9f5b1cd7bcf7e41a"
+    },
+    {
+      "file": "arxiv-2406.07572.pdf",
+      "sha256": "b26351e0cd98b014ab607ff3de2fa51ebca75ef09b0ea1116acf7c4e6923aa9c"
+    },
+    {
+      "file": "arxiv-2506.19503.pdf",
+      "sha256": "3885c2ad7a26af67c2eb45c6bf20ed11fb1a02755d7222392b25907981430ecc"
+    },
+    {
+      "file": "arxiv-2507.08697.pdf",
+      "sha256": "f4e877652d7f973e546ab810fdbc61426811300c1bfdf087540a7ba926d9d4f3"
+    },
+    {
+      "file": "arxiv-2606.26710.pdf",
+      "sha256": "4d849ed6ff4c36b4165d1781e3319adca02aa81f6b396bbbce169b57b75f303b"
+    },
+    {
+      "file": "ntrs-19780019107.pdf",
+      "sha256": "d339f243496cdbba44a83042fd296b57f6fa4e02e107be72eeabeab96c6aa6a8"
+    },
+    {
+      "file": "ntrs-19840004098.pdf",
+      "sha256": "0c2d0b80636529c5f35341228ac7e7b0361520611be9097fa8ffd711c744ace9"
+    },
+    {
+      "file": "ntrs-19860013216.pdf",
+      "sha256": "dc0ccce8215092f380b73dae562c554eceab4fcbda9877fe936d7101b35e7988"
+    },
+    {
+      "file": "ntrs-20030003697.pdf",
+      "sha256": "c866aa711e0c4a5cf4e29f4234b24010ce848b2fe968f4315531f7fbe8a06111"
+    },
+    {
+      "file": "ntrs-20070034949.pdf",
+      "sha256": "bc336b255603699c7a0b40fea5004f33363223fb7391995ddf8445acd1951a9b"
+    },
+    {
+      "file": "ntrs-20100024368.pdf",
+      "sha256": "fe262bf67f474b304c2432553e48b6e136d5b4668cb9d413b2c948fa2c605ac6"
+    },
+    {
+      "file": "ntrs-20100029602.pdf",
+      "sha256": "1cf3e11a50b1ef91e06d2cc535c23057c5fb3879b166234d541b88d3e511fdfc"
+    },
+    {
+      "file": "ntrs-20160001158.pdf",
+      "sha256": "8823064ab9713ae458dfdf5cd1ff295c2c83fc1869f6bf5f8e62c5045c82915c"
+    },
+    {
+      "file": "ntrs-20160012485.pdf",
+      "sha256": "88f7bf99be577826f5ec3e0f0539dd057f303c4758272f17fe382ee3311ea0a1"
+    }
+  ],
+  "meta": {
+    "chunking": "900 characters, 120 overlap",
+    "chunks": 1160,
+    "corpus_files": 16,
+    "date_utc": "2026-11-17 12:26",
+    "embedding_model": "not used / unavailable",
+    "git_commit": "2704998",
+    "questions": 88,
+    "reranker_model": "not used",
+    "skipped": "none"
+  }
+}
