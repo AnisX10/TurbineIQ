@@ -15,7 +15,7 @@ does not.
 | Questions (`data/benchmark/questions.jsonl`) | Done: 88 questions, committed (2704998) before any retrieval run. |
 | Baseline report (`docs/evidence/retrieval/baseline.md`, `.json`) | Done, measured (d79ab28). |
 | Improved report, bge-m3 + bge-reranker-v2-m3 (`docs/evidence/retrieval/improved.md`, `.json`) | Done, measured (ccb4e06). |
-| Cheaper configuration with `BAAI/bge-small-en-v1.5` | Not yet run. Optional; it does not change the result below. |
+| Cheaper configuration, bge-small-en-v1.5 + bge-reranker-v2-m3 (`docs/evidence/retrieval/improved-bge-small.md`, `.json`) | Done, measured. See [Cheaper embedding model](#cheaper-embedding-model-bge-small-en-v15). |
 
 The corpus, questions and runs were produced on the author's laptop (Intel i5-1235U, CPU only)
 because the cloud sessions could not reach ntrs.nasa.gov, arxiv.org or huggingface.co.
@@ -80,6 +80,25 @@ Hit@3 / MRR@10 by category:
 | hybrid_rerank | 0.923 / 0.833 | 0.920 / 0.898 | 0.920 / 0.821 |
 
 Full reports: `docs/evidence/retrieval/baseline.md` and `improved.md` (with JSON).
+
+### Cheaper embedding model (bge-small-en-v1.5)
+
+Same corpus, questions, chunking and reranker (`BAAI/bge-reranker-v2-m3`), with
+`--embedding-model BAAI/bge-small-en-v1.5 --query-prefix "Represent this sentence for
+searching relevant passages: "`. Wall time for the whole run (all five configurations):
+4044 s on the same i5-1235U CPU. Embedding the 1160 chunks took about 2.5 minutes (bge-m3:
+about 25 minutes); nearly all the remaining time is the reranker. The lexical rows are
+identical to the table above and are omitted here. The report records `git_commit 5493638`, a
+local commit that changed only this page and was not pushed; code, corpus and questions were
+the same as at `ccb4e06`.
+
+| Configuration | Hit@1 | Hit@3 [95% CI] | Hit@10 | MRR@10 [95% CI] | Context recall@3 | Refusal AUC |
+| --- | --- | --- | --- | --- | --- | --- |
+| dense (bge-small) | 0.303 | 0.645 [0.526, 0.750] | 0.895 | 0.494 [0.416, 0.576] | 0.651 | 0.979 |
+| hybrid (BM25 + bge-small, RRF) | 0.487 | 0.776 [0.684, 0.868] | 0.974 | 0.652 [0.572, 0.728] | 0.776 | 0.827 |
+| hybrid_rerank (+ bge-reranker-v2-m3) | 0.763 | 0.908 [0.829, 0.961] | 0.987 | 0.850 [0.783, 0.911] | 0.895 | 1.000 |
+
+Full report: `docs/evidence/retrieval/improved-bge-small.md` (with JSON).
 
 ## What the numbers support (interpretation)
 
