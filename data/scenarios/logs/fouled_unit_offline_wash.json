@@ -57,7 +57,7 @@
  ],
  "steps": 180000,
  "dt_s": 0.05,
- "trace_digest": "ac745a8bd252deec1c4a609f9e081bd2d4ccd8cc2a5686820b549285cb1787d2",
+ "trace_digest": "811e73930ce28aef0d4e7c594f48b5e2b7377ff8c64753c2bdecf05fb3636c76",
  "trace_format": 2,
  "model_note": "Simulated plant. Rowen-type dynamics (fuel system, rotor, exhaust thermocouple, governor/temperature/acceleration control) on static maps generated from the calibrated variable-property cycle model. Time constants, start-up timings and protection thresholds are illustrative; nothing here is validated against real 6B.03 transients, and nothing is connected to a real machine."
 }

@@ -17,7 +17,13 @@ from turbineiq.simulation import (
     replay,
 )
 from turbineiq.simulation.faults import FOULING_EFFICIENCY_RATIO
-from turbineiq.simulation.maps import CLEAN, Health, direct_health_maps, health_maps
+from turbineiq.simulation.maps import (
+    CLEAN,
+    Health,
+    degraded_pressure_ratio,
+    direct_health_maps,
+    health_maps,
+)
 
 
 def run(plant: GasTurbinePlant, seconds: float) -> None:
@@ -62,6 +68,10 @@ def test_linearised_health_maps_agree_with_direct_cycle_solutions(health: Health
                 p_dir, t_dir = direct.lookup(n, g, wf)
                 assert p_lin == pytest.approx(p_dir, abs=2e-3)
                 assert t_lin == pytest.approx(t_dir, abs=1.5)
+            cdt_lin, cdp_lin = linear.compressor_discharge(health, n, g)
+            cdt_dir, cdp_dir = direct.compressor_discharge(n, g)
+            assert cdt_lin == pytest.approx(cdt_dir, abs=0.3)
+            assert cdp_lin == pytest.approx(cdp_dir, rel=1e-12)
 
 
 def test_clean_health_returns_the_clean_maps_exactly() -> None:
@@ -83,13 +93,30 @@ def test_degraded_maps_keep_the_clean_per_unit_bases() -> None:
 # ----------------------------------------------------------------------------- plant
 def test_fouling_at_part_load_costs_fuel_not_output(plant: GasTurbinePlant) -> None:
     before_fuel, before_tx = plant.wfc, plant.tm
-    cdt_before = plant.compressor_discharge()[0]
+    cdt_before, cdp_before = plant.compressor_discharge()
     plant.command_inject_degradation("compressor_fouling", 3.0, None)
     run(plant, 600.0)
+    cdt_after, cdp_after = plant.compressor_discharge()
     assert plant.electrical_power_mw() == pytest.approx(35.0, rel=2e-3)
     assert plant.wfc > before_fuel * 1.005
     assert plant.tm > before_tx + 10.0
-    assert plant.compressor_discharge()[0] > cdt_before + 5.0
+    # Less flow through the same turbine nozzle: the pressure rise falls by 3 percent. The
+    # lower pressure ratio offsets most of the compressor efficiency loss in the discharge
+    # temperature, which still rises a little.
+    inlet = plant.maps.compressor_inlet_pressure_kpa
+    assert cdp_after - inlet == pytest.approx(0.97 * (cdp_before - inlet), rel=1e-9)
+    assert cdt_before + 1.0 < cdt_after < cdt_before + 6.0
+
+
+def test_clean_maps_are_unchanged_by_the_pressure_ratio_health_term() -> None:
+    clean = operating_maps(15.0)
+    assert clean.compressor_discharge(1.0, 1.0)[1] == pytest.approx(
+        clean.compressor_inlet_pressure_kpa * clean.rated_pressure_ratio, rel=1e-12
+    )
+    assert degraded_pressure_ratio(12.8, 0.0) == 12.8
+    assert degraded_pressure_ratio(12.8, -0.03) == pytest.approx(1.0 + 11.8 * 0.97)
+    # Near a pressure ratio of 1 the nozzle unchokes and the effect fades.
+    assert degraded_pressure_ratio(1.05, -0.10) > 1.04
 
 
 def test_fouling_at_the_temperature_limit_costs_output_as_the_degraded_cycle_predicts() -> None:

@@ -4,9 +4,10 @@ The bank is the test set for the estimation and detection work of roadmap WP4 an
 prescription work of WP5: each scenario is a session configuration plus a timed command
 script, so it can be regenerated bit-for-bit (same machine and Python build) and every
 fault's type, size and onset time is known exactly. Clean scenarios are included so false
-alarms can be counted, and some faults are chosen to look alike (a compressor discharge
-temperature sensor bias that mimics fouling, a power transducer bias that mimics an
-output loss) so that a detector has to separate sensor faults from component faults.
+alarms can be counted, and some faults are chosen to look alike (compressor discharge
+temperature and pressure sensor biases that each mimic one channel of the fouling
+signature, a power transducer bias that mimics an output loss) so that a detector has to
+separate sensor faults from component faults.
 
 Degradation rates are accelerated (percent per hour rather than per month) so that a
 scenario fits in about two simulated hours. That is a stated simplification: it tests
@@ -269,11 +270,20 @@ SCENARIOS: tuple[Scenario, ...] = (
     Scenario(
         "cdt_sensor_bias",
         "sensor",
-        "Compressor discharge temperature reads 9 K high from 30 minutes, about what 3 "
-        "percent fouling does to the true value; the plant is healthy.",
+        "Compressor discharge temperature reads 3.5 K high from 30 minutes, about what 3 "
+        "percent fouling does to the true value at 35 MW; the plant is healthy.",
         406,
         _TWO_HOURS,
-        (*_start(35.0), _sensor(ONSET_S, "compressor_discharge_temperature", "bias", 9.0)),
+        (*_start(35.0), _sensor(ONSET_S, "compressor_discharge_temperature", "bias", 3.5)),
+    ),
+    Scenario(
+        "cdp_sensor_bias",
+        "sensor",
+        "Compressor discharge pressure reads 35 kPa low from 30 minutes, about what 3 percent "
+        "fouling does to the true value at 35 MW; the plant is healthy.",
+        407,
+        _TWO_HOURS,
+        (*_start(35.0), _sensor(ONSET_S, "compressor_discharge_pressure", "bias", -35.0)),
     ),
     # ------------------------------------------------------------- actuator
     Scenario(

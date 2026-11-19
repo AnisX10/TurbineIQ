@@ -10,7 +10,7 @@ Nothing in it is plant data.
 - Committed output: `data/scenarios/manifest.json` (scripts, ground-truth fault timeline,
   trace digests, end-state summary) and `data/scenarios/logs/<id>.json` (event logs that
   replay with `turbineiq.simulation.session.replay` or `POST /api/sim/replay`).
-- Traces are not committed (about 34 MB for the bank). Regenerate them with
+- Traces are not committed (about 36 MB for the bank). Regenerate them with
   `PYTHONPATH=src python scripts/build_scenario_bank.py --traces data/scenarios/traces`
   (about six minutes on the development container; `--only <id>` runs one scenario).
 
@@ -46,25 +46,30 @@ start at 30 minutes (1,800 s) unless stated. Seeds are distinct per scenario.
 | `exhaust_tc_noise` | sensor | 3 K extra noise (sigma) on the exhaust thermocouple. |
 | `power_transducer_bias` | sensor | Power transducer reads +1 MW; the plant is healthy. |
 | `fuel_meter_drift` | sensor | Fuel meter drifts +0.06 kg/s per hour (about 3 %/h); the plant is healthy. |
-| `cdt_sensor_bias` | sensor | Compressor discharge temperature reads +9 K, about what 3 % fouling does to the true value. |
+| `cdt_sensor_bias` | sensor | Compressor discharge temperature reads +3.5 K, about what 3 % fouling does to the true value at 35 MW. |
+| `cdp_sensor_bias` | sensor | Compressor discharge pressure reads −35 kPa, about what 3 % fouling does to the true value at 35 MW. |
 | `slow_fuel_valve_load_steps` | actuator | Fuel valve lag rises from 0.05 s to 2.5 s; same load steps as `clean_fast_load_steps`. |
 
 Some pairs are built to look alike so that a detector has to tell a sensor fault from a
-component fault: `cdt_sensor_bias` against `fouling_step_part_load`, `power_transducer_bias`
-against an output loss, and `fuel_meter_drift` against a heat-rate loss.
+component fault: `cdt_sensor_bias` and `cdp_sensor_bias` against `fouling_step_part_load`
+(each matches one channel of the fouling signature), `power_transducer_bias` against an
+output loss, and `fuel_meter_drift` against a heat-rate loss.
 
 ## Signatures measured in the bank
 
-Differences of the true values against the matching clean scenario, averaged over the last
-10 minutes (or the last 100 s at base load). Measured on the committed runs; they are
-properties of this model, not of a real 6B.03.
+Differences of the true values (measured values for discharge pressure, whose noise is
+0.2 %) against the matching clean scenario, averaged over the last 10 minutes (or the last
+100 s at base load). Measured on the committed runs; they are properties of this model, not
+of a real 6B.03. Fouling lowers the pressure ratio, which offsets most of the compressor
+efficiency loss in the discharge temperature, so the discharge temperature rises only a few
+kelvin while the pressure falls clearly.
 
 | Scenario | Power | Exhaust T | Fuel flow | Compressor discharge T | Compressor discharge p |
 | --- | --- | --- | --- | --- | --- |
-| 3 % fouling, 35 MW | held | +21.6 K | +0.029 kg/s (+1.3 %) | +9.1 K | no change (see limits) |
-| 1.5 pt erosion, 35 MW | held | +17.3 K | +0.058 kg/s (+2.7 %) | no change | no change |
-| 2 % fouling + 1 pt erosion, 35 MW | held | +26.0 K | +0.058 kg/s | +6.1 K | no change |
-| 4.5 % fouling, temperature limit | −3.98 MW (−8.6 %) | on the limit | −0.164 kg/s | +13.5 K | no change |
+| 3 % fouling, 35 MW | held | +25.8 K | +0.043 kg/s (+2.0 %) | +3.4 K | −35.3 kPa (−2.8 %) |
+| 1.5 pt erosion, 35 MW | held | +17.3 K | +0.058 kg/s (+2.7 %) | no change | no change (see limits) |
+| 2 % fouling + 1 pt erosion, 35 MW | held | +28.9 K | +0.068 kg/s (+3.1 %) | +2.3 K | −23.7 kPa |
+| 4.5 % fouling, temperature limit | −4.80 MW (−10.4 %) | on the limit | −0.182 kg/s | +5.3 K | −53.3 kPa |
 | TC drift −15 K at the end, 47 MW requested | +0.86 MW | +7.6 K over the limit, reading 7.1 K under it | +0.046 kg/s | no change | no change |
 | TC stuck, then 47 MW | +0.86 MW | +7.6 K over the limit, reading 98.5 K below the truth | +0.046 kg/s | no change | no change |
 
@@ -90,14 +95,15 @@ the ground truth do not depend on that.
 - Degradation is accelerated (percent per hour, not per month), so the bank tests whether
   an estimator follows a trend, not whether it follows one through months of noise and
   seasons.
-- Compressor discharge pressure carries no fouling or erosion signature: the cycle model
-  sets the pressure ratio from speed alone (see `DYNAMIC_MODEL.md`). On a real unit fouling
-  lowers the pressure ratio, so a gas-path method that relies on discharge pressure cannot
-  be tested on this bank as it stands.
+- Fouling lowers the compressor pressure rise in proportion to the flow-capacity loss, but
+  the clean engine's pressure ratio still depends on speed only (not on IGV position or
+  firing temperature), and erosion does not change it because its flow-capacity increase is
+  not modelled (see `DYNAMIC_MODEL.md`).
 - The fouling model removes flow capacity and compressor efficiency at a fixed 2:1 ratio
   (an assumed ratio, not identified from data); erosion removes turbine efficiency only.
   The degraded maps are a linear superposition of single-parameter maps, checked against
-  the directly degraded cycle to within 0.0014 pu power and 1.2 K up to 6 % fouling.
+  the directly degraded cycle to within 0.0021 pu power and 1.1 K exhaust up to 6 %
+  fouling (0.0045 pu and 6.4 K at the 10 % maximum).
 - One seed per scenario. Detection statistics (false-alarm rate, delay) need repeated
   seeds; `run_scenario` on a copy of a scenario with another seed produces them.
 - All runs are at 15 C start ambient on an infinite bus.

@@ -28,13 +28,13 @@
    "params": {
     "channel": "compressor_discharge_temperature",
     "mode": "bias",
-    "magnitude": 9.0
+    "magnitude": 3.5
    }
   }
  ],
  "steps": 144000,
  "dt_s": 0.05,
- "trace_digest": "1aaad41e8cfee5cc4db379a5888ddb3cd97a1abaaf54228ddca4ed43b0bf5479",
+ "trace_digest": "37482517837d6c98bcc0fc30592aa63c13e5b0c584042b6d037ec87aefa2eaeb",
  "trace_format": 2,
  "model_note": "Simulated plant. Rowen-type dynamics (fuel system, rotor, exhaust thermocouple, governor/temperature/acceleration control) on static maps generated from the calibrated variable-property cycle model. Time constants, start-up timings and protection thresholds are illustrative; nothing here is validated against real 6B.03 transients, and nothing is connected to a real machine."
 }

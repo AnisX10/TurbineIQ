@@ -10,10 +10,11 @@ Three kinds of fault:
   :class:`~turbineiq.simulation.maps.Health`. *Compressor fouling* of severity ``s``
   percent removes ``s`` percent of compressor flow capacity and ``s / 2`` points of
   compressor polytropic efficiency (a 2:1 flow-to-efficiency ratio: an assumed value, not
-  identified from data). *Turbine erosion* of
-  severity ``s`` removes ``s`` points of turbine polytropic efficiency; the flow-capacity
-  increase that erosion also causes is not modelled because the cycle model does not treat
-  the turbine as choked. Both can grow at a set rate while air flows through the machine.
+  identified from data); with less flow through the same turbine nozzle the compressor
+  pressure rise also falls by ``s`` percent (see :mod:`~turbineiq.simulation.maps`).
+  *Turbine erosion* of severity ``s`` removes ``s`` points of turbine polytropic
+  efficiency; the flow-capacity increase that erosion also causes is not modelled. Both
+  can grow at a set rate while air flows through the machine.
 * **Sensor faults** change what an instrument reports, not the plant: ``bias`` (constant
   offset), ``drift`` (offset growing linearly in time), ``stuck`` (frozen at the reading
   when the fault started) and ``noise`` (extra Gaussian noise). The exhaust thermocouple

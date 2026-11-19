@@ -90,7 +90,9 @@ with the rest of the session.
 - **Gas-path degradation** changes the plant through three health deltas: compressor flow
   capacity, compressor polytropic efficiency and turbine polytropic efficiency. Compressor
   fouling of `s` percent removes `s` % of flow capacity and `s/2` points of compressor
-  efficiency (an assumed 2:1 ratio); turbine erosion of `s` removes `s` points of turbine
+  efficiency (an assumed 2:1 ratio). With less flow through the same turbine nozzle the
+  compressor pressure rise (`PR - 1`) also falls by `s` %, close to a choked nozzle's
+  proportional drop near design. Turbine erosion of `s` removes `s` points of turbine
   efficiency (the flow-capacity increase of real erosion is not modelled). Limits: 10 %
   fouling, 5 points erosion, growth up to 10 %/h, and degradation grows only while air
   flows (speed above 0.5 pu). An offline wash at standstill removes the fouling but keeps
@@ -99,8 +101,10 @@ with the rest of the session.
   moved by a reference amount (flow −4 %, each efficiency −2 points); the degraded maps are
   the clean maps plus the scaled sum of those single-parameter changes. Per-unit bases stay
   those of the clean engine, so a degraded unit shows a real loss. Checked against the
-  directly degraded cycle: within 0.0014 pu power and 1.2 K exhaust up to 6 % fouling, and
-  the temperature-limited output of a 3 % fouled unit matches the direct cycle within 0.5 %.
+  directly degraded cycle: within 0.0021 pu power and 1.1 K exhaust up to 6 % fouling
+  (0.0045 pu and 6.4 K at the 10 % maximum), compressor discharge temperature within 0.5 K
+  and pressure exact; the temperature-limited output of a 3 % fouled unit matches the direct
+  cycle within 0.5 %. The clean maps are unchanged bit for bit.
 - **Sensor faults** on six channels (electrical power, exhaust temperature, speed,
   compressor discharge temperature and pressure, fuel flow): bias, drift (per hour), stuck
   (frozen at the reading when it started) and extra noise. They change the reading, not the
@@ -113,16 +117,18 @@ with the rest of the session.
   previous reading.
 
 Measured signatures (steady state, against the same clean run): 3 % fouling at 35 MW holds
-power and raises exhaust temperature by 21.6 K, fuel by 1.3 % and compressor discharge
-temperature by 9.1 K; 1.5 points of erosion raises exhaust temperature by 17.3 K and fuel
-by 2.7 % with no change at the compressor; on the temperature limit, 4.5 % fouling costs
-8.6 % of output. A low-reading exhaust thermocouple lets the unit overfire without an
+power, raises exhaust temperature by 25.8 K, fuel by 2.0 % and compressor discharge
+temperature by 3.4 K, and lowers discharge pressure by 2.8 %; 1.5 points of erosion raises
+exhaust temperature by 17.3 K and fuel by 2.7 % with no change at the compressor; on the
+temperature limit, 4.5 % fouling costs 10.4 % of output. A low-reading exhaust thermocouple lets the unit overfire without an
 alarm. `SCENARIO_BANK.md` has the full table and the seeded scenario bank.
 
 Not established: the 2:1 fouling ratio and the fault magnitudes are assumptions, not OEM or
-fleet data. Compressor discharge pressure carries no fouling signature, because the pressure
-ratio is a function of speed only in these maps; on a real unit fouling lowers it. A single
-exhaust reading stands for the thermocouple array (no spread monitoring or voting), and an
+fleet data. The pressure-ratio response to flow is applied to the health change only: IGV
+position and firing temperature still do not change the pressure ratio of the clean engine
+(a real unit's discharge pressure falls at part load), and erosion leaves the discharge
+pressure unchanged because its flow-capacity increase is not modelled. A single exhaust
+reading stands for the thermocouple array (no spread monitoring or voting), and an
 open-circuit thermocouple is represented only by a large bias or a stuck reading.
 
 **Trace format 2.** The trace digest now also hashes the four added measured channels, the

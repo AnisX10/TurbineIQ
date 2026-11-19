@@ -54,7 +54,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.9
+   "run_seconds": 18.4
   },
   {
    "id": "clean_base_load",
@@ -101,7 +101,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.5
+   "run_seconds": 18.2
   },
   {
    "id": "clean_load_cycling",
@@ -180,7 +180,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.6
+   "run_seconds": 18.1
   },
   {
    "id": "clean_ambient_swing",
@@ -255,7 +255,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 19.1
+   "run_seconds": 18.9
   },
   {
    "id": "clean_fast_load_steps",
@@ -326,7 +326,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.8
+   "run_seconds": 18.9
   },
   {
    "id": "fouling_step_part_load",
@@ -371,14 +371,14 @@
     }
    ],
    "steps": 144000,
-   "trace_digest": "bda7ca9ad40741f3403526a8544cf5ed52c204616953fcfffaa89342b3f9ecc5",
+   "trace_digest": "b9bf392e4fb0dbbd9807923a257fbbff3049018963a1d0643b9aeff320e7fabd",
    "end_state": {
     "state": "loaded",
     "true_electrical_power_mw": 35.0,
-    "true_exhaust_temperature_c": 494.239,
-    "true_heat_rate_kj_per_kwh": 11311.03,
+    "true_exhaust_temperature_c": 498.456,
+    "true_heat_rate_kj_per_kwh": 11382.18,
     "measured_electrical_power_mw": 35.0712,
-    "measured_exhaust_temperature_c": 494.345,
+    "measured_exhaust_temperature_c": 498.562,
     "limiter": "governor",
     "trip_cause": null,
     "injected_faults": {
@@ -397,7 +397,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 22.0
+   "run_seconds": 22.9
   },
   {
    "id": "fouling_progressive_base_load",
@@ -442,14 +442,14 @@
     }
    ],
    "steps": 144000,
-   "trace_digest": "5bf1a977af51c0696b5d578f9d3e470f006fb4f093b1c15df1c4c5a586e03a7c",
+   "trace_digest": "a2d7471115c5c902e602c664912a36f3c1e7d2acbe4442ef83b02775311c8332",
    "end_state": {
     "state": "loaded",
-    "true_electrical_power_mw": 42.126,
-    "true_exhaust_temperature_c": 571.027,
-    "true_heat_rate_kj_per_kwh": 11064.9,
-    "measured_electrical_power_mw": 42.1822,
-    "measured_exhaust_temperature_c": 570.613,
+    "true_electrical_power_mw": 41.2938,
+    "true_exhaust_temperature_c": 571.03,
+    "true_heat_rate_kj_per_kwh": 11208.06,
+    "measured_electrical_power_mw": 41.3489,
+    "measured_exhaust_temperature_c": 570.616,
     "limiter": "temperature",
     "trip_cause": null,
     "injected_faults": {
@@ -468,7 +468,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 21.0
+   "run_seconds": 22.1
   },
   {
    "id": "fouling_progressive_ambient_swing",
@@ -541,14 +541,14 @@
     }
    ],
    "steps": 144000,
-   "trace_digest": "f7a94437eb4414fb5596dd38c84d638c01b71fd73af7e1ed62bcd070a37a05bc",
+   "trace_digest": "d8a8c7cf0cdb670939b8d582d36fb3ad62456d914e8f7b21d110103c8a0544b7",
    "end_state": {
     "state": "loaded",
-    "true_electrical_power_mw": 34.9982,
-    "true_exhaust_temperature_c": 480.698,
-    "true_heat_rate_kj_per_kwh": 11283.41,
-    "measured_electrical_power_mw": 35.0729,
-    "measured_exhaust_temperature_c": 482.127,
+    "true_electrical_power_mw": 34.9972,
+    "true_exhaust_temperature_c": 484.837,
+    "true_heat_rate_kj_per_kwh": 11354.31,
+    "measured_electrical_power_mw": 35.072,
+    "measured_exhaust_temperature_c": 486.266,
     "limiter": "governor",
     "trip_cause": null,
     "injected_faults": {
@@ -567,7 +567,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 24.0
+   "run_seconds": 24.4
   },
   {
    "id": "erosion_step_part_load",
@@ -638,7 +638,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 20.9
+   "run_seconds": 21.2
   },
   {
    "id": "fouling_then_erosion",
@@ -701,14 +701,14 @@
     }
    ],
    "steps": 144000,
-   "trace_digest": "b5cc884ce858941b91fa2bf1225940a2a277b52e594caa2427b80aac28a19b2c",
+   "trace_digest": "e1fb9dd7876a31a6d6f4f6e9d92a39a7f5434de2ff1e4405ceccfcdc7ed8656a",
    "end_state": {
     "state": "loaded",
     "true_electrical_power_mw": 35.0,
-    "true_exhaust_temperature_c": 498.646,
-    "true_heat_rate_kj_per_kwh": 11461.71,
+    "true_exhaust_temperature_c": 501.503,
+    "true_heat_rate_kj_per_kwh": 11510.43,
     "measured_electrical_power_mw": 34.9247,
-    "measured_exhaust_temperature_c": 498.701,
+    "measured_exhaust_temperature_c": 501.559,
     "limiter": "governor",
     "trip_cause": null,
     "injected_faults": {
@@ -731,7 +731,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 22.7
+   "run_seconds": 23.6
   },
   {
    "id": "fouled_unit_offline_wash",
@@ -804,7 +804,7 @@
     }
    ],
    "steps": 180000,
-   "trace_digest": "ac745a8bd252deec1c4a609f9e081bd2d4ccd8cc2a5686820b549285cb1787d2",
+   "trace_digest": "811e73930ce28aef0d4e7c594f48b5e2b7377ff8c64753c2bdecf05fb3636c76",
    "end_state": {
     "state": "loaded",
     "true_electrical_power_mw": 40.0,
@@ -825,7 +825,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 21.0
+   "run_seconds": 21.3
   },
   {
    "id": "exhaust_tc_drift_base_load",
@@ -898,7 +898,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.7
+   "run_seconds": 18.1
   },
   {
    "id": "exhaust_tc_stuck_load_increase",
@@ -980,7 +980,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.6
+   "run_seconds": 18.2
   },
   {
    "id": "exhaust_tc_noise",
@@ -1053,7 +1053,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.3
+   "run_seconds": 18.8
   },
   {
    "id": "power_transducer_bias",
@@ -1126,7 +1126,7 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.6
+   "run_seconds": 18.1
   },
   {
    "id": "fuel_meter_drift",
@@ -1199,12 +1199,12 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.9
+   "run_seconds": 19.0
   },
   {
    "id": "cdt_sensor_bias",
    "category": "sensor",
-   "description": "Compressor discharge temperature reads 9 K high from 30 minutes, about what 3 percent fouling does to the true value; the plant is healthy.",
+   "description": "Compressor discharge temperature reads 3.5 K high from 30 minutes, about what 3 percent fouling does to the true value at 35 MW; the plant is healthy.",
    "seed": 406,
    "ambient_temperature_c": 15.0,
    "duration_s": 7200.0,
@@ -1228,7 +1228,7 @@
      "params": {
       "channel": "compressor_discharge_temperature",
       "mode": "bias",
-      "magnitude": 9.0
+      "magnitude": 3.5
      }
     }
    ],
@@ -1239,12 +1239,12 @@
      "params": {
       "channel": "compressor_discharge_temperature",
       "mode": "bias",
-      "magnitude": 9.0
+      "magnitude": 3.5
      }
     }
    ],
    "steps": 144000,
-   "trace_digest": "1aaad41e8cfee5cc4db379a5888ddb3cd97a1abaaf54228ddca4ed43b0bf5479",
+   "trace_digest": "37482517837d6c98bcc0fc30592aa63c13e5b0c584042b6d037ec87aefa2eaeb",
    "end_state": {
     "state": "loaded",
     "true_electrical_power_mw": 35.0,
@@ -1264,7 +1264,7 @@
      "sensors": {
       "compressor_discharge_temperature": {
        "mode": "bias",
-       "magnitude": 9.0,
+       "magnitude": 3.5,
        "unit": "K",
        "since_s": 1800.0
       }
@@ -1272,7 +1272,80 @@
      "fuel_valve_lag_s": null
     }
    },
-   "run_seconds": 18.7
+   "run_seconds": 19.4
+  },
+  {
+   "id": "cdp_sensor_bias",
+   "category": "sensor",
+   "description": "Compressor discharge pressure reads 35 kPa low from 30 minutes, about what 3 percent fouling does to the true value at 35 MW; the plant is healthy.",
+   "seed": 407,
+   "ambient_temperature_c": 15.0,
+   "duration_s": 7200.0,
+   "script": [
+    {
+     "t_s": 0.0,
+     "command": "start",
+     "params": {}
+    },
+    {
+     "t_s": 300.0,
+     "command": "set_load",
+     "params": {
+      "mw": 35.0,
+      "ramp_mw_per_min": 60.0
+     }
+    },
+    {
+     "t_s": 1800.0,
+     "command": "inject_sensor_fault",
+     "params": {
+      "channel": "compressor_discharge_pressure",
+      "mode": "bias",
+      "magnitude": -35.0
+     }
+    }
+   ],
+   "ground_truth_fault_events": [
+    {
+     "t_s": 1800.0,
+     "command": "inject_sensor_fault",
+     "params": {
+      "channel": "compressor_discharge_pressure",
+      "mode": "bias",
+      "magnitude": -35.0
+     }
+    }
+   ],
+   "steps": 144000,
+   "trace_digest": "d255eb92a2abf0f961191ce63dfa4e30ef3995b3b975fd5d5a6420bc49d82a55",
+   "end_state": {
+    "state": "loaded",
+    "true_electrical_power_mw": 35.0,
+    "true_exhaust_temperature_c": 472.611,
+    "true_heat_rate_kj_per_kwh": 11161.98,
+    "measured_electrical_power_mw": 34.9304,
+    "measured_exhaust_temperature_c": 471.304,
+    "limiter": "governor",
+    "trip_cause": null,
+    "injected_faults": {
+     "degradation": {},
+     "health": {
+      "compressor_flow_capacity_delta": 0.0,
+      "compressor_efficiency_delta": 0.0,
+      "turbine_efficiency_delta": 0.0
+     },
+     "sensors": {
+      "compressor_discharge_pressure": {
+       "mode": "bias",
+       "magnitude": -35.0,
+       "unit": "kPa",
+       "since_s": 1800.0
+      }
+     },
+     "fuel_valve_lag_s": null
+    }
+   },
+   "run_seconds": 19.1
   },
   {
    "id": "slow_fuel_valve_load_steps",
@@ -1358,7 +1431,7 @@
      "fuel_valve_lag_s": 2.5
     }
    },
-   "run_seconds": 18.5
+   "run_seconds": 19.1
   }
  ]
 }

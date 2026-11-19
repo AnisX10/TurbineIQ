@@ -13,7 +13,13 @@ Off-design assumptions (all illustrative, none validated against 6B.03 data):
   effective exponent, rather than from a compressor map;
 * component polytropic efficiencies, cooling fraction and pressure losses stay at their
   calibrated values at every speed and load;
-* the turbine is not modelled as choked, and nothing below 20 percent speed is tabulated.
+* a change in compressor flow capacity (fouling) scales the pressure rise ``PR - 1`` in
+  proportion. Near design that is close to the proportional drop in pressure ratio of a
+  choked first-stage turbine nozzle at fixed firing temperature, and the effect fades as
+  the pressure ratio approaches 1, where the nozzle unchokes. This is applied to the
+  health change only: IGV position and firing temperature do not change the pressure
+  ratio, so the clean engine behaves exactly as calibrated;
+* nothing below 20 percent speed is tabulated.
 
 Maps are keyed by ambient temperature and component health, and cached.
 
@@ -47,8 +53,8 @@ class Health(NamedTuple):
 
     ``compressor_flow`` is the fractional change in compressor flow capacity (-0.02 is a
     2 percent loss); the efficiencies are absolute changes in polytropic efficiency
-    (-0.01 is one point). Turbine flow capacity is not a parameter because the cycle model
-    does not treat the turbine as choked.
+    (-0.01 is one point). A compressor flow-capacity change also scales the pressure ratio
+    (see the module docstring). Turbine flow capacity is not a parameter.
     """
 
     compressor_flow: float = 0.0
@@ -79,6 +85,14 @@ def pressure_ratio_at_speed(rated_pressure_ratio: float, speed_pu: float) -> flo
 
     x_rated = rated_pressure_ratio**_PR_EXPONENT
     return (1.0 + speed_pu**2 * (x_rated - 1.0)) ** (1.0 / _PR_EXPONENT)
+
+
+def degraded_pressure_ratio(pressure_ratio: float, compressor_flow: float) -> float:
+    """Pressure ratio after a compressor flow-capacity change (see the module docstring)."""
+
+    if compressor_flow == 0.0:
+        return pressure_ratio  # keeps the clean engine bit-for-bit as calibrated
+    return 1.0 + (pressure_ratio - 1.0) * (1.0 + compressor_flow)
 
 
 @dataclass(frozen=True)
@@ -151,9 +165,9 @@ class OperatingMaps:
     def compressor_discharge(self, speed_pu: float, air_factor: float) -> tuple[float, float]:
         """Return (compressor discharge temperature in K, discharge pressure in kPa).
 
-        Both follow the map assumptions above: the pressure ratio depends on speed only, so
-        IGV position and flow capacity do not change it. Below the lowest tabulated speed
-        the values are held at that speed's.
+        Both follow the map assumptions above: the pressure ratio depends on speed and on
+        the compressor flow-capacity health delta, not on IGV position or firing
+        temperature. Below the lowest tabulated speed the values are held at that speed's.
         """
 
         n_tab = min(max(speed_pu, SPEED_GRID[0]), SPEED_GRID[-1])
@@ -166,8 +180,8 @@ class OperatingMaps:
         c1 = r[i + 1][j].compressor_discharge_k + v * (
             r[i + 1][j + 1].compressor_discharge_k - r[i + 1][j].compressor_discharge_k
         )
-        pressure = self.compressor_inlet_pressure_kpa * pressure_ratio_at_speed(
-            self.rated_pressure_ratio, n_tab
+        pressure = self.compressor_inlet_pressure_kpa * degraded_pressure_ratio(
+            pressure_ratio_at_speed(self.rated_pressure_ratio, n_tab), self.health.compressor_flow
         )
         return c0 + u * (c1 - c0), pressure
 
@@ -205,7 +219,9 @@ def _build(ambient_key: float, health: Health = CLEAN) -> OperatingMaps:
     rows: list[tuple[_Row, ...]] = []
     for n in SPEED_GRID:
         per_speed: list[_Row] = []
-        pr = pressure_ratio_at_speed(base.pressure_ratio, n)
+        pr = degraded_pressure_ratio(
+            pressure_ratio_at_speed(base.pressure_ratio, n), health.compressor_flow
+        )
         for g in AIR_FACTOR_GRID:
             air = base.air_mass_flow_kg_s * (1.0 + health.compressor_flow) * n * g * t_base / t_amb
             probe = replace(
@@ -308,12 +324,19 @@ class HealthMaps:
     def compressor_discharge(
         self, health: Health, speed_pu: float, air_factor: float
     ) -> tuple[float, float]:
-        t0, pressure = self.clean.compressor_discharge(speed_pu, air_factor)
-        if health.compressor_efficiency == 0.0:
-            return t0, pressure
-        t1, _ = self._sensitivity[1].compressor_discharge(speed_pu, air_factor)
-        w = health.compressor_efficiency / HEALTH_REFERENCE[1]
-        return t0 + w * (t1 - t0), pressure
+        t0, p0 = self.clean.compressor_discharge(speed_pu, air_factor)
+        if health.is_clean():
+            return t0, p0
+        temperature = t0
+        for i in (0, 1):  # turbine health does not reach the compressor
+            if health[i] == 0.0:
+                continue
+            t1, _ = self._sensitivity[i].compressor_discharge(speed_pu, air_factor)
+            temperature += health[i] / HEALTH_REFERENCE[i] * (t1 - t0)
+        # The pressure-ratio change is linear in flow capacity, so this part is exact.
+        inlet = self.clean.compressor_inlet_pressure_kpa
+        ratio = degraded_pressure_ratio(p0 / inlet, health.compressor_flow)
+        return temperature, inlet * ratio
 
 
 @lru_cache(maxsize=16)
