@@ -18,7 +18,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 
-from .maps import OperatingMaps, igv_air_factor
+from .faults import CHANNELS, FaultState
+from .maps import HealthMaps, OperatingMaps, health_maps, igv_air_factor
 
 
 class UnitState(str, Enum):
@@ -114,6 +115,7 @@ class GasTurbinePlant:
         grid: str = "infinite_bus",
         grid_frequency_hz: float = 50.0,
         island_load_mw: float = 20.0,
+        fault_seed: int = 0,
     ) -> None:
         if grid not in ("infinite_bus", "island"):
             raise ValueError("grid must be 'infinite_bus' or 'island'")
@@ -163,6 +165,13 @@ class GasTurbinePlant:
         self.temperature_limit_k = maps.rated_exhaust_k + self.p.temperature_limit_margin_k
         self.trip_temperature_k = maps.rated_exhaust_k + self.p.trip_temperature_margin_k
 
+        # Injected faults. The controllers and protections see ``readings`` (sensor values
+        # after any sensor fault, before measurement noise); the physics sees the health.
+        self.faults = FaultState(fault_seed)
+        self._health_maps: HealthMaps | None = None
+        self.readings: dict[str, float] = {}
+        self._update_readings()
+
     # ------------------------------------------------------------------ helpers
     @property
     def grid_speed_pu(self) -> float:
@@ -187,8 +196,33 @@ class GasTurbinePlant:
         base = self._mw_to_pu(self.island_load_mw)
         return base * (1.0 + self.p.load_damping * (n - 1.0))
 
+    def _lookup(self, n: float, air_factor: float, fuel_pu: float) -> tuple[float, float]:
+        """Plant physics: the maps at the present component health."""
+
+        health = self.faults.health
+        if health.is_clean():
+            return self.maps.lookup(n, air_factor, fuel_pu)
+        if self._health_maps is None:
+            self._health_maps = health_maps(self.maps.ambient_temperature_c)
+        return self._health_maps.lookup(health, n, air_factor, fuel_pu)
+
+    def compressor_discharge(self) -> tuple[float, float]:
+        """True compressor discharge temperature (K) and pressure (kPa)."""
+
+        health = self.faults.health
+        if health.is_clean():
+            return self.maps.compressor_discharge(self.n, self._air_factor())
+        if self._health_maps is None:
+            self._health_maps = health_maps(self.maps.ambient_temperature_c)
+        return self._health_maps.compressor_discharge(health, self.n, self._air_factor())
+
+    @property
+    def valve_lag_s(self) -> float:
+        lag = self.faults.fuel_valve_lag_s
+        return self.p.valve_lag_s if lag is None else lag
+
     def shaft_power_pu(self) -> float:
-        return self.maps.lookup(self.n, self._air_factor(), self.wfc)[0]
+        return self._lookup(self.n, self._air_factor(), self.wfc)[0]
 
     def electrical_power_mw(self) -> float:
         if not self.breaker_closed:
@@ -212,7 +246,7 @@ class GasTurbinePlant:
         n, v, wf, wfc, tx, tm, igv = x
         p = self.p
         g = igv_air_factor(igv)
-        power_pu, t_exh = self.maps.lookup(n, g, wfc)
+        power_pu, t_exh = self._lookup(n, g, wfc)
         if pinned_n:
             dn = 0.0
         else:
@@ -224,7 +258,7 @@ class GasTurbinePlant:
             dn = torque / p.two_h_s
         return (
             dn,
-            _lag(v, fsr, p.valve_lag_s),
+            _lag(v, fsr, self.valve_lag_s),
             _lag(wf, v, p.fuel_lag_s),
             _lag(wfc, wf, p.combustor_lag_s),
             _lag(tx, t_exh, p.exhaust_lag_s),
@@ -282,20 +316,23 @@ class GasTurbinePlant:
         ):
             target_pu = self._mw_to_pu(self.load_ref_mw) + (self.n_ref - self.n) / p.droop
             # Steady-state power of the demanded fuel, so fuel-system lag is not mistaken for error.
-            meas_pu = self.maps.lookup(self.n, self._air_factor(), self.fsr)[0]
+            # It stands in for measured power, so it uses the plant (degraded) maps.
+            meas_pu = self._lookup(self.n, self._air_factor(), self.fsr)[0]
             self.trim += p.trim_ki * (target_pu - meas_pu) * dt
             self.trim = max(-p.trim_limit, min(p.trim_limit, self.trim))
         elif state != UnitState.ACCELERATE:
             self.trim = 0.0
 
         # Temperature and acceleration integrators (wind up to fsr_max when inactive).
-        self.x_temp += p.temperature_ki * (self.temperature_limit_k - self.tm) * dt
+        # Temperature control acts on the exhaust thermocouple reading, faults included.
+        tc = self.readings["exhaust_temperature"]
+        self.x_temp += p.temperature_ki * (self.temperature_limit_k - tc) * dt
         self.x_temp = max(0.0, min(p.fsr_max, self.x_temp))
         self.x_acc += p.acceleration_ki * (p.acceleration_limit_pu_s - self.dn_dt) * dt
         self.x_acc = max(0.0, min(p.fsr_max, self.x_acc))
 
         gov = self._governor_demand(dt)
-        temp_demand = self.x_temp + p.temperature_kp * (self.temperature_limit_k - self.tm)
+        temp_demand = self.x_temp + p.temperature_kp * (self.temperature_limit_k - tc)
         demands = (("governor", gov), ("temperature", temp_demand), ("acceleration", self.x_acc))
         name, fsr = min(demands, key=lambda item: item[1])
         floor = p.fsr_ignition if state == UnitState.ACCELERATE else p.fsr_min
@@ -304,7 +341,7 @@ class GasTurbinePlant:
         # A limiter that is far from its limit stays out of the way (wound up to fsr_max);
         # near its limit it tracks the selected FSR so it can take over without delay.
         ceiling = max(fsr + p.tracking_margin, 0.0)
-        if self.tm < self.temperature_limit_k - p.temperature_band_k:
+        if tc < self.temperature_limit_k - p.temperature_band_k:
             self.x_temp = p.fsr_max
         else:
             self.x_temp = min(self.x_temp, ceiling)
@@ -324,7 +361,7 @@ class GasTurbinePlant:
             return
         if self.n > p.overspeed_trip_pu:
             self._trip("overspeed")
-        elif self.tm > self.trip_temperature_k:
+        elif self.readings["exhaust_temperature"] > self.trip_temperature_k:
             self._trip("exhaust_over_temperature")
         elif self.state in (UnitState.LOADED, UnitState.UNLOADING) and (
             self.n < p.underspeed_trip_pu
@@ -478,6 +515,31 @@ class GasTurbinePlant:
             raise CommandError("grid frequency must be between 47.5 and 52.5 Hz")
         self.grid_frequency_hz = hz
 
+    # ------------------------------------------------------------------ fault commands
+    def command_inject_degradation(
+        self, kind: str, severity_pct: float, rate_pct_per_h: float | None
+    ) -> None:
+        self.faults.inject_degradation(kind, severity_pct, rate_pct_per_h or 0.0)
+        self._update_readings()
+
+    def command_inject_sensor_fault(self, channel: str, mode: str, magnitude: float | None) -> None:
+        current = self.readings.get(channel, 0.0)
+        self.faults.inject_sensor_fault(channel, mode, magnitude, self.time_s, current)
+        self._update_readings()
+
+    def command_set_fuel_valve_lag(self, tau_s: float) -> None:
+        self.faults.set_fuel_valve_lag(tau_s)
+
+    def command_clear_fault(self, target: str) -> None:
+        self.faults.clear(target)
+        self._update_readings()
+
+    def command_wash_compressor(self) -> None:
+        if self.state != UnitState.STANDSTILL:
+            raise CommandError("an offline compressor wash needs the unit at standstill")
+        self.faults.wash_compressor()
+        self._update_readings()
+
     def set_maps(self, maps: OperatingMaps) -> None:
         self.maps = maps
         self._fsnl_fuel = maps.fuel_for_power(0.0)
@@ -485,6 +547,28 @@ class GasTurbinePlant:
         self.droop_gain = (self._rated_fuel - self._fsnl_fuel) / self.p.droop
         self.temperature_limit_k = maps.rated_exhaust_k + self.p.temperature_limit_margin_k
         self.trip_temperature_k = maps.rated_exhaust_k + self.p.trip_temperature_margin_k
+        self._health_maps = None  # rebuilt for the new ambient when health is not clean
+
+    # ------------------------------------------------------------------ sensors
+    def true_measurands(self) -> dict[str, float]:
+        """True values of the instrumented quantities, in :data:`CHANNELS` order."""
+
+        cdt, cdp = self.compressor_discharge()
+        return {
+            "electrical_power": self.electrical_power_mw(),
+            "exhaust_temperature": self.tm,
+            "speed": self.n,
+            "compressor_discharge_temperature": cdt,
+            "compressor_discharge_pressure": cdp,
+            "fuel_flow": self.wfc * self.maps.rated_fuel_kg_s,
+        }
+
+    def _update_readings(self) -> None:
+        values = self.true_measurands()
+        faults = self.faults
+        self.readings = {
+            channel: faults.read(channel, values[channel], self.time_s) for channel in CHANNELS
+        }
 
     # ------------------------------------------------------------------ one fixed step
     def step(self) -> None:
@@ -520,4 +604,6 @@ class GasTurbinePlant:
             self.n = 0.0
         if grid_pinned:
             self.n = self.grid_speed_pu
+        self.faults.advance(dt, air_flowing=self.n > 0.5)
         self._advance_state_machine()
+        self._update_readings()

@@ -15,7 +15,15 @@ Off-design assumptions (all illustrative, none validated against 6B.03 data):
   calibrated values at every speed and load;
 * the turbine is not modelled as choked, and nothing below 20 percent speed is tabulated.
 
-Maps are keyed by ambient temperature and cached.
+Maps are keyed by ambient temperature and component health, and cached.
+
+Component health (gas-path degradation) enters as changes to the calibrated compressor
+flow capacity and the compressor and turbine polytropic efficiencies. The rated
+normalisation (rated fuel, shaft power, exhaust temperature) always comes from the clean
+calibrated engine, so a degraded map and a clean map share the same per-unit bases.
+:class:`HealthMaps` combines a clean map with one map per health parameter at a reference
+deterioration, linearly (first-order superposition), so health can change continuously
+without rebuilding maps. The linearisation error is tested against direct cycle solutions.
 """
 
 from __future__ import annotations
@@ -23,6 +31,7 @@ from __future__ import annotations
 from bisect import bisect_right
 from dataclasses import dataclass, replace
 from functools import lru_cache
+from typing import NamedTuple
 
 from turbineiq.engineering import CALIBRATED_6B03, simulate_real_gas_cycle
 
@@ -31,6 +40,32 @@ AIR_FACTOR_GRID: tuple[float, ...] = (0.7, 0.8, 0.9, 1.0)
 _FIRING_POINTS = 30
 _FIRING_MAX_K = 1900.0
 _PR_EXPONENT = 0.31  # effective (gamma - 1) / (gamma * eta_p) for the N^2 work scaling
+
+
+class Health(NamedTuple):
+    """Gas-path health deltas relative to the clean calibrated engine.
+
+    ``compressor_flow`` is the fractional change in compressor flow capacity (-0.02 is a
+    2 percent loss); the efficiencies are absolute changes in polytropic efficiency
+    (-0.01 is one point). Turbine flow capacity is not a parameter because the cycle model
+    does not treat the turbine as choked.
+    """
+
+    compressor_flow: float = 0.0
+    compressor_efficiency: float = 0.0
+    turbine_efficiency: float = 0.0
+
+    def is_clean(self) -> bool:
+        return not any(self)
+
+
+CLEAN = Health()
+#: Reference deteriorations used to build the per-parameter sensitivity maps.
+HEALTH_REFERENCE = Health(
+    compressor_flow=-0.04, compressor_efficiency=-0.02, turbine_efficiency=-0.02
+)
+#: Ranges accepted for health deltas (beyond these the linear superposition is not checked).
+HEALTH_LIMITS = Health(compressor_flow=-0.10, compressor_efficiency=-0.05, turbine_efficiency=-0.05)
 
 
 def igv_air_factor(igv_position: float) -> float:
@@ -51,6 +86,7 @@ class _Row:
     fuel_pu: tuple[float, ...]
     power_pu: tuple[float, ...]
     exhaust_k: tuple[float, ...]
+    compressor_discharge_k: float  # independent of fuel flow at a given speed and IGV
 
 
 def _interp(row: _Row, wf: float) -> tuple[float, float]:
@@ -85,6 +121,8 @@ class OperatingMaps:
     drivetrain_efficiency: float
     fuel_lhv_kj_kg: float
     rated_pressure_ratio: float
+    compressor_inlet_pressure_kpa: float
+    health: Health = CLEAN
 
     def lookup(self, speed_pu: float, air_factor: float, fuel_pu: float) -> tuple[float, float]:
         """Return (shaft power in per unit of rated shaft power, exhaust temperature in K).
@@ -110,6 +148,29 @@ class OperatingMaps:
             power *= (n / SPEED_GRID[0]) ** 3
         return power, exhaust
 
+    def compressor_discharge(self, speed_pu: float, air_factor: float) -> tuple[float, float]:
+        """Return (compressor discharge temperature in K, discharge pressure in kPa).
+
+        Both follow the map assumptions above: the pressure ratio depends on speed only, so
+        IGV position and flow capacity do not change it. Below the lowest tabulated speed
+        the values are held at that speed's.
+        """
+
+        n_tab = min(max(speed_pu, SPEED_GRID[0]), SPEED_GRID[-1])
+        i, u = _bracket(SPEED_GRID, n_tab)
+        j, v = _bracket(AIR_FACTOR_GRID, air_factor)
+        r = self.rows
+        c0 = r[i][j].compressor_discharge_k + v * (
+            r[i][j + 1].compressor_discharge_k - r[i][j].compressor_discharge_k
+        )
+        c1 = r[i + 1][j].compressor_discharge_k + v * (
+            r[i + 1][j + 1].compressor_discharge_k - r[i + 1][j].compressor_discharge_k
+        )
+        pressure = self.compressor_inlet_pressure_kpa * pressure_ratio_at_speed(
+            self.rated_pressure_ratio, n_tab
+        )
+        return c0 + u * (c1 - c0), pressure
+
     def fuel_for_power(
         self, power_pu: float, speed_pu: float = 1.0, air_factor: float = 1.0
     ) -> float:
@@ -128,10 +189,17 @@ class OperatingMaps:
         return shaft_power_pu * self.rated_shaft_power_mw * self.drivetrain_efficiency
 
 
-@lru_cache(maxsize=16)
-def _build(ambient_key: float) -> OperatingMaps:
+@lru_cache(maxsize=64)
+def _build(ambient_key: float, health: Health = CLEAN) -> OperatingMaps:
     base = CALIBRATED_6B03
-    rated = simulate_real_gas_cycle(base)
+    rated = simulate_real_gas_cycle(base)  # per-unit bases: always the clean engine
+    engine = replace(
+        base,
+        compressor_polytropic_efficiency=base.compressor_polytropic_efficiency
+        + health.compressor_efficiency,
+        turbine_polytropic_efficiency=base.turbine_polytropic_efficiency
+        + health.turbine_efficiency,
+    )
     t_base = base.ambient_temperature_c + 273.15
     t_amb = ambient_key + 273.15
     rows: list[tuple[_Row, ...]] = []
@@ -139,9 +207,9 @@ def _build(ambient_key: float) -> OperatingMaps:
         per_speed: list[_Row] = []
         pr = pressure_ratio_at_speed(base.pressure_ratio, n)
         for g in AIR_FACTOR_GRID:
-            air = base.air_mass_flow_kg_s * n * g * t_base / t_amb
+            air = base.air_mass_flow_kg_s * (1.0 + health.compressor_flow) * n * g * t_base / t_amb
             probe = replace(
-                base,
+                engine,
                 ambient_temperature_c=ambient_key,
                 pressure_ratio=pr,
                 air_mass_flow_kg_s=air,
@@ -162,7 +230,11 @@ def _build(ambient_key: float) -> OperatingMaps:
                 fuel.append(res.fuel_mass_flow_kg_s / rated.fuel_mass_flow_kg_s)
                 power.append(res.shaft_power_mw / rated.shaft_power_mw)
                 exhaust.append(res.exhaust_temperature_k)
-            per_speed.append(_Row(tuple(fuel), tuple(power), tuple(exhaust)))
+            per_speed.append(
+                _Row(
+                    tuple(fuel), tuple(power), tuple(exhaust), t2.compressor_discharge_temperature_k
+                )
+            )
         rows.append(tuple(per_speed))
     return OperatingMaps(
         ambient_temperature_c=ambient_key,
@@ -174,12 +246,78 @@ def _build(ambient_key: float) -> OperatingMaps:
         drivetrain_efficiency=base.drivetrain_efficiency,
         fuel_lhv_kj_kg=base.fuel_lhv_kj_kg,
         rated_pressure_ratio=base.pressure_ratio,
+        compressor_inlet_pressure_kpa=base.ambient_pressure_kpa
+        * (1.0 - base.inlet_pressure_loss_fraction),
+        health=health,
     )
 
 
 def operating_maps(ambient_temperature_c: float = 15.0) -> OperatingMaps:
     """Return the cached maps for an ambient temperature (rounded to 0.5 C)."""
 
+    return _build(_ambient_key(ambient_temperature_c))
+
+
+def _ambient_key(ambient_temperature_c: float) -> float:
     if not -40.0 <= ambient_temperature_c <= 55.0:
         raise ValueError("ambient_temperature_c must be between -40 and 55 C")
-    return _build(round(ambient_temperature_c * 2.0) / 2.0)
+    return round(ambient_temperature_c * 2.0) / 2.0
+
+
+def single_parameter_health(index: int, value: float) -> Health:
+    values = [0.0, 0.0, 0.0]
+    values[index] = value
+    return Health(*values)
+
+
+def direct_health_maps(ambient_temperature_c: float, health: Health) -> OperatingMaps:
+    """Maps built directly at ``health`` (no linearisation). Slower; used for checks."""
+
+    return _build(_ambient_key(ambient_temperature_c), Health(*(float(h) for h in health)))
+
+
+class HealthMaps:
+    """Clean maps plus first-order health corrections from per-parameter sensitivity maps.
+
+    For each health parameter a map is built at :data:`HEALTH_REFERENCE`; a lookup at
+    health ``h`` returns ``clean + sum_i (h_i / ref_i) * (map_i - clean)``. Cross terms are
+    neglected. With clean health it returns the clean map's values exactly.
+    """
+
+    def __init__(self, clean: OperatingMaps) -> None:
+        self.clean = clean
+        key = clean.ambient_temperature_c
+        self._sensitivity = tuple(
+            _build(key, single_parameter_health(i, HEALTH_REFERENCE[i])) for i in range(3)
+        )
+
+    def lookup(self, health: Health, speed_pu: float, air_factor: float, fuel_pu: float):
+        p0, t0 = self.clean.lookup(speed_pu, air_factor, fuel_pu)
+        if health.is_clean():
+            return p0, t0
+        power, exhaust = p0, t0
+        for i, sens in enumerate(self._sensitivity):
+            if health[i] == 0.0:
+                continue
+            w = health[i] / HEALTH_REFERENCE[i]
+            p1, t1 = sens.lookup(speed_pu, air_factor, fuel_pu)
+            power += w * (p1 - p0)
+            exhaust += w * (t1 - t0)
+        return power, exhaust
+
+    def compressor_discharge(
+        self, health: Health, speed_pu: float, air_factor: float
+    ) -> tuple[float, float]:
+        t0, pressure = self.clean.compressor_discharge(speed_pu, air_factor)
+        if health.compressor_efficiency == 0.0:
+            return t0, pressure
+        t1, _ = self._sensitivity[1].compressor_discharge(speed_pu, air_factor)
+        w = health.compressor_efficiency / HEALTH_REFERENCE[1]
+        return t0 + w * (t1 - t0), pressure
+
+
+@lru_cache(maxsize=16)
+def health_maps(ambient_temperature_c: float = 15.0) -> HealthMaps:
+    """Cached :class:`HealthMaps` for an ambient temperature (rounded to 0.5 C)."""
+
+    return HealthMaps(operating_maps(ambient_temperature_c))
