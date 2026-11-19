@@ -9,8 +9,8 @@ Three kinds of fault:
 * **Gas-path degradation** changes the plant physics through the health deltas of
   :class:`~turbineiq.simulation.maps.Health`. *Compressor fouling* of severity ``s``
   percent removes ``s`` percent of compressor flow capacity and ``s / 2`` points of
-  compressor polytropic efficiency (a 2:1 flow-to-efficiency ratio, a common assumption in
-  gas-path analysis studies and labelled here as an assumption). *Turbine erosion* of
+  compressor polytropic efficiency (a 2:1 flow-to-efficiency ratio: an assumed value, not
+  identified from data). *Turbine erosion* of
   severity ``s`` removes ``s`` points of turbine polytropic efficiency; the flow-capacity
   increase that erosion also causes is not modelled because the cycle model does not treat
   the turbine as choked. Both can grow at a set rate while air flows through the machine.
@@ -36,7 +36,7 @@ from typing import Any
 from .maps import CLEAN, Health
 
 #: Share of the fouling severity (flow-capacity loss, percent) lost as compressor
-#: polytropic efficiency points. Assumed 2:1 flow-to-efficiency, see the module docstring.
+#: polytropic efficiency points. An assumed 2:1 flow-to-efficiency ratio (module docstring).
 FOULING_EFFICIENCY_RATIO = 0.5
 
 DEGRADATIONS: dict[str, float] = {

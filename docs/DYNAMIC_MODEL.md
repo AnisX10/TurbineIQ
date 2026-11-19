@@ -76,10 +76,60 @@ integrates and the governor sets the frequency).
   dependent.
 - Exhaust thermal inertia of the casing is not modelled (only the gas and thermocouple
   lags), so cool-down temperatures fall faster than a real machine's.
-- Isochronous governor mode, flame-loss trips, compressor surge and bleed behaviour,
-  fuel-gas composition changes and fault injection (WP3 injection panel) are not implemented.
+- Isochronous governor mode, flame-loss trips, compressor surge and bleed behaviour and
+  fuel-gas composition changes are not implemented.
 - Temperature and acceleration loops use simple PI structures with conditional tracking;
   gains were tuned for stable behaviour in the tests, not identified.
+
+## Fault and degradation injection
+
+`simulation/faults.py` adds the WP3 fault-injection layer; it creates the ground truth that
+WP4 estimators are scored against. All faults are commands, so they are logged and replay
+with the rest of the session.
+
+- **Gas-path degradation** changes the plant through three health deltas: compressor flow
+  capacity, compressor polytropic efficiency and turbine polytropic efficiency. Compressor
+  fouling of `s` percent removes `s` % of flow capacity and `s/2` points of compressor
+  efficiency (an assumed 2:1 ratio); turbine erosion of `s` removes `s` points of turbine
+  efficiency (the flow-capacity increase of real erosion is not modelled). Limits: 10 %
+  fouling, 5 points erosion, growth up to 10 %/h, and degradation grows only while air
+  flows (speed above 0.5 pu). An offline wash at standstill removes the fouling but keeps
+  its growth rate.
+- **Degraded maps.** The step-1 cycle is run once per ambient with each health parameter
+  moved by a reference amount (flow −4 %, each efficiency −2 points); the degraded maps are
+  the clean maps plus the scaled sum of those single-parameter changes. Per-unit bases stay
+  those of the clean engine, so a degraded unit shows a real loss. Checked against the
+  directly degraded cycle: within 0.0014 pu power and 1.2 K exhaust up to 6 % fouling, and
+  the temperature-limited output of a 3 % fouled unit matches the direct cycle within 0.5 %.
+- **Sensor faults** on six channels (electrical power, exhaust temperature, speed,
+  compressor discharge temperature and pressure, fuel flow): bias, drift (per hour), stuck
+  (frozen at the reading when it started) and extra noise. They change the reading, not the
+  plant, except that the exhaust thermocouple reading is what the temperature control and
+  over-temperature protection use, so a fault there acts on the plant through the control.
+  The governor and overspeed protection use the true speed (real units vote redundant
+  pickups). Noise faults draw from their own seeded stream.
+- **Fuel valve lag** from 0.05 to 5 s (healthy 0.05 s), for a sticky or degraded valve.
+- A fault acts from the next simulation step; a snapshot taken between steps still shows the
+  previous reading.
+
+Measured signatures (steady state, against the same clean run): 3 % fouling at 35 MW holds
+power and raises exhaust temperature by 21.6 K, fuel by 1.3 % and compressor discharge
+temperature by 9.1 K; 1.5 points of erosion raises exhaust temperature by 17.3 K and fuel
+by 2.7 % with no change at the compressor; on the temperature limit, 4.5 % fouling costs
+8.6 % of output. A low-reading exhaust thermocouple lets the unit overfire without an
+alarm. `SCENARIO_BANK.md` has the full table and the seeded scenario bank.
+
+Not established: the 2:1 fouling ratio and the fault magnitudes are assumptions, not OEM or
+fleet data. Compressor discharge pressure carries no fouling signature, because the pressure
+ratio is a function of speed only in these maps; on a real unit fouling lowers it. A single
+exhaust reading stands for the thermocouple array (no spread monitoring or voting), and an
+open-circuit thermocouple is represented only by a large bias or a stuck reading.
+
+**Trace format 2.** The trace digest now also hashes the four added measured channels, the
+controller's thermocouple reading, the health deltas and the valve lag. Runs without faults
+have the same physics and the same power and exhaust noise as before (checked bit for bit
+against the previous core), but logs recorded before this change do not replay to their old
+digest. Logs carry `"trace_format": 2`.
 
 ## API
 
@@ -99,7 +149,12 @@ least recently used is evicted). `GET /api/sim/commands` lists commands and para
 
 Commands: `start`, `stop`, `trip`, `reset`, `set_load(mw, ramp_mw_per_min)`,
 `set_igv(mode, position)`, `set_ambient(temperature_c)`, `open_breaker` (load rejection),
-`close_breaker`, `set_grid_frequency(hz)`, `set_island_load(mw)`.
+`close_breaker`, `set_grid_frequency(hz)`, `set_island_load(mw)`, and the fault commands
+`inject_degradation(kind, severity_pct, rate_pct_per_h)`, `inject_sensor_fault(channel,
+mode, magnitude)`, `set_fuel_valve_lag(tau_s)`, `clear_fault(target)` and
+`wash_compressor` (standstill only). Fault commands are accepted in every unit state.
+Snapshots carry `measured` (the six instrument readings) and `injected_faults` (ground
+truth, which an estimator under test must not read).
 
 Example:
 
@@ -126,10 +181,17 @@ plots power, speed, exhaust temperature (with the limit) and fuel flow. It is la
 machine. The page keeps its own short log of commands and alarms; the authoritative event
 log with the replay digest is `GET /sessions/{id}/log`.
 
-Limits: one session per page load (a reload creates a new unit), no stored sessions, no
-fault injection, and the console does not yet show the replay digest.
+The fault-injection panel injects degradation (fouling or erosion, with an optional growth
+rate), sensor faults (channel, mode, magnitude) and a slow fuel valve, offers an offline
+compressor wash at standstill, lists the active faults with a Clear button each, and shows
+every instrument's true value next to its reading.
+
+Limits: one session per page load (a reload creates a new unit), no stored sessions, and
+the console does not yet show the replay digest.
 
 ## Next
 
-Step 3 of the roadmap (assistant benchmark before the RAG upgrade) is next. Fault injection
-and showing the replay digest in the console come after the dynamic core is accepted.
+Section 10 of the roadmap defines steps 1 to 3. Fault injection and the scenario bank are
+step 4 here: the WP3 injection prerequisite of WP4 in the roadmap's timeline. WP4
+(health-parameter estimation scored against the bank) follows. Showing the replay digest in
+the console is still open.

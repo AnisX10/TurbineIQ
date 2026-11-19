@@ -1,0 +1,63 @@
+{
+ "config": {
+  "seed": 103,
+  "ambient_temperature_c": 15.0,
+  "grid": "infinite_bus",
+  "grid_frequency_hz": 50.0,
+  "island_load_mw": 20.0,
+  "measurement_noise": true,
+  "record_interval_s": 1.0
+ },
+ "events": [
+  {
+   "step": 0,
+   "command": "start",
+   "params": {}
+  },
+  {
+   "step": 6000,
+   "command": "set_load",
+   "params": {
+    "mw": 30.0,
+    "ramp_mw_per_min": 60.0
+   }
+  },
+  {
+   "step": 30000,
+   "command": "set_load",
+   "params": {
+    "mw": 40.0,
+    "ramp_mw_per_min": 60.0
+   }
+  },
+  {
+   "step": 54000,
+   "command": "set_load",
+   "params": {
+    "mw": 25.0,
+    "ramp_mw_per_min": 60.0
+   }
+  },
+  {
+   "step": 78000,
+   "command": "set_load",
+   "params": {
+    "mw": 45.0,
+    "ramp_mw_per_min": 60.0
+   }
+  },
+  {
+   "step": 102000,
+   "command": "set_load",
+   "params": {
+    "mw": 35.0,
+    "ramp_mw_per_min": 60.0
+   }
+  }
+ ],
+ "steps": 144000,
+ "dt_s": 0.05,
+ "trace_digest": "d1a78a44f592226c84d74e74f034c188f4aa092c02d39a263ae8344a88901f52",
+ "trace_format": 2,
+ "model_note": "Simulated plant. Rowen-type dynamics (fuel system, rotor, exhaust thermocouple, governor/temperature/acceleration control) on static maps generated from the calibrated variable-property cycle model. Time constants, start-up timings and protection thresholds are illustrative; nothing here is validated against real 6B.03 transients, and nothing is connected to a real machine."
+}
