@@ -52,3 +52,34 @@ test('Operate: no serious axe violations and no horizontal scroll on a phone', a
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow).toBeLessThanOrEqual(0)
 })
+
+test('Operate: inject faults, read their ground truth, wash and clear them', async ({ page }) => {
+  await page.goto('/#/operate')
+  await page.getByRole('button', { name: 'Create unit' }).click()
+  await expect(page.getByTestId('no-faults')).toBeVisible()
+
+  await page.getByLabel('Sensor', { exact: true }).selectOption('exhaust_temperature')
+  await page.getByLabel('Fault mode').selectOption('bias')
+  await page.getByLabel('Magnitude (K)').fill('-20')
+  await page.getByRole('button', { name: 'Inject sensor fault' }).click()
+  await expect(page.getByTestId('active-faults')).toContainText('Exhaust temperature sensor bias -20 K')
+  // Faults act from the next step: once the simulation runs, the reading sits about 20 K below the truth.
+  const number = async (testId: string) => parseFloat((await page.getByTestId(testId).textContent()) ?? 'NaN')
+  await page.getByRole('button', { name: 'Run' }).click()
+  await expect.poll(async () => (await number('truth-exhaust_temperature')) - (await number('reading-exhaust_temperature'))).toBeGreaterThan(17)
+  await page.getByRole('button', { name: 'Pause' }).click()
+
+  await page.getByLabel('Severity (%)').fill('3')
+  await page.getByRole('button', { name: 'Inject degradation' }).click()
+  await expect(page.getByTestId('active-faults')).toContainText('Compressor fouling 3.00 %')
+  await page.getByRole('button', { name: 'Offline compressor wash' }).click()
+  await expect(page.getByTestId('active-faults')).not.toContainText('Compressor fouling')
+
+  await page.getByRole('button', { name: 'Clear Exhaust temperature sensor' }).click()
+  await expect(page.getByTestId('no-faults')).toBeVisible()
+
+  await page.getByLabel('Magnitude (K)').fill('500')
+  await page.getByRole('button', { name: 'Inject sensor fault' }).click()
+  await expect(page.getByLabel('Magnitude (K)')).toHaveAttribute('aria-invalid', 'true')
+  await expect(page.getByTestId('no-faults')).toBeVisible()
+})

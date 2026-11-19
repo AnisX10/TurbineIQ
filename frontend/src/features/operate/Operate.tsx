@@ -1,8 +1,10 @@
-import { useId, useState } from 'react'
+import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { OctagonAlert, Pause, Play, Power, RotateCcw } from 'lucide-react'
 import { useTurbineStore } from '../../app/useTurbineStore'
 import { EngineOfflineBanner } from '../../components/ui/EngineOfflineBanner'
+import { FaultPanel } from './FaultPanel'
+import { Field } from './Field'
 import { Trend } from './Trend'
 import { useSimSession } from './useSimSession'
 import {
@@ -19,19 +21,6 @@ import './Operate.css'
 
 const SPEEDS = [1, 10, 60] as const
 const MAX_LOAD_MW = 47
-
-function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: (ids: { id: string; describedBy?: string }) => React.ReactNode }) {
-  const id = useId()
-  const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined
-  return (
-    <div className="operate-field">
-      <label htmlFor={id}>{label}</label>
-      {children({ id, describedBy })}
-      {error ? <small id={`${id}-error`} className="operate-field-error" role="alert">{error}</small>
-        : hint ? <small id={`${id}-hint`}>{hint}</small> : null}
-    </div>
-  )
-}
 
 function CreateForm({ busy, onCreate }: { busy: boolean; onCreate: (config: { seed: number; ambient_temperature_c: number; grid: SimGrid }) => void }) {
   const [seed, setSeed] = useState('1')
@@ -233,6 +222,8 @@ export default function Operate() {
               </form>
             </div>
           </section>
+
+          <FaultPanel state={state} busy={sim.busy} send={sim.send} />
 
           <section className="operate-card" aria-labelledby="operate-trends-title">
             <h2 id="operate-trends-title">Trends</h2>
