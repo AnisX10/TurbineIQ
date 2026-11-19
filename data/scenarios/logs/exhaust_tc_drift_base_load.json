@@ -1,0 +1,40 @@
+{
+ "config": {
+  "seed": 401,
+  "ambient_temperature_c": 15.0,
+  "grid": "infinite_bus",
+  "grid_frequency_hz": 50.0,
+  "island_load_mw": 20.0,
+  "measurement_noise": true,
+  "record_interval_s": 1.0
+ },
+ "events": [
+  {
+   "step": 0,
+   "command": "start",
+   "params": {}
+  },
+  {
+   "step": 6000,
+   "command": "set_load",
+   "params": {
+    "mw": 47.0,
+    "ramp_mw_per_min": 60.0
+   }
+  },
+  {
+   "step": 36000,
+   "command": "inject_sensor_fault",
+   "params": {
+    "channel": "exhaust_temperature",
+    "mode": "drift",
+    "magnitude": -10.0
+   }
+  }
+ ],
+ "steps": 144000,
+ "dt_s": 0.05,
+ "trace_digest": "dcd16fc0999e0f938bbc54b14da3b6c5a49847404f11388c4d4d1d6cf74b5e40",
+ "trace_format": 2,
+ "model_note": "Simulated plant. Rowen-type dynamics (fuel system, rotor, exhaust thermocouple, governor/temperature/acceleration control) on static maps generated from the calibrated variable-property cycle model. Time constants, start-up timings and protection thresholds are illustrative; nothing here is validated against real 6B.03 transients, and nothing is connected to a real machine."
+}

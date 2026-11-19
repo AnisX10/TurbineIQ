@@ -51,3 +51,19 @@
 .operate-log time { color: var(--muted); font: 11px var(--mono); }
 .operate-log li.is-alarm span { color: var(--negative); font-weight: 600; }
 @media (max-width: 620px) { .operate-clock { margin-left: 0; } .operate-commands button { flex: 1 1 140px; } }
+.operate-forms form .operate-note { margin: 4px 0 0; }
+.operate-fault-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 12px; }
+.operate-fault-grid h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
+.operate-fault-list { margin: 0 0 8px; padding: 0; list-style: none; }
+.operate-fault-list li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--rule); font-size: 12px; }
+.operate-fault-list li span { min-width: 0; overflow-wrap: anywhere; }
+.operate-fault-list button { min-height: 44px; display: inline-flex; align-items: center; gap: 4px; padding: 0 10px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; cursor: pointer; }
+.operate-fault-list button:disabled { opacity: 0.5; cursor: not-allowed; }
+.operate-instruments { min-width: 0; overflow-x: auto; }
+.operate-instruments table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.operate-instruments caption { margin-bottom: 8px; text-align: left; font-size: 13px; font-weight: 600; }
+.operate-instruments th, .operate-instruments td { padding: 6px 8px; border-bottom: 1px solid var(--rule); text-align: right; }
+.operate-instruments th[scope='row'], .operate-instruments thead th:first-child { text-align: left; font-weight: 400; }
+.operate-instruments thead th { color: var(--muted); font-size: 11px; font-weight: 400; }
+.operate-instruments td { font: 12px var(--mono); font-variant-numeric: tabular-nums; }
+.operate-fault-flag { color: var(--negative); font-weight: 600; }

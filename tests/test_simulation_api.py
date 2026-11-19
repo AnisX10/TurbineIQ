@@ -71,7 +71,16 @@ def test_full_operating_flow_over_http() -> None:
 
     tripped = _command(session_id, "trip").json()["state"]
     assert tripped["state"] == "tripped" and tripped["trip_cause"] == "manual_emergency_trip"
-    assert tripped["available_commands"] == ["reset", "set_load", "set_igv", "set_ambient"]
+    assert tripped["available_commands"] == [
+        "reset",
+        "set_load",
+        "set_igv",
+        "set_ambient",
+        "inject_degradation",
+        "inject_sensor_fault",
+        "set_fuel_valve_lag",
+        "clear_fault",
+    ]
 
 
 def test_state_conflicts_and_bad_input_use_distinct_status_codes() -> None:
@@ -154,3 +163,39 @@ def test_openapi_description_does_not_claim_there_are_no_control_endpoints() -> 
     description = client.get("/openapi.json").json()["info"]["description"]
     assert "simulated plant only" in description
     assert "industrial connectivity" in description
+
+
+def test_fault_injection_over_http_is_logged_and_reported_as_ground_truth() -> None:
+    session_id = _create(seed=2)
+    catalog = client.get("/api/sim/commands").json()["commands"]
+    assert catalog["inject_sensor_fault"] == {
+        "channel": "str",
+        "mode": "str",
+        "magnitude": "null | number",
+    }
+    injected = _command(
+        session_id, "inject_degradation", kind="compressor_fouling", severity_pct=2.0
+    )
+    assert injected.status_code == 200
+    truth = injected.json()["state"]["injected_faults"]
+    assert truth["degradation"]["compressor_fouling"] == {
+        "severity_pct": 2.0,
+        "rate_pct_per_h": 0.0,
+    }
+    assert (
+        _command(
+            session_id, "inject_sensor_fault", channel="vibration", mode="bias", magnitude=1.0
+        ).status_code
+        == 409
+    )
+    assert (
+        _command(
+            session_id, "inject_sensor_fault", channel="speed", mode="bias", magnitude="x"
+        ).status_code
+        == 422
+    )
+    assert _command(session_id, "wash_compressor").status_code == 200
+    log = client.get(f"/api/sim/sessions/{session_id}/log").json()
+    assert [e["command"] for e in log["events"]] == ["inject_degradation", "wash_compressor"]
+    replayed = client.post("/api/sim/replay", json={"log": log}).json()
+    assert replayed["digest_matches"] is True

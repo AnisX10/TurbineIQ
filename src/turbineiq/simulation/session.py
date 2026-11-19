@@ -1,10 +1,11 @@
 """Seeded, event-logged simulation sessions with bit-for-bit replay.
 
 A session wraps one :class:`~turbineiq.simulation.plant.GasTurbinePlant`. Operator
-commands are validated, applied between fixed steps and written to an event log keyed by
-the step index. The only randomness is measurement noise from ``random.Random(seed)``,
-drawn in a fixed order, so the same configuration and event log reproduce the same
-trajectory exactly (same machine and Python build). :func:`replay` checks that.
+commands, including injected faults, are validated, applied between fixed steps and
+written to an event log keyed by the step index. The only randomness is measurement noise
+and noise-type sensor faults, drawn from generators seeded by the session seed in a fixed
+order, so the same configuration and event log reproduce the same trajectory exactly (same
+machine and Python build). :func:`replay` checks that.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ from collections import deque
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
+from .faults import CHANNELS
 from .maps import operating_maps
 from .plant import CommandError, GasTurbinePlant, PlantParameters, UnitState
 
@@ -40,13 +42,41 @@ COMMANDS: dict[str, dict[str, type | tuple[type, ...]]] = {
     "close_breaker": {},
     "set_grid_frequency": {"hz": (int, float)},
     "set_island_load": {"mw": (int, float)},
+    "inject_degradation": {
+        "kind": str,
+        "severity_pct": (int, float),
+        "rate_pct_per_h": (int, float, type(None)),
+    },
+    "inject_sensor_fault": {
+        "channel": str,
+        "mode": str,
+        "magnitude": (int, float, type(None)),
+    },
+    "set_fuel_valve_lag": {"tau_s": (int, float)},
+    "clear_fault": {"target": str},
+    "wash_compressor": {},
 }
+
+#: Fault commands are accepted in every unit state (a fault does not wait for the operator).
+FAULT_COMMANDS = ("inject_degradation", "inject_sensor_fault", "set_fuel_valve_lag", "clear_fault")
+#: Version of the per-step record hashed into the trace digest. Format 2 adds the extra
+#: instrument channels, the controller's thermocouple reading and the injected health, so
+#: logs recorded before fault injection existed do not replay to the same digest.
+TRACE_FORMAT = 2
 
 _STATE_CODES = {state: i for i, state in enumerate(UnitState)}
 _ALLOWED: dict[UnitState, tuple[str, ...]] = {
-    UnitState.STANDSTILL: ("start", "set_load", "set_igv", "set_ambient", "set_island_load"),
-    UnitState.TRIPPED: ("reset", "set_load", "set_igv", "set_ambient"),
-    UnitState.COASTDOWN: ("trip", "set_load", "set_igv", "set_ambient"),
+    UnitState.STANDSTILL: (
+        "start",
+        "set_load",
+        "set_igv",
+        "set_ambient",
+        "set_island_load",
+        "wash_compressor",
+        *FAULT_COMMANDS,
+    ),
+    UnitState.TRIPPED: ("reset", "set_load", "set_igv", "set_ambient", *FAULT_COMMANDS),
+    UnitState.COASTDOWN: ("trip", "set_load", "set_igv", "set_ambient", *FAULT_COMMANDS),
 }
 _RUNNING = (
     "stop",
@@ -58,6 +88,7 @@ _RUNNING = (
     "close_breaker",
     "set_grid_frequency",
     "set_island_load",
+    *FAULT_COMMANDS,
 )
 
 
@@ -148,16 +179,19 @@ class Session:
             grid=self.config.grid,
             grid_frequency_hz=self.config.grid_frequency_hz,
             island_load_mw=self.config.island_load_mw,
+            fault_seed=self.config.seed,
         )
         self.dt = self.plant.p.dt_s
         self.step_count = 0
         self.events: list[SimEvent] = []
         self._rng = random.Random(self.config.seed)
+        # Noise for the channels added with fault injection; a separate stream keeps the
+        # power and exhaust-temperature noise sequence of earlier versions unchanged.
+        self._rng_extra = random.Random(self.config.seed * 2 + 2)
         self._hash = hashlib.sha256()
         self._record_every = max(1, round(self.config.record_interval_s / self.dt))
         self.history: deque[dict[str, Any]] = deque(maxlen=20_000)
-        self.measured_power_mw = 0.0
-        self.measured_exhaust_k = self.plant.tm
+        self.measured: dict[str, float] = {}
         self._sample()
 
     # ------------------------------------------------------------------ commands
@@ -194,6 +228,24 @@ class Session:
                 plant.command_set_grid_frequency(float(clean["hz"]))
             elif command == "set_island_load":
                 plant.command_set_island_load(float(clean["mw"]))
+            elif command == "inject_degradation":
+                rate = clean["rate_pct_per_h"]
+                plant.command_inject_degradation(
+                    clean["kind"],
+                    float(clean["severity_pct"]),
+                    None if rate is None else float(rate),
+                )
+            elif command == "inject_sensor_fault":
+                magnitude = clean["magnitude"]
+                plant.command_inject_sensor_fault(
+                    clean["channel"], clean["mode"], None if magnitude is None else float(magnitude)
+                )
+            elif command == "set_fuel_valve_lag":
+                plant.command_set_fuel_valve_lag(float(clean["tau_s"]))
+            elif command == "clear_fault":
+                plant.command_clear_fault(clean["target"])
+            elif command == "wash_compressor":
+                plant.command_wash_compressor()
         except ValueError as exc:
             if isinstance(exc, CommandError):
                 raise
@@ -237,13 +289,27 @@ class Session:
 
     def _sample(self) -> None:
         plant = self.plant
+        readings = plant.readings
+        measured: dict[str, float] = {}
+        for channel, spec in CHANNELS.items():
+            value = readings[channel]
+            if self.config.measurement_noise:
+                # Power and exhaust temperature draw from the original stream, in its order.
+                rng = (
+                    self._rng
+                    if channel in ("electrical_power", "exhaust_temperature")
+                    else (self._rng_extra)
+                )
+                g = rng.gauss(0.0, 1.0)
+                value = (
+                    value * (1.0 + spec.noise_rel * g)
+                    if spec.noise_rel
+                    else (value + spec.noise_abs * g)
+                )
+            measured[channel] = value
+        self.measured = measured
         power = plant.electrical_power_mw()
-        if self.config.measurement_noise:
-            self.measured_power_mw = power * (1.0 + 0.002 * self._rng.gauss(0.0, 1.0))
-            self.measured_exhaust_k = plant.tm + 0.5 * self._rng.gauss(0.0, 1.0)
-        else:
-            self.measured_power_mw = power
-            self.measured_exhaust_k = plant.tm
+        health = plant.faults.health
         self._hash.update(
             struct.pack(
                 "<9d",
@@ -254,8 +320,23 @@ class Session:
                 plant.igv,
                 plant.fsr,
                 power,
-                self.measured_power_mw,
+                measured["electrical_power"],
                 float(_STATE_CODES[plant.state]),
+            )
+        )
+        self._hash.update(
+            struct.pack(
+                "<10d",
+                measured["exhaust_temperature"],
+                measured["speed"],
+                measured["compressor_discharge_temperature"],
+                measured["compressor_discharge_pressure"],
+                measured["fuel_flow"],
+                readings["exhaust_temperature"],
+                health.compressor_flow,
+                health.compressor_efficiency,
+                health.turbine_efficiency,
+                plant.valve_lag_s,
             )
         )
         if self.step_count % self._record_every == 0:
@@ -270,6 +351,8 @@ class Session:
         maps = plant.maps
         power = plant.electrical_power_mw()
         fuel_kg_s = plant.wfc * maps.rated_fuel_kg_s
+        cdt, cdp = plant.compressor_discharge()
+        m = self.measured
         heat_rate = None
         if power > 0.05 * maps.rated_electrical_power_mw and fuel_kg_s > 0:
             heat_rate = fuel_kg_s * maps.fuel_lhv_kj_kg * 3600.0 / (power * 1000.0)
@@ -300,10 +383,21 @@ class Session:
             "igv_mode": plant.igv_mode,
             "ambient_temperature_c": maps.ambient_temperature_c,
             "heat_rate_kj_per_kwh": heat_rate,
+            "compressor_discharge_temperature_k": cdt,
+            "compressor_discharge_pressure_kpa": cdp,
+            # What the instruments report: sensor faults applied, then measurement noise.
+            # Speed in per unit, the rest in the units of the matching true value.
             "measured": {
-                "electrical_power_mw": self.measured_power_mw,
-                "exhaust_temperature_k": self.measured_exhaust_k,
+                "electrical_power_mw": m["electrical_power"],
+                "exhaust_temperature_k": m["exhaust_temperature"],
+                "speed_pu": m["speed"],
+                "compressor_discharge_temperature_k": m["compressor_discharge_temperature"],
+                "compressor_discharge_pressure_kpa": m["compressor_discharge_pressure"],
+                "fuel_flow_kg_s": m["fuel_flow"],
             },
+            # Ground truth of injected faults, for the console and for scoring estimators.
+            # An estimator under test must use only "measured" (and the commands it sent).
+            "injected_faults": plant.faults.to_dict(),
             "alarms": [{"t_s": t, "message": m} for t, m in plant.alarms[-5:]],
             "available_commands": self.allowed_commands(),
             "synthetic_simulation": True,
@@ -316,6 +410,7 @@ class Session:
             "steps": self.step_count,
             "dt_s": self.dt,
             "trace_digest": self.trace_digest(),
+            "trace_format": TRACE_FORMAT,
             "model_note": MODEL_NOTE,
         }
 
