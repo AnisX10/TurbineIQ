@@ -19,8 +19,8 @@ Rate changes
     Faults start and stop growing abruptly; a rate walk large enough to follow that makes
     the band several times too wide while the rate is steady. So the walk is kept small and
     the filter watches an exponentially weighted mean of its normalised innovations: when
-    it leaves its expected range (``rate_change_sigma``), the rate's variance is reopened to
-    its prior and the rate is re-learned from the next estimates.
+    it leaves its expected range (``rate_change_sigma``), the rate's variance is increased
+    by its prior variance and the rate is re-learned from the next estimates.
 
 Estimator errors
     Successive estimates from a filter are not independent, and part of an estimator's error
@@ -206,7 +206,7 @@ class _Trend:
         self.x = [x[0] + k0 * nu, x[1] + k1 * nu]
         self.p = [p00 * r / s, p01 * r / s, p11 - k1 * p01]
         # Rate change: innovations that keep one sign mean the rate is out of date (a fault
-        # started or stopped growing). Then the rate's variance is reopened to its prior, so
+        # started or stopped growing). Then the rate's prior variance is added back, so
         # the filter re-learns it in minutes while the rate walk can stay small.
         a = self.c.rate_change_weight
         self.drift = (1.0 - a) * self.drift + a * nu / math.sqrt(s)

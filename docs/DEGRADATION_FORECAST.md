@@ -40,8 +40,8 @@ rate walk large enough to follow that keeps the band several times wider than ne
 the rate is steady (section 4.3). So the rate walk is small (0.005 per hour per
 sqrt(hour) for flow capacity, half that for the efficiencies) and the filter watches an
 exponentially weighted mean of its normalised innovations (weight 0.2 for the newest).
-When that mean leaves 2.0 of its own standard deviations, the rate variance is reopened to
-its prior (0.02 per hour for flow, 0.01 for the efficiencies) and the rate is re-learned
+When that mean leaves 2.0 of its own standard deviations, the rate variance is increased by
+its prior variance (prior std 0.02 per hour for flow, 0.01 for the efficiencies) and the rate is re-learned
 from the next estimates. A test checks that a 3 %/h onset is detected within 15 minutes and
 the rate learned to within 1 %/h within 25 minutes.
 
