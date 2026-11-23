@@ -39,7 +39,7 @@ from dataclasses import dataclass, replace
 from functools import lru_cache
 from typing import NamedTuple
 
-from turbineiq.engineering import CALIBRATED_6B03, simulate_real_gas_cycle
+from turbineiq.engineering import CALIBRATED_6B03, RealGasInputs, simulate_real_gas_cycle
 
 SPEED_GRID: tuple[float, ...] = (0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1.0, 1.05, 1.1)
 AIR_FACTOR_GRID: tuple[float, ...] = (0.7, 0.8, 0.9, 1.0)
@@ -344,3 +344,102 @@ def health_maps(ambient_temperature_c: float = 15.0) -> HealthMaps:
     """Cached :class:`HealthMaps` for an ambient temperature (rounded to 0.5 C)."""
 
     return HealthMaps(operating_maps(ambient_temperature_c))
+
+
+# ---------------------------------------------------------------------- perturbed engines
+# Additive helpers for twin-plant mismatch studies (roadmap WP4). They build the same maps
+# as ``_build`` and ``health_maps`` but on another engine calibration, so that a twin can be
+# given slightly wrong calibration data while the plant keeps the calibrated engine. The
+# functions above are unchanged and the plant never uses these.
+
+
+@lru_cache(maxsize=64)
+def _build_for_engine(base: RealGasInputs, ambient_key: float, health: Health) -> OperatingMaps:
+    """``_build`` on the engine ``base`` instead of :data:`CALIBRATED_6B03`.
+
+    The per-unit bases are ``base``'s own clean rated point, so the maps are a
+    self-consistent model of that engine. For ``base == CALIBRATED_6B03`` the result equals
+    ``_build`` (checked in the tests).
+    """
+
+    rated = simulate_real_gas_cycle(base)
+    engine = replace(
+        base,
+        compressor_polytropic_efficiency=base.compressor_polytropic_efficiency
+        + health.compressor_efficiency,
+        turbine_polytropic_efficiency=base.turbine_polytropic_efficiency
+        + health.turbine_efficiency,
+    )
+    t_base = base.ambient_temperature_c + 273.15
+    t_amb = ambient_key + 273.15
+    rows: list[tuple[_Row, ...]] = []
+    for n in SPEED_GRID:
+        per_speed: list[_Row] = []
+        pr = degraded_pressure_ratio(
+            pressure_ratio_at_speed(base.pressure_ratio, n), health.compressor_flow
+        )
+        for g in AIR_FACTOR_GRID:
+            air = base.air_mass_flow_kg_s * (1.0 + health.compressor_flow) * n * g * t_base / t_amb
+            probe = replace(
+                engine,
+                ambient_temperature_c=ambient_key,
+                pressure_ratio=pr,
+                air_mass_flow_kg_s=air,
+                effective_firing_temperature_k=1000.0,
+            )
+            t2 = simulate_real_gas_cycle(probe, allow_negative_work=True)
+            t_lo = t2.compressor_discharge_temperature_k + 2.0
+            fuel, power, exhaust = [], [], []
+            for k in range(_FIRING_POINTS):
+                t_fire = t_lo + (_FIRING_MAX_K - t_lo) * k / (_FIRING_POINTS - 1)
+                try:
+                    res = simulate_real_gas_cycle(
+                        replace(probe, effective_firing_temperature_k=t_fire),
+                        allow_negative_work=True,
+                    )
+                except ValueError:
+                    continue
+                fuel.append(res.fuel_mass_flow_kg_s / rated.fuel_mass_flow_kg_s)
+                power.append(res.shaft_power_mw / rated.shaft_power_mw)
+                exhaust.append(res.exhaust_temperature_k)
+            per_speed.append(
+                _Row(
+                    tuple(fuel), tuple(power), tuple(exhaust), t2.compressor_discharge_temperature_k
+                )
+            )
+        rows.append(tuple(per_speed))
+    return OperatingMaps(
+        ambient_temperature_c=ambient_key,
+        rows=tuple(rows),
+        rated_shaft_power_mw=rated.shaft_power_mw,
+        rated_electrical_power_mw=rated.net_electrical_power_mw,
+        rated_fuel_kg_s=rated.fuel_mass_flow_kg_s,
+        rated_exhaust_k=rated.exhaust_temperature_k,
+        drivetrain_efficiency=base.drivetrain_efficiency,
+        fuel_lhv_kj_kg=base.fuel_lhv_kj_kg,
+        rated_pressure_ratio=base.pressure_ratio,
+        compressor_inlet_pressure_kpa=base.ambient_pressure_kpa
+        * (1.0 - base.inlet_pressure_loss_fraction),
+        health=health,
+    )
+
+
+class EngineHealthMaps(HealthMaps):
+    """:class:`HealthMaps` whose clean and sensitivity maps come from another engine."""
+
+    def __init__(self, engine: RealGasInputs, ambient_temperature_c: float) -> None:
+        key = _ambient_key(ambient_temperature_c)
+        self.engine = engine
+        self.clean = _build_for_engine(engine, key, CLEAN)
+        self._sensitivity = tuple(
+            _build_for_engine(engine, key, single_parameter_health(i, HEALTH_REFERENCE[i]))
+            for i in range(3)
+        )
+
+
+@lru_cache(maxsize=64)
+def engine_health_maps(engine: RealGasInputs, ambient_temperature_c: float = 15.0) -> HealthMaps:
+    """Cached health maps of ``engine`` (for example a perturbed copy of
+    :data:`CALIBRATED_6B03`) at an ambient temperature (rounded to 0.5 C)."""
+
+    return EngineHealthMaps(engine, _ambient_key(ambient_temperature_c))
