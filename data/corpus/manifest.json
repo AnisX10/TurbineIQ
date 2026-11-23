@@ -1,0 +1,292 @@
+{
+  "note": "Public documents only, each with its source URL and licence. Add entries here, then run scripts/corpus_manifest.py fetch --update. Files are git-ignored; only redistributable ones may be committed.",
+  "documents": [
+    {
+      "id": "ntrs-20160012485",
+      "title": "Practical Techniques for Modeling Gas Turbine Engine Performance",
+      "authors": [
+        "Chapman, Jeffryes W.",
+        "Lavelle, Thomas M.",
+        "Litt, Jonathan S."
+      ],
+      "publisher": "NASA Technical Reports Server (NASA/TM-2016-219147)",
+      "year": 2016,
+      "url": "https://ntrs.nasa.gov/api/citations/20160012485/downloads/20160012485.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/20160012485",
+      "licence": "NTRS copyright determination PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-20160012485.pdf",
+      "topic": "steady-state and transient engine performance modelling",
+      "sha256": "88f7bf99be577826f5ec3e0f0539dd057f303c4758272f17fe382ee3311ea0a1"
+    },
+    {
+      "id": "ntrs-20100024368",
+      "title": "An Integrated Architecture for On-Board Aircraft Engine Performance Trend Monitoring and Gas Path Fault Diagnostics",
+      "authors": [
+        "Simon, Donald L."
+      ],
+      "publisher": "NASA Technical Reports Server (NASA/TM-2010-216358)",
+      "year": 2010,
+      "url": "https://ntrs.nasa.gov/api/citations/20100024368/downloads/20100024368.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/20100024368",
+      "licence": "NTRS copyright determination GOV_PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-20100024368.pdf",
+      "topic": "performance trend monitoring and gas path fault diagnostics",
+      "sha256": "fe262bf67f474b304c2432553e48b6e136d5b4668cb9d413b2c948fa2c605ac6"
+    },
+    {
+      "id": "ntrs-20160001158",
+      "title": "Sensor Selection for Aircraft Engine Performance Estimation and Gas Path Fault Diagnostics",
+      "authors": [
+        "Simon, Donald L.",
+        "Rinehart, Aidan W."
+      ],
+      "publisher": "NASA Technical Reports Server (GT2015-43744)",
+      "year": 2016,
+      "url": "https://ntrs.nasa.gov/api/citations/20160001158/downloads/20160001158.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/20160001158",
+      "licence": "NTRS copyright determination PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-20160001158.pdf",
+      "topic": "sensor selection for performance estimation and gas path diagnostics",
+      "sha256": "8823064ab9713ae458dfdf5cd1ff295c2c83fc1869f6bf5f8e62c5045c82915c"
+    },
+    {
+      "id": "ntrs-20030003697",
+      "title": "Turbine Engine Clearance Control Systems: Current Practices and Future Directions",
+      "authors": [
+        "Lattime, Scott B.",
+        "Steinetz, Bruce M."
+      ],
+      "publisher": "NASA Technical Reports Server (AIAA Paper 2002-3790)",
+      "year": 2002,
+      "url": "https://ntrs.nasa.gov/api/citations/20030003697/downloads/20030003697.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/20030003697",
+      "licence": "NTRS copyright determination PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-20030003697.pdf",
+      "topic": "turbine clearance control and its effect on efficiency and degradation",
+      "sha256": "c866aa711e0c4a5cf4e29f4234b24010ce848b2fe968f4315531f7fbe8a06111"
+    },
+    {
+      "id": "ntrs-20100029602",
+      "title": "Sensor and Actuator Needs for More Intelligent Gas Turbine Engines",
+      "authors": [
+        "Garg, Sanjay",
+        "Schadow, Klaus",
+        "Horn, Wolfgang",
+        "Pfoertner, Hugo",
+        "Stiharu, Ion"
+      ],
+      "publisher": "NASA Technical Reports Server (GT2010-22685)",
+      "year": 2010,
+      "url": "https://ntrs.nasa.gov/api/citations/20100029602/downloads/20100029602.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/20100029602",
+      "licence": "NTRS copyright determination PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-20100029602.pdf",
+      "topic": "sensing and actuation for engine control and health management",
+      "sha256": "1cf3e11a50b1ef91e06d2cc535c23057c5fb3879b166234d541b88d3e511fdfc"
+    },
+    {
+      "id": "ntrs-20070034949",
+      "title": "User's Guide for the Commercial Modular Aero-Propulsion System Simulation (C-MAPSS)",
+      "authors": [
+        "Frederick, Dean K.",
+        "DeCastro, Jonathan A.",
+        "Litt, Jonathan S."
+      ],
+      "publisher": "NASA Technical Reports Server (NASA/TM-2007-215026)",
+      "year": 2007,
+      "url": "https://ntrs.nasa.gov/api/citations/20070034949/downloads/20070034949.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/20070034949",
+      "licence": "NTRS copyright determination PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-20070034949.pdf",
+      "topic": "dynamic engine simulation with health parameters and controller (C-MAPSS)",
+      "sha256": "bc336b255603699c7a0b40fea5004f33363223fb7391995ddf8445acd1951a9b"
+    },
+    {
+      "id": "ntrs-19860013216",
+      "title": "Ceramic thermal barrier coatings for electric utility gas turbine engines",
+      "authors": [
+        "Miller, R. A."
+      ],
+      "publisher": "NASA Technical Reports Server (NASA-TM-87288)",
+      "year": 1986,
+      "url": "https://ntrs.nasa.gov/api/citations/19860013216/downloads/19860013216.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/19860013216",
+      "licence": "NTRS copyright determination GOV_PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-19860013216.pdf",
+      "topic": "thermal barrier coatings in electric utility (industrial) gas turbines",
+      "sha256": "dc0ccce8215092f380b73dae562c554eceab4fcbda9877fe936d7101b35e7988"
+    },
+    {
+      "id": "ntrs-19840004098",
+      "title": "A generalized computer code for developing dynamic gas turbine engine models (DIGTEM)",
+      "authors": [
+        "Daniele, C. J."
+      ],
+      "publisher": "NASA Technical Reports Server (NASA-TM-83508)",
+      "year": 1983,
+      "url": "https://ntrs.nasa.gov/api/citations/19840004098/downloads/19840004098.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/19840004098",
+      "licence": "NTRS copyright determination GOV_PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-19840004098.pdf",
+      "topic": "dynamic gas turbine model generation (DIGTEM)",
+      "sha256": "0c2d0b80636529c5f35341228ac7e7b0361520611be9097fa8ffd711c744ace9"
+    },
+    {
+      "id": "ntrs-19780019107",
+      "title": "JT9D jet engine performance deterioration",
+      "authors": [
+        "Jay, A.",
+        "Todd, E. S.",
+        "Sallee, G. P."
+      ],
+      "publisher": "NASA Technical Reports Server",
+      "year": 1978,
+      "url": "https://ntrs.nasa.gov/api/citations/19780019107/downloads/19780019107.pdf",
+      "landing_page": "https://ntrs.nasa.gov/citations/19780019107",
+      "licence": "NTRS copyright determination GOV_PUBLIC_USE_PERMITTED (public use permitted; NASA/US-government work)",
+      "redistributable": true,
+      "filename": "ntrs-19780019107.pdf",
+      "topic": "in-service performance deterioration of a turbofan",
+      "sha256": "d339f243496cdbba44a83042fd296b57f6fa4e02e107be72eeabeab96c6aa6a8"
+    },
+    {
+      "id": "arxiv-2209.09168",
+      "title": "Application of Neural Network in the Prediction of NOx Emissions from Degrading Gas Turbine",
+      "authors": [
+        "Zhenkun Zheng",
+        "Alan Rezazadeh"
+      ],
+      "publisher": "arXiv",
+      "year": 2022,
+      "url": "https://arxiv.org/pdf/2209.09168v1",
+      "landing_page": "https://arxiv.org/abs/2209.09168v1",
+      "licence": "CC BY 4.0",
+      "redistributable": true,
+      "filename": "arxiv-2209.09168.pdf",
+      "topic": "NOx prediction for a degrading gas turbine",
+      "sha256": "3171b728e0f84e69601259e8d3e8294a35d5e67f33299d9b9f5b1cd7bcf7e41a"
+    },
+    {
+      "id": "arxiv-2606.26710",
+      "title": "Kalman Prototypical Networks for Few-shot Fault Detection in Combined Cycle Gas Turbines",
+      "authors": [
+        "Mohammed Ayalew Belay",
+        "Lucas Ferreira Bernardino",
+        "Adil Rasheed",
+        "Rub\u00e9n M. Monta\u00f1\u00e9s",
+        "Pierluigi Salvo Rossi"
+      ],
+      "publisher": "arXiv",
+      "year": 2026,
+      "url": "https://arxiv.org/pdf/2606.26710v1",
+      "landing_page": "https://arxiv.org/abs/2606.26710v1",
+      "licence": "CC BY 4.0",
+      "redistributable": true,
+      "filename": "arxiv-2606.26710.pdf",
+      "topic": "few-shot fault detection in combined cycle gas turbines",
+      "sha256": "4d849ed6ff4c36b4165d1781e3319adca02aa81f6b396bbbce169b57b75f303b"
+    },
+    {
+      "id": "arxiv-2507.08697",
+      "title": "Domain-Informed Operation Excellence of Gas Turbine System with Machine Learning",
+      "authors": [
+        "Waqar Muhammad Ashraf",
+        "Amir H. Keshavarzzadeh",
+        "Abdulelah S. Alshehri",
+        "Abdulrahman bin Jumah",
+        "Ramit Debnath",
+        "Vivek Dua"
+      ],
+      "publisher": "arXiv",
+      "year": 2025,
+      "url": "https://arxiv.org/pdf/2507.08697v1",
+      "landing_page": "https://arxiv.org/abs/2507.08697v1",
+      "licence": "CC BY 4.0",
+      "redistributable": true,
+      "filename": "arxiv-2507.08697.pdf",
+      "topic": "machine learning for industrial gas turbine operation",
+      "sha256": "f4e877652d7f973e546ab810fdbc61426811300c1bfdf087540a7ba926d9d4f3"
+    },
+    {
+      "id": "arxiv-2406.07572",
+      "title": "Domain-specific ReAct for physics-integrated iterative modeling: A case study of LLM agents for gas path analysis of gas turbines",
+      "authors": [
+        "Tao Song",
+        "Yuwei Fan",
+        "Chenlong Feng",
+        "Keyu Song",
+        "Chao Liu",
+        "Dongxiang Jiang"
+      ],
+      "publisher": "arXiv",
+      "year": 2024,
+      "url": "https://arxiv.org/pdf/2406.07572v1",
+      "landing_page": "https://arxiv.org/abs/2406.07572v1",
+      "licence": "arXiv non-exclusive distribution licence 1.0 (no redistribution right granted)",
+      "redistributable": false,
+      "filename": "arxiv-2406.07572.pdf",
+      "topic": "LLM agent for gas path analysis",
+      "sha256": "b26351e0cd98b014ab607ff3de2fa51ebca75ef09b0ea1116acf7c4e6923aa9c"
+    },
+    {
+      "id": "arxiv-2104.14842",
+      "title": "A Thermodynamic based and Data Driven Hybrid Network for Gas Turbine Modeling",
+      "authors": [
+        "Likun Ren"
+      ],
+      "publisher": "arXiv",
+      "year": 2021,
+      "url": "https://arxiv.org/pdf/2104.14842v2",
+      "landing_page": "https://arxiv.org/abs/2104.14842v2",
+      "licence": "CC BY-SA 4.0",
+      "redistributable": true,
+      "filename": "arxiv-2104.14842.pdf",
+      "topic": "hybrid thermodynamic / data-driven gas turbine model",
+      "sha256": "45f658baf5133f7fdb44154a4149539645df97c5a7d434c017a9583b9123d2b6"
+    },
+    {
+      "id": "arxiv-1111.0233",
+      "title": "Gas turbine diagnostic system",
+      "authors": [
+        "Shuvatov Talgat",
+        "Suleimenov Batrbek"
+      ],
+      "publisher": "arXiv",
+      "year": 2011,
+      "url": "https://arxiv.org/pdf/1111.0233v2",
+      "landing_page": "https://arxiv.org/abs/1111.0233v2",
+      "licence": "arXiv non-exclusive distribution licence 1.0 (no redistribution right granted)",
+      "redistributable": false,
+      "filename": "arxiv-1111.0233.pdf",
+      "topic": "gas turbine diagnostic system",
+      "sha256": "e0f77e6ef0b1673283bb10bce86dd4c6aa6a1071eb55c5eaf8db7d0dbe50bcaf"
+    },
+    {
+      "id": "arxiv-2506.19503",
+      "title": "Physics-Informed Neural Networks for Industrial Gas Turbines: Recent Trends, Advancements and Challenges",
+      "authors": [
+        "Afila Ajithkumar Sophiya",
+        "Sepehr Maleki",
+        "Giuseppe Bruni",
+        "Senthil K. Krishnababu"
+      ],
+      "publisher": "arXiv",
+      "year": 2025,
+      "url": "https://arxiv.org/pdf/2506.19503v1",
+      "landing_page": "https://arxiv.org/abs/2506.19503v1",
+      "licence": "arXiv non-exclusive distribution licence 1.0 (no redistribution right granted)",
+      "redistributable": false,
+      "filename": "arxiv-2506.19503.pdf",
+      "topic": "physics-informed neural networks for industrial gas turbines (review)",
+      "sha256": "3885c2ad7a26af67c2eb45c6bf20ed11fb1a02755d7222392b25907981430ecc"
+    }
+  ]
+}

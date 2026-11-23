@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "embedding_model": "BAAI/bge-m3",
+    "reranker_model": "BAAI/bge-reranker-v2-m3",
+    "chunks": 1160,
+    "top_k": 10,
+    "machine": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+    "cpu_count": 12,
+    "torch": "2.15.0+cpu",
+    "torch_threads": 10,
+    "note": "Per-query wall time after one warm-up query; CPU only."
+  },
+  "setup": {
+    "bm25_index_s": 0.08646069999667816,
+    "embedding_model_load_s": 20.673881700000493,
+    "dense_index_s (from cache if present)": 0.009495799997239374,
+    "reranker_load_s": 9.104506400006358
+  },
+  "per_query": {
+    "lexical_baseline": {
+      "queries": 10,
+      "median_s": 0.11339030000090133,
+      "mean_s": 0.12079325999948196,
+      "max_s": 0.15674599999329075
+    },
+    "bm25": {
+      "queries": 10,
+      "median_s": 0.003257550000853371,
+      "mean_s": 0.003338270004314836,
+      "max_s": 0.004716800001915544
+    },
+    "dense": {
+      "queries": 10,
+      "median_s": 0.42297975000110455,
+      "mean_s": 0.41948733999888643,
+      "max_s": 0.5140876999939792
+    },
+    "hybrid": {
+      "queries": 10,
+      "median_s": 0.37715145000402117,
+      "mean_s": 0.3856175699998857,
+      "max_s": 0.46181999999680556
+    },
+    "hybrid_rerank (candidate_k=30)": {
+      "queries": 10,
+      "median_s": 47.24236850000307,
+      "mean_s": 47.41006103000109,
+      "max_s": 59.90431689999241
+    },
+    "hybrid_rerank (candidate_k=10)": {
+      "queries": 10,
+      "median_s": 13.478670349999447,
+      "mean_s": 14.787176590001035,
+      "max_s": 24.269702699995833
+    }
+  }
+}
