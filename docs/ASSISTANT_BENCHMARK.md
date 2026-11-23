@@ -115,9 +115,33 @@ Full report: `docs/evidence/retrieval/improved-bge-small.md` (with JSON).
 - Refusal AUC of 1.000 for `hybrid_rerank` means its top score separated all 12 unanswerable
   questions from the answerable ones here. With 12 questions this is weak evidence, and the
   score threshold for refusing has not been chosen or tested.
-- Cost: reranking with a 568M-parameter cross-encoder on a laptop CPU is slow (the full run took
-  85 minutes). Per-query latency was not measured separately; it must be before the assistant
-  uses this configuration interactively.
+- Cost: reranking with a 568M-parameter cross-encoder on a laptop CPU is far too slow for
+  interactive use: about 46 to 47 s per query at 30 candidates and 12 to 13 s at 10 (measured
+  below). The quality gain above was measured at 30 candidates only; whether 10 candidates or a
+  smaller reranker keeps it has not been tested.
+
+## Per-query latency (measured)
+
+`scripts/retrieval_latency.py`, 10 benchmark questions after one warm-up query, top 10
+returned, same i5-1235U CPU (torch 2.15.0+cpu, 10 threads). Chunk embeddings came from the
+benchmark cache, so only query-time work is timed. Reports:
+`docs/evidence/retrieval/latency-bge-small.json` and `latency-bge-m3.json`.
+
+| Configuration | bge-small-en-v1.5: median / max (s) | bge-m3: median / max (s) |
+| --- | --- | --- |
+| lexical_baseline (re-indexes per query) | 0.138 / 0.176 | 0.113 / 0.157 |
+| bm25 (indexed) | 0.005 / 0.007 | 0.003 / 0.005 |
+| dense | 0.042 / 0.046 | 0.423 / 0.514 |
+| hybrid (RRF) | 0.047 / 0.057 | 0.377 / 0.462 |
+| hybrid_rerank, 30 candidates (bge-reranker-v2-m3) | 45.8 / 61.8 | 47.2 / 59.9 |
+| hybrid_rerank, 10 candidates (bge-reranker-v2-m3) | 12.4 / 14.0 | 13.5 / 24.3 |
+
+One-off setup, not included above: loading the embedding model took 21 to 24 s and the
+reranker 9 to 12 s.
+
+Measured: the reranker accounts for almost all of the query time. Without it, every
+configuration answers in under 0.6 s. Not measured: retrieval quality at 10 candidates, a
+smaller cross-encoder, or a GPU.
 
 ## Limitations
 
