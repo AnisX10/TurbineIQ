@@ -7,14 +7,20 @@ stated coverage, and, by propagating an ensemble through the quasi-steady twin, 
 steady-state performance at a fixed operating point.
 
 Trend model (one independent filter per health parameter)
-    A local-linear-trend Kalman filter with state (level, rate). The rate follows a random
-    walk, so it can change (a fault starts or stops growing), and the level can take a small
-    random walk of its own. Time runs in hours. Why this rather than least squares on a
-    sliding window: the filter takes irregular sampling and gaps without special cases (the
-    prediction over a gap widens the band by the process noise), it gives the covariance of
-    level and rate directly, and its forecast variance grows with the horizon in a stated
-    way. A window fit needs a window length chosen against the same trade-off and gives no
-    allowance for a rate change inside the horizon.
+    A local-linear-trend Kalman filter with state (level, rate). The rate follows a small
+    random walk (the level can take one too, off by default). Time runs in hours. Why this
+    rather than least squares on a sliding window: the filter takes irregular sampling and
+    gaps without special cases (the prediction over a gap widens the band by the process
+    noise), it gives the covariance of level and rate directly, and its forecast variance
+    grows with the horizon in a stated way. A window fit needs a window length chosen against
+    the same trade-off and gives no allowance for a rate change inside the horizon.
+
+Rate changes
+    Faults start and stop growing abruptly; a rate walk large enough to follow that makes
+    the band several times too wide while the rate is steady. So the walk is kept small and
+    the filter watches an exponentially weighted mean of its normalised innovations: when
+    it leaves its expected range (``rate_change_sigma``), the rate's variance is reopened to
+    its prior and the rate is re-learned from the next estimates.
 
 Estimator errors
     Successive estimates from a filter are not independent, and part of an estimator's error
@@ -29,6 +35,9 @@ Steps (a wash) and outliers
     back. If the next ``shift_confirm - 1`` estimates are also beyond it on the same side,
     the level restarts at the first of them and the rate is kept: an offline wash removes
     the fouling but not its cause. Otherwise the held estimate is dropped as an outlier.
+    The test allows for at most ``shift_test_interval_s`` of process noise, because after a
+    long shutdown the predicted spread would hide the step and the update would read it as
+    a rate.
     :meth:`DegradationForecaster.reset_level` does the same on request (a logged wash).
 
 The cap
@@ -110,13 +119,15 @@ class TrendConfig:
 
     min_interval_s: float = 60.0  # estimates closer than this to the last one are skipped
     rate_prior_std: Health = Health(0.02, 0.01, 0.01)  # rate before any data, per hour
-    rate_walk: Health = Health(0.03, 0.015, 0.015)  # rate change std over one hour, per hour
-    level_walk: Health = Health(0.001, 0.0005, 0.0005)  # level change std over one hour
+    rate_walk: Health = Health(0.005, 0.0025, 0.0025)  # rate change std over one hour, per h
+    level_walk: Health = Health(0.0, 0.0, 0.0)  # level change std over one hour
     variance_inflation: float = 1.0  # estimate variance used = this * std**2
-    persistent_fraction: float = 0.6  # forecast adds (this * std)**2 of the latest estimate
+    persistent_fraction: float = 1.0  # forecast adds (this * std)**2 of the latest estimate
     shift_sigma: float = 4.0  # innovation beyond this many sigma is held as a possible step
     shift_confirm: int = 2  # this many in a row on the same side make a step (level restart)
     shift_test_interval_s: float = 600.0  # the step test counts process noise up to this gap
+    rate_change_weight: float = 0.2  # weight of the newest innovation in the drift average
+    rate_change_sigma: float = 2.0  # drift beyond this many of its sigma reopens the rate
     floor: Health = HEALTH_LIMITS  # the cap: maximum degradation of each parameter
     coverage: float = 0.9  # default coverage of the band
     min_std: float = 1e-5  # floor on a reported std
@@ -139,10 +150,15 @@ class _Pending(NamedTuple):
 class _Trend:
     """Local-linear-trend Kalman filter for one parameter. Time in hours."""
 
-    def __init__(self, rate_prior_std: float, rate_walk: float, level_walk: float) -> None:
-        self.rate_prior_var = rate_prior_std**2
-        self.qr = rate_walk**2  # rate random walk, variance per hour
-        self.ql = level_walk**2  # level random walk, variance per hour
+    def __init__(self, index: int, config: TrendConfig) -> None:
+        self.c = config
+        self.rate_prior_var = config.rate_prior_std[index] ** 2
+        self.qr = config.rate_walk[index] ** 2  # rate random walk, variance per hour
+        self.ql = config.level_walk[index] ** 2  # level random walk, variance per hour
+        a = config.rate_change_weight
+        self.drift_limit = config.rate_change_sigma * math.sqrt(a / (2.0 - a))
+        self.drift = 0.0  # exponentially weighted mean of normalised innovations
+        self.rate_changes: list[float] = []  # times (h) at which the rate was reopened
         self.t_h: float | None = None
         self.x = [0.0, 0.0]  # level, rate
         self.p = [0.0, 0.0, 0.0]  # P00, P01, P11
@@ -178,6 +194,7 @@ class _Trend:
             rate, rate_var = x[1], p[2]
         self.t_h, self.x, self.p = t_h, [z, rate], [r, 0.0, rate_var]
         self.restart_level = False
+        self.drift = 0.0
 
     def _correct(self, t_h: float, z: float, r: float) -> None:
         x, p = self.predicted(t_h)
@@ -188,10 +205,19 @@ class _Trend:
         self.t_h = t_h
         self.x = [x[0] + k0 * nu, x[1] + k1 * nu]
         self.p = [p00 * r / s, p01 * r / s, p11 - k1 * p01]
+        # Rate change: innovations that keep one sign mean the rate is out of date (a fault
+        # started or stopped growing). Then the rate's variance is reopened to its prior, so
+        # the filter re-learns it in minutes while the rate walk can stay small.
+        a = self.c.rate_change_weight
+        self.drift = (1.0 - a) * self.drift + a * nu / math.sqrt(s)
+        if abs(self.drift) > self.drift_limit:
+            self.p[2] += self.rate_prior_var
+            self.drift = 0.0
+            self.rate_changes.append(t_h)
 
-    def update(
-        self, t_h: float, z: float, r: float, shift_sigma: float, confirm: int, test_dt: float
-    ) -> str:
+    def update(self, t_h: float, z: float, r: float) -> str:
+        shift_sigma, confirm = self.c.shift_sigma, self.c.shift_confirm
+        test_dt = self.c.shift_test_interval_s / _S_PER_H
         if self.restart_level:
             self._init_level(t_h, z, r)
             return "init"
@@ -271,9 +297,7 @@ class DegradationForecaster:
     def __init__(self, config: TrendConfig | None = None) -> None:
         self.config = config or TrendConfig()
         c = self.config
-        self._trends = [
-            _Trend(c.rate_prior_std[i], c.rate_walk[i], c.level_walk[i]) for i in range(3)
-        ]
+        self._trends = [_Trend(i, c) for i in range(3)]
         self._last_used_s: float | None = None
         self._last_std = np.zeros(3)
         self.used = 0
@@ -294,14 +318,7 @@ class DegradationForecaster:
             raise ValueError("estimate mean and std must be finite")
         t_h = t_s / _S_PER_H
         for i, trend in enumerate(self._trends):
-            trend.update(
-                t_h,
-                float(estimate.mean[i]),
-                c.variance_inflation * std[i] ** 2,
-                c.shift_sigma,
-                c.shift_confirm,
-                c.shift_test_interval_s / _S_PER_H,
-            )
+            trend.update(t_h, float(estimate.mean[i]), c.variance_inflation * std[i] ** 2)
         self._last_used_s = t_s
         self._last_std = std
         self.used += 1
@@ -348,6 +365,17 @@ class DegradationForecaster:
             (t_h * _S_PER_H, PARAMETERS[i], size)
             for i, trend in enumerate(self._trends)
             for t_h, size in trend.shifts
+        ]
+        return sorted(out)
+
+    @property
+    def rate_changes(self) -> list[tuple[float, str]]:
+        """Times (s) at which a parameter's rate was found out of date and reopened."""
+
+        out = [
+            (t_h * _S_PER_H, PARAMETERS[i])
+            for i, trend in enumerate(self._trends)
+            for t_h in trend.rate_changes
         ]
         return sorted(out)
 

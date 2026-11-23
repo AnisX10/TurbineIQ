@@ -258,3 +258,20 @@ def test_the_performance_band_comes_from_the_health_ensemble(twin):
     assert wide.lower.fuel_kg_s < exact.fuel_kg_s < wide.upper.fuel_kg_s
     assert wide.lower.exhaust_k < exact.exhaust_k < wide.upper.exhaust_k
     assert wide.on_limit_share == 0.0 and wide.samples == 100
+
+
+def test_a_fault_that_starts_growing_reopens_the_rate():
+    rng = np.random.default_rng(6)
+    onset = 3600.0
+    truth_at = lambda t: fouling(0.03 * max(t - onset, 0.0) / 3600)  # noqa: E731
+    f = DegradationForecaster(WHITE)
+    for e in noisy_series(truth_at, range(0, int(onset) + 1500, 60), rng):
+        f.update(e)
+    flow_changes = [t for t, name in f.rate_changes if name == "compressor_flow"]
+    assert any(onset < t <= onset + 900 for t in flow_changes)
+    assert f.rate_per_h[0] == pytest.approx(-0.03, abs=0.01)  # learned within 25 minutes
+    still = TrendConfig(persistent_fraction=0.0, rate_change_sigma=math.inf)
+    g = DegradationForecaster(still)
+    for e in noisy_series(truth_at, range(0, int(onset) + 1500, 60), np.random.default_rng(6)):
+        g.update(e)
+    assert g.rate_changes == [] and g.rate_per_h[0] > f.rate_per_h[0]  # slower without it
