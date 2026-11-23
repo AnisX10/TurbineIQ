@@ -192,8 +192,9 @@ class UKFSettings:
     """Tuning of :class:`UKFHealthEstimator` (chosen on seeds 1000 to 1002).
 
     Process noise is a random walk: the variance of each health delta grows by
-    ``process_std_per_h**2`` per hour of operation. ``prior_std`` is the uncertainty
-    before any steady data. ``batch_s`` steady samples are averaged into one update.
+    ``process_std_per_h**2`` per hour of elapsed time (also while the unit is stopped).
+    ``prior_std`` is the uncertainty before any steady data. ``batch_s`` steady samples
+    are averaged into one update.
     When the normalised innovation squared of a batch exceeds ``inflation_nis`` (a sign
     that the health has moved faster than the random walk allows) the covariance is
     inflated by ``inflation_factor`` before the update, never beyond the prior.
@@ -201,7 +202,7 @@ class UKFSettings:
 
     model: str = PowerInputModel.name
     prior_std: tuple[float, float, float] = (0.03, 0.015, 0.015)
-    process_std_per_h: tuple[float, float, float] = (0.01, 0.005, 0.005)
+    process_std_per_h: tuple[float, float, float] = (0.003, 0.0015, 0.0015)
     batch_s: float = 10.0
     min_batch_s: float = 5.0
     inflation_nis: float | None = 30.0

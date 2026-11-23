@@ -20,10 +20,10 @@ plant data.
 efficiency)` as fractions, the fields of `simulation.maps.Health`. They are three
 independent random walks: the filter does not know the simulator's 2:1 fouling ratio.
 
-**Process model.** `x(t + dt) = x(t) + w`, with `Var(w) = diag(q²) dt`, `q = (1.0, 0.5,
-0.5)` points per square-root hour. Variance grows with elapsed time whether or not the unit
-runs, so after a stop (and, for example, an offline wash) the filter is more willing to
-move. Prior: zero (clean) with standard deviation (3, 1.5, 1.5) points.
+**Process model.** `x(t + dt) = x(t) + w`, with `Var(w) = diag(q²) dt`, `q = (0.3, 0.15,
+0.15)` points per square-root hour (tuned, below). Variance grows with elapsed time
+whether or not the unit runs, so after a stop (and, for example, an offline wash) the
+filter is more willing to move. Prior: zero (clean) with standard deviation (3, 1.5, 1.5) points.
 
 **Measurement model.** The quasi-steady twin of `estimation/twin.py` in the *power-input*
 form (`PowerInputModel`): the measured electrical power, speed, IGV position and ambient go
