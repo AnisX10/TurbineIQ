@@ -130,7 +130,11 @@ are correlated, so runs are the independent units). Reproduce with
     PYTHONPATH=src python -m turbineiq.estimation.forecast --seeds evaluation \
         --traces <folder of <id>.csv and <id>@<seed>.csv> --performance-replicates 2
 
-(missing traces are simulated, about 20 s each).
+(missing traces are simulated, about 20 s each; the evaluation takes about ten minutes on
+the shared development container). It prints the summaries of 4.1, 4.2 and 4.4 as JSON.
+The comparison in 4.3 is `evaluate(config=TrendConfig(rate_walk=Health(0.02, 0.01, 0.01),
+rate_change_sigma=math.inf))`, and 4.5 passes `reported_std` or `bias_walk` to
+`synthetic_estimates` inside `evaluate_run`.
 
 ## 4. Results (synthetic estimates)
 
@@ -184,8 +188,11 @@ than persistence (0.09-0.10), because the rate term adds noise to a constant.
 In the progressive scenarios almost all misses come from the first 10 minutes after the
 fault starts: at the origins 30 and 35 minutes into the run the trend has not shown yet
 (flow coverage 0.04 and 0.20 at 30 minutes in the base-load runs), at 40 minutes 0.74, and
-from 45 minutes on 0.90-1.00. The wash was found as a step in every run (both compressor
-parameters) and after the restart the bands covered; the wash scenario has no trend to
+from 45 minutes on 0.90-1.00. The wash was found as a step in all 50 runs, for both
+compressor parameters and at the first estimates after the restart, with no other step and
+no outlier in any of the 150 runs. Rate reopenings also fire without cause: about 0.6 to 0.8
+per run on turbine efficiency, which never changes; each one widens that band for a few
+minutes. After the restart the bands covered; the wash scenario has no trend to
 forecast, so persistence is better there, and the bands are wider than needed because the
 rate uncertainty grows over the shutdown.
 
@@ -235,7 +242,25 @@ under-covered after an onset. With 10-70 forecasts per row these coverages are r
 
 ### 4.5 Sensitivity to the estimator's stated uncertainty
 
-SENSITIVITY_TABLE
+The same evaluation with three draws per simulation (45 runs per case), flow capacity and
+compressor efficiency pooled, default settings (not re-tuned):
+
+| Synthetic input | Horizon | Coverage, stable | MAE, stable | Coverage, all but event in horizon |
+|---|---|---|---|---|
+| as in section 3 | 30 min | 0.96 | 0.18 | 0.84 |
+| as in section 3 | 60 min | 0.93 | 0.33 | 0.72 |
+| stated std half the actual error | 30 min | 0.82 | 0.33 | 0.77 |
+| stated std half the actual error | 60 min | 0.86 | 0.63 | 0.74 |
+| stated std twice the actual error | 30 min | 0.99 | 0.19 | 0.84 |
+| stated std twice the actual error | 60 min | 0.91 | 0.39 | 0.58 |
+| bias walk doubled (and stated) | 30 min | 0.89 | 0.27 | 0.80 |
+| bias walk doubled (and stated) | 60 min | 0.93 | 0.45 | 0.68 |
+
+An overconfident estimator (std too small) makes the band too narrow and the error larger,
+because the filter then follows noise. An underconfident one keeps the stable band
+covering but makes the filter slower to notice an onset, so the 60-minute coverage after
+events falls further (0.58). A larger persistent bias, honestly stated, costs accuracy but
+little coverage.
 
 ## 5. What the accelerated degradation means
 

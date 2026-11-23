@@ -957,12 +957,23 @@ def _scenario_of(run: str) -> str:
     return run.split("@")[0]
 
 
+def _no_event(records):
+    return [r for r in records if r.category != "event_in_horizon"]
+
+
 def _grouped_health(records: Sequence[ForecastRecord]) -> dict[str, list[dict]]:
-    out: dict[str, list[dict]] = {"all": summarize_health(records)}
-    out["all_by_category"] = summarize_health(records, ("horizon_s", "parameter", "category"))
+    """Pooled, pooled without forecasts across an event, by category, and per scenario."""
+
+    cat = ("horizon_s", "parameter", "category")
+    out: dict[str, list[dict]] = {
+        "all": summarize_health(records),
+        "all_but_event_in_horizon": summarize_health(_no_event(records)),
+        "all_by_category": summarize_health(records, cat),
+    }
     for sid in sorted({_scenario_of(r.run) for r in records}):
         sub = [r for r in records if _scenario_of(r.run) == sid]
-        out[sid] = summarize_health(sub, ("horizon_s", "parameter", "category"))
+        out[sid] = summarize_health(sub, cat)
+        out[f"{sid}/all_but_event_in_horizon"] = summarize_health(_no_event(sub))
     return out
 
 
@@ -971,6 +982,7 @@ def _grouped_performance(records: Sequence[PerformanceRecord]) -> dict[str, list
     for sid in sorted({_scenario_of(r.run) for r in records}):
         sub = [r for r in records if _scenario_of(r.run) == sid]
         out[sid] = summarize_performance(sub, ("horizon_s", "quantity", "category"))
+        out[f"{sid}/all_but_event_in_horizon"] = summarize_performance(_no_event(sub))
     return out
 
 
