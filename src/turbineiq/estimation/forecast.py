@@ -653,7 +653,7 @@ class ForecastRecord:
     run: str
     origin_s: float
     horizon_s: float
-    category: str  # stable, recent_event (event within 30 min before), event_in_horizon
+    category: str  # see category()
     parameter: str
     truth: float
     mean: float
@@ -676,11 +676,22 @@ class PerformanceRecord:
     upper: float
 
 
-def _category(origin_s: float, target_s: float, events: Sequence[float], recent_s: float) -> str:
+#: Labels of :func:`category`, in order of time since the last ground-truth event.
+CATEGORIES = ("event_in_horizon", "event_0_10_min_ago", "event_10_30_min_ago", "stable")
+
+
+def category(origin_s: float, target_s: float, events: Sequence[float]) -> str:
+    """Label a forecast by the ground-truth fault events around it (scoring only):
+    an event inside the horizon, an event 0-10 or 10-30 minutes before the origin, or none
+    in the 30 minutes before the origin or inside the horizon (stable)."""
+
     if any(origin_s < e <= target_s for e in events):
         return "event_in_horizon"
-    if any(origin_s - recent_s < e <= origin_s for e in events):
-        return "recent_event"
+    since = [origin_s - e for e in events if e <= origin_s]
+    if since and min(since) < 600.0:
+        return "event_0_10_min_ago"
+    if since and min(since) < 1800.0:
+        return "event_10_30_min_ago"
     return "stable"
 
 
@@ -695,7 +706,6 @@ def evaluate_run(
     origin_step_s: float = 300.0,
     warmup_s: float = 900.0,
     max_age_s: float = 300.0,
-    recent_s: float = 1800.0,
     point: OperatingPoint | None = None,
     twin: QuasiSteadyTwin | None = None,
     n_samples: int = 200,
@@ -733,7 +743,7 @@ def evaluate_run(
                     continue
                 j = int(np.searchsorted(times, target, side="right")) - 1
                 truth = true_health[j]
-                category = _category(origin, target, events, recent_s)
+                label = category(origin, target, events)
                 fc = forecaster.forecast(horizon, now_s=origin)
                 for i, name in enumerate(PARAMETERS):
                     records.append(
@@ -741,7 +751,7 @@ def evaluate_run(
                             run,
                             origin,
                             horizon,
-                            category,
+                            label,
                             name,
                             float(truth[i]),
                             fc.mean[i],
@@ -760,7 +770,7 @@ def evaluate_run(
                                 run,
                                 origin,
                                 horizon,
-                                category,
+                                label,
                                 name,
                                 actual[i],
                                 pf.mean[i],

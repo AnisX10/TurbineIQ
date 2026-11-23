@@ -207,7 +207,8 @@ def test_evaluation_labels_forecasts_around_events():
     records, perf = evaluate_run(est, truths, run="x", events=[1800.0])
     cats = {(r.origin_s, r.horizon_s): r.category for r in records}
     assert cats[(1200.0, 1800.0)] == "event_in_horizon"
-    assert cats[(2100.0, 1800.0)] == "recent_event"
+    assert cats[(2100.0, 1800.0)] == "event_0_10_min_ago"
+    assert cats[(2700.0, 1800.0)] == "event_10_30_min_ago"
     assert cats[(3600.0, 1800.0)] == "stable"
     assert perf == []
     rows = summarize_health(records)
