@@ -31,6 +31,10 @@ test('Twin: the app lands on the live twin console', async ({ page }) => {
 })
 
 test('Twin: create, start, load, switch modes, inject a fault and read the logs from one screen', async ({ page }) => {
+  // About 13 simulated minutes with the supervisor ticking every second on the server.
+  test.setTimeout(300000)
+  const started = Date.now()
+  const mark = (label: string) => console.log(`[twin e2e] ${label} at ${((Date.now() - started) / 1000).toFixed(1)} s`)
   await page.goto('/#/twin')
   await page.getByRole('group', { name: 'Layer mode' }).getByRole('button', { name: 'Advisory' }).click()
   await page.getByRole('button', { name: 'Create unit' }).click()
@@ -46,6 +50,7 @@ test('Twin: create, start, load, switch modes, inject a fault and read the logs 
   await page.getByRole('button', { name: 'Set', exact: true }).click()
   await expect(page.getByTestId('now-power')).toContainText('demand 35.0 MW')
   await advance(page, 480)
+  mark('loaded')
   await expect.poll(async () => parseFloat((await page.getByTestId('now-power').locator('.twin-now-value').textContent()) ?? '0')).toBeGreaterThan(33)
   await expect(page.getByTestId('health-compressor_flow')).toContainText('±')
   await expect(page.getByTestId('callout-compressor')).toBeVisible({ timeout: 30000 })
@@ -72,6 +77,7 @@ test('Twin: create, start, load, switch modes, inject a fault and read the logs 
   await expect(faults.getByTestId('active-faults')).toContainText('Exhaust temperature')
   await faults.getByRole('button', { name: 'Close faults' }).click()
 
+  mark('fault injected')
   await page.getByRole('button', { name: 'Log', exact: true }).click()
   const log = page.getByRole('dialog', { name: 'Decision and event log' })
   await expect(log.getByText(/Rejected/).first()).toBeVisible()

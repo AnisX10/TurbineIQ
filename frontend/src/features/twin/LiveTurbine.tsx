@@ -11,6 +11,8 @@ import type { Callout } from './twinLogic'
 import { heatFraction, rotorRadPerSecond } from './twinLogic'
 
 const MODEL_PATH = '/models/turbine.glb'
+/** Callouts pinned under the model, so the four do not crowd one another above it. */
+const BELOW = new Set<Callout['id']>(['combustor', 'exhaust'])
 const HOT_GLOW = new Color('#ff6a1f')
 const OVER_LIMIT_GLOW = new Color('#ff1e12')
 const FLAME_GLOW = new Color('#ffad42')
@@ -70,10 +72,10 @@ function prepare(source: Object3D): Prepared {
     if (componentId) grow(componentId, object)
     if (normalizedObjectName(object.name).includes('exhaust')) grow('exhaust', object)
   })
-  const top = (key: string, fallback: string): [number, number, number] => {
+  const top = (key: string, fallback: string, below = false): [number, number, number] => {
     const box = boxes[key] ?? boxes[fallback] ?? bounds
     const center = box.getCenter(new Vector3())
-    return [center.x, box.max.y, center.z]
+    return [center.x, below ? box.min.y : box.max.y, center.z]
   }
   const combustor = (boxes.combustor ?? bounds).getCenter(new Vector3())
   return {
@@ -82,9 +84,9 @@ function prepare(source: Object3D): Prepared {
     rotor,
     anchors: {
       compressor: top('compressor', 'inlet'),
-      combustor: top('combustor', 'turbine'),
+      combustor: top('combustor', 'turbine', true),
       turbine: top('turbine', 'combustor'),
-      exhaust: top('exhaust', 'turbine'),
+      exhaust: top('exhaust', 'turbine', true),
     },
     flameAt: [combustor.x, combustor.y, combustor.z],
   }
@@ -145,7 +147,7 @@ function LiveModel({ speedPu, flame, tripped, exhaustK, limitK, callouts, reduce
       <pointLight ref={light} position={prepared.flameAt} distance={6} decay={1.6} color="#ffb259" intensity={0} />
       {callouts.map((callout) => (
         <Html key={callout.id} position={prepared.anchors[callout.id]} zIndexRange={[20, 0]} style={{ pointerEvents: 'none' }}>
-          <div className={`twin-callout twin-callout--${callout.id} is-${callout.tone}`} data-testid={`callout-${callout.id}`}>
+          <div className={`twin-callout twin-callout--${callout.id} is-${callout.tone} ${BELOW.has(callout.id) ? 'is-below' : ''}`} data-testid={`callout-${callout.id}`}>
             <span className="twin-callout-label">{callout.label}</span>
             <strong className="twin-callout-value">{callout.value}</strong>
           </div>
@@ -153,6 +155,24 @@ function LiveModel({ speedPu, flame, tripped, exhaustK, limitK, callouts, reduce
       ))}
     </>
   )
+}
+
+const CAMERA_HOME = new Vector3(-5.2, 3.4, 8.4)
+
+/** Step the camera back on narrow stages (a phone) so the whole unit stays in view. */
+function FitCamera() {
+  const camera = useThree((s) => s.camera)
+  const width = useThree((s) => s.size.width)
+  const height = useThree((s) => s.size.height)
+  const invalidate = useThree((s) => s.invalidate)
+  useEffect(() => {
+    const aspect = width / Math.max(1, height)
+    const scale = aspect < 1.7 ? Math.min(1.9, 1.7 / aspect) : 1
+    camera.position.copy(CAMERA_HOME).multiplyScalar(scale)
+    camera.lookAt(0, 0, 0)
+    invalidate()
+  }, [camera, width, height, invalidate])
+  return null
 }
 
 function Invalidate({ deps }: { deps: unknown[] }) {
@@ -185,7 +205,8 @@ export function LiveTurbine(props: LiveTurbineProps) {
             <LiveModel {...props} />
           </Suspense>
         </ModelBoundary>
-        <OrbitControls enablePan={false} enableDamping={!props.reduceMotion} dampingFactor={0.08} minDistance={4} maxDistance={18} makeDefault />
+        <FitCamera />
+        <OrbitControls enablePan={false} enableDamping={!props.reduceMotion} dampingFactor={0.08} minDistance={4} maxDistance={22} makeDefault />
       </Canvas>
       {failed && <p className="twin-stage-fallback" role="status">The 3D model could not be loaded. The values beside it are live.</p>}
     </div>
