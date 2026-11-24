@@ -137,7 +137,39 @@ What this establishes, for this model and these instruments:
 
 ## Tuning
 
-TUNING_SECTION
+Tuned on scenario seeds 1000, 1001 and 1002 only (the six degradation scenarios and the
+five clean ones, 33 runs, exact twin), never on the evaluation seeds. Score: RMS error over
+every scored segment from 20 minutes after onset, the worst absolute error, and the longest
+time from an onset until the error stays within tolerance. Points of health (flow, ηc, ηt):
+
+| setting | RMS error | worst error |
+| --- | --- | --- |
+| start: q = (1, 0.5, 0.5), inflation at NIS 30, 10 s batches | 0.044, 0.019, 0.025 | 0.18, 0.08, 0.11 |
+| same without inflation, or inflation at NIS 60 | identical | identical |
+| q × 3 | 0.066, 0.027, 0.038 | 0.26, 0.11, 0.17 |
+| **q × 0.3 (chosen)**, with or without inflation | **0.029, 0.013, 0.015** | **0.15, 0.06, 0.06** |
+| q × 0.1 | 0.052, 0.021, 0.022 | 0.19, 0.08, 0.08 |
+| start, 30 s batches | 0.039, 0.016, 0.022 | 0.15, 0.07, 0.08 |
+| start, one update per sample | 0.045, 0.020, 0.025 | 0.22, 0.11, 0.14 |
+| start, diagonal noise covariance | 0.046, 0.017, 0.024 | 0.17, 0.07, 0.10 |
+| start, fuel-input form, full covariance | identical to power-input | identical |
+| start, fuel-input form, diagonal covariance | 0.048, 0.019, 0.023 | 0.19, 0.08, 0.08 |
+
+- The process noise is the only setting that matters much. Below q × 0.3 the error grows
+  again because the filter lags the bank's accelerated fouling (2 to 3 % per hour); above
+  it, noise passes through. The chosen value is therefore tied to the bank's accelerated
+  rates: real fouling is orders of magnitude slower and would want a much smaller q.
+- The covariance inflation never changed a result at q × 0.3 (the random walk alone lets
+  the filter follow a 3 % step within a few batches). At q × 0.1 it shortened the slowest
+  step response from 9.2 to 8.5 minutes. It is kept as a guard for smaller q.
+- Convergence after a step is limited by the steady-state gate, not the filter: the
+  slowest onset (the restart after the wash) converged 8.3 minutes after the wash command,
+  which is the restart, loading and the gate's 120 s quiet window.
+- Batch length, per-sample updates, the diagonal covariance and the fuel-input form change
+  the error by a few hundredths of a point at most, consistent with the observability
+  result (the full-covariance forms agree to the printed digits).
+- The prior (3, 1.5, 1.5 points) and the 10 s batch were not tuned further; the first
+  estimate appears when the gate first opens, about 7.5 minutes after a start.
 
 ## Results with the exact twin
 
