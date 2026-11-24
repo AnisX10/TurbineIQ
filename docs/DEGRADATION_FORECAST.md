@@ -286,6 +286,15 @@ order of percent per month, about 700 times slower. For these results that means
 
 ## 6. When the estimator's output replaces the synthetic estimates
 
+**Done on 24 November 2026; results in `WP4_RESULTS.md`, section 5.** In short: on UKF
+estimates the defaults give 90 % band coverage of 0.89 at 30 minutes and 0.80 at
+60 minutes (forecasts without a new event in the horizon, evaluation seeds), 100 % in
+stable periods, and 0.45 to 0.50 in the first 10 minutes after an onset. A grid on the
+training seeds found no setting that does clearly better, so the defaults were kept. Run
+it with `--estimates ukf --cache-dir data/estimation/cache`. The checklist below was
+written before that run and is kept as the reasoning behind it.
+
+
 - **Stated std**: the band is only as good as the estimator's std. The forecaster uses it
   twice (filter noise and the persistent term); section 4.5 shows the effect of a std that
   is too small. Check the estimator's calibration first (its own normalised errors against

@@ -9,6 +9,11 @@ real 6B.03.
 - Code: `src/turbineiq/estimation/detectors.py`. Tests: `tests/test_estimation_detectors.py`.
 - Registry names (harness): `ResidualScreen`, `CusumDetector`, `MewmaDetector`,
   `PatternIsolator`, all with no-argument constructors and the tuned defaults.
+- The comparison with the estimator-based detector, run through the shared harness, is in
+  `docs/WP4_RESULTS.md` (section 4). The harness reproduces the detections, false alarms
+  and isolation scores below. Its delays are means where this page gives medians, so they
+  differ a little (229 against 231 s for the screen on the base-load ramp) and, where one
+  seed is an outlier, more (MEWMA on fouling then erosion: mean 27 s, median 2 s).
 
 ## What the detectors see
 

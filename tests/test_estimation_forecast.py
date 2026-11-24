@@ -21,6 +21,7 @@ from turbineiq.estimation.forecast import (
     steady_performance,
     summarize_health,
     synthetic_estimates,
+    ukf_estimates,
 )
 from turbineiq.estimation.twin import QuasiSteadyTwin
 from turbineiq.simulation.faults import DEGRADATIONS, FOULING_EFFICIENCY_RATIO
@@ -276,3 +277,31 @@ def test_a_fault_that_starts_growing_reopens_the_rate():
     for e in noisy_series(truth_at, range(0, int(onset) + 1500, 60), np.random.default_rng(6)):
         g.update(e)
     assert g.rate_changes == [] and g.rate_per_h[0] > f.rate_per_h[0]  # slower without it
+
+
+def test_ukf_estimates_are_the_filter_updates_only():
+    # A steady, healthy unit: the filter updates every 10 s while the gate is open, and the
+    # forecaster gets those updates, not the estimate repeated at every observation.
+    obs = [
+        Observation(float(t), "loaded", True, 35.0, 15.0, 1.0, 35.0, 0.0, 1.0, 0.0, 0.0, 0.0)
+        for t in range(400)
+    ]
+    twin = QuasiSteadyTwin()
+    rated = twin.maps(15.0).clean.rated_fuel_kg_s
+    at = [replace(o, fuel_kg_s=0.8 * rated) for o in obs]
+    prediction = twin.predict(Health(), at[0])
+    at = [
+        replace(
+            o,
+            power_mw=prediction.power_mw,
+            exhaust_k=prediction.exhaust_k,
+            cdt_k=prediction.cdt_k,
+            cdp_kpa=prediction.cdp_kpa,
+        )
+        for o in at
+    ]
+    estimates = ukf_estimates(at)
+    times = [e.t_s for e in estimates]
+    assert len(estimates) >= 20 and times == sorted(set(times))
+    assert min(np.diff(times)) >= 9.0  # one per 10 s batch
+    assert all(abs(v) < 1e-3 for e in estimates for v in e.mean)  # noise-free and healthy

@@ -238,6 +238,9 @@ PYTHONPATH=src python scripts/run_estimation_benchmark.py --estimator ukf \
 
 ## Reference results (full evaluation set)
 
+Results for every estimator and detector, on the final code, are in `WP4_RESULTS.md` and
+`docs/evidence/wp4/benchmark.md`. The run below is the harness's own check.
+
 The run used all 95 evaluation streams, the default settings and commit `aa5f23c`. It
 took 209 s wall time with 2 workers, with all streams already cached. `ukf` and `cusum`
 were skipped because their modules are not on this branch.
