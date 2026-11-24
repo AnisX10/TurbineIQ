@@ -78,7 +78,14 @@ def predictive_twin(
     _, exhaust_k = twin._lookup(twin.n, igv_air_factor(twin.igv), fuel_pu)
     twin.tx = twin.tm = exhaust_k
     twin._update_readings()
+    # Settle with the load reference held where it is: a dispatcher ramp under way must not
+    # advance during the settling, or the candidate is checked on a later operating point
+    # (an IGV closure at the start of a 60 MW/min ramp down was checked 30 s, i.e. 30 MW,
+    # into the ramp and missed an 8.7 K overshoot of the control limit).
+    target = twin.load_target_mw
+    twin.load_target_mw = twin.load_ref_mw
     _run(twin, settle_s)
+    twin.load_target_mw = target
     return twin
 
 
