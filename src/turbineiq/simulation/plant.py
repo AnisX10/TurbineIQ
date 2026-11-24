@@ -169,6 +169,11 @@ class GasTurbinePlant:
         # after any sensor fault, before measurement noise); the physics sees the health.
         self.faults = FaultState(fault_seed)
         self._health_maps: HealthMaps | None = None
+        # Exhaust temperature feedback for the temperature control and over-temperature
+        # protection: the thermocouple reading, or a model-based substitute written in from
+        # outside (the prescriptive layer's soft sensor) when the thermocouple is distrusted.
+        self.exhaust_feedback_source = "thermocouple"
+        self.exhaust_substitute_k: float | None = None
         self.readings: dict[str, float] = {}
         self._update_readings()
 
@@ -324,8 +329,9 @@ class GasTurbinePlant:
             self.trim = 0.0
 
         # Temperature and acceleration integrators (wind up to fsr_max when inactive).
-        # Temperature control acts on the exhaust thermocouple reading, faults included.
-        tc = self.readings["exhaust_temperature"]
+        # Temperature control acts on the exhaust thermocouple reading, faults included, or
+        # on the model-based substitute when one has been switched in.
+        tc = self.controller_exhaust_k()
         self.x_temp += p.temperature_ki * (self.temperature_limit_k - tc) * dt
         self.x_temp = max(0.0, min(p.fsr_max, self.x_temp))
         self.x_acc += p.acceleration_ki * (p.acceleration_limit_pu_s - self.dn_dt) * dt
@@ -361,7 +367,7 @@ class GasTurbinePlant:
             return
         if self.n > p.overspeed_trip_pu:
             self._trip("overspeed")
-        elif self.readings["exhaust_temperature"] > self.trip_temperature_k:
+        elif self.controller_exhaust_k() > self.trip_temperature_k:
             self._trip("exhaust_over_temperature")
         elif self.state in (UnitState.LOADED, UnitState.UNLOADING) and (
             self.n < p.underspeed_trip_pu
@@ -533,6 +539,32 @@ class GasTurbinePlant:
     def command_clear_fault(self, target: str) -> None:
         self.faults.clear(target)
         self._update_readings()
+
+    def command_set_exhaust_feedback(self, source: str, value_k: float | None) -> None:
+        """Choose the exhaust temperature the controller and protection act on.
+
+        ``source="model"`` needs ``value_k``, a substitute estimate (kelvin) supplied from
+        outside; sending it again updates the value. ``"thermocouple"`` returns to the
+        thermocouple reading.
+        """
+
+        if source == "thermocouple":
+            self.exhaust_feedback_source = source
+            self.exhaust_substitute_k = None
+            return
+        if source != "model":
+            raise CommandError("exhaust feedback source must be 'thermocouple' or 'model'")
+        if value_k is None or not 250.0 <= value_k <= 1200.0:
+            raise CommandError("a model exhaust substitute needs value_k between 250 and 1200 K")
+        self.exhaust_feedback_source = source
+        self.exhaust_substitute_k = float(value_k)
+
+    def controller_exhaust_k(self) -> float:
+        """Exhaust temperature seen by the temperature control and the protection."""
+
+        if self.exhaust_feedback_source == "model" and self.exhaust_substitute_k is not None:
+            return self.exhaust_substitute_k
+        return self.readings["exhaust_temperature"]
 
     def command_wash_compressor(self) -> None:
         if self.state != UnitState.STANDSTILL:

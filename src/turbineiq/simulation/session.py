@@ -55,10 +55,14 @@ COMMANDS: dict[str, dict[str, type | tuple[type, ...]]] = {
     "set_fuel_valve_lag": {"tau_s": (int, float)},
     "clear_fault": {"target": str},
     "wash_compressor": {},
+    "set_exhaust_feedback": {"source": str, "value_k": (int, float, type(None))},
 }
 
 #: Fault commands are accepted in every unit state (a fault does not wait for the operator).
 FAULT_COMMANDS = ("inject_degradation", "inject_sensor_fault", "set_fuel_valve_lag", "clear_fault")
+#: Commands accepted in every unit state that are not faults. The exhaust feedback choice is
+#: a control-system setting, so it can be made whether or not the unit runs.
+ANY_STATE_COMMANDS = ("set_exhaust_feedback",)
 #: Version of the per-step record hashed into the trace digest. Format 2 adds the extra
 #: instrument channels, the controller's thermocouple reading and the injected health, so
 #: logs recorded before fault injection existed do not replay to the same digest.
@@ -74,9 +78,14 @@ _ALLOWED: dict[UnitState, tuple[str, ...]] = {
         "set_island_load",
         "wash_compressor",
         *FAULT_COMMANDS,
+        *ANY_STATE_COMMANDS,
     ),
-    UnitState.TRIPPED: ("reset", "set_load", "set_igv", "set_ambient", *FAULT_COMMANDS),
-    UnitState.COASTDOWN: ("trip", "set_load", "set_igv", "set_ambient", *FAULT_COMMANDS),
+    UnitState.TRIPPED: (
+        "reset", "set_load", "set_igv", "set_ambient", *FAULT_COMMANDS, *ANY_STATE_COMMANDS
+    ),
+    UnitState.COASTDOWN: (
+        "trip", "set_load", "set_igv", "set_ambient", *FAULT_COMMANDS, *ANY_STATE_COMMANDS
+    ),
 }
 _RUNNING = (
     "stop",
@@ -89,6 +98,7 @@ _RUNNING = (
     "set_grid_frequency",
     "set_island_load",
     *FAULT_COMMANDS,
+    *ANY_STATE_COMMANDS,
 )
 
 
@@ -246,6 +256,11 @@ class Session:
                 plant.command_clear_fault(clean["target"])
             elif command == "wash_compressor":
                 plant.command_wash_compressor()
+            elif command == "set_exhaust_feedback":
+                value = clean["value_k"]
+                plant.command_set_exhaust_feedback(
+                    clean["source"], None if value is None else float(value)
+                )
         except ValueError as exc:
             if isinstance(exc, CommandError):
                 raise
@@ -378,6 +393,10 @@ class Session:
             "exhaust_temperature_k": plant.tm,
             "exhaust_temperature_c": plant.tm - 273.15,
             "temperature_limit_k": plant.temperature_limit_k,
+            "exhaust_feedback": {
+                "source": plant.exhaust_feedback_source,
+                "value_k": plant.controller_exhaust_k(),
+            },
             "trip_temperature_k": plant.trip_temperature_k,
             "igv_position": plant.igv,
             "igv_mode": plant.igv_mode,
