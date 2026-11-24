@@ -123,7 +123,7 @@ seeds 1000 to 1019, which is 100 runs and 179.5 steady hours.
   - 3 was kept as a guard against a single bad 10 s batch. The healthy training runs
     contain no such batch, so they do not test that choice.
 - `scripts/tune_detection_thresholds.py` reproduces both procedures from the training
-  runs. Its full run is reported in section 7.
+  runs (section 7).
 
 **Measured false alarms on the evaluation runs.** These are 44.9 steady hours in the clean
 scenarios plus 24.2 steady hours before onset in the fault scenarios.
@@ -258,10 +258,26 @@ Two consequences for the results above:
 
 ## 7. Threshold check on all training runs
 
-`scripts/tune_detection_thresholds.py` was run on the full training set (5 clean
-scenarios × seeds 1000–1019) on the final code.
+`scripts/tune_detection_thresholds.py` was run on the final code over the full training
+set: 5 clean scenarios × seeds 1000–1019, 100 runs, 179.5 steady hours. It took 42 minutes
+on the shared 4-CPU container, of which about 20 were spent generating the streams.
 
-TBD: results of the full run.
+- **Noise model.** Refitting it reproduces the committed `TUNED_NOISE` to its rounding.
+- **Residual detectors.** Bootstrap signal rate at the default thresholds, over 40,000
+  simulated hours, and signals on the 100 training runs themselves:
+
+  | Detector | Bootstrap rate (per steady hour) | Signals on the training runs |
+  | --- | --- | --- |
+  | Screen | 0.0086 | 0 |
+  | CUSUM | 0.0102 | 0 |
+  | MEWMA | 0.0098 | 5 |
+
+  The MEWMA's five signals are one noise event that repeats in all five clean scenarios
+  with seed 1013, because runs with the same seed share their noise (section 8).
+- **UKF Wald test.** The alarm-onset curve is the one in section 4.1. The tail fit gives a
+  threshold of 8.42 for 0.01 per hour, against the default of 8.5, with 0 onsets at the
+  default.
+- The output is recorded in `docs/evidence/wp4/tuning.json`.
 
 ## 8. Limits
 
