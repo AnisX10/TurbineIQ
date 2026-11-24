@@ -106,7 +106,7 @@ WASH_STUDY_FOULING_H = 6.0
 WASH_STUDY_DURATION_S = ONSET_S + WASH_STUDY_FOULING_H * 3600.0
 #: Timing of a scripted offline wash: the rotor reaches standstill about 860 s after a stop
 #: from 40 MW, and the breaker closes about 237 s after a start.
-STOP_TO_WASH_S = 900.0
+STOP_TO_WASH_S = 1200.0
 WASH_TO_START_S = 60.0
 START_TO_LOAD_S = 300.0
 WASH_INTERVALS_H: tuple[float, ...] = (0.75, 1.0, 1.5, 2.0, 3.0)
@@ -1339,6 +1339,7 @@ def markdown_secondary(name: str, rows: list[dict[str, Any]]) -> str:
             "Band vs manual (pp)",
             "Violation runs / s",
             "Max over limit (K)",
+            "Trips",
             "Decisions",
             "Approved share",
             "Mismatch index (median)",
@@ -1356,6 +1357,7 @@ def markdown_secondary(name: str, rows: list[dict[str, Any]]) -> str:
                 f"{r['violations']['runs_with_violation']} / "
                 f"{_f(r['violations']['violation_s'], 0)}",
                 _f(r["violations"]["max_over_limit_k"], 1),
+                r["violations"]["trips"],
                 r["decisions"]["decisions"],
                 _f(r["decisions"]["approved_share"], 3),
                 _f(r["mismatch_median"], 2),
