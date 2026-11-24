@@ -10,7 +10,8 @@ plant data.
   `observability.py` (Jacobian and information analysis), `mismatch.py` (perturbed twins,
   steady-state bias, scoring and the evaluation driver), and the additive
   `engine_health_maps` helper in `src/turbineiq/simulation/maps.py`.
-- Tests: `tests/test_estimation_ukf.py` (about 30 to 40 s; one 55-minute simulation).
+- Tests: `tests/test_estimation_ukf.py` (18 s on an idle machine, about 40 s under load; one
+  55-minute simulation).
 - Health is counted in **points**: 1 point is 1 % of compressor flow capacity or one point of
   polytropic efficiency (a health delta of −0.01).
 
