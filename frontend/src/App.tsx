@@ -8,6 +8,7 @@ import './Shell.css'
 
 const ComponentDetail = lazy(() => import('./features/component-detail/ComponentDetail'))
 const Operate = lazy(() => import('./features/operate/Operate'))
+const TwinConsole = lazy(() => import('./features/twin/TwinConsole'))
 const Evidence = lazy(() => import('./features/evidence/Evidence'))
 const Assistant = lazy(() => import('./features/assistant/Assistant'))
 const AssistantDock = lazy(() => import('./features/assistant/AssistantDock'))
@@ -24,6 +25,7 @@ function RouteLoadingState({ label }: { label: string }) {
 function RouteOutlet() {
   const { state } = useTurbineStore()
   if (state.page === 'components') return <Suspense fallback={<RouteLoadingState label="component detail" />}><ComponentDetail /></Suspense>
+  if (state.page === 'twin') return <Suspense fallback={<RouteLoadingState label="Live twin" />}><TwinConsole /></Suspense>
   if (state.page === 'operate') return <Suspense fallback={<RouteLoadingState label="Operate" />}><Operate /></Suspense>
   if (state.page === 'evidence') return <Suspense fallback={<RouteLoadingState label="Evidence" />}><Evidence /></Suspense>
   if (state.page === 'assistant') return <Suspense fallback={<RouteLoadingState label="Assistant" />}><Assistant /></Suspense>

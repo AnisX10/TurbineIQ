@@ -13,6 +13,7 @@ import {
   Gauge,
   Monitor,
   Moon,
+  Radio,
   SlidersHorizontal,
   MessageSquareText,
   ShieldCheck,
@@ -25,6 +26,7 @@ import { PUBLISHED_6B03_REFERENCE } from './lib/publishedReference'
 import { Sheet } from './components/ui/Sheet'
 
 const NAV_ITEMS: Array<{ page: RoutePage; label: string; mobileLabel: string; icon: LucideIcon }> = [
+  { page: 'twin', label: 'Live twin', mobileLabel: 'Twin', icon: Radio },
   { page: 'overview', label: 'Overview', mobileLabel: 'Overview', icon: Gauge },
   { page: 'components', label: 'Components', mobileLabel: 'Parts', icon: Box },
   { page: 'operate', label: 'Operate', mobileLabel: 'Operate', icon: SlidersHorizontal },
@@ -198,9 +200,9 @@ function DesktopNav({ page, selectedComponentId }: { page: RoutePage; selectedCo
 
   return (
     <nav className="rail-nav" aria-label="Primary navigation">
-      <div className="rail-nav-group">{NAV_ITEMS.slice(0, 3).map(renderItem)}</div>
+      <div className="rail-nav-group">{NAV_ITEMS.slice(0, 4).map(renderItem)}</div>
       <span className="rail-separator" aria-hidden="true" />
-      <div className="rail-nav-group">{NAV_ITEMS.slice(3).map(renderItem)}</div>
+      <div className="rail-nav-group">{NAV_ITEMS.slice(4).map(renderItem)}</div>
     </nav>
   )
 }
@@ -224,7 +226,7 @@ export function IconRail({
 }) {
   return (
     <aside className="icon-rail" aria-label="TurbineIQ workspace">
-      <a className="rail-brand" href="#/overview" aria-label="TurbineIQ" title="TurbineIQ">
+      <a className="rail-brand" href="#/twin" aria-label="TurbineIQ" title="TurbineIQ">
         <CycleGlyph />
       </a>
       <DesktopNav page={page} selectedComponentId={selectedComponentId} />
@@ -283,6 +285,7 @@ export function PageHeader({
   const close = () => setOverflowOpen(false)
   useDismissOnOutside(overflowOpen, close, root)
   const titles: Record<RoutePage, string> = {
+    twin: 'Live twin',
     overview: 'Overview',
     components: 'Turbine components',
     operate: 'Operate',
@@ -293,16 +296,16 @@ export function PageHeader({
   return (
     <header className="page-header">
       <div className="page-heading-copy">
-        <div className="page-context">{page === 'operate' ? 'GE 6B.03-class model · Simulated' : 'GE 6B.03 reference · Synthetic'}</div>
+        <div className="page-context">{page === 'operate' || page === 'twin' ? 'GE 6B.03-class model · Simulated' : 'GE 6B.03 reference · Synthetic'}</div>
         <h1>{titles[page]}</h1>
       </div>
       <div className="page-header-actions">
         {page === 'evidence' && <span className="page-route-chip">Local lexical retrieval</span>}
-        {page === 'operate' && <span className="page-route-chip">Simulated plant</span>}
+        {(page === 'operate' || page === 'twin') && <span className="page-route-chip">Simulated plant</span>}
         <button ref={askButtonRef} className="assistant-header-ask" type="button" onClick={onOpenAssistant} aria-keyshortcuts="A">
           <MessageSquareText size={15} aria-hidden="true" /><span>Ask</span><kbd aria-hidden="true">A</kbd>
         </button>
-        {page !== 'operate' && (
+        {page !== 'operate' && page !== 'twin' && (
         <button
           className="boundary-chip"
           type="button"

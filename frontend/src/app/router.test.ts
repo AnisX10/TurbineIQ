@@ -47,13 +47,20 @@ describe('route validation', () => {
     for (const id of ['inlet', 'compressor', 'combustor', 'turbine', 'shaft', 'generator']) {
       expect(parseRoute(`#/components/${id}`).componentId).toBe(id)
     }
-    expect(parseRoute('#/components/unknown')).toMatchObject({ page: 'overview', componentId: 'compressor' })
-    expect(parseRoute('#/components/compressor/extra').page).toBe('overview')
+    expect(parseRoute('#/components/unknown')).toMatchObject({ page: 'twin', componentId: 'compressor' })
+    expect(parseRoute('#/components/compressor/extra').page).toBe('twin')
   })
 
-  it('redirects unknown routes to overview while preserving valid URL state', () => {
+  it('lands empty routes on the live twin console', () => {
+    expect(parseRoute('').page).toBe('twin')
+    expect(parseRoute('#/').page).toBe('twin')
+    expect(parseRoute('#/twin').page).toBe('twin')
+    expect(parseRoute(routeHash({ page: 'twin', componentId: 'compressor', scenarioId: 'baseline', seed: 1, sampleIndex: 2 })).page).toBe('twin')
+  })
+
+  it('redirects unknown routes to the twin console while preserving valid URL state', () => {
     expect(parseRoute('#/not-a-route?scenario=compressor_fouling&seed=3&i=4')).toMatchObject({
-      page: 'overview', scenarioId: 'compressor_fouling', seed: 3, sampleIndex: 4,
+      page: 'twin', scenarioId: 'compressor_fouling', seed: 3, sampleIndex: 4,
     })
   })
 })

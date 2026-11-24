@@ -6,6 +6,15 @@ import type {
   SimState,
 } from './features/operate/simTypes'
 import type {
+  DecisionLog,
+  DecisionResult,
+  SupervisedAdvance,
+  SupervisedCreated,
+  SupervisorActionResult,
+  SupervisorMode,
+  SupervisorSummary,
+} from './features/twin/supervisorTypes'
+import type {
   AssistantResponse,
   EvidenceResponse,
   ScenarioDefinition,
@@ -51,11 +60,35 @@ export const simApi = {
       method: 'POST',
       body: JSON.stringify({ command, params }),
     }),
+  history: (id: string, last = 600) => request<{ samples: SimState[] }>(`/api/sim/sessions/${encodeURIComponent(id)}/history?last=${last}`),
   advance: (id: string, seconds: number) =>
     request<SimAdvanceResult>(`/api/sim/sessions/${encodeURIComponent(id)}/advance`, {
       method: 'POST',
       body: JSON.stringify({ seconds }),
     }),
+}
+
+const sessionPath = (id: string, path = '') => `/api/sim/sessions/${encodeURIComponent(id)}${path}`
+const postJson = (body: unknown = {}): RequestInit => ({ method: 'POST', body: JSON.stringify(body) })
+
+/** A simulated session with the WP5 supervisor attached (prescriptive layer). */
+export const twinApi = {
+  create: (mode: SupervisorMode, config: Partial<SimConfig> = {}) =>
+    request<SupervisedCreated>('/api/sim/sessions', postJson({ ...config, supervisor_mode: mode })),
+  state: (id: string) => request<SimState>(sessionPath(id)),
+  advance: (id: string, seconds: number) => request<SupervisedAdvance>(sessionPath(id, '/advance'), postJson({ seconds })),
+  history: (id: string, last = 600) => request<{ samples: SimState[] }>(sessionPath(id, `/history?last=${last}`)),
+  supervisor: (id: string) => request<SupervisorSummary>(sessionPath(id, '/supervisor')),
+  attach: (id: string, mode: SupervisorMode) => request<SupervisorSummary>(sessionPath(id, '/supervisor'), postJson({ mode })),
+  setMode: (id: string, mode: SupervisorMode) => request<SupervisorSummary>(sessionPath(id, '/supervisor/mode'), postJson({ mode })),
+  setDemand: (id: string, mw: number, applySetpoint = true, rampMwPerMin = 10) =>
+    request<SupervisorActionResult>(sessionPath(id, '/supervisor/demand'), postJson({ mw, apply_setpoint: applySetpoint, ramp_mw_per_min: rampMwPerMin })),
+  accept: (id: string, decisionId: number) =>
+    request<DecisionResult>(sessionPath(id, `/supervisor/decisions/${decisionId}/accept`), postJson()),
+  reject: (id: string, decisionId: number) =>
+    request<DecisionResult>(sessionPath(id, `/supervisor/decisions/${decisionId}/reject`), postJson()),
+  trustThermocouple: (id: string) => request<SupervisorActionResult>(sessionPath(id, '/supervisor/trust-thermocouple'), postJson()),
+  decisions: (id: string, last = 200) => request<DecisionLog>(sessionPath(id, `/supervisor/decisions?last=${last}`)),
 }
 
 export const api = {

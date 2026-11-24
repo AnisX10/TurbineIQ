@@ -1,0 +1,188 @@
+/* Live twin console. Grey by default; colour only for abnormal states (ISA-101 spirit). */
+.twin-page { width: min(100%, 1760px); min-width: 0; margin: 0 auto; padding: 16px 32px 32px; display: grid; gap: 12px; align-content: start; }
+.twin-page > * { min-width: 0; }
+.twin-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.twin-note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+
+.twin-card { min-width: 0; padding: 14px 16px; color: var(--text); border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.twin-card h2 { margin: 0; font-size: 14px; font-weight: 600; }
+.twin-card-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-bottom: 10px; }
+
+.twin-button, .twin-primary { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.twin-primary { color: var(--surface); border-color: var(--text); background: var(--text); }
+.twin-button:hover:not(:disabled) { background: var(--raised); }
+.twin-button:disabled, .twin-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.twin-link { min-height: 44px; margin-top: 4px; padding: 0; color: var(--text); border: 0; background: none; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* Start */
+.twin-start { display: grid; gap: 12px; max-width: 720px; }
+.twin-start-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+
+/* Control strip */
+.twin-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); }
+.twin-strip-group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.twin-strip-end { margin-left: auto; }
+.twin-clock { color: var(--muted); font: 13px var(--mono); font-variant-numeric: tabular-nums; }
+.twin-speed, .twin-mode { display: inline-flex; border: 1px solid var(--control-strong); border-radius: 6px; overflow: hidden; }
+.twin-speed button, .twin-mode button { min-width: 48px; min-height: 44px; padding: 0 10px; color: var(--text); border: 0; border-right: 1px solid var(--control); background: var(--surface); font-size: 12px; cursor: pointer; }
+.twin-speed button { font-family: var(--mono); }
+.twin-speed button:last-child, .twin-mode button:last-child { border-right: 0; }
+.twin-speed button.is-active, .twin-mode button.is-active { color: var(--surface); background: var(--text); }
+.twin-mode button.is-pending { outline: 2px dashed var(--control-strong); outline-offset: -4px; }
+.twin-mode button:disabled { cursor: progress; }
+.twin-demand label { color: var(--muted); font-size: 12px; }
+.twin-demand input { width: 72px; min-height: 44px; padding: 0 8px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font: 13px var(--mono); }
+.twin-demand input[aria-invalid='true'] { border-color: var(--negative); }
+.twin-unit { color: var(--muted); font-size: 12px; }
+.twin-field-error { color: var(--negative); font-size: 12px; }
+
+/* Grid */
+.twin-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 400px); gap: 12px; align-items: start; }
+.twin-side { display: grid; gap: 12px; min-width: 0; }
+
+/* Hero */
+.twin-hero { position: relative; min-width: 0; height: clamp(380px, 58vh, 620px); overflow: hidden; border: 1px solid var(--border); border-radius: 8px; background: var(--stage-bg); }
+.twin-hero.is-tripped { border: 2px solid var(--alarm-bg); }
+.twin-stage-canvas { position: absolute; inset: 0; }
+.twin-stage-canvas canvas { touch-action: none; }
+.twin-stage-fallback { position: absolute; inset: auto 16px 16px; margin: 0; color: var(--muted); font-size: 12px; }
+.twin-hero-overlay { position: absolute; top: 12px; left: 12px; display: flex; flex-wrap: wrap; gap: 6px; pointer-events: none; }
+.twin-hero-chip { padding: 3px 8px; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; background: var(--surface); font: 11px var(--mono); }
+.twin-hero-note { position: absolute; right: 12px; bottom: 8px; margin: 0; color: var(--muted); font-size: 11px; pointer-events: none; }
+.twin-trip-banner { position: absolute; top: 12px; left: 50%; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; color: var(--alarm-ink); border-radius: 6px; background: var(--alarm-bg); font-size: 14px; font-weight: 700; letter-spacing: 0.02em; transform: translateX(-50%); white-space: nowrap; }
+
+/* Callouts pinned to the model */
+.twin-callout { position: relative; display: grid; gap: 1px; width: max-content; max-width: 190px; padding: 4px 8px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 5px; background: var(--surface); font: 11px/1.3 var(--sans); transform: translate(-50%, calc(-100% - 26px)); white-space: nowrap; }
+.twin-callout::after { position: absolute; left: 50%; top: 100%; width: 1px; height: 26px; background: var(--control-strong); content: ''; }
+.twin-callout-label { color: var(--muted); }
+.twin-callout-value { font: 500 12px var(--mono); font-variant-numeric: tabular-nums; white-space: normal; }
+.twin-callout.is-warning { color: var(--alert-ink); border-color: var(--alert-ink); background: var(--alert-bg); }
+.twin-callout.is-warning .twin-callout-label { color: var(--alert-ink); }
+.twin-callout.is-alarm { color: var(--alarm-ink); border-color: var(--alarm-bg); background: var(--alarm-bg); }
+.twin-callout.is-alarm .twin-callout-label { color: var(--alarm-ink); }
+.twin-callout.is-warning::after, .twin-callout.is-alarm::after { width: 2px; background: currentColor; }
+.twin-callout.is-alarm::after { background: var(--alarm-bg); }
+
+/* Unit now */
+.twin-now h2 { margin-bottom: 8px; }
+.twin-now dl { margin: 0; display: grid; }
+.twin-now dl > div { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 8px; align-items: baseline; padding: 7px 0; border-top: 1px solid var(--rule); }
+.twin-now dt { color: var(--muted); font-size: 12px; }
+.twin-now dd { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.twin-now-value { font: 500 14px var(--mono); font-variant-numeric: tabular-nums; }
+.twin-now-ref { color: var(--muted); font: 12px var(--mono); }
+.twin-now .is-alarm .twin-now-value { color: var(--negative); font-weight: 700; }
+
+/* Tone marks (never colour alone) */
+.twin-tone-mark { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+.twin-tone-mark.is-warning { color: var(--alert-ink); background: var(--alert-bg); }
+.twin-tone-mark.is-alarm { color: var(--alarm-ink); background: var(--alarm-bg); }
+.twin-status { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; color: var(--pill-neutral-ink); border-radius: 999px; background: var(--pill-neutral-bg); font-size: 11px; font-weight: 600; white-space: nowrap; }
+.twin-status.is-warning { color: var(--alert-ink); background: var(--alert-bg); }
+.twin-status.is-alarm { color: var(--alarm-ink); background: var(--alarm-bg); }
+
+/* Recommendation */
+.twin-action { display: grid; gap: 8px; }
+.twin-action .twin-card-head { margin-bottom: 2px; }
+.twin-empty p { margin: 0 0 4px; font-size: 13px; }
+.twin-rec { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid var(--border); border-left: 3px solid var(--control-strong); border-radius: 6px; }
+.twin-rec.is-warning { border-left-color: var(--alert-bg); }
+.twin-rec.is-warning { border-left-width: 4px; }
+.twin-rec.is-alarm { border: 2px solid var(--alarm-bg); }
+.twin-rec-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+.twin-rec-problem { font-size: 12px; font-weight: 600; }
+.twin-rec-time { margin-left: auto; color: var(--muted); font: 11px var(--mono); }
+.twin-rec-summary { margin: 0; font-size: 13px; line-height: 1.45; }
+.twin-rec-gain { margin: 0; font: 12px var(--mono); }
+.twin-rec-guard { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.twin-rec-guard.is-failed { font-weight: 700; }
+.twin-failed-checks { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.5; }
+.twin-rec-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.twin-rec-actions > * { flex: 1 1 120px; }
+.twin-banner { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 6px; font-size: 12px; }
+.twin-banner.is-warning { color: var(--alert-ink); background: var(--alert-bg); }
+.twin-banner.is-warning .twin-button { margin-left: auto; color: var(--alert-ink); border-color: var(--alert-ink); background: transparent; }
+
+.twin-disclosure { border-top: 1px solid var(--rule); }
+.twin-disclosure > summary, .twin-decision-log summary { list-style: none; }
+.twin-disclosure > summary::-webkit-details-marker, .twin-decision-log summary::-webkit-details-marker { display: none; }
+.twin-disclosure > summary { min-height: 44px; display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 12px; cursor: pointer; }
+.twin-disclosure > summary::before, .twin-decision-log summary::before { width: 6px; height: 6px; flex: none; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(-45deg); transition: transform var(--dur-slow); content: ''; }
+.twin-disclosure[open] > summary::before, .twin-decision-log details[open] > summary::before { transform: rotate(45deg); }
+@media (prefers-reduced-motion: reduce) { .twin-disclosure > summary::before, .twin-decision-log summary::before { transition: none; } }
+.twin-disclosure > .twin-note { margin-bottom: 8px; }
+.twin-table-wrap { max-height: 260px; overflow: auto; }
+.twin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.twin-table th, .twin-table td { padding: 5px 6px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.twin-table thead th { color: var(--muted); font-size: 11px; font-weight: 400; }
+.twin-table tbody th { font-weight: 400; }
+.twin-table td { font-family: var(--mono); font-size: 11px; }
+.twin-table td.is-failed { color: var(--negative); font-weight: 700; }
+
+/* Health */
+.twin-health .twin-note { margin: 4px 0 8px; }
+.twin-health-list { margin: 0; padding: 0; list-style: none; }
+.twin-health-list li { display: grid; gap: 2px; padding: 8px 0 8px 10px; border-top: 1px solid var(--rule); border-left: 3px solid transparent; }
+.twin-health-list li.is-warning { border-left-color: var(--alert-bg); }
+.twin-health-list li.is-alarm { border-left-color: var(--alarm-bg); }
+.twin-health-list li.is-inactive .twin-health-value { color: var(--muted); font-family: var(--sans); font-size: 12px; }
+.twin-health-main { display: flex; justify-content: space-between; gap: 12px; }
+.twin-health-label { font-size: 13px; }
+.twin-health-value { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; text-align: right; }
+.twin-health-detail { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 8px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+
+/* Trend */
+.twin-select select { min-height: 44px; padding: 0 10px; color: var(--text); border: 1px solid var(--control-strong); border-radius: 6px; background: var(--surface); font-size: 12px; }
+.twin-lanes { display: grid; gap: 10px; }
+.twin-lane-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: 12px; color: var(--muted); }
+.twin-lane-head strong { color: var(--text); font: 500 13px var(--mono); }
+.twin-lane-head .unit { margin-inline-start: 0.25em; color: var(--muted); font-weight: 400; }
+.twin-lane-ref { display: inline-flex; align-items: center; gap: 5px; font: 11px var(--mono); }
+.twin-ref-swatch { width: 14px; border-top: 1.5px dashed var(--chart-2); }
+.twin-lane-plot { position: relative; padding-left: 44px; }
+.twin-lane-plot svg { width: 100%; height: auto; display: block; border-bottom: 1px solid var(--rule); }
+.twin-lane-axis { position: absolute; left: 0; color: var(--muted); font: 11px var(--mono); }
+.twin-lane-axis--hi { top: 0; }
+.twin-lane-axis--lo { bottom: 0; }
+.twin-grid-line { stroke: var(--rule); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.twin-trend-line { fill: none; stroke: var(--chart-1); stroke-width: 1.6; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.twin-trend-ref { fill: none; stroke: var(--chart-2); stroke-width: 1.2; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.twin-time-axis { display: flex; justify-content: space-between; margin-top: 4px; padding-left: 44px; color: var(--muted); font: 11px var(--mono); }
+
+/* Sheets */
+.twin-sheet { width: min(560px, 100vw); }
+.twin-fault-sheet { width: min(760px, 100vw); }
+.twin-fault-sheet .operate-card { margin-top: 16px; padding: 0; border: 0; }
+.twin-fault-sheet .operate-card > h2 { display: none; }
+.twin-sheet .operate-log { max-height: none; }
+.twin-sheet-subhead { margin: 20px 0 8px; font-size: 13px; font-weight: 600; }
+.twin-decision-log { margin: 0; padding: 0; list-style: none; }
+.twin-decision-log li { border-top: 1px solid var(--rule); }
+.twin-decision-log summary { min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 12px; cursor: pointer; }
+.twin-decision-log time { color: var(--muted); font: 11px var(--mono); }
+.twin-decision-title { font-weight: 600; }
+.twin-decision-log p { margin: 4px 0 8px; font-size: 12px; line-height: 1.45; }
+
+@media (max-width: 1100px) {
+  .twin-grid { grid-template-columns: minmax(0, 1fr); }
+  .twin-side { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+}
+
+@media (max-width: 900px) {
+  .twin-page { padding: 12px 16px 24px; }
+  .twin-strip { gap: 8px; }
+  .twin-strip-end { margin-left: 0; }
+  .twin-hero { height: 360px; }
+  .twin-callout { max-width: 132px; padding: 3px 6px; font-size: 10.5px; transform: translate(-50%, calc(-100% - 16px)); }
+  .twin-callout::after { height: 16px; }
+  .twin-callout-value { font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .twin-strip-group { width: 100%; }
+  .twin-strip-group > .twin-button { flex: 1 1 auto; }
+  .twin-demand input { flex: 1 1 60px; }
+  .twin-hero { height: 320px; }
+  .twin-mode { width: 100%; }
+  .twin-mode button { flex: 1 1 0; min-width: 0; }
+}
