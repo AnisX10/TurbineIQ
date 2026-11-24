@@ -149,10 +149,16 @@ class TwinMonitor:
         self.twin: QuasiSteadyTwin = (
             QuasiSteadyTwin() if twin_engine_name is None else mismatched_twin(self.engine)
         )
-        self.estimator = UKFHealthEstimator(twin=self.twin)
+        # The steady-state gates ignore the exhaust reading as well: the default gate also
+        # needs the exhaust scatter below 1.5 K, so a noisy thermocouple (3 K on the bank)
+        # closed it for good, which starved the estimator and made the scatter check below
+        # unreachable. Power flatness and unchanged inputs still mark the transients.
+        self.estimator = UKFHealthEstimator(
+            twin=self.twin, gate=SteadyStateGate(exhaust_std_k=math.inf)
+        )
         self.estimator.model = ExhaustFreeModel(self.twin)
         self.forecaster = DegradationForecaster()
-        self.gate = SteadyStateGate()
+        self.gate = SteadyStateGate(exhaust_std_k=math.inf)
         self.power_model = PowerInputModel(self.twin)
         self._residuals: deque[tuple[float, np.ndarray]] = deque()
         self._exhaust_window: deque[float] = deque(maxlen=10)
