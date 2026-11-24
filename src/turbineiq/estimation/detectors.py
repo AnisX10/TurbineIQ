@@ -159,16 +159,17 @@ def _identity() -> tuple[tuple[float, ...], ...]:
 
 
 #: Fitted with :meth:`NoiseModel.fit` on every steady sample of the five clean scenarios,
-#: seeds 1000-1019 (about 180 steady hours). Units: MW, K, K, kPa; per_fuel per kg/s.
+#: seeds 1000-1019 (646,039 samples, 179.5 steady hours), rounded. Units MW, K, K, kPa;
+#: ``per_fuel`` per kg/s.
 TUNED_NOISE = NoiseModel(
-    location=(0.0, 0.0, 0.0, 0.0),
-    offset=(0.0, 0.5, 0.6, 3.4),
-    per_fuel=(0.1, 0.8, 0.0, 0.0),
+    location=(0.0010, -0.0141, -0.0025, 0.0115),
+    offset=(0.0151, 0.3856, 0.6121, 3.3929),
+    per_fuel=(0.09484, 0.7232, 0.0001, 0.0102),
     correlation=(
-        (1.0, 0.89, 0.04, 0.05),
-        (0.89, 1.0, -0.08, -0.09),
-        (0.04, -0.08, 1.0, 0.39),
-        (0.05, -0.09, 0.39, 1.0),
+        (1.0, 0.896, 0.035, 0.036),
+        (0.896, 1.0, -0.087, -0.103),
+        (0.035, -0.087, 1.0, 0.382),
+        (0.036, -0.103, 0.382, 1.0),
     ),
 )
 
