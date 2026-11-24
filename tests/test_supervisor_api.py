@@ -142,6 +142,8 @@ def test_advisory_recommendation_can_be_rejected_then_not_reopened() -> None:
     }
     log = client.get(_url(session_id, "/supervisor/decisions")).json()
     assert log["total"] >= 1
+    assert body["supervisor"]["decisions_total"] == log["total"]
+    assert body["supervisor"]["recent_decisions"][-1] == log["decisions"][-1]
     open_ids = [d["id"] for d in body["supervisor"]["open_decisions"]]
     assert open_ids, "the layer should have a recommendation waiting in advisory mode"
     rejected = client.post(_url(session_id, f"/supervisor/decisions/{open_ids[0]}/reject"))
@@ -150,3 +152,11 @@ def test_advisory_recommendation_can_be_rejected_then_not_reopened() -> None:
     assert rejected.json()["decision"]["resolved_by"] == "operator"
     again = client.post(_url(session_id, f"/supervisor/decisions/{open_ids[0]}/accept"))
     assert again.status_code == 409
+
+
+def test_summary_carries_the_log_size_and_recent_decisions() -> None:
+    session_id, body = _create(seed=1, supervisor_mode="manual")
+    assert body["supervisor"]["decisions_total"] == 0
+    assert body["supervisor"]["recent_decisions"] == []
+    summary = client.get(_url(session_id, "/supervisor")).json()
+    assert {"status", "open_decisions", "last_load_evaluation", "counters"} <= set(summary)

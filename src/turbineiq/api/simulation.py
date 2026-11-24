@@ -74,7 +74,20 @@ class _Entry:
                 sup.tick()
 
     def supervisor_summary(self) -> dict[str, Any] | None:
-        return None if self.supervisor is None else self.supervisor.summary()
+        return None if self.supervisor is None else _summary(self.supervisor)
+
+
+RECENT_DECISIONS = 5
+
+
+def _summary(supervisor: Supervisor) -> dict[str, Any]:
+    """The supervisor's own summary plus the size of its log and its latest decisions, so a
+    console sees decisions applied (or resolved) between two polls without the full log."""
+
+    summary = supervisor.summary()
+    summary["decisions_total"] = len(supervisor.decisions)
+    summary["recent_decisions"] = [d.to_dict() for d in supervisor.decisions[-RECENT_DECISIONS:]]
+    return summary
 
 
 _sessions: OrderedDict[str, _Entry] = OrderedDict()
@@ -302,14 +315,14 @@ def attach_supervisor(session_id: str, request: SupervisorRequest) -> dict[str, 
             entry.supervisor = _new_supervisor(entry.session, request.mode)
         else:
             entry.supervisor.set_mode(request.mode)
-        return entry.supervisor.summary()
+        return _summary(entry.supervisor)
 
 
 @router.get("/sessions/{session_id}/supervisor")
 def supervisor_summary(session_id: str) -> dict[str, Any]:
     entry = _supervised(session_id)
     with entry.lock:
-        return entry.supervisor.summary()
+        return _summary(entry.supervisor)
 
 
 @router.post("/sessions/{session_id}/supervisor/mode")
@@ -317,7 +330,7 @@ def supervisor_mode(session_id: str, request: ModeRequest) -> dict[str, Any]:
     entry = _supervised(session_id)
     with entry.lock:
         entry.supervisor.set_mode(request.mode)
-        return entry.supervisor.summary()
+        return _summary(entry.supervisor)
 
 
 @router.post("/sessions/{session_id}/supervisor/demand")
@@ -335,7 +348,7 @@ def supervisor_demand(session_id: str, request: DemandRequest) -> dict[str, Any]
             entry.supervisor.set_demand(request.mw)
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
-        return {"supervisor": entry.supervisor.summary(), "state": entry.session.snapshot()}
+        return {"supervisor": _summary(entry.supervisor), "state": entry.session.snapshot()}
 
 
 def _resolve_decision(session_id: str, decision_id: int, accept: bool) -> dict[str, Any]:
@@ -352,7 +365,7 @@ def _resolve_decision(session_id: str, decision_id: int, accept: bool) -> dict[s
             raise _command_error(exc) from exc
         return {
             "decision": decision.to_dict(),
-            "supervisor": sup.summary(),
+            "supervisor": _summary(sup),
             "state": entry.session.snapshot(),
         }
 
@@ -375,7 +388,7 @@ def trust_thermocouple(session_id: str) -> dict[str, Any]:
             entry.supervisor.trust_thermocouple()
         except CommandError as exc:
             raise _command_error(exc) from exc
-        return {"supervisor": entry.supervisor.summary(), "state": entry.session.snapshot()}
+        return {"supervisor": _summary(entry.supervisor), "state": entry.session.snapshot()}
 
 
 @router.get("/sessions/{session_id}/supervisor/decisions")
