@@ -76,6 +76,11 @@
   --stage-part: #d9dde3;
   --stage-edge: #8a8f98;
   --stage-selected: var(--chart-3);
+  /* Alarm and alert fills (ISA-101 style): saturated, high contrast, same in both themes. */
+  --alarm-bg: #c8102e;
+  --alarm-ink: #ffffff;
+  --alert-bg: #f2b100;
+  --alert-ink: #141414;
   --sans: 'Geist', system-ui, sans-serif;
   --mono: 'Geist Mono', ui-monospace, Consolas, monospace;
   --dur-slow: 240ms;

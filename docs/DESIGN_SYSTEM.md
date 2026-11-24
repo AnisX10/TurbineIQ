@@ -39,6 +39,8 @@ The Stage and form-control hit areas are at least 44 by 44 CSS pixels. Small lab
 | `--stage-part` | `#d9dde3` | `#626872` | Schematic/model neutral part color |
 | `--stage-edge` | `#8a8f98` | `#686e77` | Stage frame and schematic outlines |
 | `--stage-selected` | `var(--chart-3)` | `var(--chart-3)` | Selected mesh outline |
+| `--alarm-bg` / `--alarm-ink` | `#c8102e` / `#ffffff` | same | Process alarms on the live twin (trip, distrusted instrument, health loss beyond the alarm level) |
+| `--alert-bg` / `--alert-ink` | `#f2b100` / `#141414` | same | Alerts that need attention but are not alarms (escalated recommendation, model substitute active, health warning) |
 
 `--control` is reserved for low-emphasis dividers. Use `--control-strong` for interactive boundaries; the contrast checker verifies required token pairs in both themes. System, Light, and Dark modes share the same token names.
 
@@ -51,6 +53,7 @@ The Stage and form-control hit areas are at least 44 by 44 CSS pixels. Small lab
 - **Assistant:** Local / Cloud segmented mode, context chips, answer and trace ledger, consent Sheet, and keyboard-operable composer.
 - **Shared UI:** native-dialog `Sheet` and `EngineOfflineBanner` in `frontend/src/components/ui/`.
 - **Viewer:** local GLB, schematic fallback, stage toolbar, mesh picker, selected-part outline and callout.
+- **Live twin (landing page, `#/twin`):** control strip, the 3D model driven by the live simulation with status callouts pinned on compressor, combustor, turbine and exhaust, a five-value Unit now card, one action card (current recommendation, guard verdict, Accept / Reject, Manual / Advisory / Autonomous), one trend with a channel select, and a ranked component-health list that shows only estimated quantities. Guard checks, candidates, the decision and event log and fault injection sit behind disclosures and side sheets. The page stays grey in normal operation (ISA-101 spirit); colour appears only for an abnormal state, always with a text or icon cue, and alarms use the saturated alarm tokens rather than pastel pills.
 
 ## Accessibility rules
 

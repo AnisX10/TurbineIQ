@@ -2,6 +2,11 @@
 
 Everything here drives a simulated plant held in memory. There is no connection to any
 real machine or control system, and no persistence beyond the running process.
+
+A session may carry a WP5 :class:`~turbineiq.prescription.Supervisor` (create it with
+``supervisor_mode`` or ``POST /sessions/{id}/supervisor``). The supervisor is ticked once
+per simulated second whenever the session advances, through the advance endpoint and the
+stream alike, so its view does not depend on how the client chops up time.
 """
 
 from __future__ import annotations
@@ -12,12 +17,13 @@ import threading
 import time
 from collections import OrderedDict
 from collections.abc import Iterator
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
+from turbineiq.prescription import Mode, Supervisor, SupervisorConfig
 from turbineiq.simulation import (
     COMMANDS,
     MODEL_NOTE,
@@ -36,11 +42,52 @@ MAX_REPLAY_STEPS = 200_000
 MAX_REPLAY_EVENTS = 2_000
 
 
+SupervisorMode = Literal["manual", "advisory", "autonomous"]
+
+
 class _Entry:
-    def __init__(self, session: Session) -> None:
+    def __init__(self, session: Session, supervisor: Supervisor | None = None) -> None:
         self.session = session
+        self.supervisor = supervisor
         self.lock = threading.Lock()
         self.last_used = time.monotonic()
+
+    def advance(self, seconds: float) -> None:
+        """Advance the session; with a supervisor, tick it at every whole simulated second.
+
+        The caller holds ``self.lock``.
+        """
+
+        session = self.session
+        steps = round(seconds / session.dt)
+        sup = self.supervisor
+        if sup is None:
+            session.advance(steps)
+            return
+        per_second = max(1, round(1.0 / session.dt))
+        while steps > 0:
+            to_boundary = per_second - session.step_count % per_second
+            chunk = min(steps, to_boundary)
+            session.advance(chunk)
+            steps -= chunk
+            if session.step_count % per_second == 0:
+                sup.tick()
+
+    def supervisor_summary(self) -> dict[str, Any] | None:
+        return None if self.supervisor is None else _summary(self.supervisor)
+
+
+RECENT_DECISIONS = 5
+
+
+def _summary(supervisor: Supervisor) -> dict[str, Any]:
+    """The supervisor's own summary plus the size of its log and its latest decisions, so a
+    console sees decisions applied (or resolved) between two polls without the full log."""
+
+    summary = supervisor.summary()
+    summary["decisions_total"] = len(supervisor.decisions)
+    summary["recent_decisions"] = [d.to_dict() for d in supervisor.decisions[-RECENT_DECISIONS:]]
+    return summary
 
 
 _sessions: OrderedDict[str, _Entry] = OrderedDict()
@@ -55,6 +102,24 @@ class CreateSessionRequest(BaseModel):
     island_load_mw: float = Field(default=20.0, ge=0.0, le=60.0)
     measurement_noise: bool = True
     record_interval_s: float = Field(default=1.0, ge=0.1, le=60.0)
+    #: Attach a WP5 supervisor in this mode; omitted or null means no supervisor.
+    supervisor_mode: SupervisorMode | None = None
+
+
+class SupervisorRequest(BaseModel):
+    mode: SupervisorMode = "advisory"
+
+
+class ModeRequest(BaseModel):
+    mode: SupervisorMode
+
+
+class DemandRequest(BaseModel):
+    mw: float = Field(ge=0.0, le=60.0)
+    #: Also move the plant's load setpoint to the demand (as the operator does when the
+    #: dispatcher sends a new target); the supervisor then optimises inside the band.
+    apply_setpoint: bool = False
+    ramp_mw_per_min: float = Field(default=10.0, gt=0.0, le=120.0)
 
 
 class CommandRequest(BaseModel):
@@ -105,22 +170,36 @@ def _type_name(types: type | tuple[type, ...]) -> str:
 
 @router.post("/sessions", status_code=201)
 def create_session(request: CreateSessionRequest) -> dict[str, Any]:
+    body = request.model_dump()
+    mode = body.pop("supervisor_mode")
     try:
-        config = SessionConfig(**request.model_dump())
+        config = SessionConfig(**body)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     session = Session(config)
+    entry = _Entry(session)
+    if mode is not None:
+        entry.supervisor = _new_supervisor(session, mode)
     session_id = secrets.token_hex(8)
     with _registry_lock:
         while len(_sessions) >= MAX_SESSIONS:
             _sessions.popitem(last=False)  # evict the least recently used session
-        _sessions[session_id] = _Entry(session)
-    return {
+        _sessions[session_id] = entry
+    response: dict[str, Any] = {
         "session_id": session_id,
         "config": config.to_dict(),
         "state": session.snapshot(),
         "model_note": MODEL_NOTE,
     }
+    if entry.supervisor is not None:
+        response["supervisor"] = entry.supervisor_summary()
+    return response
+
+
+def _new_supervisor(session: Session, mode: str) -> Supervisor:
+    supervisor = Supervisor(session, SupervisorConfig(mode=Mode(mode)))
+    supervisor.tick()  # a first look, so the summary has a status from the start
+    return supervisor
 
 
 @router.get("/sessions/{session_id}")
@@ -148,11 +227,14 @@ def advance(session_id: str, request: AdvanceRequest) -> dict[str, Any]:
         session = entry.session
         mark = session.step_count
         try:
-            session.advance_seconds(request.seconds)
+            entry.advance(request.seconds)
         except CommandError as exc:
             raise _command_error(exc) from exc
         samples = [s for s in session.history if s["step"] > mark][-600:]
-        return {"state": session.snapshot(), "samples": samples}
+        response: dict[str, Any] = {"state": session.snapshot(), "samples": samples}
+        if entry.supervisor is not None:
+            response["supervisor"] = entry.supervisor_summary()
+        return response
 
 
 @router.get("/sessions/{session_id}/history")
@@ -191,13 +273,16 @@ def stream(
             started = time.monotonic()
             with entry.lock:
                 try:
-                    entry.session.advance_seconds(chunk)
+                    entry.advance(chunk)
                 except CommandError as exc:
                     yield f"event: error\ndata: {json.dumps({'detail': str(exc)})}\n\n"
                     return
                 payload = entry.session.snapshot()
+                summary = entry.supervisor_summary()
             remaining -= chunk
             yield f"event: state\ndata: {json.dumps(payload)}\n\n"
+            if summary is not None:
+                yield f"event: supervisor\ndata: {json.dumps(summary)}\n\n"
             pause = chunk / speed - (time.monotonic() - started)
             if pause > 0:
                 time.sleep(pause)
@@ -208,6 +293,115 @@ def stream(
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+# ---------------------------------------------------------------------- supervisor (WP5)
+
+
+def _supervised(session_id: str) -> _Entry:
+    entry = _get(session_id)
+    if entry.supervisor is None:
+        raise HTTPException(status_code=404, detail="This session has no supervisor")
+    return entry
+
+
+@router.post("/sessions/{session_id}/supervisor")
+def attach_supervisor(session_id: str, request: SupervisorRequest) -> dict[str, Any]:
+    """Attach a supervisor in ``mode``, or switch the mode of the one already attached."""
+
+    entry = _get(session_id)
+    with entry.lock:
+        if entry.supervisor is None:
+            entry.supervisor = _new_supervisor(entry.session, request.mode)
+        else:
+            entry.supervisor.set_mode(request.mode)
+        return _summary(entry.supervisor)
+
+
+@router.get("/sessions/{session_id}/supervisor")
+def supervisor_summary(session_id: str) -> dict[str, Any]:
+    entry = _supervised(session_id)
+    with entry.lock:
+        return _summary(entry.supervisor)
+
+
+@router.post("/sessions/{session_id}/supervisor/mode")
+def supervisor_mode(session_id: str, request: ModeRequest) -> dict[str, Any]:
+    entry = _supervised(session_id)
+    with entry.lock:
+        entry.supervisor.set_mode(request.mode)
+        return _summary(entry.supervisor)
+
+
+@router.post("/sessions/{session_id}/supervisor/demand")
+def supervisor_demand(session_id: str, request: DemandRequest) -> dict[str, Any]:
+    entry = _supervised(session_id)
+    with entry.lock:
+        if request.apply_setpoint:
+            try:
+                entry.session.apply(
+                    "set_load", {"mw": request.mw, "ramp_mw_per_min": request.ramp_mw_per_min}
+                )
+            except CommandError as exc:
+                raise _command_error(exc) from exc
+        try:
+            entry.supervisor.set_demand(request.mw)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        return {"supervisor": _summary(entry.supervisor), "state": entry.session.snapshot()}
+
+
+def _resolve_decision(session_id: str, decision_id: int, accept: bool) -> dict[str, Any]:
+    entry = _supervised(session_id)
+    with entry.lock:
+        sup = entry.supervisor
+        try:
+            decision = sup.accept(decision_id) if accept else sup.reject(decision_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail="Unknown decision id") from exc
+        except ValueError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        except CommandError as exc:
+            raise _command_error(exc) from exc
+        return {
+            "decision": decision.to_dict(),
+            "supervisor": _summary(sup),
+            "state": entry.session.snapshot(),
+        }
+
+
+@router.post("/sessions/{session_id}/supervisor/decisions/{decision_id}/accept")
+def accept_decision(session_id: str, decision_id: int) -> dict[str, Any]:
+    return _resolve_decision(session_id, decision_id, accept=True)
+
+
+@router.post("/sessions/{session_id}/supervisor/decisions/{decision_id}/reject")
+def reject_decision(session_id: str, decision_id: int) -> dict[str, Any]:
+    return _resolve_decision(session_id, decision_id, accept=False)
+
+
+@router.post("/sessions/{session_id}/supervisor/trust-thermocouple")
+def trust_thermocouple(session_id: str) -> dict[str, Any]:
+    entry = _supervised(session_id)
+    with entry.lock:
+        try:
+            entry.supervisor.trust_thermocouple()
+        except CommandError as exc:
+            raise _command_error(exc) from exc
+        return {"supervisor": _summary(entry.supervisor), "state": entry.session.snapshot()}
+
+
+@router.get("/sessions/{session_id}/supervisor/decisions")
+def decision_log(
+    session_id: str, last: int = Query(default=200, ge=1, le=2000)
+) -> dict[str, Any]:
+    entry = _supervised(session_id)
+    with entry.lock:
+        decisions = entry.supervisor.decisions[-last:]
+        return {
+            "decisions": [d.to_dict() for d in decisions],
+            "total": len(entry.supervisor.decisions),
+        }
 
 
 @router.post("/replay")

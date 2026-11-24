@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { simApi } from '../../api'
 import { commandSummary, mergeSamples } from './simLogic'
+import { readStoredSession, storeSession } from '../twin/useTwinSession'
 import type { SimConfig, SimState } from './simTypes'
 
 export interface LogEntry { id: number; t_s: number; text: string; kind: 'command' | 'alarm' | 'info' }
@@ -43,6 +44,7 @@ export function useSimSession() {
       const created = await simApi.create(config)
       setRunning(false)
       setSessionId(created.session_id)
+      storeSession(created.session_id)
       setState(created.state)
       setSamples([created.state])
       setLog([])
@@ -53,6 +55,21 @@ export function useSimSession() {
     } finally {
       setBusy(false)
     }
+  }, [addLog])
+
+  // Pick up the unit this tab already runs (the twin console and Operate share it).
+  useEffect(() => {
+    const stored = readStoredSession()
+    if (!stored) return
+    let active = true
+    Promise.all([simApi.state(stored), simApi.history(stored)]).then(([current, history]) => {
+      if (!active) return
+      setSessionId(stored)
+      setState(current)
+      setSamples(history.samples.length ? history.samples : [current])
+      addLog(current.t_s, 'Resumed the unit running in this tab', 'info')
+    }).catch(() => storeSession(null))
+    return () => { active = false }
   }, [addLog])
 
   const send = useCallback(async (command: string, params: Record<string, unknown> = {}) => {
