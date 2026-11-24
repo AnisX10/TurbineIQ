@@ -62,6 +62,14 @@ def test_evidence_search_returns_local_citations() -> None:
     assert result["evidence"][0]["citation"].startswith("[")
 
 
+def test_evidence_search_covers_the_project_writeups() -> None:
+    response = client.get("/api/evidence/search", params={"q": "UKF thermocouple sensor fault"})
+
+    assert response.status_code == 200
+    sources = {item["source"] for item in response.json()["evidence"]}
+    assert "HEALTH_ESTIMATION.md" in sources or "WP4_RESULTS.md" in sources
+
+
 def test_assistant_rejects_cloud_document_context_without_cloud_opt_in() -> None:
     response = client.post(
         "/api/assistant/ask",

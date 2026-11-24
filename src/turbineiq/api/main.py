@@ -33,14 +33,18 @@ from .simulation import router as simulation_router
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 DEMO_DOCUMENTS_PATH = PROJECT_ROOT / "data" / "documents"
+# The project's own engineering write-ups (calibration, WP4 results, scenario bank...).
+# Top level only: docs/evidence holds JSON and docs/redesign is UI process notes.
+PROJECT_WRITEUPS_PATH = PROJECT_ROOT / "docs"
 FRONTEND_DIST_PATH = PROJECT_ROOT / "frontend" / "dist"
 
 
 def _load_demo_documents() -> list[DocumentChunk]:
     documents: list[DocumentChunk] = []
-    for path in sorted(DEMO_DOCUMENTS_PATH.glob("*")):
-        if path.is_file() and path.suffix.lower() in {".md", ".markdown", ".txt", ".pdf"}:
-            documents.extend(load_document_path(path))
+    for folder in (DEMO_DOCUMENTS_PATH, PROJECT_WRITEUPS_PATH):
+        for path in sorted(folder.glob("*")):
+            if path.is_file() and path.suffix.lower() in {".md", ".markdown", ".txt", ".pdf"}:
+                documents.extend(load_document_path(path))
     return documents
 
 
