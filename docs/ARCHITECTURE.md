@@ -35,6 +35,7 @@ flowchart TD
 - `rag/` extracts local PDF/Markdown/TXT content and performs lexical ranking with citation metadata. It uses no remote vector service.
 - `agent/` routes questions through a fixed allow-list of deterministic tools. Its optional cloud adapter cannot run arbitrary code or expand the tool list.
 - `simulation/` is the Rowen-type dynamic plant: maps generated from the calibrated cycle, fuel system, rotor, controls, start/stop/trip state machine, and seeded event-logged sessions with bit-for-bit replay (`docs/DYNAMIC_MODEL.md`). It operates a simulated unit only.
+- `estimation/` is the WP4 layer on the simulated plant: a quasi-steady twin, a steady-state gate, an unscented Kalman filter for the gas-path health, residual and estimator-based fault detectors with a fault-pattern isolator, a degradation forecaster, and the benchmark harness that scores them on the seeded scenario bank (`docs/WP4_RESULTS.md`). Detectors and estimators see only instrument readings and operating inputs, never the injected ground truth.
 - `api/` exposes health, scenario catalog, replay, evidence search, assistant endpoints, and the `/api/sim` operating-session endpoints. Selected context is validated and recomputed by the server before use.
 - `ui/` contains the earlier Streamlit pages. Install the `streamlit` extra to run them.
 
