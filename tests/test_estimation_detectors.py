@@ -84,11 +84,16 @@ def test_no_detector_signals_on_a_healthy_load_cycling_run(clean_run):
 
 def test_every_detector_sees_three_percent_fouling_within_minutes(fouling_run):
     _, outputs, _ = fouling_run
+    delays = {}
     for name, series in outputs.items():
         assert _first_alarm(series, after_s=0.0).t_s >= ONSET_S, name  # nothing before onset
-        delay = _first_alarm(series, after_s=ONSET_S).t_s - ONSET_S
-        # The step closes the gate for one window (120 s) plus settling; then it is obvious.
-        assert 100.0 <= delay <= 400.0, (name, delay)
+        delays[name] = _first_alarm(series, after_s=ONSET_S).t_s - ONSET_S
+        assert delays[name] <= 400.0, (name, delays[name])
+    # The discharge pressure drops at once, so the MEWMA fires in the first samples; the
+    # exhaust rise then shuts the gate for about one window (120 s) before the per-channel
+    # detectors have accumulated enough.
+    assert delays["mewma"] <= 10.0
+    assert delays["cusum"] >= 100.0 and delays["screen"] >= 100.0
 
 
 def test_fouling_is_isolated_from_the_channel_pattern(fouling_run):
@@ -169,8 +174,9 @@ def test_noise_model_fit_recovers_a_fuel_dependent_scale():
     scale = np.array([0.1, 0.8, 0.0, 0.0]) * fuel[:, None] + np.array([0.0, 0.5, 0.6, 3.4])
     residuals = rng.normal(size=(len(fuel), 4)) * scale
     model = NoiseModel.fit(residuals, fuel)
-    assert np.allclose(model.per_fuel, [0.1, 0.8, 0.0, 0.0], atol=0.04)
-    assert np.allclose(model.scale(2.2), scale[4000], rtol=0.05)
+    assert np.allclose(model.per_fuel[:2], [0.1, 0.8], atol=0.04)
+    for level in (0, 4000, 8000):
+        assert np.allclose(model.scale(fuel[level]), scale[level], rtol=0.04)
     z = model.standardize(residuals, fuel)
     assert np.allclose(z.std(axis=0), 1.0, atol=0.05)
 

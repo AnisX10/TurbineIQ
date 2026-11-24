@@ -7,8 +7,10 @@ prediction for a *clean* engine at the measured inputs, and looks at it only whi
 :class:`~turbineiq.estimation.steady.SteadyStateGate` is open. While the gate is closed
 (start-up, load and ambient changes, and for ``window_s`` after any jump in power or exhaust
 temperature) a detector holds its state and cannot signal, so a fault that shows only in
-transients, such as a slow fuel valve, is invisible to it, and a step fault is seen no
-earlier than one gate window after the step.
+transients, such as a slow fuel valve, is invisible to it, extra exhaust noise that keeps
+the gate shut is never examined, and a step fault that moves power or exhaust is usually
+seen only after the gate reopens, about two minutes later (a detector that reacts within
+the first few samples, before the gate's spread test notices the jump, can be faster).
 
 Three detectors, all on residuals standardised by a :class:`NoiseModel` fitted to healthy
 runs:
@@ -326,10 +328,19 @@ class MewmaCore:
 
 # --------------------------------------------------------------------------- detectors
 class _ResidualDetector:
-    """Shared plumbing: gate, clean-twin residual, standardisation, output."""
+    """Shared plumbing: gate, clean-twin residual, standardisation, output.
 
-    def __init__(self, core, noise: NoiseModel, source: GatedResiduals | None) -> None:
-        self.core = core
+    The detector's memory is held while the gate is closed but cleared when the unit
+    leaves the loaded state (shutdown or trip), because the machine may be washed or
+    repaired while it is down; it starts afresh at the next steady sample.
+    """
+
+    def __init__(
+        self, make_core: Callable[[], object], noise: NoiseModel, source: GatedResiduals | None
+    ) -> None:
+        self._make_core = make_core
+        self.core = make_core()
+        self._loaded = False
         self.noise = noise
         self.source = source or GatedResiduals()
         self.statistic = 0.0
@@ -341,6 +352,11 @@ class _ResidualDetector:
         return self.core.threshold
 
     def update(self, obs: Observation) -> DetectorOutput:
+        loaded = obs.state == "loaded" and obs.breaker_closed
+        if self._loaded and not loaded:
+            self.core = self._make_core()
+            self.statistic = 0.0
+        self._loaded = loaded
         residual = self.source.update(obs)
         if residual is None:
             return DetectorOutput(obs.t_s, False, self.statistic, None)
@@ -386,7 +402,7 @@ class ResidualScreen(_ResidualDetector):
         noise: NoiseModel = TUNED_NOISE,
         source: GatedResiduals | None = None,
     ) -> None:
-        super().__init__(ScreenCore(threshold, window, persistence), noise, source)
+        super().__init__(lambda: ScreenCore(threshold, window, persistence), noise, source)
 
 
 class CusumDetector(_ResidualDetector):
@@ -400,7 +416,7 @@ class CusumDetector(_ResidualDetector):
         noise: NoiseModel = TUNED_NOISE,
         source: GatedResiduals | None = None,
     ) -> None:
-        super().__init__(CusumCore(threshold, slack, clip), noise, source)
+        super().__init__(lambda: CusumCore(threshold, slack, clip), noise, source)
 
 
 class MewmaDetector(_ResidualDetector):
@@ -417,7 +433,8 @@ class MewmaDetector(_ResidualDetector):
         noise: NoiseModel = TUNED_NOISE,
         source: GatedResiduals | None = None,
     ) -> None:
-        super().__init__(MewmaCore(threshold, smoothing, noise.whitener()), noise, source)
+        whitener = noise.whitener()
+        super().__init__(lambda: MewmaCore(threshold, smoothing, whitener), noise, source)
 
 
 # --------------------------------------------------------------------------- isolation
