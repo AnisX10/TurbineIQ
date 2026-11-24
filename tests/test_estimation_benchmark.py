@@ -411,7 +411,9 @@ def test_the_command_line_writes_json_and_markdown(tmp_path):
     out, md = tmp_path / "r.json", tmp_path / "r.md"
     code = cli.main(
         [
-            *("--estimator", "clean", "--detector", "never", "--estimator", "ukf"),
+            *("--estimator", "clean", "--detector", "never"),
+            # A module that does not exist is skipped with a message, not fatal.
+            *("--estimator", "turbineiq.estimation._absent:Nothing"),
             *("--scenarios", "fouling_step_part_load", "--seeds", "tune:1", "--until-s", "300"),
             *("--workers", "1", "--cache-dir", str(tmp_path / "cache")),
             *("--out", str(out), "--markdown", str(md)),
