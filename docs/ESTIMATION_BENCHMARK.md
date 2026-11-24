@@ -130,6 +130,27 @@ command-line options and are recorded in the results.
   - On a sensor or actuator scenario the true health stays clean, so the convergence time
     measures how long the fault pulls the estimate out of the band.
 
+### Twin tracking (`score_tracking`)
+
+This answers the first half of research question RQ2: does the twin, updated with the
+estimated health, follow the instruments to within sensor noise?
+
+- **Samples.** The scoring window above, with the shared `SteadyStateGate` open and an
+  estimate in force, one sample every 10 s.
+- **Residuals.** On each sample the `QuasiSteadyTwin` predicts power, exhaust temperature
+  and compressor discharge temperature and pressure from the measured inputs, three
+  times: with the estimated health, with the true health and with a clean engine.
+- **Per channel.** `tracking_rms_*` is the RMS of measured minus predicted with the
+  estimate. `tracking_floor_*` is the same with the true health: what measurement noise
+  (including input-reading noise pushed through the twin) leaves even with perfect health
+  knowledge. `tracking_ratio_*` = rms / floor. `tracking_ratio_max` is the worst channel.
+- **Reading it.** A ratio of 1 means the twin tracks to within sensor noise.
+  `tracking_clean_ratio_*` (and `_max`) is the same ratio for the clean, un-updated twin,
+  which is what a twin without self-calibration would show.
+- On a sensor-fault stream the floor includes the sensor fault, so the ratio there says
+  how much worse than "perfect health knowledge" the estimate makes the twin, not whether
+  it tracks the true plant.
+
 ### Detectors (`score_detections`, `score_isolation`)
 
 - **Detection delay.** Time from the onset to the first sample at or after it with the
@@ -206,6 +227,7 @@ PYTHONPATH=src python scripts/run_estimation_benchmark.py --estimator ukf \
 | `cusum` | detector | `turbineiq.estimation.detectors:CusumDetector` |
 | `mewma` | detector | `turbineiq.estimation.detectors:MewmaDetector` |
 | `isolator` | detector | `turbineiq.estimation.detectors:PatternIsolator` |
+| `ukf_shift` | detector | `turbineiq.estimation.health_detector:HealthShiftDetector` |
 
 - Modules are imported only when a name is used.
 - If the target module (or its package) is missing, or it lacks the attribute, the name

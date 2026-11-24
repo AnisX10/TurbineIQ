@@ -863,7 +863,7 @@ def summarize_performance(
     return rows
 
 
-def _streams(scenario_id: str, seed: int, traces: Path | None):
+def _streams(scenario_id: str, seed: int, traces: Path | None, cache_dir: Path | None = None):
     from turbineiq.simulation.scenarios import scenario
 
     item = scenario(scenario_id)
@@ -876,7 +876,31 @@ def _streams(scenario_id: str, seed: int, traces: Path | None):
             if path.exists():
                 with path.open(newline="") as fh:
                     return split_rows(csv.DictReader(fh))
+    if cache_dir is not None:
+        from .benchmark import load_streams
+
+        return load_streams(item, seed, cache_dir)  # the benchmark's stream cache
     return run_streams(item, seed=seed)  # about 20 s for a two-hour scenario
+
+
+def ukf_estimates(observations: Sequence[Observation]) -> list[HealthEstimateLike]:
+    """The UKF's estimates at its measurement updates (fresh, steady-state estimates only).
+
+    Between updates the estimator repeats its last estimate; those repeats carry no new
+    information and are left out, as an estimator feeding the forecaster online would.
+    """
+
+    from .ukf import UKFHealthEstimator
+
+    estimator = UKFHealthEstimator()
+    out: list[HealthEstimateLike] = []
+    updates = 0
+    for obs in observations:
+        estimate = estimator.update(obs)
+        if estimate is not None and estimator.updates != updates:
+            updates = estimator.updates
+            out.append(estimate)
+    return out
 
 
 def evaluate(
@@ -887,14 +911,24 @@ def evaluate(
     performance_replicates: int = 0,
     config: TrendConfig | None = None,
     scenarios: Sequence[str] = tuple(EVALUATION_LOADS_MW),
+    estimates: str = "synthetic",
+    cache_dir: Path | None = None,
 ) -> tuple[list[ForecastRecord], list[PerformanceRecord]]:
-    """The write-up's evaluation on synthetic estimates.
+    """The write-up's evaluation, on synthetic estimates or on the UKF's output.
 
     ``seeds="tuning"`` uses simulation seeds 1000-1002, ``"evaluation"`` the bank seed and
-    bank seed + 10000 k (k = 1..4). Each simulation gets ``replicates`` synthetic-estimate
-    draws (estimate seed = simulation seed * 100 + replicate); the first
-    ``performance_replicates`` of them also get a performance forecast.
+    bank seed + 10000 k (k = 1..4). With ``estimates="synthetic"`` each simulation gets
+    ``replicates`` synthetic-estimate draws (estimate seed = simulation seed * 100 +
+    replicate); with ``"ukf"`` it gets one run of :class:`~.ukf.UKFHealthEstimator`
+    (``replicates`` is then 1). The first ``performance_replicates`` of the runs per
+    simulation also get a performance forecast. Streams come from ``traces``, then from
+    the benchmark cache ``cache_dir``, else they are simulated.
     """
+
+    if estimates not in ("synthetic", "ukf"):
+        raise ValueError("estimates must be 'synthetic' or 'ukf'")
+    if estimates == "ukf":
+        replicates = 1
 
     from turbineiq.simulation.scenarios import scenario
 
@@ -909,11 +943,14 @@ def evaluate(
         events = sorted({float(e["t_s"]) for e in item.fault_events()})
         point = OperatingPoint(load_mw=EVALUATION_LOADS_MW.get(sid, 35.0))
         for sim_seed in sim_seeds:
-            observations, truths = _streams(sid, sim_seed, traces)
+            observations, truths = _streams(sid, sim_seed, traces, cache_dir)
             for r in range(replicates):
-                estimates = synthetic_estimates(observations, truths, seed=sim_seed * 100 + r)
+                if estimates == "ukf":
+                    series = ukf_estimates(observations)
+                else:
+                    series = synthetic_estimates(observations, truths, seed=sim_seed * 100 + r)
                 recs, prec = evaluate_run(
-                    estimates,
+                    series,
                     truths,
                     run=f"{sid}@{sim_seed}#{r}",
                     events=events,
@@ -932,6 +969,13 @@ def main(argv: Sequence[str] | None = None) -> None:
     parser.add_argument("--traces", type=Path, help="folder of <id>.csv / <id>@<seed>.csv")
     parser.add_argument("--replicates", type=int, default=10)
     parser.add_argument("--performance-replicates", type=int, default=2)
+    parser.add_argument(
+        "--estimates",
+        choices=("synthetic", "ukf"),
+        default="synthetic",
+        help="forecast from synthetic estimates or from the UKF health estimator",
+    )
+    parser.add_argument("--cache-dir", type=Path, help="the estimation benchmark's stream cache")
     parser.add_argument("--out", type=Path, help="write the summaries as JSON here")
     args = parser.parse_args(argv)
     records, perf = evaluate(
@@ -939,9 +983,15 @@ def main(argv: Sequence[str] | None = None) -> None:
         traces=args.traces,
         replicates=args.replicates,
         performance_replicates=args.performance_replicates,
+        estimates=args.estimates,
+        cache_dir=args.cache_dir,
     )
     summary = {
-        "inputs": "synthetic estimates (ground truth + noise + random-walk bias)",
+        "inputs": (
+            "UKF health estimates (UKFHealthEstimator, default settings)"
+            if args.estimates == "ukf"
+            else "synthetic estimates (ground truth + noise + random-walk bias)"
+        ),
         "seeds": args.seeds,
         "config": asdict(TrendConfig()),
         "health": _grouped_health(records),

@@ -45,6 +45,7 @@ from turbineiq.estimation.benchmark import (
     summarize,
     t_quantile_975,
 )
+from turbineiq.estimation.twin import MEASUREMENTS
 from turbineiq.simulation.maps import Health
 from turbineiq.simulation.scenarios import Scenario, ScriptStep, scenario
 
@@ -398,6 +399,12 @@ def test_reference_entries_score_as_expected_end_to_end(tmp_path):
     assert clean["converged"] is False
     assert never["detected"] is False and never["false_alarms_steady"] == 0
     assert never["steady_h"] > 0
+    # Twin tracking: with the true health the twin error is the noise floor itself; the
+    # clean twin misses the fouled exhaust temperature by many noise widths.
+    assert oracle["tracking_samples"] > 10
+    assert all(oracle[f"tracking_ratio_{c}"] == 1.0 for c in MEASUREMENTS)
+    assert clean["tracking_ratio_exhaust_k"] == clean["tracking_clean_ratio_exhaust_k"] > 5.0
+    assert clean["tracking_ratio_max"] == clean["tracking_clean_ratio_max"]
     text = format_markdown(results)
     assert "NOT an estimator" in text and "`short_fouling`" in text and "_absent" in text
 

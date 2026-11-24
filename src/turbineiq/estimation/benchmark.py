@@ -13,8 +13,8 @@ the same seeds and with the metric functions below. The module has four parts.
 * **Runs** (:func:`run_estimator`, :func:`run_detector`). Objects under test see only
   :class:`~turbineiq.estimation.data.Observation` values, one at a time and in order. What
   one returns stays in force (zero-order hold) until it returns something else.
-* **Metrics** (:func:`score_estimates`, :func:`score_detections`, :func:`summarize`), with
-  numpy only. The exact definitions are in each docstring and in
+* **Metrics** (:func:`score_estimates`, :func:`score_tracking`, :func:`score_detections`,
+  :func:`summarize`), with numpy only. The exact definitions are in each docstring and in
   ``docs/ESTIMATION_BENCHMARK.md``.
 
 The reference entries (:class:`OracleEstimator`, :class:`CleanEstimator`,
@@ -50,6 +50,7 @@ from turbineiq.simulation.scenarios import SCENARIOS, Scenario, run_scenario, tr
 
 from .data import Observation, Truth, scenario_with_seed, split_rows
 from .steady import SteadyStateGate
+from .twin import MEASUREMENTS, QuasiSteadyTwin, measured
 
 # ----------------------------------------------------------------------------------- seeds
 
@@ -492,6 +493,12 @@ REGISTRY: dict[str, Entry] = {
             "turbineiq.estimation.detectors:PatternIsolator",
             "CUSUM detection with fault-pattern isolation (scored through its label).",
         ),
+        Entry(
+            "ukf_shift",
+            DETECTOR,
+            "turbineiq.estimation.health_detector:HealthShiftDetector",
+            "Wald test of the UKF health estimate against the clean engine (labels the kind).",
+        ),
     )
 }
 
@@ -782,6 +789,77 @@ def score_estimates(
     return result
 
 
+DEFAULT_TRACKING_STRIDE_S = 10.0
+
+
+def score_tracking(
+    ctx: StreamContext,
+    observations: Sequence[Observation],
+    mean: np.ndarray,
+    *,
+    settle_s: float = DEFAULT_SETTLE_S,
+    stride_s: float = DEFAULT_TRACKING_STRIDE_S,
+    twin: QuasiSteadyTwin | None = None,
+) -> dict[str, Any]:
+    """How closely the twin, updated with the estimated health, follows the instruments.
+
+    Samples: the scoring window (:func:`scoring_window`) with the steady-state gate open
+    and an estimate in force, one every ``stride_s`` seconds. On each, the
+    :class:`~turbineiq.estimation.twin.QuasiSteadyTwin` predicts the four outputs of
+    :data:`~turbineiq.estimation.twin.MEASUREMENTS` from the measured inputs three times:
+    with the estimated health, with the true health and with a clean engine. Per channel
+    ``tracking_rms_<channel>`` is the RMS of measured minus predicted with the estimate,
+    ``tracking_floor_<channel>`` the same with the true health (the error left by
+    measurement noise, including input noise pushed through the twin) and
+    ``tracking_ratio_<channel>`` their ratio; ``tracking_ratio_max`` is the largest ratio.
+    A ratio of 1 means the twin tracks to within sensor noise. ``tracking_clean_ratio_*``
+    (and ``_max``) is the ratio for the un-updated (clean) twin, for comparison. On a
+    sensor-fault stream the floor includes the sensor fault.
+    """
+
+    if ctx.steady is None:
+        raise ValueError("score_tracking needs a context built with steady=True")
+    window = scoring_window(ctx, settle_s) & ctx.steady & np.all(np.isfinite(mean), axis=1)
+    stride = max(1, int(round(stride_s / ctx.dt_s)))
+    rows = np.flatnonzero(window)
+    rows = rows[(rows - rows[0]) % stride == 0] if rows.size else rows
+    result: dict[str, Any] = {"tracking_samples": int(rows.size)}
+    if rows.size == 0:
+        for name in MEASUREMENTS:
+            for key in ("rms", "floor", "ratio", "clean_ratio"):
+                result[f"tracking_{key}_{name}"] = None
+        result["tracking_ratio_max"] = result["tracking_clean_ratio_max"] = None
+        return result
+    twin = twin or QuasiSteadyTwin()
+    residual = {"estimate": [], "truth": [], "clean": []}
+    for i in rows:
+        obs = observations[i]
+        z = np.asarray(measured(obs))
+        for key, health in (
+            ("estimate", Health(*mean[i])),
+            ("truth", Health(*ctx.health[i])),
+            ("clean", Health()),
+        ):
+            residual[key].append(z - np.asarray(twin.predict(health, obs).as_tuple()))
+    rms = {key: np.sqrt(np.mean(np.square(np.array(v)), axis=0)) for key, v in residual.items()}
+    ratios, clean_ratios = [], []
+    for k, name in enumerate(MEASUREMENTS):
+        floor = float(rms["truth"][k])
+        ratio = float(rms["estimate"][k] / floor) if floor > 0 else None
+        result[f"tracking_rms_{name}"] = float(rms["estimate"][k])
+        result[f"tracking_floor_{name}"] = floor
+        result[f"tracking_ratio_{name}"] = ratio
+        result[f"tracking_clean_ratio_{name}"] = (
+            float(rms["clean"][k] / floor) if floor > 0 else None
+        )
+        if ratio is not None:
+            ratios.append(ratio)
+            clean_ratios.append(result[f"tracking_clean_ratio_{name}"])
+    result["tracking_ratio_max"] = max(ratios) if ratios else None
+    result["tracking_clean_ratio_max"] = max(clean_ratios) if clean_ratios else None
+    return result
+
+
 _NO_LABEL = object()  # the detector has no ``label`` attribute
 
 
@@ -910,6 +988,10 @@ ESTIMATE_METRICS = (
     "coverage_joint",
     "availability",
     "convergence_s",
+    *(f"tracking_ratio_{name}" for name in MEASUREMENTS),
+    "tracking_ratio_max",
+    *(f"tracking_clean_ratio_{name}" for name in MEASUREMENTS),
+    "tracking_clean_ratio_max",
 )
 DETECTION_METRICS = (
     "delay_s",
@@ -1026,9 +1108,7 @@ def evaluate_stream(
     """
 
     observations, truths = load_streams(item, seed, cache_dir, until_s)
-    ctx = stream_context(
-        item, observations, truths, steady=any(e.kind == DETECTOR for e in entries)
-    )
+    ctx = stream_context(item, observations, truths, steady=True)
     records = []
     for entry in entries:
         record: dict[str, Any] = {
@@ -1057,6 +1137,7 @@ def evaluate_stream(
                         ctx, mean, std, settle_s=config.settle_s, tolerance=config.tolerance
                     )
                 )
+                record.update(score_tracking(ctx, observations, mean, settle_s=config.settle_s))
             else:
                 alarm, _statistic, channel = run_detector(instance, observations)
                 record.update(score_detections(ctx, alarm, channel))
@@ -1209,9 +1290,10 @@ def format_markdown(results: Mapping[str, Any]) -> str:
 def _estimator_table(block: Mapping[str, Any]) -> list[str]:
     head = (
         "| Scenario | n | RMS flow (%) | RMS ηc (pt) | RMS ηt (pt) | Bias flow (%) "
-        "| Bias ηc (pt) | Bias ηt (pt) | 2σ coverage | Converged | Convergence (s) |"
+        "| Bias ηc (pt) | Bias ηt (pt) | 2σ coverage | Converged | Convergence (s) "
+        "| Twin error / noise (worst channel) | Clean twin / noise |"
     )
-    rows = [head, "|" + " --- |" * 11]
+    rows = [head, "|" + " --- |" * 13]
     for label, s, ci in _rows(block):
         conv = s["converged"] + s["not_converged"]
         rows.append(
@@ -1225,6 +1307,8 @@ def _estimator_table(block: Mapping[str, Any]) -> list[str]:
                     _fmt(s["coverage_joint"], 1, 100.0, " %", ci),
                     f"{s['converged']}/{conv}" if conv else "–",
                     _fmt(s["convergence_s"], 0, interval=ci),
+                    _fmt(s["tracking_ratio_max"], interval=ci),
+                    _fmt(s["tracking_clean_ratio_max"], 1, interval=ci),
                 ]
             )
             + " |"
