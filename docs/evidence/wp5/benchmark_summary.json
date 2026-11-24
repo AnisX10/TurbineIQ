@@ -1,0 +1,5709 @@
+{
+ "commit": "6fb606568579c968aaba6cffbba4b6ad327b544a",
+ "code_fingerprint": "6be952b7a9dcaf02bb78f31ad3d11b6c00db277dcd854464e23714ae4b559684",
+ "test_seeds": [
+  2000,
+  2001,
+  2002,
+  2003,
+  2004
+ ],
+ "tuning_seeds": [
+  1000,
+  1001,
+  1002,
+  1003,
+  1004
+ ],
+ "secondary_seeds": [
+  2000,
+  2001,
+  2002
+ ],
+ "generated": "2026-11-24 22:04:49",
+ "tuning": {
+  "runs": 152,
+  "rows": [
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 3,
+    "suspect_after_onset_s": [
+     140.0,
+     140.0,
+     138.0
+    ],
+    "max_abs_exhaust_residual_k": 14.942267331437323,
+    "max_exhaust_scatter_k": 0.5387666299947721,
+    "mismatch_p95": 0.5816778366558352
+   },
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     152.0,
+     152.0,
+     152.0,
+     150.0,
+     155.0
+    ],
+    "max_abs_exhaust_residual_k": 13.525633735921568,
+    "max_exhaust_scatter_k": 0.5519421016941802,
+    "mismatch_p95": 0.5404686039453509
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.5781594427565968
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.5756017005914339
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.6124738762145816,
+    "mismatch_p95": 0.49690166851546425
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.49336316503302546
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.572749185169686,
+    "max_exhaust_scatter_k": 0.5740768272618764,
+    "mismatch_p95": 0.4781363643355982
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.572749185169686,
+    "max_exhaust_scatter_k": 0.5983577475088173,
+    "mismatch_p95": 0.4781363643355982
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9577156968909069,
+    "max_exhaust_scatter_k": 0.5708611206714668,
+    "mismatch_p95": 0.47199584261864824
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9577156968909069,
+    "max_exhaust_scatter_k": 0.5706127747634371,
+    "mismatch_p95": 0.500286719702067
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9577156968909069,
+    "max_exhaust_scatter_k": 0.5740768272618764,
+    "mismatch_p95": 0.5509850235736448
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9577156968909069,
+    "max_exhaust_scatter_k": 0.598344607581522,
+    "mismatch_p95": 0.6072273142332467
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.4957662389761892
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.4975223920455857
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5907622669012024,
+    "mismatch_p95": 0.5931275288083515
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 5.047748841653288,
+    "max_exhaust_scatter_k": 0.5690960517459202,
+    "mismatch_p95": 0.6393762288856861
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": true,
+    "suspect_runs": 3,
+    "suspect_after_onset_s": [
+     4214.0,
+     3964.0,
+     4086.0
+    ],
+    "max_abs_exhaust_residual_k": 12.401291635599557,
+    "max_exhaust_scatter_k": 0.5725864236287418,
+    "mismatch_p95": 0.4870035544145081
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     4214.0,
+     3964.0,
+     4086.0,
+     3986.0,
+     4177.0
+    ],
+    "max_abs_exhaust_residual_k": 12.406796629416876,
+    "max_exhaust_scatter_k": 0.5983577475088173,
+    "mismatch_p95": 0.4781363643355982
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": true,
+    "suspect_runs": 3,
+    "suspect_after_onset_s": [
+     98.0,
+     108.0,
+     108.0
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 3.1892636029792825,
+    "mismatch_p95": 0.4957662389761892
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     108.0,
+     108.0,
+     118.0,
+     98.0
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 3.1892636029792825,
+    "mismatch_p95": 0.4975223920455857
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": true,
+    "suspect_runs": 3,
+    "suspect_after_onset_s": [
+     908.0,
+     908.0,
+     908.0
+    ],
+    "max_abs_exhaust_residual_k": 20.77523751471705,
+    "max_exhaust_scatter_k": 0.5387666299947721,
+    "mismatch_p95": 0.4817856709272614
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     819.0,
+     819.0,
+     819.0,
+     819.0,
+     819.0
+    ],
+    "max_abs_exhaust_residual_k": 107.40165143345098,
+    "max_exhaust_scatter_k": 0.5519421016941802,
+    "mismatch_p95": 0.47710144663458043
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 3.7232385053076005,
+    "max_exhaust_scatter_k": 0.7385917895362208,
+    "mismatch_p95": 1.5458065154616394
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 4.428970404059891,
+    "max_exhaust_scatter_k": 0.6960537902649883,
+    "mismatch_p95": 0.5291813035119015
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.6109934289031551,
+    "mismatch_p95": 0.47396955050842426
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.578548876904307,
+    "mismatch_p95": 0.49724387328776926
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.572749185169686,
+    "max_exhaust_scatter_k": 0.5740763545483122,
+    "mismatch_p95": 0.5461937950308365
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.572749185169686,
+    "max_exhaust_scatter_k": 0.5983577475088173,
+    "mismatch_p95": 0.5347313020874996
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 3.688928533320556,
+    "max_exhaust_scatter_k": 0.5655614135318309,
+    "mismatch_p95": 0.6324140490283785
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.5419224165649851
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.0214888447327404,
+    "max_exhaust_scatter_k": 0.695097620829196,
+    "mismatch_p95": 1.2618322569234917
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9443890925123384,
+    "max_exhaust_scatter_k": 0.5808028866191243,
+    "mismatch_p95": 0.7137724604304614
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 3,
+    "suspect_after_onset_s": [
+     2263.0,
+     2263.0,
+     2263.0
+    ],
+    "max_abs_exhaust_residual_k": 13.120662126007058,
+    "max_exhaust_scatter_k": 0.5459772509283392,
+    "mismatch_p95": 1.0204334609586874
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     2441.0,
+     2401.0,
+     2421.0,
+     2429.0,
+     2468.0
+    ],
+    "max_abs_exhaust_residual_k": 12.420414335246113,
+    "max_exhaust_scatter_k": 0.5519421016941802,
+    "mismatch_p95": 0.9398040139153312
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 8.83674433362587,
+    "max_exhaust_scatter_k": 0.5740768272618764,
+    "mismatch_p95": 0.7485040040771925
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 6.8588462679965625,
+    "max_exhaust_scatter_k": 0.5693007939016708,
+    "mismatch_p95": 0.6303603846224529
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "autonomous",
+    "runs": 3,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9577156968909069,
+    "max_exhaust_scatter_k": 0.5708610054491075,
+    "mismatch_p95": 0.4719958451163171
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9641959434047014,
+    "max_exhaust_scatter_k": 0.5918867026980966,
+    "mismatch_p95": 0.4971664335485356
+   }
+  ]
+ },
+ "main": {
+  "modes": {
+   "manual": {
+    "violations": {
+     "runs": 95,
+     "runs_with_violation": 20,
+     "violation_s": 42155.0,
+     "runs_over_limit": 20,
+     "over_limit_k_s": 337683.35481494915,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 0,
+     "by_problem_initial": {},
+     "by_problem_final": {},
+     "approved_share": null,
+     "escalated": 0,
+     "escalation_reasons": {}
+    },
+    "runs": 95
+   },
+   "advisory": {
+    "violations": {
+     "runs": 95,
+     "runs_with_violation": 35,
+     "violation_s": 15511.0,
+     "runs_over_limit": 42,
+     "over_limit_k_s": 273630.56965878344,
+     "max_over_limit_k": 105.37994892647009,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 358,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 95,
+       "pending": 213
+      },
+      "compressor_wash": {
+       "escalated": 25
+      },
+      "exhaust_feedback": {
+       "pending": 25
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 90,
+       "accepted": 197,
+       "expired": 6,
+       "rejected": 15
+      },
+      "compressor_wash": {
+       "accepted": 25
+      },
+      "exhaust_feedback": {
+       "accepted": 25
+      }
+     },
+     "approved_share": 0.664804469273743,
+     "escalated": 120,
+     "escalation_reasons": {
+      "model_mismatch": 95,
+      "shutdown_allowed": 25,
+      "meets_demand": 15,
+      "health_converged": 10
+     }
+    },
+    "runs": 95,
+    "heat_rate_pct": {
+     "n": 95,
+     "mean": -1.685783533637846,
+     "lo": -1.6877507716703835,
+     "hi": -1.6837416635274969
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 19,
+     "mean": -1.6857835336378453,
+     "lo": -2.1158711450839824,
+     "hi": -1.2200805396056458
+    },
+    "fuel_per_mwh_pct": {
+     "n": 95,
+     "mean": -1.6857835336378486,
+     "lo": -1.6877507716703868,
+     "hi": -1.6837416635274995
+    },
+    "fuel_per_mwh_pct_across_scenarios": {
+     "n": 19,
+     "mean": -1.685783533637849,
+     "lo": -2.1158711450839878,
+     "hi": -1.2200805396056462
+    },
+    "energy_mwh": {
+     "n": 95,
+     "mean": -3.123223772871852,
+     "lo": -3.1414685362130186,
+     "hi": -3.105674979961027
+    },
+    "energy_mwh_across_scenarios": {
+     "n": 19,
+     "mean": -3.1232237728718517,
+     "lo": -5.249748684286619,
+     "hi": -1.2322794509073804
+    },
+    "fuel_kg": {
+     "n": 95,
+     "mean": -943.4644052730114,
+     "lo": -947.4990609794226,
+     "hi": -939.6040627927288
+    },
+    "fuel_kg_across_scenarios": {
+     "n": 19,
+     "mean": -943.4644052730113,
+     "lo": -1404.6934752588145,
+     "hi": -536.3492039159522
+    },
+    "band_pp": {
+     "n": 95,
+     "mean": -1.736839723155363,
+     "lo": -1.747087134839809,
+     "hi": -1.7264920059388746
+    },
+    "band_pp_across_scenarios": {
+     "n": 19,
+     "mean": -1.7368397231553634,
+     "lo": -3.35514749365435,
+     "hi": -0.31949375898049626
+    },
+    "violation_vs_manual": {
+     "pairs": 95,
+     "pairs_more_violation": 15,
+     "extra_violation_s": 270.0,
+     "scenarios_more_violation": [
+      "clean_fast_load_steps",
+      "clean_load_cycling",
+      "slow_fuel_valve_load_steps"
+     ],
+     "pairs_less_violation": 10,
+     "violation_s_saved": 26914.0
+    }
+   },
+   "autonomous": {
+    "violations": {
+     "runs": 95,
+     "runs_with_violation": 15,
+     "violation_s": 12217.0,
+     "runs_over_limit": 25,
+     "over_limit_k_s": 111847.79425291567,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 357,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 95,
+       "applied": 212
+      },
+      "compressor_wash": {
+       "escalated": 25
+      },
+      "exhaust_feedback": {
+       "applied": 25
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 80,
+       "applied": 212,
+       "rejected": 15
+      },
+      "compressor_wash": {
+       "accepted": 25
+      },
+      "exhaust_feedback": {
+       "applied": 25
+      }
+     },
+     "approved_share": 0.6638655462184874,
+     "escalated": 120,
+     "escalation_reasons": {
+      "model_mismatch": 95,
+      "shutdown_allowed": 25,
+      "meets_demand": 15,
+      "health_converged": 10
+     }
+    },
+    "runs": 95,
+    "heat_rate_pct": {
+     "n": 95,
+     "mean": -1.8574655035557175,
+     "lo": -1.8590686901915727,
+     "hi": -1.8556149708875016
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 19,
+     "mean": -1.8574655035557164,
+     "lo": -2.313946561692929,
+     "hi": -1.357221355703601
+    },
+    "fuel_per_mwh_pct": {
+     "n": 95,
+     "mean": -1.857465503555721,
+     "lo": -1.859068690191577,
+     "hi": -1.8556149708875067
+    },
+    "fuel_per_mwh_pct_across_scenarios": {
+     "n": 19,
+     "mean": -1.8574655035557213,
+     "lo": -2.31394656169294,
+     "hi": -1.3572213557036041
+    },
+    "energy_mwh": {
+     "n": 95,
+     "mean": -2.894038814863367,
+     "lo": -2.912126006579839,
+     "hi": -2.876121262277822
+    },
+    "energy_mwh_across_scenarios": {
+     "n": 19,
+     "mean": -2.8940388148633676,
+     "lo": -5.1109289285049035,
+     "hi": -0.9341310680333894
+    },
+    "fuel_kg": {
+     "n": 95,
+     "mean": -917.9735082069797,
+     "lo": -921.8777330034101,
+     "hi": -914.1508858260014
+    },
+    "fuel_kg_across_scenarios": {
+     "n": 19,
+     "mean": -917.9735082069797,
+     "lo": -1396.882449791697,
+     "hi": -497.69827395298057
+    },
+    "band_pp": {
+     "n": 95,
+     "mean": -0.42627451140115535,
+     "lo": -0.45581331720046253,
+     "hi": -0.4040107349562066
+    },
+    "band_pp_across_scenarios": {
+     "n": 19,
+     "mean": -0.4262745114011556,
+     "lo": -1.1336698292612197,
+     "hi": 0.31220211170495804
+    },
+    "violation_vs_manual": {
+     "pairs": 95,
+     "pairs_more_violation": 0,
+     "extra_violation_s": 0,
+     "scenarios_more_violation": [],
+     "pairs_less_violation": 10,
+     "violation_s_saved": 29938.0
+    }
+   }
+  },
+  "per_scenario": [
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -1.102053658268028,
+    "heat_rate_pct_min": -1.1021727568566715,
+    "heat_rate_pct_max": -1.1018370649495484,
+    "energy_mwh_mean": -11.426064713272877,
+    "band_pp_mean": -3.3703768128785505,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -1.396770906412714,
+    "heat_rate_pct_min": -1.39687753166552,
+    "heat_rate_pct_max": -1.3965659152676348,
+    "energy_mwh_mean": -11.426064649140752,
+    "band_pp_mean": -3.3703768128785505,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.50231569731114,
+    "heat_rate_pct_min": -2.50231569731114,
+    "heat_rate_pct_max": -2.50231569731114,
+    "energy_mwh_mean": 0.005843566673163991,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.624543563974294,
+    "heat_rate_pct_min": -2.624543563974294,
+    "heat_rate_pct_max": -2.624543563974294,
+    "energy_mwh_mean": 0.0058435666734339975,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "category": "baseline",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.4517313973956822,
+    "heat_rate_pct_min": -2.4517313973956822,
+    "heat_rate_pct_max": -2.4517313973956822,
+    "energy_mwh_mean": 0.007636027852768734,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "category": "baseline",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.6109655632749296,
+    "heat_rate_pct_min": -2.6109655632749296,
+    "heat_rate_pct_max": -2.6109655632749296,
+    "energy_mwh_mean": 0.0076360155863994805,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "category": "baseline",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": 0.0,
+    "heat_rate_pct_min": 0.0,
+    "heat_rate_pct_max": 0.0,
+    "energy_mwh_mean": 0.0,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "category": "baseline",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": 0.0,
+    "heat_rate_pct_min": 0.0,
+    "heat_rate_pct_max": 0.0,
+    "energy_mwh_mean": 0.0,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "category": "baseline",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.077714420732804,
+    "heat_rate_pct_min": -2.077714420732804,
+    "heat_rate_pct_max": -2.077714420732804,
+    "energy_mwh_mean": -1.429448105523747,
+    "band_pp_mean": -8.708882770612957,
+    "violation_s_diff_mean": 14.0
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "category": "baseline",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.4119446792618047,
+    "heat_rate_pct_min": -2.4119446792618047,
+    "heat_rate_pct_max": -2.4119446792618047,
+    "energy_mwh_mean": 0.015583170727097695,
+    "band_pp_mean": -0.04347196058542835,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "category": "baseline",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -1.6218335518701608,
+    "heat_rate_pct_min": -1.668237098578172,
+    "heat_rate_pct_max": -1.5764849793532023,
+    "energy_mwh_mean": -1.8626133993395968,
+    "band_pp_mean": -8.44225474568903,
+    "violation_s_diff_mean": 20.0
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "category": "baseline",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.341770248327997,
+    "heat_rate_pct_min": -2.356076667252145,
+    "heat_rate_pct_max": -2.2845445726314053,
+    "energy_mwh_mean": -0.06634076192987096,
+    "band_pp_mean": -0.263729894218232,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "category": "baseline",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.50231569731114,
+    "heat_rate_pct_min": -2.50231569731114,
+    "heat_rate_pct_max": -2.50231569731114,
+    "energy_mwh_mean": 0.005843566673163991,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "category": "baseline",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.624543563974294,
+    "heat_rate_pct_min": -2.624543563974294,
+    "heat_rate_pct_max": -2.624543563974294,
+    "energy_mwh_mean": 0.0058435666734339975,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "category": "degradation",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.625897765359044,
+    "heat_rate_pct_min": -2.625897765359044,
+    "heat_rate_pct_max": -2.625897765359044,
+    "energy_mwh_mean": 0.006304545412177731,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "category": "degradation",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.745613745037493,
+    "heat_rate_pct_min": -2.745613745037493,
+    "heat_rate_pct_max": -2.745613745037493,
+    "energy_mwh_mean": 0.006304545412461948,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": 0.028112929502545125,
+    "heat_rate_pct_min": 0.026727148519143366,
+    "heat_rate_pct_max": 0.030220039678724674,
+    "energy_mwh_mean": -0.23267199738563135,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": -902.8
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": 0.03760425105606187,
+    "heat_rate_pct_min": 0.035889110548825695,
+    "heat_rate_pct_max": 0.03991607866722213,
+    "energy_mwh_mean": -0.31095172202468574,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": -1203.6
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.50231569731114,
+    "heat_rate_pct_min": -2.50231569731114,
+    "heat_rate_pct_max": -2.50231569731114,
+    "energy_mwh_mean": 0.005843566673163991,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.624543563974294,
+    "heat_rate_pct_min": -2.624543563974294,
+    "heat_rate_pct_max": -2.624543563974294,
+    "energy_mwh_mean": 0.0058435666734339975,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -0.18970703565374403,
+    "heat_rate_pct_min": -0.18970703565374403,
+    "heat_rate_pct_max": -0.18970703565374403,
+    "energy_mwh_mean": -2.4915349763507066,
+    "band_pp_mean": -0.028981307056952232,
+    "violation_s_diff_mean": -4480.0
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -0.17811702144509792,
+    "heat_rate_pct_min": -0.17811702144509792,
+    "heat_rate_pct_max": -0.17811702144509792,
+    "energy_mwh_mean": -2.7173198774980705,
+    "band_pp_mean": -0.6230981017243842,
+    "violation_s_diff_mean": -4784.0
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "category": "maintenance",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -0.5963789394123078,
+    "heat_rate_pct_min": -0.5963789394123078,
+    "heat_rate_pct_max": -0.5963789394123078,
+    "energy_mwh_mean": -11.315468102111076,
+    "band_pp_mean": -1.115025352180854,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "category": "maintenance",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -0.638748228818208,
+    "heat_rate_pct_min": -0.638748228818208,
+    "heat_rate_pct_max": -0.638748228818208,
+    "energy_mwh_mean": -11.31546810211109,
+    "band_pp_mean": -1.115025352180854,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "category": "degradation",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.1435350451475315,
+    "heat_rate_pct_min": -2.167312743161685,
+    "heat_rate_pct_max": -2.1276832464714293,
+    "energy_mwh_mean": 0.006122657223863825,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "category": "degradation",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.265761663930666,
+    "heat_rate_pct_min": -2.2894819200747403,
+    "heat_rate_pct_max": -2.2499481598346165,
+    "energy_mwh_mean": 0.006122514790678224,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "category": "degradation",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": 0.019011962196332777,
+    "heat_rate_pct_min": 0.00728325202451518,
+    "heat_rate_pct_max": 0.026725511725217515,
+    "energy_mwh_mean": -6.152932321875676,
+    "band_pp_mean": 4.134938316189137,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "category": "degradation",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": 0.019011962196332777,
+    "heat_rate_pct_min": 0.00728325202451518,
+    "heat_rate_pct_max": 0.026725511725217515,
+    "energy_mwh_mean": -6.152932321875676,
+    "band_pp_mean": 4.134938316189137,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "category": "degradation",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.475348669695748,
+    "heat_rate_pct_min": -2.475348669695748,
+    "heat_rate_pct_max": -2.475348669695748,
+    "energy_mwh_mean": -11.473530625739002,
+    "band_pp_mean": -3.3736553726051888,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "category": "degradation",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.736227835220347,
+    "heat_rate_pct_min": -2.736227835220347,
+    "heat_rate_pct_max": -2.736227835220347,
+    "energy_mwh_mean": -11.47390355858851,
+    "band_pp_mean": -3.3736553726051888,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "category": "degradation",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -1.904320453306822,
+    "heat_rate_pct_min": -1.9043204533068219,
+    "heat_rate_pct_max": -1.9043204533068219,
+    "energy_mwh_mean": -11.454094269319718,
+    "band_pp_mean": -3.372343270976086,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "category": "degradation",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.1955463296373914,
+    "heat_rate_pct_min": -2.2013581096588286,
+    "heat_rate_pct_max": -2.172299209551643,
+    "energy_mwh_mean": -11.454167182601157,
+    "band_pp_mean": -3.372343270976086,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.247466329865751,
+    "heat_rate_pct_min": -2.247466329865751,
+    "heat_rate_pct_max": -2.247466329865751,
+    "energy_mwh_mean": 0.003959868300185576,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.3303171839565886,
+    "heat_rate_pct_min": -2.3303171839565886,
+    "heat_rate_pct_max": -2.3303171839565886,
+    "energy_mwh_mean": 0.003959868300455582,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "category": "sensor",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -3.0552543358813833,
+    "heat_rate_pct_min": -3.0552543358813833,
+    "heat_rate_pct_max": -3.0552543358813833,
+    "energy_mwh_mean": -0.11904138250763197,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "category": "sensor",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -3.2135125842114958,
+    "heat_rate_pct_min": -3.2135125842114958,
+    "heat_rate_pct_max": -3.2135125842114958,
+    "energy_mwh_mean": -0.12739272011815217,
+    "band_pp_mean": 0.0,
+    "violation_s_diff_mean": 0.0
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "category": "actuator",
+    "mode": "advisory",
+    "n": 5,
+    "heat_rate_pct_mean": -2.0788233362955166,
+    "heat_rate_pct_min": -2.0788233362955166,
+    "heat_rate_pct_max": -2.0788233362955166,
+    "energy_mwh_mean": -1.4254055899479994,
+    "band_pp_mean": -8.723373424141423,
+    "violation_s_diff_mean": 20.0
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "category": "actuator",
+    "mode": "autonomous",
+    "n": 5,
+    "heat_rate_pct_mean": -2.4095340993533965,
+    "heat_rate_pct_min": -2.4095340993533965,
+    "heat_rate_pct_max": -2.4095340993533965,
+    "energy_mwh_mean": 0.0006665986465890228,
+    "band_pp_mean": -0.07245326764236948,
+    "violation_s_diff_mean": 0.0
+   }
+  ],
+  "per_category": [
+   {
+    "category": "actuator",
+    "mode": "advisory",
+    "heat_rate_pct": {
+     "n": 5,
+     "mean": -2.0788233362955166,
+     "lo": -2.0788233362955166,
+     "hi": -2.0788233362955166
+    }
+   },
+   {
+    "category": "actuator",
+    "mode": "autonomous",
+    "heat_rate_pct": {
+     "n": 5,
+     "mean": -2.4095340993533965,
+     "lo": -2.4095340993533965,
+     "hi": -2.4095340993533965
+    }
+   },
+   {
+    "category": "baseline",
+    "mode": "advisory",
+    "heat_rate_pct": {
+     "n": 25,
+     "mean": -1.7307190134619572,
+     "lo": -1.7370889130981526,
+     "hi": -1.7243491138257623
+    }
+   },
+   {
+    "category": "baseline",
+    "mode": "autonomous",
+    "heat_rate_pct": {
+     "n": 25,
+     "mean": -1.9978448109678049,
+     "lo": -2.0007060947526347,
+     "hi": -1.992122243398146
+    }
+   },
+   {
+    "category": "degradation",
+    "mode": "advisory",
+    "heat_rate_pct": {
+     "n": 25,
+     "mean": -1.8260179942625627,
+     "lo": -1.8299532713838367,
+     "hi": -1.8221081610135423
+    }
+   },
+   {
+    "category": "degradation",
+    "mode": "autonomous",
+    "heat_rate_pct": {
+     "n": 25,
+     "mean": -1.984827522325913,
+     "lo": -1.9891398061474357,
+     "hi": -1.9805665548080633
+    }
+   },
+   {
+    "category": "maintenance",
+    "mode": "advisory",
+    "heat_rate_pct": {
+     "n": 5,
+     "mean": -0.5963789394123078,
+     "lo": -0.5963789394123078,
+     "hi": -0.5963789394123078
+    }
+   },
+   {
+    "category": "maintenance",
+    "mode": "autonomous",
+    "heat_rate_pct": {
+     "n": 5,
+     "mean": -0.638748228818208,
+     "lo": -0.638748228818208,
+     "hi": -0.638748228818208
+    }
+   },
+   {
+    "category": "sensor",
+    "mode": "advisory",
+    "heat_rate_pct": {
+     "n": 35,
+     "mean": -1.6529999749698057,
+     "lo": -1.6531641011394804,
+     "hi": -1.6528255971554333
+    }
+   },
+   {
+    "category": "sensor",
+    "mode": "autonomous",
+    "heat_rate_pct": {
+     "n": 35,
+     "mean": -1.7614572247026319,
+     "lo": -1.7616242432371993,
+     "hi": -1.761274349268151
+    }
+   }
+  ],
+  "tc": [
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "decision_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "applied_after_onset_s": [
+     4480.0,
+     4528.0,
+     4524.0,
+     4431.0,
+     4436.0
+    ],
+    "violation_s": [
+     2710.0,
+     2758.0,
+     2756.0,
+     2661.0,
+     2666.0
+    ],
+    "max_over_limit_k": [
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035
+    ],
+    "over_limit_k_s": [
+     23990.52598350933,
+     24358.216760777657,
+     24325.37254974446,
+     23617.28919494652,
+     23741.46472807581
+    ],
+    "soft_sensor_mae_k": 1.1707433502181177
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "decision_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "applied_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "violation_s": [
+     2409.0,
+     2457.0,
+     2453.0,
+     2361.0,
+     2367.0
+    ],
+    "max_over_limit_k": [
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035
+    ],
+    "over_limit_k_s": [
+     21711.99712331608,
+     22130.646016050956,
+     22039.3633556479,
+     21363.832310014917,
+     21517.686217079652
+    ],
+    "soft_sensor_mae_k": 1.1692432523334986
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "decision_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "applied_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "violation_s": [
+     3613.0,
+     3613.0,
+     3613.0,
+     3613.0,
+     3613.0
+    ],
+    "max_over_limit_k": [
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035,
+     7.7413024310199035
+    ],
+    "over_limit_k_s": [
+     30741.83129147275,
+     30741.83129147275,
+     30741.83129147275,
+     30741.83129147275,
+     30741.83129147275
+    ],
+    "soft_sensor_mae_k": 1.1763527525239899
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "advisory",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "decision_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "applied_after_onset_s": [
+     398.0,
+     418.0,
+     398.0,
+     408.0,
+     408.0
+    ],
+    "violation_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_over_limit_k": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "over_limit_k_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "soft_sensor_mae_k": 1.089907517195576
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "autonomous",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "decision_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "applied_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "violation_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_over_limit_k": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "over_limit_k_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "soft_sensor_mae_k": 1.0962872955034655
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "manual",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "decision_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "applied_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "violation_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_over_limit_k": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "over_limit_k_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "soft_sensor_mae_k": 1.0020336393060891
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "advisory",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     821.0,
+     821.0,
+     821.0,
+     821.0,
+     821.0
+    ],
+    "decision_after_onset_s": [
+     821.0,
+     821.0,
+     821.0,
+     821.0,
+     821.0
+    ],
+    "applied_after_onset_s": [
+     1121.0,
+     1121.0,
+     1121.0,
+     1121.0,
+     1121.0
+    ],
+    "violation_s": [
+     304.0,
+     304.0,
+     304.0,
+     304.0,
+     304.0
+    ],
+    "max_over_limit_k": [
+     105.37994892647009,
+     105.37994892647009,
+     105.37994892647009,
+     105.37994892647009,
+     105.37994892647009
+    ],
+    "over_limit_k_s": [
+     29358.978493469025,
+     29358.978493469025,
+     29358.978493469025,
+     29358.978493469025,
+     29358.978493469025
+    ],
+    "soft_sensor_mae_k": 1.133731975863198
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "autonomous",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     908.0,
+     908.0,
+     908.0,
+     908.0,
+     908.0
+    ],
+    "decision_after_onset_s": [
+     908.0,
+     908.0,
+     908.0,
+     908.0,
+     908.0
+    ],
+    "applied_after_onset_s": [
+     908.0,
+     908.0,
+     908.0,
+     908.0,
+     908.0
+    ],
+    "violation_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "max_over_limit_k": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "over_limit_k_s": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0
+    ],
+    "soft_sensor_mae_k": 1.1232439247085073
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "manual",
+    "runs": 5,
+    "suspect_after_onset_s": [
+     819.0,
+     819.0,
+     819.0,
+     819.0,
+     819.0
+    ],
+    "decision_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "applied_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "violation_s": [
+     4784.0,
+     4784.0,
+     4784.0,
+     4784.0,
+     4784.0
+    ],
+    "max_over_limit_k": [
+     7.665463798592327,
+     7.665463798592327,
+     7.665463798592327,
+     7.665463798592327,
+     7.665463798592327
+    ],
+    "over_limit_k_s": [
+     36315.1199727583,
+     36315.1199727583,
+     36315.1199727583,
+     36315.1199727583,
+     36315.1199727583
+    ],
+    "soft_sensor_mae_k": 1.110648928571639
+   }
+  ],
+  "runs": 285,
+  "table": [
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 11043.332001894973,
+    "energy_mwh": 55.5241057127475,
+    "band": 0.9619490358126722,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 30,
+    "escalated": 15,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 11010.422719767917,
+    "energy_mwh": 55.52410577687963,
+    "band": 0.9619490358126722,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 30,
+    "escalated": 15,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11166.39162934268,
+    "energy_mwh": 66.95017042602038,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10886.9732587784,
+    "energy_mwh": 66.95601399269354,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10873.324816506602,
+    "energy_mwh": 66.95601399269381,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11166.39162934268,
+    "energy_mwh": 66.95017042602038,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10904.23715251025,
+    "energy_mwh": 66.95781058179472,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 25,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10886.437481307443,
+    "energy_mwh": 66.95781056952835,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 25,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11178.299019260226,
+    "energy_mwh": 66.95017455394195,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10752.968438930977,
+    "energy_mwh": 88.1874084949055,
+    "band": 0.9939139255180407,
+    "violation_s": 85.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10752.968438930977,
+    "energy_mwh": 88.1874084949055,
+    "band": 0.9939139255180407,
+    "violation_s": 85.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 10752.968438930977,
+    "energy_mwh": 88.1874084949055,
+    "band": 0.9939139255180407,
+    "violation_s": 85.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10897.229034306136,
+    "energy_mwh": 67.30349602609105,
+    "band": 0.9074047239530503,
+    "violation_s": 70.0,
+    "max_over_limit_k": 11.02099785718599,
+    "trips": 0,
+    "decisions": 25,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10860.03439923568,
+    "energy_mwh": 68.7485273023419,
+    "band": 0.9940588320533255,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 25,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11128.44636932512,
+    "energy_mwh": 68.7329441316148,
+    "band": 0.9944935516591797,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10997.701128491686,
+    "energy_mwh": 65.10422774063207,
+    "band": 0.9051441820026083,
+    "violation_s": 100.0,
+    "max_over_limit_k": 23.36746147931558,
+    "trips": 0,
+    "decisions": 42,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10917.219362008962,
+    "energy_mwh": 66.9005003780418,
+    "band": 0.9869294305173163,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 41,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11179.005998541612,
+    "energy_mwh": 66.96684113997166,
+    "band": 0.9895667294594986,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10886.9732587784,
+    "energy_mwh": 66.95601399269354,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10873.324816506602,
+    "energy_mwh": 66.95601399269381,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11166.39162934268,
+    "energy_mwh": 66.95017042602038,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 11102.139950742836,
+    "energy_mwh": 66.9510394017439,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 11088.490494365537,
+    "energy_mwh": 66.95103940174418,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11401.532538898455,
+    "energy_mwh": 66.94473485633172,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10743.334227688814,
+    "energy_mwh": 88.92176041832502,
+    "band": 0.9939139255180407,
+    "violation_s": 13551.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 5,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10744.353625503345,
+    "energy_mwh": 88.84348069368596,
+    "band": 0.9939139255180407,
+    "violation_s": 12047.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 5,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 10740.314810557771,
+    "energy_mwh": 89.15443241571064,
+    "band": 0.9939139255180407,
+    "violation_s": 18065.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10886.9732587784,
+    "energy_mwh": 66.95601399269354,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 15,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10873.324816506602,
+    "energy_mwh": 66.95601399269381,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 15,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11166.39162934268,
+    "energy_mwh": 66.95017042602038,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10816.863620156117,
+    "energy_mwh": 80.44171984744573,
+    "band": 0.9939139255180407,
+    "violation_s": 1520.0,
+    "max_over_limit_k": 105.37994892647009,
+    "trips": 0,
+    "decisions": 20,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10818.119679018657,
+    "energy_mwh": 80.21593494629836,
+    "band": 0.9879727575713664,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 20,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 10837.42297402139,
+    "energy_mwh": 82.93325482379643,
+    "band": 0.9942037385886102,
+    "violation_s": 23920.0,
+    "max_over_limit_k": 7.665463798592327,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10984.810169425275,
+    "energy_mwh": 61.8772099124673,
+    "band": 0.977797513321492,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 5
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10980.128060301166,
+    "energy_mwh": 61.877209912467286,
+    "band": 0.977797513321492,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 10,
+    "escalated": 5,
+    "skipped_steps": 5
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11050.714302178088,
+    "energy_mwh": 73.19267801457838,
+    "band": 0.9889477668433007,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 11023.141566278413,
+    "energy_mwh": 66.95221309688525,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.6240994406776963,
+    "trips": 0,
+    "decisions": 20,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 11009.373223812378,
+    "energy_mwh": 66.95221295445207,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 20,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11264.602263492865,
+    "energy_mwh": 66.94609043966139,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10925.792770786882,
+    "energy_mwh": 78.34567241783876,
+    "band": 0.5092525855963211,
+    "violation_s": 85.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 5,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10925.792770786882,
+    "energy_mwh": 78.34567241783876,
+    "band": 0.5092525855963211,
+    "violation_s": 85.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 5,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 10923.715958038505,
+    "energy_mwh": 84.49860473971442,
+    "band": 0.46790320243442973,
+    "violation_s": 85.0,
+    "max_over_limit_k": 7.7413024310199035,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 11058.5219081108,
+    "energy_mwh": 55.4726448859589,
+    "band": 0.9619162502154058,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 30,
+    "escalated": 15,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 11028.940279999642,
+    "energy_mwh": 55.4722719531094,
+    "band": 0.9619162502154058,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 30,
+    "escalated": 15,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11339.20681311325,
+    "energy_mwh": 66.9461755116979,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 11170.122349498513,
+    "energy_mwh": 55.48975451887977,
+    "band": 0.9619293712316969,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 26,
+    "escalated": 15,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 11136.96055598238,
+    "energy_mwh": 55.489681605598335,
+    "band": 0.9619293712316969,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 26,
+    "escalated": 15,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11386.966685093992,
+    "energy_mwh": 66.94384878819949,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10915.430737212255,
+    "energy_mwh": 66.95413029432056,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 30,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10906.179286376217,
+    "energy_mwh": 66.95413029432083,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 30,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11166.39162934268,
+    "energy_mwh": 66.95017042602038,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10825.229964925691,
+    "energy_mwh": 66.83112904351275,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 2.8575588194543116,
+    "trips": 0,
+    "decisions": 20,
+    "escalated": 10,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10807.558229131413,
+    "energy_mwh": 66.82277770590223,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 2.8575588194543116,
+    "trips": 0,
+    "decisions": 20,
+    "escalated": 10,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11166.39162934268,
+    "energy_mwh": 66.95017042602038,
+    "band": 0.9956528039414577,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "advisory",
+    "runs": 5,
+    "heat_rate": 10897.300374831637,
+    "energy_mwh": 67.2994468931452,
+    "band": 0.9062454716707723,
+    "violation_s": 100.0,
+    "max_over_limit_k": 19.376164811626154,
+    "trips": 0,
+    "decisions": 25,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "autonomous",
+    "runs": 5,
+    "heat_rate": 10860.496747209714,
+    "energy_mwh": 68.72551908173979,
+    "band": 0.992754673235763,
+    "violation_s": 0.0,
+    "max_over_limit_k": 4.586422566756369,
+    "trips": 0,
+    "decisions": 25,
+    "escalated": 5,
+    "skipped_steps": 0
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "manual",
+    "runs": 5,
+    "heat_rate": 11128.645249287365,
+    "energy_mwh": 68.7248524830932,
+    "band": 0.9934792059121866,
+    "violation_s": 0.0,
+    "max_over_limit_k": 0.0,
+    "trips": 0,
+    "decisions": 0,
+    "escalated": 0,
+    "skipped_steps": 0
+   }
+  ],
+  "false_positives": [
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     138.0,
+     136.0,
+     141.0,
+     139.0,
+     139.0
+    ],
+    "max_abs_exhaust_residual_k": 15.140312325878208,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.6539330441200276
+   },
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     138.0,
+     136.0,
+     141.0,
+     139.0,
+     139.0
+    ],
+    "max_abs_exhaust_residual_k": 15.140295752622503,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.6877837748004076
+   },
+   {
+    "scenario_id": "cdp_sensor_bias",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     150.0,
+     149.0,
+     154.0,
+     151.0,
+     152.0
+    ],
+    "max_abs_exhaust_residual_k": 14.020226181443144,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5955957012890498
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5711549707751286
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5979084679614308
+   },
+   {
+    "scenario_id": "cdt_sensor_bias",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.591551726885324
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.511571180227908
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5284791106814708
+   },
+   {
+    "scenario_id": "clean_ambient_swing",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5321589062197759
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.1844787054196413,
+    "max_exhaust_scatter_k": 0.5967066632161169,
+    "mismatch_p95": 0.49554789203635613
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.1844787054196413,
+    "max_exhaust_scatter_k": 0.5967066632161169,
+    "mismatch_p95": 0.49554789203635613
+   },
+   {
+    "scenario_id": "clean_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.1844787054196413,
+    "max_exhaust_scatter_k": 0.5967066632161169,
+    "mismatch_p95": 0.49554789203635613
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.46825147223189145
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.4185402132927436
+   },
+   {
+    "scenario_id": "clean_fast_load_steps",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.5389710343682492
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.5754797341165425
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.6287802736716965
+   },
+   {
+    "scenario_id": "clean_load_cycling",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.6126039867620183
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.49392380995793633
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5324308010242972
+   },
+   {
+    "scenario_id": "clean_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5189003974403352
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.6698834100649159
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.6832592450702033
+   },
+   {
+    "scenario_id": "erosion_step_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 5.302697055564295,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.7662128692896448
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "max_abs_exhaust_residual_k": 12.317331021633853,
+    "max_exhaust_scatter_k": 0.5986243104782527,
+    "mismatch_p95": 0.5134304669398876
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "max_abs_exhaust_residual_k": 12.317331021633853,
+    "max_exhaust_scatter_k": 0.5986243104782527,
+    "mismatch_p95": 0.49794789454421395
+   },
+   {
+    "scenario_id": "exhaust_tc_drift_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     4180.0,
+     4228.0,
+     4224.0,
+     4131.0,
+     4136.0
+    ],
+    "max_abs_exhaust_residual_k": 12.317331021633853,
+    "max_exhaust_scatter_k": 0.5986243104782527,
+    "mismatch_p95": 0.49554789203635613
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 3.06972713142948,
+    "mismatch_p95": 0.49392380995793633
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 3.06972713142948,
+    "mismatch_p95": 0.5324308010242972
+   },
+   {
+    "scenario_id": "exhaust_tc_noise",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     98.0,
+     118.0,
+     98.0,
+     108.0,
+     108.0
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 3.069727131429489,
+    "mismatch_p95": 0.5189003974403352
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     821.0,
+     821.0,
+     821.0,
+     821.0,
+     821.0
+    ],
+    "max_abs_exhaust_residual_k": 129.9318783231652,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.4906028761857826
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     908.0,
+     908.0,
+     908.0,
+     908.0,
+     908.0
+    ],
+    "max_abs_exhaust_residual_k": 20.594000504804697,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5261807254008388
+   },
+   {
+    "scenario_id": "exhaust_tc_stuck_load_increase",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": true,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     819.0,
+     819.0,
+     819.0,
+     819.0,
+     819.0
+    ],
+    "max_abs_exhaust_residual_k": 107.31571769401529,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5074921398460861
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 4.252433796349563,
+    "max_exhaust_scatter_k": 0.7700818268658272,
+    "mismatch_p95": 0.5688616174757726
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 4.252433796349563,
+    "max_exhaust_scatter_k": 0.7700818268658272,
+    "mismatch_p95": 1.399591213326498
+   },
+   {
+    "scenario_id": "fouled_unit_offline_wash",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 4.5471604121659945,
+    "max_exhaust_scatter_k": 0.7700818268658272,
+    "mismatch_p95": 0.5925619076209091
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5470415823766517
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5789319794131997
+   },
+   {
+    "scenario_id": "fouling_progressive_ambient_swing",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5641642660768356
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.1844787054196413,
+    "max_exhaust_scatter_k": 0.5967070622192063,
+    "mismatch_p95": 0.5230901711487089
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.1844787054196413,
+    "max_exhaust_scatter_k": 0.5967070622192063,
+    "mismatch_p95": 0.5230901711487089
+   },
+   {
+    "scenario_id": "fouling_progressive_base_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.1844787054196413,
+    "max_exhaust_scatter_k": 0.5967070622192063,
+    "mismatch_p95": 0.5389743060117791
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 3.9592515421710104,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.7291502935503527
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 4.009797143773297,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.7463972931375759
+   },
+   {
+    "scenario_id": "fouling_step_part_load",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.5969738184173541
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.3590122029752703,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 1.4247347352993107
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.413948367799651,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 1.4246685824164285
+   },
+   {
+    "scenario_id": "fouling_then_erosion",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 2.2401513156983714,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 1.0389969413694002
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     2069.0,
+     2036.0,
+     2056.0,
+     2146.0,
+     2026.0
+    ],
+    "max_abs_exhaust_residual_k": 12.40987458953903,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.9568148776284631
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     2263.0,
+     2263.0,
+     2263.0,
+     2263.0,
+     2263.0
+    ],
+    "max_abs_exhaust_residual_k": 13.061029872057901,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.9709021644353921
+   },
+   {
+    "scenario_id": "fuel_meter_drift",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 5,
+    "suspect_after_onset_s": [
+     2524.0,
+     2454.0,
+     2336.0,
+     2397.0,
+     2350.0
+    ],
+    "max_abs_exhaust_residual_k": 12.336350983264984,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.9148303509732768
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 8.839105056523055,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.6993337462769399
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 8.86242731524635,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.718656302774625
+   },
+   {
+    "scenario_id": "power_transducer_bias",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 6.913598696187426,
+    "max_exhaust_scatter_k": 0.7022477632376392,
+    "mismatch_p95": 0.6782393175734124
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "advisory",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.43754155035502673
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "autonomous",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.4185401905383638
+   },
+   {
+    "scenario_id": "slow_fuel_valve_load_steps",
+    "mode": "manual",
+    "runs": 5,
+    "exhaust_fault": false,
+    "suspect_runs": 0,
+    "suspect_after_onset_s": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "max_abs_exhaust_residual_k": 1.9944761966460463,
+    "max_exhaust_scatter_k": 0.6042293642795425,
+    "mismatch_p95": 0.5540124860761868
+   }
+  ]
+ },
+ "delay": {
+  "runs": 63,
+  "rows": [
+   {
+    "mode": "advisory",
+    "operator_delay_s": 300.0,
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.04605208899076,
+     "lo": -1.051576320741714,
+     "hi": -1.0385120735846947
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.04605208899076,
+     "lo": -1.841688028286595,
+     "hi": -0.33059074269909994
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -3.1475747672570655,
+     "lo": -3.213477385538902,
+     "hi": -3.090018217359084
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -0.7826471545963698,
+     "lo": -0.807402881736223,
+     "hi": -0.7358958247982778
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 12,
+     "violation_s": 9247.0,
+     "runs_over_limit": 12,
+     "over_limit_k_s": 162557.98462703294,
+     "max_over_limit_k": 105.37994892647009,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 70,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 12,
+       "pending": 46
+      },
+      "compressor_wash": {
+       "escalated": 6
+      },
+      "exhaust_feedback": {
+       "pending": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 18,
+       "accepted": 40
+      },
+      "compressor_wash": {
+       "accepted": 6
+      },
+      "exhaust_feedback": {
+       "accepted": 6
+      }
+     },
+     "approved_share": 0.7428571428571429,
+     "escalated": 18,
+     "escalation_reasons": {
+      "model_mismatch": 12,
+      "shutdown_allowed": 6
+     }
+    },
+    "mismatch_median": 0.18600821999805375,
+    "mismatch_share_over_limit": 0.0,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4180.0,
+      "decision_after_onset_s": 4180.0,
+      "applied_after_onset_s": 4480.0,
+      "violation_s": 2710.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4228.0,
+      "decision_after_onset_s": 4228.0,
+      "applied_after_onset_s": 4528.0,
+      "violation_s": 2758.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4224.0,
+      "decision_after_onset_s": 4224.0,
+      "applied_after_onset_s": 4524.0,
+      "violation_s": 2756.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     }
+    ]
+   },
+   {
+    "mode": "advisory",
+    "operator_delay_s": 60.0,
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.0395009293543676,
+     "lo": -1.046983721559047,
+     "hi": -1.0334841946678999
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.039500929354368,
+     "lo": -1.98971905816204,
+     "hi": -0.23363326657886116
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -3.6759509950999014,
+     "lo": -3.741929761342761,
+     "hi": -3.618279563657171
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": 0.1988292129716664,
+     "lo": 0.1735761943122613,
+     "hi": 0.24933525029047623
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 12,
+     "violation_s": 7800.0,
+     "runs_over_limit": 12,
+     "over_limit_k_s": 85742.85341575507,
+     "max_over_limit_k": 105.37994892647009,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 78,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 19,
+       "pending": 47
+      },
+      "compressor_wash": {
+       "escalated": 6
+      },
+      "exhaust_feedback": {
+       "pending": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "rejected": 19,
+       "accepted": 47
+      },
+      "compressor_wash": {
+       "accepted": 6
+      },
+      "exhaust_feedback": {
+       "accepted": 6
+      }
+     },
+     "approved_share": 0.6794871794871795,
+     "escalated": 25,
+     "escalation_reasons": {
+      "model_mismatch": 19,
+      "shutdown_allowed": 6
+     }
+    },
+    "mismatch_median": 0.19217816879808702,
+    "mismatch_share_over_limit": 0.0,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4180.0,
+      "decision_after_onset_s": 4180.0,
+      "applied_after_onset_s": 4240.0,
+      "violation_s": 2467.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4228.0,
+      "decision_after_onset_s": 4228.0,
+      "applied_after_onset_s": 4288.0,
+      "violation_s": 2516.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4224.0,
+      "decision_after_onset_s": 4224.0,
+      "applied_after_onset_s": 4284.0,
+      "violation_s": 2514.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 968.0,
+      "decision_after_onset_s": 968.0,
+      "applied_after_onset_s": 1028.0,
+      "violation_s": 64.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 968.0,
+      "decision_after_onset_s": 968.0,
+      "applied_after_onset_s": 1028.0,
+      "violation_s": 64.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 968.0,
+      "decision_after_onset_s": 968.0,
+      "applied_after_onset_s": 1028.0,
+      "violation_s": 64.0,
+      "max_over_limit_k": 105.37994892647009
+     }
+    ]
+   },
+   {
+    "mode": "advisory",
+    "operator_delay_s": 900.0,
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -0.8336218297703878,
+     "lo": -0.8420103082908659,
+     "hi": -0.8170068667663606
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -0.8336218297703877,
+     "lo": -1.5570450361758752,
+     "hi": -0.2070971959334608
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": 1.035890007753758,
+     "lo": 1.0284060047768528,
+     "hi": 1.0495158402806968
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -0.32758081484899176,
+     "lo": -0.32758081484899176,
+     "hi": -0.32758081484899176
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 12,
+     "violation_s": 12830.0,
+     "runs_over_limit": 12,
+     "over_limit_k_s": 354070.98136871675,
+     "max_over_limit_k": 105.37895297231421,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 71,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 14,
+       "pending": 45
+      },
+      "compressor_wash": {
+       "escalated": 6
+      },
+      "exhaust_feedback": {
+       "pending": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 28,
+       "accepted": 31
+      },
+      "compressor_wash": {
+       "escalated": 3,
+       "accepted": 3
+      },
+      "exhaust_feedback": {
+       "accepted": 6
+      }
+     },
+     "approved_share": 0.7183098591549296,
+     "escalated": 20,
+     "escalation_reasons": {
+      "model_mismatch": 12,
+      "shutdown_allowed": 6,
+      "peak_exhaust": 2,
+      "transient_exhaust": 2
+     }
+    },
+    "mismatch_median": 0.18784579596955317,
+    "mismatch_share_over_limit": 0.0,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4180.0,
+      "decision_after_onset_s": 4180.0,
+      "applied_after_onset_s": 5080.0,
+      "violation_s": 3310.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4228.0,
+      "decision_after_onset_s": 4228.0,
+      "applied_after_onset_s": 5128.0,
+      "violation_s": 3361.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4224.0,
+      "decision_after_onset_s": 4224.0,
+      "applied_after_onset_s": 5124.0,
+      "violation_s": 3357.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1721.0,
+      "violation_s": 904.0,
+      "max_over_limit_k": 105.37895297231421
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1721.0,
+      "violation_s": 904.0,
+      "max_over_limit_k": 105.37895297231421
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1721.0,
+      "violation_s": 904.0,
+      "max_over_limit_k": 105.37895297231421
+     }
+    ]
+   }
+  ]
+ },
+ "mismatch": {
+  "runs": 126,
+  "rows": [
+   {
+    "mode": "advisory",
+    "twin_engine": null,
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.6513599522609999,
+     "lo": -1.6515805903988565,
+     "hi": -1.6512175159197735
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.6513599522609996,
+     "lo": -2.375671957600212,
+     "hi": -0.8254379985006427
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -0.6103217845786189,
+     "lo": -0.6114990525950829,
+     "hi": -0.6084980736787519
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -1.2110046163081962,
+     "lo": -1.2110046163081962,
+     "hi": -1.2110046163081962
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 9,
+     "violation_s": 9571.0,
+     "runs_over_limit": 12,
+     "over_limit_k_s": 165021.9661394678,
+     "max_over_limit_k": 105.37994892647009,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 78,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "pending": 54
+      },
+      "exhaust_feedback": {
+       "pending": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 24,
+       "accepted": 48
+      },
+      "exhaust_feedback": {
+       "accepted": 6
+      }
+     },
+     "approved_share": 0.7692307692307693,
+     "escalated": 18,
+     "escalation_reasons": {
+      "model_mismatch": 18
+     }
+    },
+    "mismatch_median": 0.17402652826716902,
+    "mismatch_share_over_limit": 0.0015726996574530882,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4317.0,
+      "decision_after_onset_s": 4317.0,
+      "applied_after_onset_s": 4617.0,
+      "violation_s": 2847.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4394.0,
+      "decision_after_onset_s": 4394.0,
+      "applied_after_onset_s": 4694.0,
+      "violation_s": 2926.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4293.0,
+      "decision_after_onset_s": 4293.0,
+      "applied_after_onset_s": 4593.0,
+      "violation_s": 2826.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     }
+    ]
+   },
+   {
+    "mode": "advisory",
+    "twin_engine": "combined",
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.644717326582175,
+     "lo": -1.6509735940067092,
+     "hi": -1.637177311176109
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.6447173265821742,
+     "lo": -2.3683235440972945,
+     "hi": -0.817894253331028
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -0.6567224825127272,
+     "lo": -0.6885274080823656,
+     "hi": -0.617044542128186
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -1.209624554067389,
+     "lo": -1.2110046163081962,
+     "hi": -1.2068644295857744
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 9,
+     "violation_s": 9196.0,
+     "runs_over_limit": 10,
+     "over_limit_k_s": 161633.04722240623,
+     "max_over_limit_k": 105.37994892647009,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 79,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "pending": 55
+      },
+      "exhaust_feedback": {
+       "pending": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 24,
+       "accepted": 49
+      },
+      "exhaust_feedback": {
+       "accepted": 6
+      }
+     },
+     "approved_share": 0.7721518987341772,
+     "escalated": 18,
+     "escalation_reasons": {
+      "model_mismatch": 18
+     }
+    },
+    "mismatch_median": 0.17616373642756697,
+    "mismatch_share_over_limit": 0.0015726996574530882,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4180.0,
+      "decision_after_onset_s": 4180.0,
+      "applied_after_onset_s": 4480.0,
+      "violation_s": 2710.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4228.0,
+      "decision_after_onset_s": 4228.0,
+      "applied_after_onset_s": 4528.0,
+      "violation_s": 2758.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4224.0,
+      "decision_after_onset_s": 4224.0,
+      "applied_after_onset_s": 4524.0,
+      "violation_s": 2756.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 105.37994892647009
+     }
+    ]
+   },
+   {
+    "mode": "advisory",
+    "twin_engine": "combined_x3",
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.5683758840475024,
+     "lo": -1.5722646066906518,
+     "hi": -1.5661793429150084
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.5683758840475026,
+     "lo": -2.216274298303987,
+     "hi": -0.8460240622263924
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -0.5372166491582343,
+     "lo": -0.5400657589400838,
+     "hi": -0.5351177695398722
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -1.2027242428633527,
+     "lo": -1.2027242428633527,
+     "hi": -1.2027242428633527
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 9,
+     "violation_s": 8464.0,
+     "runs_over_limit": 9,
+     "over_limit_k_s": 156034.48098609896,
+     "max_over_limit_k": 105.37994892647009,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 78,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "pending": 54
+      },
+      "exhaust_feedback": {
+       "pending": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 21,
+       "accepted": 51
+      },
+      "exhaust_feedback": {
+       "accepted": 6
+      }
+     },
+     "approved_share": 0.7692307692307693,
+     "escalated": 18,
+     "escalation_reasons": {
+      "model_mismatch": 18
+     }
+    },
+    "mismatch_median": 0.18287578273056168,
+    "mismatch_share_over_limit": 0.0015579675217842796,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 3796.0,
+      "decision_after_onset_s": 3796.0,
+      "applied_after_onset_s": 4096.0,
+      "violation_s": 2323.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 3666.0,
+      "decision_after_onset_s": 3666.0,
+      "applied_after_onset_s": 3966.0,
+      "violation_s": 2194.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 3801.0,
+      "decision_after_onset_s": 3801.0,
+      "applied_after_onset_s": 4101.0,
+      "violation_s": 2329.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 520.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 519.0,
+      "max_over_limit_k": 105.37994892647009
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 821.0,
+      "decision_after_onset_s": 821.0,
+      "applied_after_onset_s": 1121.0,
+      "violation_s": 519.0,
+      "max_over_limit_k": 105.37994892647009
+     }
+    ]
+   },
+   {
+    "mode": "autonomous",
+    "twin_engine": null,
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.8249390121203177,
+     "lo": -1.8252284902269713,
+     "hi": -1.8247478100977428
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.824939012120318,
+     "lo": -2.569037252560861,
+     "hi": -1.0098611169369307
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -0.4193884288226942,
+     "lo": -0.42096617779007367,
+     "hi": -0.41699956949654954
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -0.09315420125447663,
+     "lo": -0.09315420125447663,
+     "hi": -0.09315420125447663
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 3,
+     "violation_s": 7695.0,
+     "runs_over_limit": 3,
+     "over_limit_k_s": 69444.83933064005,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 80,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "applied": 54
+      },
+      "compressor_wash": {
+       "escalated": 2
+      },
+      "exhaust_feedback": {
+       "applied": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 18,
+       "applied": 54
+      },
+      "compressor_wash": {
+       "escalated": 2
+      },
+      "exhaust_feedback": {
+       "applied": 6
+      }
+     },
+     "approved_share": 0.75,
+     "escalated": 20,
+     "escalation_reasons": {
+      "model_mismatch": 18,
+      "shutdown_allowed": 2
+     }
+    },
+    "mismatch_median": 0.186881609471496,
+    "mismatch_share_over_limit": 0.0015726996574530882,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4317.0,
+      "decision_after_onset_s": 4317.0,
+      "applied_after_onset_s": 4317.0,
+      "violation_s": 2547.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4394.0,
+      "decision_after_onset_s": 4394.0,
+      "applied_after_onset_s": 4394.0,
+      "violation_s": 2626.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4293.0,
+      "decision_after_onset_s": 4293.0,
+      "applied_after_onset_s": 4293.0,
+      "violation_s": 2522.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     }
+    ]
+   },
+   {
+    "mode": "autonomous",
+    "twin_engine": "combined",
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.8168520276344855,
+     "lo": -1.8221891838955036,
+     "hi": -1.8100877532239634
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.8168520276344855,
+     "lo": -2.5618658423179568,
+     "hi": -0.9986685799194791
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -0.44411552073804034,
+     "lo": -0.47822878072736197,
+     "hi": -0.4263012204170248
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -0.1490467220071623,
+     "lo": -0.2608317635125336,
+     "hi": -0.09315420125447663
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 3,
+     "violation_s": 7319.0,
+     "runs_over_limit": 3,
+     "over_limit_k_s": 65882.00649501494,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 79,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "applied": 55
+      },
+      "exhaust_feedback": {
+       "applied": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 18,
+       "applied": 55
+      },
+      "exhaust_feedback": {
+       "applied": 6
+      }
+     },
+     "approved_share": 0.7721518987341772,
+     "escalated": 18,
+     "escalation_reasons": {
+      "model_mismatch": 18
+     }
+    },
+    "mismatch_median": 0.19398748337512164,
+    "mismatch_share_over_limit": 0.0015726996574530882,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 4180.0,
+      "decision_after_onset_s": 4180.0,
+      "applied_after_onset_s": 4180.0,
+      "violation_s": 2409.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 4228.0,
+      "decision_after_onset_s": 4228.0,
+      "applied_after_onset_s": 4228.0,
+      "violation_s": 2457.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 4224.0,
+      "decision_after_onset_s": 4224.0,
+      "applied_after_onset_s": 4224.0,
+      "violation_s": 2453.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     }
+    ]
+   },
+   {
+    "mode": "autonomous",
+    "twin_engine": "combined_x3",
+    "runs": 21,
+    "heat_rate_pct": {
+     "n": 21,
+     "mean": -1.7174840286287243,
+     "lo": -1.7213651425994774,
+     "hi": -1.715247064892115
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 7,
+     "mean": -1.7174840286287243,
+     "lo": -2.3957342849341465,
+     "hi": -0.9240490176878735
+    },
+    "energy_mwh": {
+     "n": 21,
+     "mean": -0.37754245679506665,
+     "lo": -0.38060488648960633,
+     "hi": -0.3751002459699674
+    },
+    "band_pp": {
+     "n": 21,
+     "mean": -0.16974765561926944,
+     "lo": -0.16974765561926944,
+     "hi": -0.16974765561926944
+    },
+    "violations": {
+     "runs": 21,
+     "runs_with_violation": 6,
+     "violation_s": 6859.0,
+     "runs_over_limit": 6,
+     "over_limit_k_s": 62166.01421975755,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 78,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "applied": 54
+      },
+      "exhaust_feedback": {
+       "applied": 6
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 18,
+       "applied": 54
+      },
+      "exhaust_feedback": {
+       "applied": 6
+      }
+     },
+     "approved_share": 0.7692307692307693,
+     "escalated": 18,
+     "escalation_reasons": {
+      "model_mismatch": 18
+     }
+    },
+    "mismatch_median": 0.1961294506908872,
+    "mismatch_share_over_limit": 0.0015652143712164886,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 3796.0,
+      "decision_after_onset_s": 3796.0,
+      "applied_after_onset_s": 3796.0,
+      "violation_s": 2022.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 3666.0,
+      "decision_after_onset_s": 3666.0,
+      "applied_after_onset_s": 3666.0,
+      "violation_s": 1895.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_drift_base_load",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 3801.0,
+      "decision_after_onset_s": 3801.0,
+      "applied_after_onset_s": 3801.0,
+      "violation_s": 2029.0,
+      "max_over_limit_k": 7.7413024310199035
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 7.590726388858911
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 305.0,
+      "max_over_limit_k": 7.590726388897679
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 7.59072638881787
+     }
+    ]
+   }
+  ]
+ },
+ "objective": {
+  "runs": 36,
+  "rows": [
+   {
+    "mode": "autonomous",
+    "load_objective": "heat_rate",
+    "runs": 18,
+    "heat_rate_pct": {
+     "n": 18,
+     "mean": -1.7474289055586203,
+     "lo": -1.756048939138874,
+     "hi": -1.7405138049506368
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 6,
+     "mean": -1.7474289055586205,
+     "lo": -2.6073667458585796,
+     "hi": -0.8509772918352047
+    },
+    "energy_mwh": {
+     "n": 18,
+     "mean": -4.067778019668976,
+     "lo": -4.103928389399698,
+     "hi": -4.023255057985445
+    },
+    "band_pp": {
+     "n": 18,
+     "mean": -1.3334104630718313,
+     "lo": -1.3905680408785905,
+     "hi": -1.2190953074583122
+    },
+    "violations": {
+     "runs": 18,
+     "runs_with_violation": 6,
+     "violation_s": 75.0,
+     "runs_over_limit": 6,
+     "over_limit_k_s": 857.4550113319189,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 86,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 24,
+       "applied": 56
+      },
+      "compressor_wash": {
+       "escalated": 3
+      },
+      "exhaust_feedback": {
+       "applied": 3
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 21,
+       "applied": 56,
+       "rejected": 3
+      },
+      "compressor_wash": {
+       "accepted": 3
+      },
+      "exhaust_feedback": {
+       "applied": 3
+      }
+     },
+     "approved_share": 0.686046511627907,
+     "escalated": 27,
+     "escalation_reasons": {
+      "model_mismatch": 18,
+      "meets_demand": 9,
+      "no_trip": 6,
+      "peak_exhaust": 6,
+      "transient_exhaust": 6,
+      "speed_band": 6,
+      "shutdown_allowed": 3,
+      "health_converged": 3
+     }
+    },
+    "mismatch_median": 0.17964863280470517,
+    "mismatch_share_over_limit": 0.0,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     }
+    ]
+   },
+   {
+    "mode": "autonomous",
+    "load_objective": "track_demand",
+    "runs": 18,
+    "heat_rate_pct": {
+     "n": 18,
+     "mean": -1.7470144366044276,
+     "lo": -1.7509884418611354,
+     "hi": -1.7390664260910125
+    },
+    "heat_rate_pct_across_scenarios": {
+     "n": 6,
+     "mean": -1.747014436604428,
+     "lo": -2.610790166229352,
+     "hi": -0.8535525367386544
+    },
+    "energy_mwh": {
+     "n": 18,
+     "mean": -2.382029796733666,
+     "lo": -2.4221082672714793,
+     "hi": -2.361990561464759
+    },
+    "band_pp": {
+     "n": 18,
+     "mean": -0.7361637377758874,
+     "lo": -0.866579619532154,
+     "hi": -0.6709557968977542
+    },
+    "violations": {
+     "runs": 18,
+     "runs_with_violation": 3,
+     "violation_s": 51.0,
+     "runs_over_limit": 3,
+     "over_limit_k_s": 463.8086768927641,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
+    },
+    "decisions": {
+     "decisions": 76,
+     "by_problem_initial": {
+      "load_setpoint": {
+       "escalated": 18,
+       "applied": 52
+      },
+      "compressor_wash": {
+       "escalated": 3
+      },
+      "exhaust_feedback": {
+       "applied": 3
+      }
+     },
+     "by_problem_final": {
+      "load_setpoint": {
+       "superseded": 15,
+       "applied": 52,
+       "rejected": 3
+      },
+      "compressor_wash": {
+       "accepted": 3
+      },
+      "exhaust_feedback": {
+       "applied": 3
+      }
+     },
+     "approved_share": 0.7236842105263158,
+     "escalated": 21,
+     "escalation_reasons": {
+      "model_mismatch": 18,
+      "shutdown_allowed": 3,
+      "health_converged": 3,
+      "meets_demand": 3
+     }
+    },
+    "mismatch_median": 0.18498383961046821,
+    "mismatch_share_over_limit": 0.0,
+    "tc": [
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2000,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2001,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     },
+     {
+      "scenario_id": "exhaust_tc_stuck_load_increase",
+      "seed": 2002,
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 0.0,
+      "max_over_limit_k": 0.0
+     }
+    ]
+   }
+  ]
+ },
+ "wash": {
+  "per_run": [
+   {
+    "policy": "never",
+    "seed": 2000,
+    "washes": 0,
+    "energy_mwh": 248.06442088919965,
+    "fuel_cost_usd": 22588.85157535502,
+    "fuel_cost_eq_usd": 22588.85157535502,
+    "wash_cost_usd": 0.0,
+    "total_cost_usd": 22588.85157535502,
+    "heat_rate": 11382.553115831828,
+    "mean_fouling_pct": 5.385026280920764,
+    "max_fouling_pct": 10.0,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 14.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_0.75h",
+    "seed": 2000,
+    "washes": 7,
+    "energy_mwh": 140.05689804444467,
+    "fuel_cost_usd": 12709.925624645653,
+    "fuel_cost_eq_usd": 22511.424882635987,
+    "wash_cost_usd": 291.66666666666663,
+    "total_cost_usd": 22803.091549302655,
+    "heat_rate": 11343.537699775035,
+    "mean_fouling_pct": 0.5864446046937289,
+    "max_fouling_pct": 1.5776944444429797,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_1h",
+    "seed": 2000,
+    "washes": 5,
+    "energy_mwh": 173.32102526405617,
+    "fuel_cost_usd": 15527.34611487632,
+    "fuel_cost_eq_usd": 22223.397975316228,
+    "wash_cost_usd": 208.33333333333331,
+    "total_cost_usd": 22431.73130864956,
+    "heat_rate": 11198.400548361245,
+    "mean_fouling_pct": 0.8384584882406789,
+    "max_fouling_pct": 2.0775833333317677,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_1.5h",
+    "seed": 2000,
+    "washes": 3,
+    "energy_mwh": 206.58463734754852,
+    "fuel_cost_usd": 18381.671336457122,
+    "fuel_cost_eq_usd": 22072.49635597333,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22197.49635597333,
+    "heat_rate": 11122.361016572497,
+    "mean_fouling_pct": 1.3250736530726241,
+    "max_fouling_pct": 3.077388888893873,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_2h",
+    "seed": 2000,
+    "washes": 2,
+    "energy_mwh": 223.21591938997287,
+    "fuel_cost_usd": 19846.026286874407,
+    "fuel_cost_eq_usd": 22055.295299993217,
+    "wash_cost_usd": 83.33333333333333,
+    "total_cost_usd": 22138.62863332655,
+    "heat_rate": 11113.69338100506,
+    "mean_fouling_pct": 1.802977740743935,
+    "max_fouling_pct": 4.0771944444547445,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_3h",
+    "seed": 2000,
+    "washes": 1,
+    "energy_mwh": 239.82883737586198,
+    "fuel_cost_usd": 21384.554457790404,
+    "fuel_cost_eq_usd": 22118.887685018795,
+    "wash_cost_usd": 41.666666666666664,
+    "total_cost_usd": 22160.554351685463,
+    "heat_rate": 11145.73767054769,
+    "mean_fouling_pct": 2.7500789852300023,
+    "max_fouling_pct": 6.076805555546987,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "layer (autonomous)",
+    "seed": 2000,
+    "washes": 3,
+    "energy_mwh": 214.54055630605632,
+    "fuel_cost_usd": 19135.86868771401,
+    "fuel_cost_eq_usd": 22126.017877280683,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22251.017877280683,
+    "heat_rate": 11149.330584152713,
+    "mean_fouling_pct": 1.6214636007968188,
+    "max_fouling_pct": 3.413694444451632,
+    "wash_decision_times_s": [
+     7544.0,
+     14349.0,
+     21279.0
+    ],
+    "optimal_interval_h_at_decision": [
+     1.36,
+     1.309,
+     1.337
+    ],
+    "loss_growth_usd_per_h2": [
+     45.06,
+     48.5985,
+     46.6381
+    ],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "layer (advisory)",
+    "seed": 2000,
+    "washes": 3,
+    "energy_mwh": 214.91059714453496,
+    "fuel_cost_usd": 19176.84995974922,
+    "fuel_cost_eq_usd": 22135.223869602614,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22260.223869602614,
+    "heat_rate": 11153.969496239004,
+    "mean_fouling_pct": 1.729224881179253,
+    "max_fouling_pct": 3.5803333333416125,
+    "wash_decision_times_s": [
+     7544.0,
+     14649.0,
+     21700.0
+    ],
+    "optimal_interval_h_at_decision": [
+     1.36,
+     1.353,
+     1.389
+    ],
+    "loss_growth_usd_per_h2": [
+     45.06,
+     45.4967,
+     43.1879
+    ],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "never",
+    "seed": 2001,
+    "washes": 0,
+    "energy_mwh": 248.06442088919965,
+    "fuel_cost_usd": 22588.85157535502,
+    "fuel_cost_eq_usd": 22588.85157535502,
+    "wash_cost_usd": 0.0,
+    "total_cost_usd": 22588.85157535502,
+    "heat_rate": 11382.553115831828,
+    "mean_fouling_pct": 5.385026280920764,
+    "max_fouling_pct": 10.0,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 14.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_0.75h",
+    "seed": 2001,
+    "washes": 7,
+    "energy_mwh": 140.05689804444467,
+    "fuel_cost_usd": 12709.925624645653,
+    "fuel_cost_eq_usd": 22511.424882635987,
+    "wash_cost_usd": 291.66666666666663,
+    "total_cost_usd": 22803.091549302655,
+    "heat_rate": 11343.537699775035,
+    "mean_fouling_pct": 0.5864446046937289,
+    "max_fouling_pct": 1.5776944444429797,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_1h",
+    "seed": 2001,
+    "washes": 5,
+    "energy_mwh": 173.32102526405617,
+    "fuel_cost_usd": 15527.34611487632,
+    "fuel_cost_eq_usd": 22223.397975316228,
+    "wash_cost_usd": 208.33333333333331,
+    "total_cost_usd": 22431.73130864956,
+    "heat_rate": 11198.400548361245,
+    "mean_fouling_pct": 0.8384584882406789,
+    "max_fouling_pct": 2.0775833333317677,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_1.5h",
+    "seed": 2001,
+    "washes": 3,
+    "energy_mwh": 206.58463734754852,
+    "fuel_cost_usd": 18381.671336457122,
+    "fuel_cost_eq_usd": 22072.49635597333,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22197.49635597333,
+    "heat_rate": 11122.361016572497,
+    "mean_fouling_pct": 1.3250736530726241,
+    "max_fouling_pct": 3.077388888893873,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_2h",
+    "seed": 2001,
+    "washes": 2,
+    "energy_mwh": 223.21591938997287,
+    "fuel_cost_usd": 19846.026286874407,
+    "fuel_cost_eq_usd": 22055.295299993217,
+    "wash_cost_usd": 83.33333333333333,
+    "total_cost_usd": 22138.62863332655,
+    "heat_rate": 11113.69338100506,
+    "mean_fouling_pct": 1.802977740743935,
+    "max_fouling_pct": 4.0771944444547445,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_3h",
+    "seed": 2001,
+    "washes": 1,
+    "energy_mwh": 239.82883737586198,
+    "fuel_cost_usd": 21384.554457790404,
+    "fuel_cost_eq_usd": 22118.887685018795,
+    "wash_cost_usd": 41.666666666666664,
+    "total_cost_usd": 22160.554351685463,
+    "heat_rate": 11145.73767054769,
+    "mean_fouling_pct": 2.7500789852300023,
+    "max_fouling_pct": 6.076805555546987,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "layer (autonomous)",
+    "seed": 2001,
+    "washes": 3,
+    "energy_mwh": 214.54045719329596,
+    "fuel_cost_usd": 19130.9595736862,
+    "fuel_cost_eq_usd": 22120.35188973883,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22245.35188973883,
+    "heat_rate": 11146.475485303017,
+    "mean_fouling_pct": 1.5819268288638788,
+    "max_fouling_pct": 3.413694444451632,
+    "wash_decision_times_s": [
+     7424.0,
+     14229.0,
+     20979.0
+    ],
+    "optimal_interval_h_at_decision": [
+     1.361,
+     1.32,
+     1.385
+    ],
+    "loss_growth_usd_per_h2": [
+     44.9734,
+     47.8422,
+     43.4637
+    ],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "layer (advisory)",
+    "seed": 2001,
+    "washes": 3,
+    "energy_mwh": 214.91061477144135,
+    "fuel_cost_usd": 19176.887996747537,
+    "fuel_cost_eq_usd": 22135.265958963584,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22260.265958963584,
+    "heat_rate": 11153.990705125398,
+    "mean_fouling_pct": 1.7296231606924768,
+    "max_fouling_pct": 3.5803333333416125,
+    "wash_decision_times_s": [
+     7424.0,
+     14409.0,
+     21699.0
+    ],
+    "optimal_interval_h_at_decision": [
+     1.361,
+     1.366,
+     1.325
+    ],
+    "loss_growth_usd_per_h2": [
+     44.9734,
+     44.6336,
+     47.4579
+    ],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "never",
+    "seed": 2002,
+    "washes": 0,
+    "energy_mwh": 248.06442088919965,
+    "fuel_cost_usd": 22588.85157535502,
+    "fuel_cost_eq_usd": 22588.85157535502,
+    "wash_cost_usd": 0.0,
+    "total_cost_usd": 22588.85157535502,
+    "heat_rate": 11382.553115831828,
+    "mean_fouling_pct": 5.385026280920764,
+    "max_fouling_pct": 10.0,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 14.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_0.75h",
+    "seed": 2002,
+    "washes": 7,
+    "energy_mwh": 140.05689804444467,
+    "fuel_cost_usd": 12709.925624645653,
+    "fuel_cost_eq_usd": 22511.424882635987,
+    "wash_cost_usd": 291.66666666666663,
+    "total_cost_usd": 22803.091549302655,
+    "heat_rate": 11343.537699775035,
+    "mean_fouling_pct": 0.5864446046937289,
+    "max_fouling_pct": 1.5776944444429797,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_1h",
+    "seed": 2002,
+    "washes": 5,
+    "energy_mwh": 173.32102526405617,
+    "fuel_cost_usd": 15527.34611487632,
+    "fuel_cost_eq_usd": 22223.397975316228,
+    "wash_cost_usd": 208.33333333333331,
+    "total_cost_usd": 22431.73130864956,
+    "heat_rate": 11198.400548361245,
+    "mean_fouling_pct": 0.8384584882406789,
+    "max_fouling_pct": 2.0775833333317677,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_1.5h",
+    "seed": 2002,
+    "washes": 3,
+    "energy_mwh": 206.58463734754852,
+    "fuel_cost_usd": 18381.671336457122,
+    "fuel_cost_eq_usd": 22072.49635597333,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22197.49635597333,
+    "heat_rate": 11122.361016572497,
+    "mean_fouling_pct": 1.3250736530726241,
+    "max_fouling_pct": 3.077388888893873,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_2h",
+    "seed": 2002,
+    "washes": 2,
+    "energy_mwh": 223.21591938997287,
+    "fuel_cost_usd": 19846.026286874407,
+    "fuel_cost_eq_usd": 22055.295299993217,
+    "wash_cost_usd": 83.33333333333333,
+    "total_cost_usd": 22138.62863332655,
+    "heat_rate": 11113.69338100506,
+    "mean_fouling_pct": 1.802977740743935,
+    "max_fouling_pct": 4.0771944444547445,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "every_3h",
+    "seed": 2002,
+    "washes": 1,
+    "energy_mwh": 239.82883737586198,
+    "fuel_cost_usd": 21384.554457790404,
+    "fuel_cost_eq_usd": 22118.887685018795,
+    "wash_cost_usd": 41.666666666666664,
+    "total_cost_usd": 22160.554351685463,
+    "heat_rate": 11145.73767054769,
+    "mean_fouling_pct": 2.7500789852300023,
+    "max_fouling_pct": 6.076805555546987,
+    "wash_decision_times_s": [],
+    "optimal_interval_h_at_decision": [],
+    "loss_growth_usd_per_h2": [],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "layer (autonomous)",
+    "seed": 2002,
+    "washes": 3,
+    "energy_mwh": 214.54047174659019,
+    "fuel_cost_usd": 19131.857126655632,
+    "fuel_cost_eq_usd": 22121.388193200735,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22246.388193200735,
+    "heat_rate": 11146.9976800308,
+    "mean_fouling_pct": 1.5892201128641084,
+    "max_fouling_pct": 3.380388888895858,
+    "wash_decision_times_s": [
+     7484.0,
+     14109.0,
+     21039.0
+    ],
+    "optimal_interval_h_at_decision": [
+     1.376,
+     1.375,
+     1.326
+    ],
+    "loss_growth_usd_per_h2": [
+     44.0138,
+     44.0834,
+     47.3944
+    ],
+    "violation_s": 0.0,
+    "skipped": 0
+   },
+   {
+    "policy": "layer (advisory)",
+    "seed": 2002,
+    "washes": 3,
+    "energy_mwh": 214.54072885179633,
+    "fuel_cost_usd": 19145.82844091869,
+    "fuel_cost_eq_usd": 22137.51612600013,
+    "wash_cost_usd": 125.0,
+    "total_cost_usd": 22262.51612600013,
+    "heat_rate": 11155.124567363928,
+    "mean_fouling_pct": 1.7003089374160847,
+    "max_fouling_pct": 3.4803611111187354,
+    "wash_decision_times_s": [
+     7484.0,
+     14409.0,
+     21519.0
+    ],
+    "optimal_interval_h_at_decision": [
+     1.376,
+     1.383,
+     1.384
+    ],
+    "loss_growth_usd_per_h2": [
+     44.0138,
+     43.5655,
+     43.5234
+    ],
+    "violation_s": 0.0,
+    "skipped": 0
+   }
+  ],
+  "policies": [
+   {
+    "policy": "never",
+    "runs": 3,
+    "washes_mean": 0.0,
+    "energy_mwh_mean": 248.06442088919962,
+    "fuel_cost_eq_mean": 22588.85157535502,
+    "wash_cost_mean": 0.0,
+    "total_cost_mean": 22588.85157535502,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 0.0,
+     "lo": 0.0,
+     "hi": 0.0
+    },
+    "mean_fouling_pct": 5.385026280920765,
+    "heat_rate_mean": 11382.553115831828,
+    "violation_s": 42.0,
+    "first_wash_h_after_onset": null,
+    "optimal_interval_h_at_decision": null
+   },
+   {
+    "policy": "every_0.75h",
+    "runs": 3,
+    "washes_mean": 7.0,
+    "energy_mwh_mean": 140.05689804444467,
+    "fuel_cost_eq_mean": 22511.424882635987,
+    "wash_cost_mean": 291.66666666666663,
+    "total_cost_mean": 22803.091549302655,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": -214.239973947635,
+     "lo": -214.239973947635,
+     "hi": -214.239973947635
+    },
+    "mean_fouling_pct": 0.5864446046937289,
+    "heat_rate_mean": 11343.537699775035,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": null,
+    "optimal_interval_h_at_decision": null
+   },
+   {
+    "policy": "every_1.5h",
+    "runs": 3,
+    "washes_mean": 3.0,
+    "energy_mwh_mean": 206.58463734754852,
+    "fuel_cost_eq_mean": 22072.49635597333,
+    "wash_cost_mean": 125.0,
+    "total_cost_mean": 22197.49635597333,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 391.3552193816904,
+     "lo": 391.3552193816904,
+     "hi": 391.3552193816904
+    },
+    "mean_fouling_pct": 1.3250736530726241,
+    "heat_rate_mean": 11122.361016572497,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": null,
+    "optimal_interval_h_at_decision": null
+   },
+   {
+    "policy": "every_1h",
+    "runs": 3,
+    "washes_mean": 5.0,
+    "energy_mwh_mean": 173.32102526405617,
+    "fuel_cost_eq_mean": 22223.397975316228,
+    "wash_cost_mean": 208.33333333333334,
+    "total_cost_mean": 22431.73130864956,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 157.12026670546038,
+     "lo": 157.12026670546038,
+     "hi": 157.12026670546038
+    },
+    "mean_fouling_pct": 0.8384584882406788,
+    "heat_rate_mean": 11198.400548361247,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": null,
+    "optimal_interval_h_at_decision": null
+   },
+   {
+    "policy": "every_2h",
+    "runs": 3,
+    "washes_mean": 2.0,
+    "energy_mwh_mean": 223.21591938997287,
+    "fuel_cost_eq_mean": 22055.295299993217,
+    "wash_cost_mean": 83.33333333333333,
+    "total_cost_mean": 22138.62863332655,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 450.22294202847115,
+     "lo": 450.22294202847115,
+     "hi": 450.22294202847115
+    },
+    "mean_fouling_pct": 1.802977740743935,
+    "heat_rate_mean": 11113.69338100506,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": null,
+    "optimal_interval_h_at_decision": null
+   },
+   {
+    "policy": "every_3h",
+    "runs": 3,
+    "washes_mean": 1.0,
+    "energy_mwh_mean": 239.82883737586198,
+    "fuel_cost_eq_mean": 22118.887685018795,
+    "wash_cost_mean": 41.666666666666664,
+    "total_cost_mean": 22160.554351685463,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 428.29722366955684,
+     "lo": 428.29722366955684,
+     "hi": 428.29722366955684
+    },
+    "mean_fouling_pct": 2.7500789852300023,
+    "heat_rate_mean": 11145.73767054769,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": null,
+    "optimal_interval_h_at_decision": null
+   },
+   {
+    "policy": "layer (advisory)",
+    "runs": 3,
+    "washes_mean": 3.0,
+    "energy_mwh_mean": 214.78731358925756,
+    "fuel_cost_eq_mean": 22136.00198485544,
+    "wash_cost_mean": 125.0,
+    "total_cost_mean": 22261.00198485544,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 327.84959049957735,
+     "lo": 326.33544935489044,
+     "hi": 328.62770575240575
+    },
+    "mean_fouling_pct": 1.7197189930959382,
+    "heat_rate_mean": 11154.36158957611,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": 1.5788888888888888,
+    "optimal_interval_h_at_decision": 1.3663333333333334
+   },
+   {
+    "policy": "layer (autonomous)",
+    "runs": 3,
+    "washes_mean": 3.0,
+    "energy_mwh_mean": 214.54049508198082,
+    "fuel_cost_eq_mean": 22122.585986740083,
+    "wash_cost_mean": 125.0,
+    "total_cost_mean": 22247.585986740083,
+    "saving_vs_never": {
+     "n": 3,
+     "mean": 341.26558861493686,
+     "lo": 337.833698074337,
+     "hi": 343.4996856161888
+    },
+    "mean_fouling_pct": 1.5975368475082687,
+    "heat_rate_mean": 11147.601249828842,
+    "violation_s": 0.0,
+    "first_wash_h_after_onset": 1.5788888888888888,
+    "optimal_interval_h_at_decision": 1.349888888888889
+   }
+  ],
+  "formula": {
+   "wash_cost_usd": 30000.0,
+   "time_compression": 720.0,
+   "effective_wash_cost_usd": 41.666666666666664,
+   "loss_growth_usd_per_h2_sim": 45.22109444444445,
+   "optimal_interval_h_sim": 1.3574968874744657,
+   "optimal_interval_h_service": 977.3977589816153,
+   "optimal_interval_days_service": 40.724906624233974
+  }
+ },
+ "cpu_s_per_experiment": {
+  "tuning": 5663.922284378,
+  "main": 10360.015113163998,
+  "delay": 2398.5490927169994,
+  "mismatch": 4903.6151481530005,
+  "objective": 1383.1140559869991,
+  "wash": 2790.240452992999
+ }
+}

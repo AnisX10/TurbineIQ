@@ -13,7 +13,11 @@ export default defineConfig({
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     ...devices['Desktop Chrome'],
-    launchOptions: { args: ['--disable-background-networking', '--disable-component-update'] },
+    launchOptions: {
+      args: ['--disable-background-networking', '--disable-component-update'],
+      // A preinstalled Chromium can stand in for the one this Playwright version downloads.
+      ...(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {}),
+    },
   },
   webServer: [
     {

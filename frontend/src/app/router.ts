@@ -1,6 +1,6 @@
 export const COMPONENT_IDS = ['inlet', 'compressor', 'combustor', 'turbine', 'shaft', 'generator'] as const
 export type ComponentId = typeof COMPONENT_IDS[number]
-export type RoutePage = 'overview' | 'components' | 'operate' | 'evidence' | 'assistant'
+export type RoutePage = 'twin' | 'overview' | 'components' | 'operate' | 'evidence' | 'assistant'
 export type ThemePreference = 'system' | 'light' | 'dark'
 
 export interface RouteState {
@@ -17,7 +17,9 @@ export interface RouteState {
 export const DEFAULT_SCENARIO = 'compressor_fouling'
 export const DEFAULT_SEED = 42
 export const DEFAULT_SAMPLE_INDEX = 72
-const ROUTE_PAGES = new Set<RoutePage>(['overview', 'components', 'operate', 'evidence', 'assistant'])
+/** The page an empty or unknown route lands on: the live twin console. */
+export const DEFAULT_PAGE: RoutePage = 'twin'
+const ROUTE_PAGES = new Set<RoutePage>(['twin', 'overview', 'components', 'operate', 'evidence', 'assistant'])
 
 function parseNonNegativeInteger(value: string | null, fallback: number): number {
   if (value === null || !/^\d+$/.test(value)) return fallback
@@ -54,7 +56,7 @@ export function parseRoute(hash: string): RouteState {
     if (segments.length === 2 && COMPONENT_IDS.includes(componentId as ComponentId)) {
       return { page: 'components', componentId: componentId as ComponentId, ...shared }
     }
-    return { page: 'overview', componentId: 'compressor', ...shared }
+    return { page: DEFAULT_PAGE, componentId: 'compressor', ...shared }
   }
 
   const page = segments[0] as RoutePage
@@ -63,7 +65,7 @@ export function parseRoute(hash: string): RouteState {
     const componentId = COMPONENT_IDS.includes(rawComponent as ComponentId) ? rawComponent as ComponentId : 'compressor'
     return { page, componentId, ...shared }
   }
-  return { page: 'overview', componentId: 'compressor', ...shared }
+  return { page: DEFAULT_PAGE, componentId: 'compressor', ...shared }
 }
 
 export function routeHash(state: Pick<RouteState, 'page' | 'componentId' | 'scenarioId' | 'seed' | 'sampleIndex'> & Partial<Pick<RouteState, 'evidenceQuery' | 'evidenceTopK' | 'evidenceCitation'>>): string {
