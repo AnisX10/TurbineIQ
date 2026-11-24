@@ -357,15 +357,18 @@ class _ResidualDetector:
         return DetectorOutput(obs.t_s, alarm, self.statistic, channel)
 
 
-#: Defaults chosen by the tuning protocol in ``docs/FAULT_DETECTION.md``.
-SCREEN_WINDOW = 60
+#: Defaults chosen by the tuning protocol in ``docs/FAULT_DETECTION.md``: the design (window,
+#: persistence, slack, smoothing) with the shortest mean delay on synthetic fouling and
+#: erosion steps and ramps added to healthy tuning residuals, and the threshold for
+#: :data:`TARGET_FALSE_ALARMS_PER_HOUR` on 40,000 bootstrap hours of those residuals.
+SCREEN_WINDOW = 300
 SCREEN_PERSISTENCE = 10
-SCREEN_THRESHOLD = 4.6
-CUSUM_SLACK = 0.5
+SCREEN_THRESHOLD = 4.39
+CUSUM_SLACK = 0.15
 CUSUM_CLIP = 4.0
-CUSUM_THRESHOLD = 13.0
-MEWMA_SMOOTHING = 0.05
-MEWMA_THRESHOLD = 30.0
+CUSUM_THRESHOLD = 38.0
+MEWMA_SMOOTHING = 0.01
+MEWMA_THRESHOLD = 27.2
 
 
 class ResidualScreen(_ResidualDetector):
