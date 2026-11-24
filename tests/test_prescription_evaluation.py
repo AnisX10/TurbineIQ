@@ -142,3 +142,17 @@ def test_short_supervised_run_logs_decisions(tmp_path):
     assert result["decisions"], "the layer should have evaluated the load setpoint"
     assert {d["problem"] for d in result["decisions"]} <= {"load_setpoint"}
     assert ev.ensure_results([spec], tmp_path, workers=1)["cached"] == 1
+
+
+def test_a_refused_wash_does_not_strand_the_unit_at_standstill():
+    from turbineiq.prescription import Supervisor, SupervisorConfig
+    from turbineiq.simulation.session import Session, SessionConfig
+
+    session = Session(SessionConfig(seed=1))
+    assert session.snapshot()["state"] == "standstill"
+    sup = Supervisor(session, SupervisorConfig(mode="advisory"))
+    sup._procedure = ["wash_compressor", "start"]  # as an accepted wash leaves it
+    sup.tick()  # no fouling: the plant refuses the wash
+    assert sup.counters["washes_refused"] == 1 and sup.last_procedure_error
+    sup.tick()
+    assert sup._procedure == [] and session.snapshot()["state"] != "standstill"

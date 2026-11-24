@@ -840,6 +840,15 @@ def summarise_main(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
         if rows:
             for f in ("heat_rate_pct", "fuel_per_mwh_pct", "energy_mwh", "fuel_kg", "band_pp"):
                 entry[f] = _ci_of(rows, f)
+            worse = [r for r in rows if r["violation_s"] > 0]
+            entry["violation_vs_manual"] = {
+                "pairs": len(rows),
+                "pairs_more_violation": len(worse),
+                "extra_violation_s": sum(r["violation_s"] for r in worse),
+                "scenarios_more_violation": sorted({r["scenario_id"] for r in worse}),
+                "pairs_less_violation": sum(1 for r in rows if r["violation_s"] < 0),
+                "violation_s_saved": -sum(r["violation_s"] for r in rows if r["violation_s"] < 0),
+            }
         out["modes"][mode] = entry
     for (sid, mode), rows in sorted(
         _by_rows(diffs, "scenario_id", "mode").items(), key=lambda kv: kv[0]
@@ -1111,6 +1120,14 @@ def markdown_main(summary: dict[str, Any], table_rows: list[dict[str, Any]]) -> 
                 _ci(e.get("energy_mwh"), 3),
                 _ci(e.get("band_pp"), 2),
                 f"{v['runs_with_violation']} / {_f(v['violation_s'], 0)} s",
+                (
+                    "–"
+                    if "violation_vs_manual" not in e
+                    else f"{e['violation_vs_manual']['pairs_more_violation']} "
+                    f"(+{_f(e['violation_vs_manual']['extra_violation_s'], 0)} s) / "
+                    f"{e['violation_vs_manual']['pairs_less_violation']} "
+                    f"(-{_f(e['violation_vs_manual']['violation_s_saved'], 0)} s)"
+                ),
                 _f(v["max_over_limit_k"], 1),
                 v["trips"],
                 d["decisions"],
@@ -1127,6 +1144,7 @@ def markdown_main(summary: dict[str, Any], table_rows: list[dict[str, Any]]) -> 
                 "Energy vs manual (MWh)",
                 "Band compliance vs manual (pp)",
                 "Runs with violation / violation time",
+                "Pairs with more / less violation than manual",
                 "Max over limit (K)",
                 "Trips",
                 "Decisions",
