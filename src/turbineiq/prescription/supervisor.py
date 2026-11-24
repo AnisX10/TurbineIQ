@@ -351,12 +351,6 @@ class Supervisor:
             # Running on the exhaust temperature limit while delivering inside the band is
             # normal base-load operation; the layer does not back off from it.
             return
-        open_load = [d for d in self.decisions if d.problem == "load_setpoint" and d.open]
-        best_actions = self._load_actions(best, setpoint, current_igv)
-        if any(d.actions == best_actions for d in open_load):
-            return  # the same recommendation is still waiting; keep its place in the queue
-        for d in open_load:
-            self._resolve(d, "superseded", t, "layer", "a newer evaluation replaced it")
         last = self._last_action_s.get("load_setpoint")
         since = None if last is None else t - last
         tried = []
@@ -398,6 +392,13 @@ class Supervisor:
         if chosen is None or verdict is None:
             return
         cand, actions = chosen
+        open_load = [d for d in self.decisions if d.problem == "load_setpoint" and d.open]
+        if any(
+            d.actions == actions and d.verdict["approved"] == verdict.approved for d in open_load
+        ):
+            return  # the same recommendation is still waiting; keep its place in the queue
+        for d in open_load:
+            self._resolve(d, "superseded", t, "layer", "a newer evaluation replaced it")
         igv_text = "IGV auto" if cand["igv"] == AUTO else f"IGV {float(cand['igv']):.0%} open"
         hr_gain = 100.0 * (cur_hr - cand["heat_rate_kj_per_kwh"]) / cur_hr
         summary = (
