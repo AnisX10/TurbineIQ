@@ -349,8 +349,17 @@ class Supervisor:
                 return
         elif meeting_band:
             # Running on the exhaust temperature limit while delivering inside the band is
-            # normal base-load operation; the layer does not back off from it.
-            return
+            # normal base-load operation; the layer does not back off from it. But when an
+            # IGV setting at the same load is clear of the limit (the limit was reached
+            # because of an earlier IGV closure and an ambient rise, say), it moves the IGV.
+            same_load = [
+                c
+                for c in feasible
+                if abs(c["load_mw"] - setpoint) < 1e-6 and c["igv"] != current_igv
+            ]
+            if not same_load:
+                return
+            feasible = same_load
         last = self._last_action_s.get("load_setpoint")
         since = None if last is None else t - last
         tried = []
