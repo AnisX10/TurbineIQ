@@ -80,6 +80,7 @@ def test_full_operating_flow_over_http() -> None:
         "inject_sensor_fault",
         "set_fuel_valve_lag",
         "clear_fault",
+        "set_exhaust_feedback",
     ]
 
 
