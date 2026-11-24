@@ -728,6 +728,17 @@ def _ci_of(rows: Sequence[dict[str, Any]], field: str, seed: int = 0) -> dict[st
     return bootstrap_ci([p[0] for p in pairs], [p[1] for p in pairs], seed=seed)
 
 
+def scenario_ci(rows: Sequence[dict[str, Any]], field: str, seed: int = 0) -> dict[str, Any]:
+    """Bootstrap over scenarios: the mean over seeds per scenario, resampled across
+    scenarios (how much the result depends on which operating situations are in the bank)."""
+
+    per: dict[str, list[float]] = defaultdict(list)
+    for r in rows:
+        if r[field] is not None:
+            per[r["scenario_id"]].append(r[field])
+    return bootstrap_ci([statistics.fmean(v) for v in per.values()], seed=seed)
+
+
 def _initial_counts(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
     by_problem: dict[str, Counter] = defaultdict(Counter)
     final: dict[str, Counter] = defaultdict(Counter)
@@ -812,7 +823,12 @@ def false_positive_summary(results: Sequence[dict[str, Any]]) -> list[dict[str, 
                 "runs": len(group),
                 "exhaust_fault": sid in EXHAUST_SCENARIOS,
                 "suspect_runs": sum(1 for t in tcs if t["first_suspect_s"] is not None),
-                "suspect_after_onset_s": [t["first_suspect_after_onset_s"] for t in tcs],
+                "suspect_after_onset_s": [
+                    None
+                    if t["first_suspect_s"] is None or r["fault_onset_s"] is None
+                    else t["first_suspect_s"] - r["fault_onset_s"]
+                    for t, r in zip(tcs, group, strict=True)
+                ],
                 "max_abs_exhaust_residual_k": max(t["max_abs_exhaust_residual_k"] for t in tcs),
                 "max_exhaust_scatter_k": max(t["max_exhaust_scatter_k"] for t in tcs),
                 "mismatch_p95": max((r["trust"]["mismatch_p95"] or 0.0) for r in group),
@@ -840,6 +856,7 @@ def summarise_main(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
         if rows:
             for f in ("heat_rate_pct", "fuel_per_mwh_pct", "energy_mwh", "fuel_kg", "band_pp"):
                 entry[f] = _ci_of(rows, f)
+                entry[f + "_across_scenarios"] = scenario_ci(rows, f)
             worse = [r for r in rows if r["violation_s"] > 0]
             entry["violation_vs_manual"] = {
                 "pairs": len(rows),
@@ -937,6 +954,7 @@ def summarise_secondary(
                 field: value,
                 "runs": len(group),
                 "heat_rate_pct": _ci_of(drows, "heat_rate_pct"),
+                "heat_rate_pct_across_scenarios": scenario_ci(drows, "heat_rate_pct"),
                 "energy_mwh": _ci_of(drows, "energy_mwh"),
                 "band_pp": _ci_of(drows, "band_pp"),
                 "violations": violation_summary(group),
@@ -1116,6 +1134,7 @@ def markdown_main(summary: dict[str, Any], table_rows: list[dict[str, Any]]) -> 
                 mode,
                 e["runs"],
                 _ci(e.get("heat_rate_pct"), 3),
+                _ci(e.get("heat_rate_pct_across_scenarios"), 3),
                 _ci(e.get("fuel_per_mwh_pct"), 3),
                 _ci(e.get("energy_mwh"), 3),
                 _ci(e.get("band_pp"), 2),
@@ -1140,6 +1159,7 @@ def markdown_main(summary: dict[str, Any], table_rows: list[dict[str, Any]]) -> 
                 "Mode",
                 "Runs",
                 "Heat rate vs manual (%)",
+                "Same, resampling scenarios",
                 "Fuel/MWh vs manual (%)",
                 "Energy vs manual (MWh)",
                 "Band compliance vs manual (pp)",
@@ -1155,7 +1175,8 @@ def markdown_main(summary: dict[str, Any], table_rows: list[dict[str, Any]]) -> 
     )
     parts.append(
         "\nMean over scenario-seed pairs [95 % bootstrap interval, seeds resampled within "
-        "scenario]. Negative heat rate is better.\n"
+        "scenario]; the second heat-rate column resamples the 19 scenarios instead (per-"
+        "scenario means). Negative heat rate is better.\n"
     )
     parts.append("\n### Decisions and escalation reasons\n")
     rows = []
@@ -1291,7 +1312,7 @@ def markdown_false_positives(rows: list[dict[str, Any]]) -> str:
                     r["mode"],
                     r["runs"],
                     r["suspect_runs"],
-                    _list(r["suspect_after_onset_s"]) if r["exhaust_fault"] else "–",
+                    _list(r["suspect_after_onset_s"]) if r["suspect_runs"] else "–",
                     _f(r["max_abs_exhaust_residual_k"], 1),
                     _f(r["max_exhaust_scatter_k"], 2),
                     _f(r["mismatch_p95"], 2),
@@ -1313,6 +1334,7 @@ def markdown_secondary(name: str, rows: list[dict[str, Any]]) -> str:
             field,
             "Runs",
             "Heat rate vs manual (%)",
+            "Same, resampling scenarios",
             "Energy vs manual (MWh)",
             "Band vs manual (pp)",
             "Violation runs / s",
@@ -1328,6 +1350,7 @@ def markdown_secondary(name: str, rows: list[dict[str, Any]]) -> str:
                 "exact (None)" if r[field] is None else r[field],
                 r["runs"],
                 _ci(r["heat_rate_pct"], 3),
+                _ci(r["heat_rate_pct_across_scenarios"], 3),
                 _ci(r["energy_mwh"], 3),
                 _ci(r["band_pp"], 2),
                 f"{r['violations']['runs_with_violation']} / "
