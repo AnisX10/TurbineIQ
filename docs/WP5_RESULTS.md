@@ -217,19 +217,28 @@ pressure loss +1.5 points, air flow −3 %).
 | --- | --- | --- | --- | --- | --- | --- |
 | exact | −1.83 % [−2.57, −1.01] | 0.19 | 0.2 % | 18 (start-up only) | 3 / 7695 | 0 |
 | combined | −1.82 % [−2.56, −1.00] | 0.19 | 0.2 % | 18 (start-up only) | 3 / 7319 | 0 |
-| combined_x3 | −1.60 % [−2.40, −0.71] | 0.20 | 0.2 % | 18 (start-up only) | 6 / 6597 | 3 |
+| combined_x3 | −1.72 % [−2.40, −0.92] | 0.20 | 0.2 % | 18 (start-up only) | 6 / 6859 | 0 |
 
 **The mismatch index does not see the large mismatch.** Its median is the same for all
 three twins. The three-parameter health estimate absorbs the engine perturbation, so
 the residuals stay at noise level near the operating point. The layer therefore acted as
-usual with the 3× twin. It did not escalate. In the stuck-thermocouple scenario it
-tripped the unit (all 3 seeds, advisory and autonomous). With the 3× twin, no IGV/load
-candidate passed the exhaust screen when the dispatcher asked for 47 MW, so the layer
-proposed nothing and left its earlier IGV 40 % setting in place. The stuck reading hid
-true exhaust about 100 K over the limit. When the model exhaust was switched in (correctly
-reading about 945 K), the over-temperature protection tripped the unit at once. With the
-`combined` twin the same review returned the IGV to auto and nothing happened. The small
-mismatch (`combined`) costs nothing against the exact twin.
+usual with the 3× twin and did not escalate for mismatch.
+
+The first run of this experiment ended in a trip in the stuck-thermocouple scenario (all
+3 seeds, advisory and autonomous). With the 3× twin, no IGV/load candidate passed the
+exhaust screen when the dispatcher asked for 47 MW, so the layer proposed nothing and left
+its earlier IGV 40 % setting in place. The stuck reading hid true exhaust about 100 K over
+the limit, and when the model exhaust was switched in, the over-temperature protection
+tripped the unit at once. **Fix (commit 6fb6065):** when no candidate passes the screen
+while the IGV is in a manual position, the layer proposes returning the IGV to auto at
+the present setpoint. The guard checks that fallback against a forward run of holding
+(no trip, no hotter than holding, speed band), not the full forward set, because the
+state it starts from is already outside the screen. With the fix, the 3× twin has no
+trips. Autonomous mode substitutes 908 s after onset and the run overfires for about
+304 s with a maximum of 7.6 K over the limit (the same maximum as the drift scenario).
+Advisory mode still reaches 105 K during the operator delay, as with the other twins.
+The small mismatch (`combined`) costs nothing against the exact twin; the 3× mismatch
+costs about 0.1 point of the heat-rate gain.
 
 ### 5.3 Objective (autonomous, 6 scenarios)
 
@@ -304,9 +313,11 @@ drift.
   mode avoided. Keeping a human in the loop was not the safer choice in this simulation.
 - **Graceful escalation under large mismatch was not shown.** The mismatch index
   stayed at noise level with a 3× mismatched twin, because the health estimate absorbs
-  the mismatch. The layer never escalated for mismatch. One scenario ended in a trip in
-  all 3 seeds.
-- The guard needed three fixes found by this evaluation before the autonomous result
+  the mismatch. The layer never escalated for mismatch. A first run ended in a trip in
+  one scenario (all 3 seeds); an IGV-schedule fallback removed it (section 5.2), so the
+  final result is no trips, but the protection came from the fallback, not from the
+  mismatch detection.
+- The layer needed several fixes found by this evaluation before the autonomous result
   above held (section 9).
 
 ## 7. Limits
@@ -359,6 +370,7 @@ rerun from scratch.
 | New guard check `transient_exhaust` (peak ≤ limit + 3 K) | `guard.py` | Before, only the trip margin (limit + 15 K) bounded transients. With the twin fix, the same run is 14 K below the limit. |
 | Reopen the IGV when the layer's part-load setting runs onto the limit | `supervisor.py` | The review returned early "on the limit but in band" (meant for base load). fouling_progressive_ambient_swing sat at IGV 40 % on the limit for 40 min, with 17 s at +8.9 K. After: IGV 60 % at 3000 s, no violation. |
 | Restart after a refused wash; no further washes after one | `supervisor.py` | CDP bias: accepted wash refused by the plant, unit stranded at standstill (17.9 vs 67.0 MWh). After: restarts, 55.5 MWh. |
+| Fall back to the IGV schedule when no candidate passes the screen; the guard checks it against holding | `supervisor.py`, `guard.py` | combined_x3, stuck TC at 47 MW: tripped in all 3 seeds (advisory and autonomous). After: no trips; autonomous 304 s at most 7.6 K over the limit. |
 | `run_supervised(observer=...)` read-only hook | `runner.py` | Needed by the evaluation, no behaviour change. |
 
 The `Supervisor` public API (constructor, `tick`, `set_mode`, `set_demand`, `accept`,
@@ -371,8 +383,6 @@ The `Supervisor` public API (constructor, `tick`, `set_mode`, `set_demand`, `acc
   points away from where the estimate converged (for example the forward-run prediction
   error after each applied action), or a bound on the estimated health against its
   plausible range.
-- A fallback when no candidate passes the screen: return the IGV to its auto schedule
-  (the fixed policy) instead of proposing nothing. That is the gap behind the 3× trip.
 - Make the guard account for the dispatcher. Hold or undo an IGV override before a
   scheduled load step, or check the band edges as well as the current demand.
 - A thermocouple check that sees slow drifts sooner: a trend test on the exhaust

@@ -1,6 +1,6 @@
 {
- "commit": "597fe5e4bd4dd3aeaee9619b2c02805724d950e1",
- "code_fingerprint": "3d60570607e484261e3debdabdebea128391bee82b2bf5675cc7d27ecf20d524",
+ "commit": "6fb606568579c968aaba6cffbba4b6ad327b544a",
+ "code_fingerprint": "6be952b7a9dcaf02bb78f31ad3d11b6c00db277dcd854464e23714ae4b559684",
  "test_seeds": [
   2000,
   2001,
@@ -20,7 +20,7 @@
   2001,
   2002
  ],
- "generated": "2026-11-24 17:34:31",
+ "generated": "2026-11-24 22:04:49",
  "tuning": {
   "runs": 152,
   "rows": [
@@ -4309,43 +4309,43 @@
     "runs": 21,
     "heat_rate_pct": {
      "n": 21,
-     "mean": -1.476119908286501,
-     "lo": -1.479940105802274,
-     "hi": -1.4739378609484517
+     "mean": -1.5683758840475024,
+     "lo": -1.5722646066906518,
+     "hi": -1.5661793429150084
     },
     "heat_rate_pct_across_scenarios": {
      "n": 7,
-     "mean": -1.476119908286501,
+     "mean": -1.5683758840475026,
      "lo": -2.216274298303987,
-     "hi": -0.6283832762603586
+     "hi": -0.8460240622263924
     },
     "energy_mwh": {
      "n": 21,
-     "mean": -8.336534137573036,
-     "lo": -8.339489222097091,
-     "hi": -8.334841396588294
+     "mean": -0.5372166491582343,
+     "lo": -0.5400657589400838,
+     "hi": -0.5351177695398722
     },
     "band_pp": {
      "n": 21,
-     "mean": -1.337856653124528,
-     "lo": -1.3378566531245282,
-     "hi": -1.3378566531245282
+     "mean": -1.2027242428633527,
+     "lo": -1.2027242428633527,
+     "hi": -1.2027242428633527
     },
     "violations": {
      "runs": 21,
      "runs_with_violation": 9,
-     "violation_s": 8457.0,
+     "violation_s": 8464.0,
      "runs_over_limit": 9,
-     "over_limit_k_s": 215398.96059446366,
+     "over_limit_k_s": 156034.48098609896,
      "max_over_limit_k": 105.37994892647009,
-     "trips": 3
+     "trips": 0
     },
     "decisions": {
-     "decisions": 75,
+     "decisions": 78,
      "by_problem_initial": {
       "load_setpoint": {
        "escalated": 18,
-       "pending": 51
+       "pending": 54
       },
       "exhaust_feedback": {
        "pending": 6
@@ -4354,19 +4354,19 @@
      "by_problem_final": {
       "load_setpoint": {
        "superseded": 21,
-       "accepted": 48
+       "accepted": 51
       },
       "exhaust_feedback": {
        "accepted": 6
       }
      },
-     "approved_share": 0.76,
+     "approved_share": 0.7692307692307693,
      "escalated": 18,
      "escalation_reasons": {
       "model_mismatch": 18
      }
     },
-    "mismatch_median": 0.18410873526869306,
+    "mismatch_median": 0.18287578273056168,
     "mismatch_share_over_limit": 0.0015579675217842796,
     "tc": [
      {
@@ -4402,7 +4402,7 @@
       "first_suspect_after_onset_s": 821.0,
       "decision_after_onset_s": 821.0,
       "applied_after_onset_s": 1121.0,
-      "violation_s": 517.0,
+      "violation_s": 520.0,
       "max_over_limit_k": 105.37994892647009
      },
      {
@@ -4411,7 +4411,7 @@
       "first_suspect_after_onset_s": 821.0,
       "decision_after_onset_s": 821.0,
       "applied_after_onset_s": 1121.0,
-      "violation_s": 517.0,
+      "violation_s": 519.0,
       "max_over_limit_k": 105.37994892647009
      },
      {
@@ -4420,7 +4420,7 @@
       "first_suspect_after_onset_s": 821.0,
       "decision_after_onset_s": 821.0,
       "applied_after_onset_s": 1121.0,
-      "violation_s": 517.0,
+      "violation_s": 519.0,
       "max_over_limit_k": 105.37994892647009
      }
     ]
@@ -4682,43 +4682,43 @@
     "runs": 21,
     "heat_rate_pct": {
      "n": 21,
-     "mean": -1.6029007200491794,
-     "lo": -1.6067192457838775,
-     "hi": -1.6007062958314655
+     "mean": -1.7174840286287243,
+     "lo": -1.7213651425994774,
+     "hi": -1.715247064892115
     },
     "heat_rate_pct_across_scenarios": {
      "n": 7,
-     "mean": -1.6029007200491794,
+     "mean": -1.7174840286287243,
      "lo": -2.3957342849341465,
-     "hi": -0.7047847580837422
+     "hi": -0.9240490176878735
     },
     "energy_mwh": {
      "n": 21,
-     "mean": -8.72685532896424,
-     "lo": -8.729917758666105,
-     "hi": -8.72497459236687
+     "mean": -0.37754245679506665,
+     "lo": -0.38060488648960633,
+     "hi": -0.3751002459699674
     },
     "band_pp": {
      "n": 21,
-     "mean": -0.33096709715871864,
-     "lo": -0.33096709715871864,
-     "hi": -0.33096709715871864
+     "mean": -0.16974765561926944,
+     "lo": -0.16974765561926944,
+     "hi": -0.16974765561926944
     },
     "violations": {
      "runs": 21,
      "runs_with_violation": 6,
-     "violation_s": 6597.0,
+     "violation_s": 6859.0,
      "runs_over_limit": 6,
-     "over_limit_k_s": 118532.44000708364,
-     "max_over_limit_k": 105.37994892647009,
-     "trips": 3
+     "over_limit_k_s": 62166.01421975755,
+     "max_over_limit_k": 7.7413024310199035,
+     "trips": 0
     },
     "decisions": {
-     "decisions": 75,
+     "decisions": 78,
      "by_problem_initial": {
       "load_setpoint": {
        "escalated": 18,
-       "applied": 51
+       "applied": 54
       },
       "exhaust_feedback": {
        "applied": 6
@@ -4727,19 +4727,19 @@
      "by_problem_final": {
       "load_setpoint": {
        "superseded": 18,
-       "applied": 51
+       "applied": 54
       },
       "exhaust_feedback": {
        "applied": 6
       }
      },
-     "approved_share": 0.76,
+     "approved_share": 0.7692307692307693,
      "escalated": 18,
      "escalation_reasons": {
       "model_mismatch": 18
      }
     },
-    "mismatch_median": 0.19990785583678075,
+    "mismatch_median": 0.1961294506908872,
     "mismatch_share_over_limit": 0.0015652143712164886,
     "tc": [
      {
@@ -4772,29 +4772,29 @@
      {
       "scenario_id": "exhaust_tc_stuck_load_increase",
       "seed": 2000,
-      "first_suspect_after_onset_s": 821.0,
-      "decision_after_onset_s": 821.0,
-      "applied_after_onset_s": 821.0,
-      "violation_s": 217.0,
-      "max_over_limit_k": 105.37994892647009
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 7.590726388858911
      },
      {
       "scenario_id": "exhaust_tc_stuck_load_increase",
       "seed": 2001,
-      "first_suspect_after_onset_s": 821.0,
-      "decision_after_onset_s": 821.0,
-      "applied_after_onset_s": 821.0,
-      "violation_s": 217.0,
-      "max_over_limit_k": 105.37994892647009
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 305.0,
+      "max_over_limit_k": 7.590726388897679
      },
      {
       "scenario_id": "exhaust_tc_stuck_load_increase",
       "seed": 2002,
-      "first_suspect_after_onset_s": 821.0,
-      "decision_after_onset_s": 821.0,
-      "applied_after_onset_s": 821.0,
-      "violation_s": 217.0,
-      "max_over_limit_k": 105.37994892647009
+      "first_suspect_after_onset_s": 908.0,
+      "decision_after_onset_s": 908.0,
+      "applied_after_onset_s": 908.0,
+      "violation_s": 304.0,
+      "max_over_limit_k": 7.59072638881787
      }
     ]
    }
@@ -5699,11 +5699,11 @@
   }
  },
  "cpu_s_per_experiment": {
-  "tuning": 5486.390343223999,
-  "main": 11257.892665673,
-  "delay": 2498.342028173004,
-  "mismatch": 5083.732183485008,
-  "objective": 1416.4106417289986,
-  "wash": 2772.2462168390057
+  "tuning": 5663.922284378,
+  "main": 10360.015113163998,
+  "delay": 2398.5490927169994,
+  "mismatch": 4903.6151481530005,
+  "objective": 1383.1140559869991,
+  "wash": 2790.240452992999
  }
 }

@@ -78,6 +78,11 @@ moves the setpoint towards the demand. No recommendation is made when the unit a
 on the exhaust temperature limit while delivering inside the band, because that is normal
 base-load operation.
 
+When no candidate passes the screen while the IGV is in a position the layer set, the layer
+proposes returning the IGV to its auto schedule at the present setpoint (the fixed policy)
+instead of proposing nothing. Without this, a stuck thermocouple and a 3× mismatched twin
+left the unit overfiring at IGV 40 % until it tripped (see `docs/WP5_RESULTS.md`, section 5.2).
+
 Reviews happen every 300 s, on a demand change and on an ambient change. Closing the IGV at
 part load lowers heat rate in this model: at 25 MW from 11,937 to 11,125 kJ/kWh with the
 IGV fully closed. That is a property of the simulated maps, not a measured 6B.03 figure.
@@ -111,7 +116,8 @@ value found, the limit and the result:
 | --- | --- |
 | Twin trust | unit loaded; health estimate has had steady updates; health standard deviation ≤ (0.006, 0.003, 0.003); model mismatch index ≤ 3 |
 | Rate limits | setpoint step ≤ 6 MW; ramp ≤ 10 MW/min; at least 120 s since the last automatic load action |
-| Forward run (load and IGV) | no trip; peak exhaust ≥ 25 K below the trip threshold; settled exhaust ≥ 5 K plus the twin's exhaust uncertainty below the control limit; speed within 0.98–1.02 pu; settled power within 0.6 MW of the target and inside the band; the temperature control acts on a trusted or substituted exhaust value |
+| Forward run (load and IGV) | no trip; peak exhaust ≥ 25 K below the trip threshold; transient peak ≤ control limit + 3 K; settled exhaust ≥ 5 K plus the twin's exhaust uncertainty below the control limit; speed within 0.98–1.02 pu; settled power within 0.6 MW of the target and inside the band; the temperature control acts on a trusted or substituted exhaust value |
+| Fallback to IGV auto | no trip; settled exhaust no hotter than a forward run of holding (or under the limit); speed within 0.98–1.02 pu. The start state is already outside the screen, so the full forward set would reject every corrective move. |
 | Exhaust substitute | twin trust, and a model exhaust value in range |
 | Wash | twin trust, and `autonomous_wash` (off by default: a shutdown changes availability, so it stays with the operator) |
 
