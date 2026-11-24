@@ -160,7 +160,13 @@ class SafetyGuard:
         forward: ForwardResult,
         exhaust_trusted_or_substituted: bool,
         since_last_action_s: float | None,
+        corrective_baseline: ForwardResult | None = None,
     ) -> GuardVerdict:
+        """Check a load/IGV candidate. With ``corrective_baseline`` (the forward run of
+        doing nothing) the candidate is a return to the default IGV schedule from a state
+        that is already outside the screen; it then has to be no worse than doing nothing
+        and must not trip, instead of meeting the full set of forward checks."""
+
         lim = self.limits
         checks = self.trust_checks(status, need_exhaust=False)
         checks.append(
@@ -204,8 +210,45 @@ class SafetyGuard:
                     "" if ok else "too soon after the last automatic action",
                 )
             )
-        checks.extend(self._forward_checks(status, forward, target_mw, band))
+        if corrective_baseline is None:
+            checks.extend(self._forward_checks(status, forward, target_mw, band))
+        else:
+            checks.extend(self._corrective_checks(forward, corrective_baseline))
         return GuardVerdict(all(c.passed for c in checks), tuple(checks), forward)
+
+    def _corrective_checks(self, fw: ForwardResult, base: ForwardResult) -> list[Check]:
+        lim = self.limits
+        checks = [
+            Check(
+                "no_trip",
+                not fw.tripped,
+                fw.trip_cause or "none",
+                "none",
+                "" if not fw.tripped else f"the twin trips ({fw.trip_cause})",
+            )
+        ]
+        ok = fw.end_exhaust_k <= max(base.end_exhaust_k, fw.temperature_limit_k) + 0.5
+        checks.append(
+            Check(
+                "no_worse_than_holding",
+                ok,
+                round(fw.end_exhaust_k, 1),
+                round(max(base.end_exhaust_k, fw.temperature_limit_k), 1),
+                "" if ok else "returning the IGV to auto would end hotter than holding",
+            )
+        )
+        lo, hi = lim.speed_band_pu
+        ok = lo <= fw.min_speed_pu and fw.max_speed_pu <= hi
+        checks.append(
+            Check(
+                "speed_band",
+                ok,
+                f"{fw.min_speed_pu:.4f}..{fw.max_speed_pu:.4f}",
+                f"{lo}..{hi}",
+                "" if ok else "speed leaves the band",
+            )
+        )
+        return checks
 
     def _forward_checks(
         self,

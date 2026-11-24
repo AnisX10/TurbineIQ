@@ -336,7 +336,31 @@ class Supervisor:
             "candidates": candidates,
         }
         if not feasible:
-            return
+            if current_igv == AUTO:
+                return
+            # Nothing passes the screen while the IGV is held in a manual position (one the
+            # layer chose for an earlier, lower demand, say). Fall back to the default IGV
+            # schedule at the present setpoint: the guard still checks it forward, and if
+            # it fails too the decision goes to the operator.
+            fallback = next(
+                (c for c in candidates if c["igv"] == AUTO and abs(c["load_mw"] - setpoint) < 1e-6),
+                None,
+            )
+            if fallback is None:
+                try:
+                    fuel, exhaust, hr = self.monitor.steady_point(obs, setpoint, 1.0)
+                except (ValueError, ZeroDivisionError):
+                    return
+                fallback = {
+                    "load_mw": setpoint,
+                    "igv": AUTO,
+                    "fuel_kg_s": round(fuel, 5),
+                    "exhaust_k": round(exhaust, 2),
+                    "heat_rate_kj_per_kwh": round(hr, 2),
+                    "feasible": False,
+                }
+            feasible = [dict(fallback, fallback=True)]
+            current_ok = False
         best = feasible[0]
         gain = 100.0 * (cur_hr - best["heat_rate_kj_per_kwh"]) / cur_hr
         tol = lim.power_tolerance_mw
@@ -383,6 +407,10 @@ class Supervisor:
             horizon = step / lim.max_ramp_mw_per_min * 60.0 + cfg.settle_extra_s
             fw = forward_run(twin, actions, horizon)
             self.counters["forward_runs"] += 1
+            baseline = None
+            if cand.get("fallback"):
+                baseline = forward_run(twin, [], horizon)
+                self.counters["forward_runs"] += 1
             v = self.guard.verify_load(
                 status,
                 current_setpoint_mw=setpoint,
@@ -393,6 +421,7 @@ class Supervisor:
                 exhaust_trusted_or_substituted=(not status.exhaust_suspect)
                 or self.substitute_active,
                 since_last_action_s=since if self.mode == Mode.AUTONOMOUS else None,
+                corrective_baseline=baseline,
             )
             tried.append({"candidate": cand, "approved": v.approved, "reason": v.reason()})
             if chosen is None or (v.approved and not verdict.approved):
