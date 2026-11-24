@@ -173,7 +173,44 @@ time from an onset until the error stays within tolerance. Points of health (flo
 
 ## Results with the exact twin
 
-RESULTS_EXACT
+Evaluation data only: each scenario's bank seed and bank seed + 10000 k (k = 1..4), five
+runs per scenario; nothing here was used for tuning. Errors are estimate minus truth in
+points. "Mean error" is the mean over the five runs of the error averaged over steady
+estimates from 20 minutes after the onset to the end of the segment (clean runs: the whole
+run); "worst error" is the largest absolute error over the same samples of all five runs.
+Convergence is the time from the onset (clean runs and the fouled start: from the start
+command) until the error stays within 0.6 % flow capacity or 0.3 point efficiency for the
+rest of the segment; the median over the five runs, all five converged unless stated.
+
+| scenario | mean error (flow, ηc, ηt) | worst error | convergence, min (flow / ηc / ηt) |
+| --- | --- | --- | --- |
+| fouling_step_part_load | +0.00, -0.00, +0.00 | 0.09, 0.03, 0.04 | 2 / 2 / 0 |
+| fouling_progressive_base_load | +0.05, +0.02, -0.02 | 0.12, 0.06, 0.07 | 0 / 0 / 0 |
+| fouling_progressive_ambient_swing | +0.03, +0.01, -0.01 | 0.16, 0.06, 0.05 | 0 / 0 / 0 |
+| erosion_step_part_load | +0.00, +0.00, -0.00 | 0.11, 0.04, 0.04 | 0 / 0 / 2 |
+| fouling_then_erosion (1800–3600 s) | -0.01, -0.00, +0.00 | 0.08, 0.03, 0.04 | 2 / 2 / 0 |
+| fouling_then_erosion (3600–7200 s) | +0.00, +0.00, -0.00 | 0.08, 0.04, 0.04 | 0 / 0 / 2 |
+| fouled_unit_offline_wash (0–1800 s) | +0.00, +0.00, -0.00 | 0.09, 0.03, 0.03 | 8 / 8 / 8 |
+| fouled_unit_offline_wash (3600–9000 s) | -0.00, +0.00, +0.00 | 0.08, 0.03, 0.05 | 8 / 8 / 8 |
+| clean_part_load | +0.00, +0.00, +0.00 | 0.09, 0.04, 0.05 | 8 / 8 / 8 |
+| clean_base_load | +0.00, +0.00, -0.00 | 0.08, 0.04, 0.05 | 8 / 8 / 8 |
+| clean_load_cycling | +0.00, +0.00, -0.00 | 0.11, 0.05, 0.04 | 8 / 8 / 8 |
+| clean_ambient_swing | -0.00, +0.00, -0.00 | 0.09, 0.04, 0.05 | 8 / 8 / 8 |
+| clean_fast_load_steps | +0.00, -0.00, +0.00 | 0.09, 0.04, 0.06 | 8 / 8 / 8 |
+
+- Every run converges, and after convergence no sample is further than 0.16 % flow capacity
+  or 0.07 point efficiency from the truth. The bias on clean runs is below 0.01 point in
+  every scenario, including load cycling, fast load steps and ambient steps.
+- A fouling or erosion step is tracked within about 2 minutes of the onset: the exhaust
+  jump closes the gate for about 125 s (one 120 s window), and the first batches after it
+  reopens move the estimate to the new health (the covariance inflation and the random
+  walk allow that). Progressive fouling (2 to 3 % per hour) is followed with a lag error
+  of 0.02 to 0.05 point.
+- The 8 minutes on the clean runs and on the wash are the start-up: synchronisation at about
+  4 minutes, loading, then the gate's 120 s quiet window. After the offline wash the
+  estimate moves from −3 % fouling to clean with the first steady batch after the restart.
+- These numbers are circular: the twin is the plant's own model. They show that the filter,
+  the gating and the noise model work, nothing more.
 
 ## Twin-plant mismatch
 
@@ -241,19 +278,177 @@ Findings:
   capacity, 0.16 point compressor efficiency and 0.39 point turbine efficiency; adding a
   1 kPa barometer error brings compressor efficiency to about 0.37 point.
 
-MISMATCH_RESULTS
+**Filter runs with a mismatched twin.** The same 95 evaluation runs, with the twin built on
+the `combined` and the `barometer` engines. "Change error" is the error of the change
+since the pre-onset baseline: the mean estimate over the last 10 minutes of the segment
+minus the mean over the 10 steady minutes before the onset, compared with the true change
+(only for segments with a healthy, steady stretch before the onset).
+
+`combined` (drivetrain −0.5 %, inlet and combustor loss +0.5 point, air flow −1 %):
+
+| scenario | mean error (flow, ηc, ηt) | worst error | change error since baseline (flow, ηc, ηt), mean / worst |
+| --- | --- | --- | --- |
+| fouling_step_part_load | +0.56, +0.17, +0.44 | 0.64, 0.21, 0.48 | -0.01, -0.01, +0.02 / 0.03, 0.02, 0.03 |
+| fouling_progressive_base_load | +0.60, +0.19, +0.46 | 0.68, 0.23, 0.50 | +0.04, +0.02, -0.02 / 0.05, 0.02, 0.02 |
+| fouling_progressive_ambient_swing | +0.60, +0.18, +0.42 | 0.72, 0.23, 0.46 | +0.03, +0.01, +0.00 / 0.05, 0.02, 0.01 |
+| erosion_step_part_load | +0.57, +0.18, +0.42 | 0.65, 0.21, 0.46 | +0.01, +0.00, -0.01 / 0.03, 0.01, 0.02 |
+| fouling_then_erosion (1800–3600 s) | +0.55, +0.17, +0.44 | 0.64, 0.20, 0.47 | -0.01, -0.00, +0.01 / 0.04, 0.01, 0.03 |
+| fouling_then_erosion (3600–7200 s) | +0.56, +0.17, +0.43 | 0.64, 0.21, 0.46 | n/a |
+| fouled_unit_offline_wash (0–1800 s) | +0.56, +0.17, +0.46 | 0.64, 0.20, 0.49 | n/a |
+| fouled_unit_offline_wash (3600–9000 s) | +0.57, +0.17, +0.45 | 0.64, 0.21, 0.49 | n/a |
+| clean_part_load | +0.57, +0.18, +0.42 | 0.66, 0.21, 0.47 | n/a |
+| clean_base_load | +0.56, +0.17, +0.47 | 0.64, 0.21, 0.52 | n/a |
+| clean_load_cycling | +0.57, +0.18, +0.42 | 0.68, 0.21, 0.50 | n/a |
+| clean_ambient_swing | +0.57, +0.18, +0.42 | 0.66, 0.21, 0.48 | n/a |
+| clean_fast_load_steps | +0.57, +0.17, +0.43 | 0.65, 0.22, 0.49 | n/a |
+
+`barometer` (1 kPa):
+
+| scenario | mean error (flow, ηc, ηt) | worst error | change error since baseline (flow, ηc, ηt), mean / worst |
+| --- | --- | --- | --- |
+| fouling_step_part_load | +1.04, +0.33, -0.37 | 1.13, 0.36, 0.41 | -0.03, -0.01, +0.03 / 0.04, 0.02, 0.04 |
+| fouling_progressive_base_load | +1.09, +0.35, -0.39 | 1.18, 0.38, 0.45 | +0.02, +0.01, +0.01 / 0.03, 0.02, 0.02 |
+| fouling_progressive_ambient_swing | +1.09, +0.34, -0.39 | 1.21, 0.39, 0.43 | +0.02, +0.00, +0.01 / 0.04, 0.01, 0.02 |
+| erosion_step_part_load | +1.07, +0.33, -0.40 | 1.15, 0.37, 0.44 | +0.01, +0.00, -0.01 / 0.03, 0.01, 0.02 |
+| fouling_then_erosion (1800–3600 s) | +1.05, +0.33, -0.37 | 1.13, 0.35, 0.41 | -0.02, -0.01, +0.02 / 0.05, 0.02, 0.03 |
+| fouling_then_erosion (3600–7200 s) | +1.05, +0.33, -0.38 | 1.14, 0.37, 0.42 | n/a |
+| fouled_unit_offline_wash (0–1800 s) | +1.05, +0.33, -0.37 | 1.12, 0.35, 0.41 | n/a |
+| fouled_unit_offline_wash (3600–9000 s) | +1.06, +0.33, -0.39 | 1.14, 0.36, 0.43 | n/a |
+| clean_part_load | +1.07, +0.33, -0.39 | 1.16, 0.37, 0.44 | n/a |
+| clean_base_load | +1.07, +0.33, -0.40 | 1.14, 0.37, 0.44 | n/a |
+| clean_load_cycling | +1.07, +0.33, -0.39 | 1.17, 0.37, 0.44 | n/a |
+| clean_ambient_swing | +1.07, +0.33, -0.39 | 1.16, 0.37, 0.43 | n/a |
+| clean_fast_load_steps | +1.07, +0.33, -0.39 | 1.15, 0.37, 0.44 | n/a |
+
+- The filter converges to the bias that the steady analysis predicts, on every scenario,
+  clean or degraded (combined: +0.57 % flow, +0.17 point ηc, +0.42 to +0.47 point ηt;
+  barometer: +1.07 %, +0.33, −0.39). The bias on healthy runs is that same number: a
+  mismatched twin reports a clean unit as degraded or improved by it.
+- Absolute compressor efficiency stays within 0.3 point with the combined mismatch (worst
+  sample 0.23 point) but not with the barometer mismatch (mean 0.33, worst 0.39 point).
+  Turbine efficiency is outside 0.3 point with both (combined worst 0.52, barometer 0.45).
+- The change since a healthy baseline is accurate to 0.05 % flow capacity and 0.02 point
+  efficiency with either mismatch, in every scenario that has a baseline: the bias is
+  almost the same before and after the degradation, including across the ambient swing and
+  at base load. This is the honest use of such an estimator: trending against a baseline
+  taken on the same twin, for example after commissioning or a wash.
+- The NIS statistics do not change with these mismatches (the same 0 to 2 % of batches
+  above the 99.9 % bound as with the exact twin), confirming that they are invisible in the
+  residuals, and the reported std (0.02 to 0.06 point) does not cover the bias.
 
 ## Sensor faults
 
-SENSOR_SECTION
+Exact twin, evaluation seeds; the truth is a healthy unit in every case except the two
+thermocouple faults at base load, where the plant itself overfires but its health is
+unchanged. So every error below is a health change invented from a sensor fault. "NIS >
+18.5" is the share of batches after the onset whose innovation exceeds the 99.9 % bound
+for 4 degrees of freedom (0 to 2 % on healthy runs).
+
+| scenario | mean error (flow, ηc, ηt) | worst error | final change since onset (flow, ηc, ηt) | batches with NIS > 18.5 |
+| --- | --- | --- | --- | --- |
+| exhaust_tc_drift_base_load | +0.19, +0.04, +0.63 | 0.54, 0.14, 1.13 | +0.30, +0.06, +0.97 | 64 % |
+| exhaust_tc_stuck_load_increase | +2.07, +0.40, +7.89 | 2.29, 0.50, 8.06 | +2.07, +0.40, +7.89 | 89 % |
+| exhaust_tc_noise | n/a, n/a, n/a | n/a, n/a, n/a | +0.00, +0.00, -0.00 | 27 % |
+| power_transducer_bias | -0.17, -0.03, +0.86 | 0.40, 0.12, 1.00 | -0.18, -0.04, +0.85 | 97 % |
+| fuel_meter_drift | +0.42, +0.08, -0.19 | 0.85, 0.19, 0.39 | +0.63, +0.13, -0.30 | 84 % |
+| cdt_sensor_bias | -0.00, -0.58, +0.40 | 0.08, 0.61, 0.43 | +0.01, -0.57, +0.39 | 1 % |
+| cdp_sensor_bias | -2.65, -0.86, +1.68 | 2.85, 0.95, 1.82 | -2.64, -0.86, +1.67 | 100 % |
+| slow_fuel_valve_load_steps | +0.00, +0.00, +0.00 | 0.08, 0.04, 0.05 | -0.00, -0.00, +0.00 | 0 % |
+
+What happens, and why (for the static biases on power, discharge temperature and
+discharge pressure, the linear map of a reading error into health from the same weighted
+fit as `steady_bias` matches the filter's change to 0.01 point):
+
+- **Power transducer +1 MW.** Power is the model's input, so the twin is asked for 1 MW
+  more than the unit makes and finds a unit that needs too little fuel and runs too cool:
+  turbine efficiency +0.86 point (an apparent improvement), with a clear residual (97 % of
+  batches flagged).
+- **Fuel meter drift.** Fuel is a predicted output; the estimate drifts to +0.6 % flow and
+  −0.3 point ηt by the end, but most of the error stays in the residual (84 % flagged).
+- **Discharge temperature +3.5 K.** Absorbed completely as compressor efficiency −0.57 and
+  turbine efficiency +0.39 point, with **no** residual (1 % flagged, the healthy rate). With
+  four readings and three parameters there is one redundant direction, and a discharge
+  temperature bias is not in it. This fault is indistinguishable from degradation for this
+  estimator, and so is any combination of reading errors in the same span.
+- **Discharge pressure −35 kPa** (what 3 % fouling does to the true value). Read as −2.6 %
+  flow, −0.86 point ηc and +1.7 point ηt (not as fouling, whose ηt is zero), and every batch
+  is flagged: the residual makes this one detectable.
+- **Thermocouple drift and stuck at base load.** The low reading makes the plant overfire
+  and the twin sees a reading lower than the truth: turbine efficiency +1.0 point by the
+  end of the drift, +7.9 points with the stuck thermocouple after the load increase, with
+  large residuals (64 % and 89 % flagged).
+- **Thermocouple noise (3 K).** The exhaust spread keeps the steady-state gate shut from
+  18 s after the onset to the end of the run, so the filter holds its last (correct)
+  estimate. Safe, but blind (the error columns are empty because no steady estimate
+  falls in the scoring window).
+- **Slow fuel valve.** No steady-state effect, no change in the estimate.
+
+The estimator does not reject sensor faults itself; separating them is the detectors' job.
+What it gives a detector is `last_innovation` and `last_nis`: the faults that leave a
+residual are visible there, the discharge-temperature bias is not.
 
 ## Verdict on the ±0.3 point target
 
-VERDICT_SECTION
+The target was fouling efficiency loss within ±0.3 efficiency points after convergence.
+
+- **Exact twin (circular): met with a wide margin.** Worst compressor-efficiency error after
+  convergence 0.06 point over the six degradation scenarios and five seeds each, converged
+  within about 2 minutes of a step.
+- **Mismatched twin, absolute value: met for the combined calibration error (worst 0.23
+  point), not met for a 1 kPa barometric error (mean 0.33, worst 0.39 point).** For turbine
+  efficiency (erosion) the absolute target is missed by both mismatches (0.42 to 0.47 point
+  mean). The absolute accuracy is set by the twin's calibration, not by the estimator:
+  roughly 1:1 from calibration error to health error, and the root-sum-square budget of
+  the stated calibration errors is 0.16 point for ηc and 0.39 point for ηt before any
+  barometric error.
+- **Mismatched twin, change since a healthy baseline: met with a wide margin** (0.02 point
+  on ηc and ηt, 0.05 % on flow capacity in every scenario with a baseline).
+
+So the thesis claim that can be supported is the relative one: degradation since a known
+healthy baseline is tracked to well within ±0.3 point despite plausible calibration errors.
+An absolute ±0.3 point claim cannot be made on this evidence: it depends on calibration
+quality and site conditions (barometric pressure in particular) that the estimator cannot
+check from its own residuals.
 
 ## Limits and open problems
 
-LIMITS_SECTION
+- **All data is simulated**, and the plant and the twin share their structure (same cycle
+  model, same map assumptions, same linear health superposition). The mismatch experiment
+  only perturbs parameters inside that structure. Structural error (a real compressor map,
+  IGV effects on pressure ratio, load-dependent losses, combustor efficiency, fuel
+  composition, humidity, sensor dynamics) is not covered, and is likely larger.
+- **Ambient pressure is not in the observation.** A 1 kPa barometric change moves
+  compressor efficiency by 0.33 point and flow capacity by 1.07 %. A real deployment needs
+  a barometer input (see the request below) or must re-baseline often.
+- **Discharge pressure is the only flow-capacity channel**, so anything that biases it
+  (inlet pressure loss, barometer, the CDP transducer) goes straight into flow capacity and
+  from there into the other two parameters.
+- **One redundant direction only.** Four readings for three parameters leave one residual
+  direction, so many sensor faults and calibration errors are absorbed into health without
+  a trace (the discharge-temperature bias, the pressure-loss errors). More instruments
+  (inlet pressure drop, compressor inlet temperature, a second exhaust measurement) would
+  add redundancy.
+- **The fouling model's 2:1 flow-to-efficiency ratio is not used**, which is right for an
+  estimator but means flow capacity and compressor efficiency are estimated separately;
+  imposing the ratio would sharpen the fouling estimate if it were known to hold.
+- **The process noise is tuned to the bank's accelerated degradation** (2 to 3 % per hour).
+  Real fouling is orders of magnitude slower; q would need re-tuning against noise over
+  weeks, and the steady gate, sensor drift and ambient seasons would matter far more.
+- **Reported std covers noise only.** It is 0.02 to 0.06 point and says nothing about
+  calibration bias; a coverage test against the truth fails with any mismatch. An honest
+  absolute uncertainty would add a calibration term of the order of the bias budget above.
+- **The estimator stops at the gate.** It learns nothing during transients, at low load
+  outside the gate's limits or while a noisy thermocouple keeps the gate shut; the
+  steady-state twin has no dynamics to do better.
+- **Few seeds.** Five evaluation runs per scenario: enough to show the bias and noise level
+  (both are much smaller than the tolerances), not enough for tail statistics.
+
+**Requested changes to the shared foundation** (not made here):
+
+1. Add `ambient_pressure_kpa` to `Observation` (and a matching session input and plant
+   effect) so that the barometric error above can be measured instead of assumed away.
+2. Optionally expose the gate's open/closed reason; the estimator currently cannot tell a
+   noisy sensor from a transient when the gate stays shut.
 
 ## Reproducing
 
