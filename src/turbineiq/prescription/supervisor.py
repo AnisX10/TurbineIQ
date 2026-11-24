@@ -135,6 +135,7 @@ class Supervisor:
         self.last_load_evaluation: dict[str, Any] | None = None
         self.last_wash_evaluation: dict[str, Any] | None = None
         self.counters = {"forward_runs": 0, "substitute_updates": 0}
+        self.last_procedure_error: str | None = None
 
     # ------------------------------------------------------------------ operator API
     def set_mode(self, mode: Mode | str) -> None:
@@ -349,8 +350,17 @@ class Supervisor:
                 return
         elif meeting_band:
             # Running on the exhaust temperature limit while delivering inside the band is
-            # normal base-load operation; the layer does not back off from it.
-            return
+            # normal base-load operation; the layer does not back off from it. But when an
+            # IGV setting at the same load is clear of the limit (the limit was reached
+            # because of an earlier IGV closure and an ambient rise, say), it moves the IGV.
+            same_load = [
+                c
+                for c in feasible
+                if abs(c["load_mw"] - setpoint) < 1e-6 and c["igv"] != current_igv
+            ]
+            if not same_load:
+                return
+            feasible = same_load
         last = self._last_action_s.get("load_setpoint")
         since = None if last is None else t - last
         tried = []
@@ -519,6 +529,10 @@ class Supervisor:
         cfg = self.config
         if not status.loaded or status.estimator_updates == 0:
             return
+        if self.counters.get("washes_refused"):
+            # A wash found nothing to wash off, so the estimated "fouling" is something else
+            # (a sensor fault the estimate has absorbed); another wash would not help.
+            return
         last = self._last_wash_review_s
         if last is not None and t - last < cfg.wash_review_interval_s:
             return
@@ -556,9 +570,17 @@ class Supervisor:
                 self.session.apply("stop")
                 self._procedure.pop(0)
             elif nxt == "wash_compressor" and state == "standstill":
-                self.session.apply("wash_compressor")
-                self.monitor.note_wash()
-                self._last_wash_s = float(snap["t_s"])
+                try:
+                    self.session.apply("wash_compressor")
+                except CommandError as exc:
+                    # The plant refuses a wash with nothing to wash off (the "fouling" was,
+                    # e.g., a biased pressure reading). Record it and restart anyway; before,
+                    # the procedure waited at standstill for good.
+                    self.counters["washes_refused"] = self.counters.get("washes_refused", 0) + 1
+                    self.last_procedure_error = str(exc)
+                else:
+                    self.monitor.note_wash()
+                    self._last_wash_s = float(snap["t_s"])
                 self._procedure.pop(0)
             elif nxt == "start" and state == "standstill":
                 self.session.apply("start")

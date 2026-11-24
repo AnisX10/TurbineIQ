@@ -26,6 +26,12 @@ class GuardLimits:
     min_action_interval_s: float = 120.0
     #: Peak twin exhaust temperature must stay this far below the trip threshold (K).
     trip_margin_k: float = 25.0
+    #: Peak twin exhaust during the forward run may exceed the temperature control limit by
+    #: at most this (K). The evaluation counts more than 5 K above the limit as a hard-limit
+    #: violation; without this check an IGV closure applied during a fast dispatcher ramp
+    #: passed the trip-margin check and overshot the control limit by 8.7 K for 4 s
+    #: (clean_load_cycling, tuning seeds 1000-1002).
+    transient_over_limit_k: float = 3.0
     #: Settled twin exhaust must stay this far below the temperature control limit (K),
     #: plus the twin's own exhaust uncertainty (the mean exhaust residual magnitude).
     control_margin_k: float = 5.0
@@ -226,6 +232,17 @@ class SafetyGuard:
                 round(fw.max_exhaust_k, 1),
                 round(peak_limit, 1),
                 "" if fw.max_exhaust_k <= peak_limit else "exhaust peak too close to the trip",
+            )
+        )
+        transient_limit = fw.temperature_limit_k + lim.transient_over_limit_k
+        ok = fw.max_exhaust_k <= transient_limit
+        checks.append(
+            Check(
+                "transient_exhaust",
+                ok,
+                round(fw.max_exhaust_k, 1),
+                round(transient_limit, 1),
+                "" if ok else "the exhaust overshoots the temperature control limit on the way",
             )
         )
         uncertainty = abs((status.exhaust_residual_k or 0.0)) if not status.exhaust_suspect else 0.0
