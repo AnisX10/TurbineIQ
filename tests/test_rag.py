@@ -99,6 +99,92 @@ def test_bad_chunk_settings_are_rejected(chunk_size: int, overlap: int) -> None:
         load_document_bytes("note.txt", b"small text", chunk_size=chunk_size, overlap=overlap)
 
 
+def test_stemming_matches_other_word_forms() -> None:
+    chunks = load_document_bytes("note.txt", b"The fouled compressor was washed offline.")
+
+    assert search_documents("fouling washing", chunks)
+
+
+def test_heading_words_count_toward_relevance() -> None:
+    content = (
+        b"# Operator console\nStart, stop and reset the unit from here.\n\n"
+        b"# Limits\nThe console is a simulation and controls no plant at all."
+    )
+    chunks = load_document_bytes("notes.md", content, chunk_size=120, overlap=20)
+
+    hits = search_documents("operator console", chunks)
+
+    assert hits[0].chunk.section == "Operator console"
+
+
+def test_spelled_out_term_finds_its_abbreviation() -> None:
+    chunks = load_document_bytes(
+        "notes.txt", b"CDT rises by 6 K for one percent of fouling at 35 MW."
+    )
+
+    assert search_documents("compressor discharge temperature", chunks)
+
+
+def test_underscore_identifiers_match_their_parts() -> None:
+    chunks = load_document_bytes("notes.txt", b"Call score_tracking after each run.")
+
+    assert search_documents("tracking score", chunks)
+    assert search_documents("score_tracking", chunks)
+
+
+class _ReverseReranker:
+    name = "reverse"
+
+    def rerank(self, query, hits):
+        return list(reversed(hits))
+
+
+def test_reranker_only_reorders_lexical_candidates() -> None:
+    chunks = load_document_bytes(
+        "notes.txt",
+        b"Compressor compressor compressor fouling. "
+        + b"filler words here. " * 80
+        + b"Compressor wash restores flow.",
+        chunk_size=200,
+        overlap=0,
+    )
+    lexical = search_documents("compressor", chunks, top_k=8)
+
+    reranked = search_documents("compressor", chunks, top_k=2, reranker=_ReverseReranker())
+
+    assert [h.chunk.chunk_index for h in reranked] == [
+        h.chunk.chunk_index for h in reversed(lexical)
+    ][:2]
+    assert search_documents("hydrogen", chunks, reranker=_ReverseReranker()) == []
+
+
+def test_reranker_is_off_unless_configured(monkeypatch: pytest.MonkeyPatch) -> None:
+    from turbineiq.rag.rerank import reranker_from_env
+
+    monkeypatch.delenv("TURBINEIQ_RERANK_MODEL", raising=False)
+    assert reranker_from_env() is None
+    monkeypatch.setenv("TURBINEIQ_RERANK_MODEL", "off")
+    assert reranker_from_env() is None
+
+
+def test_retrieval_quality_on_the_eval_set_does_not_regress() -> None:
+    from pathlib import Path
+
+    from turbineiq.rag.evaluation import evaluate, load_eval_set
+
+    root = Path(__file__).resolve().parents[1]
+    questions, chunks = load_eval_set(root / "tests/data/retrieval_eval.json", root)
+
+    def search(query, docs, k):
+        return search_documents(query, docs, top_k=k)
+
+    report = evaluate(search, questions, chunks, top_k=4)
+
+    # Lexical baseline before stemming/headings/glossary: hit@4 0.80, MRR@4 0.64.
+    assert report.hit_rate >= 0.875, report.misses
+    assert report.mrr >= 0.75
+
+
 def test_search_rejects_bad_top_k() -> None:
     chunks = load_document_bytes("note.txt", b"Compressor work depends on the temperature rise.")
 

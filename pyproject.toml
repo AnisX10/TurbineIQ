@@ -21,6 +21,7 @@ cloud = ["openai>=1.70,<3", "python-dotenv>=1.0,<2"]
 dev = ["httpx>=0.27,<1", "pytest>=8,<10", "ruff>=0.8,<1"]
 calibration = ["scipy>=1.13,<2", "cantera>=3,<4", "CoolProp>=6,<8"]
 streamlit = ["streamlit>=1.45,<2"]
+rerank = ["fastembed>=0.7,<1"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

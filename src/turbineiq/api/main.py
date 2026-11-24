@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field
 from turbineiq.agent import CloudLLMSettings, TurbineAssistant
 from turbineiq.agent.orchestrator import ProviderCallFailure
 from turbineiq.rag import DocumentChunk, load_document_path, search_documents
+from turbineiq.rag.rerank import reranker_from_env
 from turbineiq.synthetic import SCENARIOS
 from turbineiq.twin import create_synthetic_twin
 
@@ -44,6 +45,8 @@ def _load_demo_documents() -> list[DocumentChunk]:
 
 
 DEMO_DOCUMENTS = _load_demo_documents()
+# Off unless TURBINEIQ_RERANK_MODEL is set and the `rerank` extra is installed.
+EVIDENCE_RERANKER = reranker_from_env()
 assistant = TurbineAssistant(documents=DEMO_DOCUMENTS)
 assistant_rate_limiter = TokenBucketLimiter()
 install_secret_redaction_filter()
@@ -225,10 +228,14 @@ def search_evidence(
     q: str = Query(min_length=2, max_length=300),
     top_k: int = Query(default=4, ge=1, le=8),
 ) -> dict[str, object]:
-    hits = search_documents(q, DEMO_DOCUMENTS, top_k=top_k)
+    hits = search_documents(q, DEMO_DOCUMENTS, top_k=top_k, reranker=EVIDENCE_RERANKER)
     return {
         "query": q,
-        "mode": "local lexical retrieval",
+        "mode": (
+            "local lexical retrieval"
+            if EVIDENCE_RERANKER is None
+            else f"local lexical retrieval + {EVIDENCE_RERANKER.name} rerank"
+        ),
         "evidence": [
             {
                 "text": hit.chunk.text,
