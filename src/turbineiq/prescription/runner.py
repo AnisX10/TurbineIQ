@@ -14,6 +14,7 @@ default the wash, which the guard always hands to the operator because it is a s
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -53,7 +54,12 @@ def run_supervised(
     config: SupervisorConfig | None = None,
     operator: OperatorModel | None = None,
     until_s: float | None = None,
+    observer: Callable[[float, Session, Supervisor], None] | None = None,
 ) -> tuple[Session, Supervisor, RunRecord]:
+    """Run ``scenario`` with the supervisor in ``mode``. ``observer`` (optional) is called
+    once per simulated second after the supervisor and the operator have acted, for
+    evaluation code that needs more than the :class:`RunRecord` (it must not act)."""
+
     check_script(scenario)
     cfg = config or SupervisorConfig()
     from dataclasses import replace
@@ -97,6 +103,8 @@ def run_supervised(
         rec.trip_k.append(snap["trip_temperature_k"])
         rec.state.append(snap["state"])
         rec.demand_mw.append(sup.demand_mw)
+        if observer is not None:
+            observer(t, session, sup)
     return session, sup, rec
 
 
